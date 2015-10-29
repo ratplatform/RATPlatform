@@ -652,8 +652,6 @@
 		 <version>2.3.2</version>
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
-			<!--OrientDB-->
-		    <compilerArgument>-Djna.nosys=true, -Xms1024m, -Xmx2048m, -Dmemory.useUnsafe=false</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <source>1.7</source>

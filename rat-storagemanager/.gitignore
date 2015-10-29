@@ -1,1 +1,4 @@
-.settings
+/target
+/pom.xml~
+/.settings
+.gitignore~
