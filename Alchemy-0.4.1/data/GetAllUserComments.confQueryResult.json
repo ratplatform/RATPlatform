@@ -1,0 +1,67 @@
+{
+  "header" : {
+    "applicationVersion" : "2.0",
+    "commandType" : "Query",
+    "commandName" : "GetAllUserComments",
+    "application" : "RATPlatform",
+    "CommandGraphUUID" : "cdcc6b2b-8cb2-42f7-93af-6352859cd3f6",
+    "domainName" : "@domainPlaceholder@",
+    "commandVersion" : "0.1",
+    "StatusCode" : "200",
+    "MessageType" : "Response"
+  },
+  "nodes" : [ {
+    "VertexCommandOwnerField" : "AddNewUser",
+    "VertexLabelField" : "User",
+    "CommandGraphUUID" : "a93ef76a-d908-453c-b7d2-b81b9e617ee1",
+    "VertexUUIDField" : "126b10a3-c712-4041-a192-27e1e5e16c83",
+    "VertexIsRootField" : true,
+    "VertexContentField" : "User",
+    "VertexTypeField" : "User",
+    "id" : "0",
+    "_type" : "vertex"
+  }, {
+    "VertexCommandOwnerField" : "AddComment",
+    "VertexLabelField" : "Comment",
+    "CommandGraphUUID" : "ccd9a12d-c538-4909-b0ee-ef8e2913f828",
+    "VertexUUIDField" : "a377e7d0-f520-4636-97bd-a19e99d8b801",
+    "VertexIsRootField" : false,
+    "VertexContentField" : "Comment",
+    "VertexTypeField" : "Comment",
+    "id" : "1",
+    "_type" : "vertex"
+  }, {
+    "VertexCommandOwnerField" : "AddComment",
+    "VertexLabelField" : "Comment",
+    "CommandGraphUUID" : "ccd9a12d-c538-4909-b0ee-ef8e2913f828",
+    "VertexUUIDField" : "d3dd0962-fda2-4cc1-a645-86999fc00e34",
+    "VertexIsRootField" : false,
+    "VertexContentField" : "Comment",
+    "VertexTypeField" : "Comment",
+    "id" : "3",
+    "_type" : "vertex"
+  }, {
+    "VertexCommandOwnerField" : "AddComment",
+    "VertexLabelField" : "Comment",
+    "CommandGraphUUID" : "ccd9a12d-c538-4909-b0ee-ef8e2913f828",
+    "VertexUUIDField" : "1294dcd1-6252-45d9-8a8d-2d6c793a6074",
+    "VertexIsRootField" : false,
+    "VertexContentField" : "Comment",
+    "VertexTypeField" : "Comment",
+    "id" : "5",
+    "_type" : "vertex"
+  } ],
+  "edges" : [ {
+    "source" : "0",
+    "target" : "1",
+    "caption" : ""
+  }, {
+    "source" : "0",
+    "target" : "3",
+    "caption" : ""
+  }, {
+    "source" : "0",
+    "target" : "5",
+    "caption" : ""
+  } ]
+}

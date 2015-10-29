@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	 
+  <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>ratplatform-project</artifactId>
+        <groupId>org.rat.platform</groupId>
+  	<version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+  <groupId>org.rat.platform</groupId>
+  <artifactId>rat-wsserver-webclient</artifactId>
+  <version>0.9.0-SNAPSHOT</version>
+  <name>RATWSServer WebClient</name>
+  <packaging>jar</packaging>
+
+    <developers>
+        <developer>
+            <name>Daniele Grignani</name>
+            <email>grignani.d@gmail.com</email>
+        </developer>
+        <developer>
+            <name>Angela Locoro</name>
+        </developer>
+    </developers>
+
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+	</plugins>
+  </build>
+</project>

@@ -1,0 +1,4 @@
+root.domain=RAT
+domain.placeholder=@domainPlaceholder@
+configuration.folder=conf
+systemcommands.folder=SystemCommands

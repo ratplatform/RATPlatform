@@ -1,0 +1,5 @@
+json.result.placeholder=@resultPlaceholder@
+page.template=template.conf
+sigma.path=/home/dgr/dev/RATPlatform/sigma-release-v1.0.3
+sigma.data.folder=data
+page.title.placeholder=@titlePlaceholder@

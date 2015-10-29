@@ -1,0 +1,53 @@
+{
+  "header" : {
+    "applicationVersion" : "2.0",
+    "commandType" : "Query",
+    "commandName" : "GetAllUsers",
+    "application" : "RATPlatform",
+    "CommandGraphUUID" : "012ea243-02f4-45c2-aafd-10f58b8b19c1",
+    "domainName" : "@domainPlaceholder@",
+    "commandVersion" : "0.1",
+    "StatusCode" : "200",
+    "MessageType" : "Response"
+  },
+  "nodes" : [ {
+    "VertexCommandOwnerField" : "AddRootDomain",
+    "VertexLabelField" : "RAT",
+    "CommandGraphUUID" : "1ea54530-5960-439f-89c5-f3c74146ae4a",
+    "VertexUUIDField" : "350fa89c-6450-4270-b14e-4b2cfcd3bc77",
+    "VertexIsRootField" : true,
+    "VertexContentField" : "RAT",
+    "VertexTypeField" : "RootDomain",
+    "id" : "0",
+    "_type" : "vertex"
+  }, {
+    "VertexCommandOwnerField" : "AddNewUser",
+    "VertexLabelField" : "dgr1",
+    "CommandGraphUUID" : "a93ef76a-d908-453c-b7d2-b81b9e617ee1",
+    "VertexUUIDField" : "126b10a3-c712-4041-a192-27e1e5e16c83",
+    "VertexIsRootField" : true,
+    "VertexContentField" : "dgr1",
+    "VertexTypeField" : "User",
+    "id" : "1",
+    "_type" : "vertex"
+  }, {
+    "VertexCommandOwnerField" : "AddNewUser",
+    "VertexLabelField" : "dgr3",
+    "CommandGraphUUID" : "a93ef76a-d908-453c-b7d2-b81b9e617ee1",
+    "VertexUUIDField" : "1a71810c-2b01-4fd2-8d96-3c0d31f4dd07",
+    "VertexIsRootField" : true,
+    "VertexContentField" : "dgr3",
+    "VertexTypeField" : "User",
+    "id" : "3",
+    "_type" : "vertex"
+  } ],
+  "edges" : [ {
+    "source" : "0",
+    "target" : "1",
+    "caption" : ""
+  }, {
+    "source" : "0",
+    "target" : "3",
+    "caption" : ""
+  } ]
+}

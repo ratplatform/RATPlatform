@@ -1,0 +1,42 @@
+Manifest-Version: 1.0
+Built-By: dgr
+Build-Jdk: 1.7.0_72
+Class-Path: forgerock-guava-annotations.jar forgerock-guava-base.jar f
+ orgerock-guava-primitives.jar forgerock-guava-collect.jar forgerock-g
+ uava-cache.jar forgerock-guava-math.jar forgerock-util.jar forgerock-
+ guava-concurrent.jar i18n-core.jar i18n-slf4j.jar script-common.jar j
+ ackson-core.jar jackson-databind.jar commons-io.jar jackson-annotatio
+ ns.jar activemq-all.jar spring-aop.jar aopalliance.jar spring-asm.jar
+  spring-beans.jar spring-context.jar spring-core.jar spring-expressio
+ n.jar spring-jms.jar spring-tx.jar spring-web.jar validation-api.jar 
+ xbean-spring.jar commons-logging.jar commons-net.jar commons-pool.jar
+  snappy-java.jar activation.jar bsh.jar commons-codec.jar commons-lan
+ g3.jar concurrentlinkedhashmap-lru.jar disruptor.jar fest-assert-core
+ .jar fest-util.jar hamcrest-core.jar jackson-mapper-asl.jar jackson-c
+ ore-asl.jar jackson-module-afterburner.jar javax.mail-api.jar jcomman
+ der.jar jna.jar jna-platform.jar joda-time.jar json-crypto.jar json-f
+ luent.jar json-patch.jar json-resource.jar json-resource-servlet.jar 
+ javax.mail.jar junit.jar mail.jar mockito-all.jar org.apache.felix.fr
+ amework.jar org.apache.felix.scr.annotations.jar org.osgi.compendium.
+ jar org.osgi.core.jar slf4j-api.jar snakeyaml.jar testng.jar orient-c
+ ommons.jar orientdb-client.jar orientdb-core.jar orientdb-distributed
+ .jar hazelcast-all.jar annotations.jar minimal-json.jar orientdb-ente
+ rprise.jar orientdb-graphdb.jar gremlin-groovy.jar ivy.jar groovy.jar
+  antlr.jar asm.jar asm-commons.jar asm-util.jar asm-analysis.jar asm-
+ tree.jar ant.jar ant-launcher.jar jansi.jar jline.jar orientdb-jdbc.j
+ ar orientdb-object.jar hibernate-jpa-2.0-api.jar orientdb-server.jar 
+ orientdb-tools.jar blueprints-core.jar hppc.jar commons-configuration
+ .jar commons-lang.jar commons-beanutils-core.jar gremlin-java.jar pip
+ es.jar jettison.jar stax-api.jar lucene-analyzers-common.jar lucene-c
+ ore.jar lucene-queryparser.jar lucene-queries.jar lucene-sandbox.jar 
+ jakarta-regexp.jar frames.jar guava.jar javassist.jar commons-validat
+ or.jar commons-beanutils.jar commons-digester.jar commons-collections
+ .jar
+Implementation-Title: RATWSServer
+Implementation-Version: 0.9.0-SNAPSHOT
+Implementation-Vendor-Id: org.rat.platform
+Author: Daniele Grignani
+Created-By: Maven Integration for Eclipse
+Product: RATPlatform 2.0
+url: 
+
