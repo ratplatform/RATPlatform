@@ -7,9 +7,6 @@ package com.dgr.rat.graphgenerator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -20,8 +17,6 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -44,8 +39,8 @@ public class GraphGeneratorUUIDIndex {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void initWrite(String folder) throws IOException{
-		Path path = Paths.get(folder);
+	@SuppressWarnings("deprecation")
+	public void initWriter(String folder) throws IOException{
 		//Directory dir = FSDirectory.open(path);
 		Directory indexDirectory = FSDirectory.open(new File(folder));
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);

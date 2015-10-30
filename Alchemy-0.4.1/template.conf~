@@ -19,7 +19,7 @@
 
 	<body>
 		<div class="alchemy" id="alchemy"></div>
- 		 <script src="alchemy.min.js"></script>
+ 		 <script src="../alchemy.min.js"></script>
 
 		<script type="text/javascript">
 		var config = {
@@ -75,7 +75,7 @@
 					"color"      : "#FFCC99"
 				},
 				"InstructionParameter": {
-					"color"      : "#C85A17"
+					"color"      : "#FFCCCC"
 				},
 				"Instruction": {
 					"color"      : "#E77471"

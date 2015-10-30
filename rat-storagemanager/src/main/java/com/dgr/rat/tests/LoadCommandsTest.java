@@ -50,8 +50,9 @@ public class LoadCommandsTest {
 	public void verify(){
 		// Anche in caso di exception voglio che scriva lo stesso i risultati per vederli
 		try {
+			@SuppressWarnings("unused")
 			String resultFilename = this.getClass().getSimpleName() + "Result";
-			TestHelpers.writeGraphToHTML(resultFilename);
+//			TestHelpers.writeGraphToHTML(resultFilename);
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block

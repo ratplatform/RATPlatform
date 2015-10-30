@@ -164,14 +164,16 @@ public class AddRootDomainTest {
 			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "storage-manager.properties");
 			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			
+			String dir = "";//".." + FileSystems.getDefault().getSeparator();
+			
 			System.out.println("Domini sotto RAT");
 			json = this.query("GetAllDomains.conf", "rootNodeUUID", rootDomainUUID);
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 			response = this.executeRemoteCommand(json);
 			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			String resultFilename = "GetAllDomains.conf" + "QueryResult";
-			String path = TestHelpers.writeGraphToHTML(resultFilename);
+			String resultFilename = dir + "GetAllDomains.conf" + "QueryResult";
+			String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			System.out.println("Utenti sotto RAT");
@@ -179,8 +181,8 @@ public class AddRootDomainTest {
 			response = this.executeRemoteCommand(json);
 			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = "GetAllUsers.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename);
+			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			System.out.println("Domini dell'utente dgr1");
@@ -188,8 +190,8 @@ public class AddRootDomainTest {
 			response = this.executeRemoteCommand(json);
 			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = "GetAllUserDomains.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename);
+			resultFilename = dir + "GetAllUserDomains.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			System.out.println("Utenti del dominio DGR Domain 1");
@@ -197,8 +199,8 @@ public class AddRootDomainTest {
 			response = this.executeRemoteCommand(json);
 			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = "GetAllDomainUsers.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename);
+			resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			System.out.println("Commenti dell'utente dgr1");
@@ -206,8 +208,8 @@ public class AddRootDomainTest {
 			response = this.executeRemoteCommand(json);
 			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = "GetAllUserComments.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename);
+			resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
@@ -612,7 +614,7 @@ public class AddRootDomainTest {
 			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			
 			String resultFilename = this.getClass().getSimpleName() + "Result";
-			String path = TestHelpers.writeGraphToHTML(resultFilename);
+			String path = TestHelpers.writeGraphToHTML(resultFilename, "commandResults");
 			TestHelpers.dumpJson(path);
 		} 
 		catch (Exception e) {

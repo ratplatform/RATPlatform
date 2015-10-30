@@ -263,7 +263,7 @@ public class QueryGraphGeneratorTest {
 
 		//Alchemy command template JSON
 		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);
-		GraphGeneratorHelpers.writeAlchemyJson(query.getEndPipeInstruction() + "Template", query.get_commandVersion(), alchemyJSON);
+		GraphGeneratorHelpers.writeAlchemyJson(query.getEndPipeInstruction() + "Template", query.get_commandVersion(), alchemyJSON, "queries");
 
 		this.saveForTest(commandTemplate, remoteRequestJson);
 //		JSONObjectBuilder.buildQuery(header, command.get_rootNode().getNode().asVertex());

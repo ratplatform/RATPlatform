@@ -62,21 +62,23 @@ public class TestHelpers {
 	
 	
 	
-	public static String writeGraphToHTML(String resultFilename) throws Exception{
+	public static String writeGraphToHTML(String resultFilename, String destinationFolder) throws Exception{
 		String appPath = AppProperties.getInstance().getStringProperty("sigma.path");
-		String dataFolder = AppProperties.getInstance().getStringProperty("sigma.data.folder");
+		//String dataFolder = AppProperties.getInstance().getStringProperty("sigma.data.folder");
 		String pageTitlePlaceholder = AppProperties.getInstance().getStringProperty("page.title.placeholder");
+		String sep = FileSystems.getDefault().getSeparator();
+				
 		
 		String resultPlaceholder = AppProperties.getInstance().getStringProperty("json.result.placeholder");
 		String pageTemplate = AppProperties.getInstance().getStringProperty("page.template");
 
-		String text = FileUtils.fileRead(appPath + FileSystems.getDefault().getSeparator() + pageTemplate);
+		String text = FileUtils.fileRead(".." + sep + appPath + sep + pageTemplate);
 		
-		String path = appPath + FileSystems.getDefault().getSeparator() + dataFolder + FileSystems.getDefault().getSeparator() + resultFilename + ".json";
-		String html = text.replace(resultPlaceholder, dataFolder + FileSystems.getDefault().getSeparator() + resultFilename + ".json");
+		String path = ".." + sep + appPath + sep + destinationFolder + sep + resultFilename + ".json";
+		String html = text.replace(resultPlaceholder, resultFilename + ".json");
 		html = html.replace(pageTitlePlaceholder, resultFilename);
 		
-		FileUtils.write(appPath + FileSystems.getDefault().getSeparator() + resultFilename + ".html", html, false);
+		FileUtils.write(".." + sep + appPath + sep + destinationFolder + sep + resultFilename + ".html", html, false);
 		
 		return path;
 //		TestHelpers.dumpJson(path);

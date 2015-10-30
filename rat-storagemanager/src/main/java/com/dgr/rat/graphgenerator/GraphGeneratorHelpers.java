@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 import org.apache.lucene.queryparser.classic.ParseException;
 import com.dgr.rat.json.toolkit.RATHelpers;
@@ -49,8 +51,9 @@ public class GraphGeneratorHelpers {
         }
     }
 	
-	public static void writeAlchemyJson(String commandName, String commandVersion, String alchemyJSON) throws Exception{
+	public static void writeAlchemyJson(String commandName, String commandVersion, String alchemyJSON, String destinationFolder) throws Exception{
 		RATHelpers.initProperties(UnitTestPropertyFile);
+		String sep = FileSystems.getDefault().getSeparator();
 		
 		String appPath = AppProperties.getInstance().getStringProperty("sigma.path");
 		String dataFolder = AppProperties.getInstance().getStringProperty("sigma.data.folder");
@@ -59,12 +62,17 @@ public class GraphGeneratorHelpers {
 		String resultPlaceholder = AppProperties.getInstance().getStringProperty("json.result.placeholder");
 		String pageTemplate = AppProperties.getInstance().getStringProperty("page.template");
 
-		String text = FileUtils.fileRead(appPath + FileSystems.getDefault().getSeparator() + pageTemplate);
+//		Path currentRelativePath = Paths.get("");
+//		String s = currentRelativePath.toAbsolutePath().toString();
+//		System.out.println("Current relative path is: " + s);
 		
-		String jsonPath = appPath + FileSystems.getDefault().getSeparator() + dataFolder + FileSystems.getDefault().getSeparator() + commandName + ".json";
-		String html = text.replace(resultPlaceholder, dataFolder + FileSystems.getDefault().getSeparator() + commandName + ".json");
+		String text = FileUtils.fileRead(".." + sep + appPath + sep + pageTemplate);
+		
+//		String jsonPath = ".." + sep + appPath + sep + destinationFolder + sep + commandName + ".json";
+		String jsonPath = ".." + sep + appPath + sep + destinationFolder + sep + commandName + ".json";
+		String html = text.replace(resultPlaceholder, commandName + ".json");
 		html = html.replace(pageTitlePlaceholder, commandName);
-		FileUtils.write(appPath + FileSystems.getDefault().getSeparator() + commandName + ".html", html, false);
+		FileUtils.write(".." + sep + appPath + sep + destinationFolder + sep + commandName + ".html", html, false);
 	    
 		GraphGeneratorHelpers.writeGraphToJson(alchemyJSON, jsonPath);
 	}
@@ -78,7 +86,7 @@ public class GraphGeneratorHelpers {
 			
 			if(result == null){
 				String strUUID = uuid.toString();
-				index.initWrite(IndexFolder);
+				index.initWriter(IndexFolder);
 				index.addText(query, strUUID);
 				index.closeWriter();
 			}

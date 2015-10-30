@@ -207,41 +207,41 @@ public class CommandGraphGeneratorTest {
 		
 		// LoadCommands
 		command = this.loadCommands("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// LoadQueries
 		command = this.loadQueries("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// AddRootDomain
 		command = this.addRootDomain("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 	
 		// AddRootDomainAdminUser
 		command = this.addRootDomainAdminUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 
 		// AddNewDomain
 		command = this.addNewDomain("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// AddNewUser
 		command = this.addNewUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// BindDomaUser
 		command = this.addBindGraphFromDomainToUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		command = this.addBindGraphFromUserToDomain("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// AddComment
 		command = this.addAddComment("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// AddSubComment
 		command = this.addSubComment("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 //		/*Queries*/
 //		// GetCommandParams
@@ -264,7 +264,7 @@ public class CommandGraphGeneratorTest {
 		}
 	}
 	
-	public void writeAll(ICommandCreator command, String placeHolder, String applicationName, String applicationVersion) throws Exception{
+	public void writeAll(ICommandCreator command, String placeHolder, String applicationName, String applicationVersion, String destinationFolder) throws Exception{
 		JsonHeader header = new JsonHeader();
 		header.setApplicationName(applicationName);
 		header.setApplicationVersion(applicationVersion);
@@ -289,7 +289,7 @@ public class CommandGraphGeneratorTest {
 
 		//Alchemy command template JSON
 		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);
-		GraphGeneratorHelpers.writeAlchemyJson(command.get_commandName() + "Template", command.get_commandVersion(), alchemyJSON);
+		GraphGeneratorHelpers.writeAlchemyJson(command.get_commandName() + "Template", command.get_commandVersion(), alchemyJSON, destinationFolder);
 
 		this.saveForTest(commandTemplate, remoteRequestJson);
 //		JSONObjectBuilder.buildQuery(header, command.get_rootNode().getNode().asVertex());
