@@ -1,0 +1,211 @@
+{
+  "header" : {
+    "commandType" : "SystemCommands",
+    "applicationVersion" : "2.0",
+    "application" : "RATPlatform",
+    "commandVersion" : "0.1",
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "RootVertexUUID" : "c074e5c1-cd81-44d2-b9df-34cbe33c852e",
+    "commandName" : "AddRootDomain",
+    "domainName" : "@domainPlaceholder@",
+    "MessageType" : "Template"
+  },
+  "nodes" : [ {
+    "VertexUUIDField" : "6337300c-91b7-4ebb-8413-8ccfbdc739ba",
+    "VertexInstructionParameterNameField" : "rootDomainName",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "RAT",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "2",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "216e8a33-c377-4ba9-813a-b67adac2a6bd",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "CreateRootVertex",
+    "VertexContentField" : "CreateRootVertex",
+    "id" : "1",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "c074e5c1-cd81-44d2-b9df-34cbe33c852e",
+    "VertexTypeField" : "RootDomain",
+    "VertexIsRootField" : true,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "VertexCommandOwnerField" : "AddRootDomain",
+    "VertexLabelField" : "RootDomain",
+    "VertexContentField" : "RootDomain",
+    "id" : "0",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "19c343fc-85ba-4c23-9f06-f2d50f62ceda",
+    "VertexInstructionParameterNameField" : "commandsNodeUUID",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "VertexContentUndefined",
+    "VertexInstructionParameterReturnTypeField" : "uuid",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "6",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 2,
+    "VertexUUIDField" : "8414ddd9-7415-4d52-99b9-c5d03d4ead64",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 1,
+    "VertexLabelField" : "Bind",
+    "VertexContentField" : "Bind",
+    "id" : "5",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "7b489639-5c9e-4b9c-88b3-f4ce3615bc4d",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "CreateVertex",
+    "VertexContentField" : "CreateVertex",
+    "id" : "17",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "594eda30-cd7c-4734-b3b1-8c745288bfda",
+    "VertexInstructionParameterNameField" : "nodeName",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "is-put-by",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "18",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "a91a362f-81ff-4dc2-ad69-0ff868c8d246",
+    "VertexTypeField" : "SystemKey",
+    "VertexIsRootField" : false,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "VertexCommandOwnerField" : "AddRootDomain",
+    "VertexLabelField" : "is-put-by",
+    "VertexContentField" : "is-put-by",
+    "id" : "16",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "1b8f6ede-2bc7-4d03-a5fe-3470bcd95999",
+    "VertexInstructionParameterNameField" : "queriesNodeUUID",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "VertexContentUndefined",
+    "VertexInstructionParameterReturnTypeField" : "uuid",
+    "InstructionOrderField" : 1,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "8",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "f18c6004-518d-4176-a218-7012a815957a",
+    "VertexInstructionParameterNameField" : "nodeName",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "is-system",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "13",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "d5354ba5-3284-4bad-9e83-30e8bc751e39",
+    "VertexTypeField" : "SystemKey",
+    "VertexIsRootField" : false,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "VertexCommandOwnerField" : "AddRootDomain",
+    "VertexLabelField" : "is-system",
+    "VertexContentField" : "is-system",
+    "id" : "11",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "012d6838-5cfa-46fe-ae41-42c2c4fb2c6d",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "CreateVertex",
+    "VertexContentField" : "CreateVertex",
+    "id" : "12",
+    "_type" : "vertex"
+  } ],
+  "edges" : [ {
+    "weight" : 0,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "EdgeUUIDField" : "787983cb-1cf5-4543-9124-5b21186611a4",
+    "source" : "16",
+    "target" : "0",
+    "caption" : "Command"
+  }, {
+    "weight" : 0,
+    "source" : "1",
+    "target" : "2",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "source" : "16",
+    "target" : "17",
+    "caption" : "EdgeInstruction"
+  }, {
+    "weight" : 1,
+    "source" : "0",
+    "target" : "5",
+    "caption" : "EdgeInstruction"
+  }, {
+    "weight" : 0,
+    "source" : "5",
+    "target" : "6",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "source" : "17",
+    "target" : "18",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "source" : "0",
+    "target" : "1",
+    "caption" : "EdgeInstruction"
+  }, {
+    "weight" : 0,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "EdgeUUIDField" : "787983cb-1cf5-4543-9124-5b21186611a4",
+    "source" : "11",
+    "target" : "16",
+    "caption" : "Command"
+  }, {
+    "weight" : 0,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "EdgeUUIDField" : "787983cb-1cf5-4543-9124-5b21186611a4",
+    "source" : "0",
+    "target" : "11",
+    "caption" : "Command"
+  }, {
+    "weight" : 0,
+    "source" : "11",
+    "target" : "12",
+    "caption" : "EdgeInstruction"
+  }, {
+    "weight" : 1,
+    "source" : "5",
+    "target" : "8",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "source" : "12",
+    "target" : "13",
+    "caption" : "EdgeInstructionsParameter"
+  } ]
+}

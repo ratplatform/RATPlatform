@@ -1,0 +1,67 @@
+{
+  "header" : {
+    "StatusCode" : "200",
+    "commandType" : "Query",
+    "applicationVersion" : "2.0",
+    "application" : "RATPlatform",
+    "commandVersion" : "0.1",
+    "CommandGraphUUID" : "cbd70d99-0aff-4241-9528-1b8ba9c826a9",
+    "commandName" : "GetAllDomains",
+    "domainName" : "@domainPlaceholder@",
+    "MessageType" : "Response"
+  },
+  "nodes" : [ {
+    "VertexUUIDField" : "736479fb-af4b-4c4f-b9e1-9ff9336a8cb5",
+    "VertexTypeField" : "Domain",
+    "VertexIsRootField" : true,
+    "CommandGraphUUID" : "5e939553-cb24-423f-b968-b6f0ee32f652",
+    "VertexCommandOwnerField" : "AddNewDomain",
+    "VertexLabelField" : "DGR Domain 2",
+    "VertexContentField" : "DGR Domain 2",
+    "id" : "3",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "62a33539-a450-49ed-adb1-afde1c25a8d6",
+    "VertexTypeField" : "Domain",
+    "VertexIsRootField" : true,
+    "CommandGraphUUID" : "5e939553-cb24-423f-b968-b6f0ee32f652",
+    "VertexCommandOwnerField" : "AddNewDomain",
+    "VertexLabelField" : "DGR Domain 1",
+    "VertexContentField" : "DGR Domain 1",
+    "id" : "1",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "6cbf9a81-aa33-4456-8d34-4ca1d6919d27",
+    "VertexTypeField" : "RootDomain",
+    "VertexIsRootField" : true,
+    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
+    "VertexCommandOwnerField" : "AddRootDomain",
+    "VertexLabelField" : "RAT",
+    "VertexContentField" : "RAT",
+    "id" : "0",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "658a7035-3c23-464e-9bb7-a6020c7df07e",
+    "VertexTypeField" : "Domain",
+    "VertexIsRootField" : true,
+    "CommandGraphUUID" : "5e939553-cb24-423f-b968-b6f0ee32f652",
+    "VertexCommandOwnerField" : "AddNewDomain",
+    "VertexLabelField" : "DGR Domain 3",
+    "VertexContentField" : "DGR Domain 3",
+    "id" : "5",
+    "_type" : "vertex"
+  } ],
+  "edges" : [ {
+    "source" : "0",
+    "target" : "1",
+    "caption" : ""
+  }, {
+    "source" : "0",
+    "target" : "5",
+    "caption" : ""
+  }, {
+    "source" : "0",
+    "target" : "3",
+    "caption" : ""
+  } ]
+}

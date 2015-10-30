@@ -1,0 +1,89 @@
+{
+  "header" : {
+    "commandType" : "SystemCommands",
+    "applicationVersion" : "2.0",
+    "application" : "RATPlatform",
+    "commandVersion" : "0.1",
+    "CommandGraphUUID" : "4b4130e2-36d9-496a-8197-8859291755b7",
+    "RootVertexUUID" : "42fc1097-b340-41a1-8ab2-e4d718ad48b9",
+    "commandName" : "LoadCommands",
+    "domainName" : "@domainPlaceholder@",
+    "MessageType" : "Template"
+  },
+  "nodes" : [ {
+    "VertexUUIDField" : "f9159071-4d56-434d-a661-111e4d5fdf1d",
+    "VertexInstructionParameterNameField" : "name",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "Commands",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "2",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "2ca0ebd8-5b22-47ef-9e82-fae5f6c89437",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "CreateRootVertex",
+    "VertexContentField" : "CreateRootVertex",
+    "id" : "1",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "42fc1097-b340-41a1-8ab2-e4d718ad48b9",
+    "VertexTypeField" : "SystemKey",
+    "VertexIsRootField" : true,
+    "CommandGraphUUID" : "4b4130e2-36d9-496a-8197-8859291755b7",
+    "VertexCommandOwnerField" : "LoadCommands",
+    "VertexLabelField" : "Commands",
+    "VertexContentField" : "Commands",
+    "id" : "0",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "57990fa6-8b15-40f7-98ea-e41f0a752af7",
+    "VertexInstructionParameterNameField" : "folder",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "VertexContentUndefined",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "6",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "415cf58e-c7ac-43f3-93b6-436c4bbb9b28",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 1,
+    "VertexLabelField" : "LoadCommandsAction",
+    "VertexContentField" : "LoadCommandsAction",
+    "id" : "5",
+    "_type" : "vertex"
+  } ],
+  "edges" : [ {
+    "weight" : 0,
+    "source" : "1",
+    "target" : "2",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "source" : "5",
+    "target" : "6",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "source" : "0",
+    "target" : "1",
+    "caption" : "EdgeInstruction"
+  }, {
+    "weight" : 1,
+    "source" : "0",
+    "target" : "5",
+    "caption" : "EdgeInstruction"
+  } ]
+}
