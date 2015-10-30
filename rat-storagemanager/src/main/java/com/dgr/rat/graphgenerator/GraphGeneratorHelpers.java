@@ -18,14 +18,14 @@ import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
 
 public class GraphGeneratorHelpers {
-	public static final String IndexFolder = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/UUIDIndex";
-	public static final String UnitTestPropertyFile = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/unittest.properties";
+	public static final String IndexFolder = "conf/UUIDIndex";
+	public static final String UnitTestPropertyFile = "conf/unittest.properties";
 	public static final String PathSeparator = FileSystems.getDefault().getSeparator();
-	public static final String CommandsFolder = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/Commands";
-	public static final String QueriesFolder = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/Queries";
-	public static final String StorageManagerPropertyFile = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/storage-manager.properties";
-	public static final String QueryTemplatesFolder = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/QueryTemplates";
-	public static final String CommandTemplatesFolder = "/home/dgr/dev/RATPlatform/RATStorageManager/conf/CommandTemplates";
+	public static final String CommandsFolder = "conf/Commands";
+	public static final String QueriesFolder = "conf/Queries";
+	public static final String StorageManagerPropertyFile = "conf/storage-manager.properties";
+	public static final String QueryTemplatesFolder = "conf/QueryTemplates";
+	public static final String CommandTemplatesFolder = "conf/CommandTemplates";
 	
 	public static void writeGraphToJson(String json, String path) throws IOException{
         BufferedWriter writer = null;
