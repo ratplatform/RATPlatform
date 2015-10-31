@@ -129,6 +129,7 @@ public class CommandGraphGeneratorTest {
 		
 		AbstractCommand command = new AddSubComment(commandName, commandVersion);
 		command.set_commandType(JSONType.SystemCommands);
+		command.set_edgeName("AddSubComment");
 		command.addNodesToGraph();
 		command.buildGraph();
 
@@ -207,6 +208,12 @@ public class CommandGraphGeneratorTest {
 		
 		// LoadCommands
 		command = this.loadCommands("0.1");
+//		String commandName = JSONType.LoadCommands.toString();
+//		
+//		AbstractCommand command = new LoadCommands(commandName, commandVersion);
+//		command.set_commandType(JSONType.SystemCommands);
+//		command.addNodesToGraph();
+//		command.buildGraph();
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// LoadQueries

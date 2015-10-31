@@ -11,7 +11,7 @@
     "MessageType" : "Response"
   },
   "nodes" : [ {
-    "VertexUUIDField" : "77052b79-8460-45c0-a75e-719ca5f27b48",
+    "VertexUUIDField" : "fd272b06-9947-4df4-9986-e3ea9cf00ccb",
     "VertexTypeField" : "Comment",
     "VertexIsRootField" : false,
     "CommandGraphUUID" : "256beb60-b47c-4506-bf58-263ac3c5502f",
@@ -21,7 +21,7 @@
     "id" : "3",
     "_type" : "vertex"
   }, {
-    "VertexUUIDField" : "55fa9f36-a67d-4ddd-a9df-c4d3acec2bb0",
+    "VertexUUIDField" : "63c05c57-6f5b-4341-ae0c-b2985f50f66f",
     "VertexTypeField" : "Comment",
     "VertexIsRootField" : false,
     "CommandGraphUUID" : "256beb60-b47c-4506-bf58-263ac3c5502f",
@@ -31,7 +31,7 @@
     "id" : "1",
     "_type" : "vertex"
   }, {
-    "VertexUUIDField" : "fb9dd9dd-5b7a-42af-81d3-987a751249f3",
+    "VertexUUIDField" : "15ddde78-f6aa-4401-9d1b-c9b5f07a431f",
     "VertexTypeField" : "User",
     "VertexIsRootField" : true,
     "CommandGraphUUID" : "10a7be79-d9fa-405a-8cca-fe04352b36a8",
@@ -40,24 +40,10 @@
     "VertexContentField" : "User",
     "id" : "0",
     "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "3470642a-7341-40f8-a5c1-73954dbf90f3",
-    "VertexTypeField" : "Comment",
-    "VertexIsRootField" : false,
-    "CommandGraphUUID" : "256beb60-b47c-4506-bf58-263ac3c5502f",
-    "VertexCommandOwnerField" : "AddComment",
-    "VertexLabelField" : "Comment",
-    "VertexContentField" : "Comment",
-    "id" : "5",
-    "_type" : "vertex"
   } ],
   "edges" : [ {
     "source" : "0",
     "target" : "1",
-    "caption" : ""
-  }, {
-    "source" : "0",
-    "target" : "5",
     "caption" : ""
   }, {
     "source" : "0",

@@ -36,7 +36,7 @@ public class AddComment extends AbstractCommand{
 		// COMMENT: bind verso il nodo dell'owner (dominio)
 		belongsTo.addBindInstruction("ownerNodeUUID", RATConstants.VertexContentUndefined);
 		this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetAllDomainComments");
-		this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Comment, "StartQueryPipe", "SetQueryPipe", "GetAllCommentComments");
+		//this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Comment, "StartQueryPipe", "SetQueryPipe", "GetAllCommentComments");
 		
 		SystemKeyNode isPublic = this.buildNode(SystemKeyNode.class, "is-public");
 		isPublic.addCreateVertexInstruction("nodeName", "is-public", ReturnType.string);

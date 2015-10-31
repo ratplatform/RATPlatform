@@ -93,6 +93,7 @@ public class QueryPipeHelpers {
 				Object value = vertex.getProperty(key);
 				newVertex.setProperty(key, value);
 			}
+			newVertex.setProperty(RATConstants.VertexIsRootField, false);
 			newRootVertex.addEdge("", newVertex);
 		}
 		
@@ -103,5 +104,4 @@ public class QueryPipeHelpers {
 
 		return resultGraph;
 	}
-
 }

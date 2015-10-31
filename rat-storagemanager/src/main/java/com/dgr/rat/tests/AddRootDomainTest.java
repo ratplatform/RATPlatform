@@ -119,9 +119,17 @@ public class AddRootDomainTest {
 			response = this.executeRemoteCommand(json);
 			String comment2UUID = this.getNewRootNodeUUID(response);
 			
-			json = this.setAddCommentsValues("AddComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 4");
+			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 4");
 			response = this.executeRemoteCommand(json);
 			String comment3UUID = this.getNewRootNodeUUID(response);
+			
+			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 5");
+			response = this.executeRemoteCommand(json);
+			String comment4UUID = this.getNewRootNodeUUID(response);
+			
+			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 6");
+			response = this.executeRemoteCommand(json);
+			String comment5UUID = this.getNewRootNodeUUID(response);
 //			
 ////			 SubDomain
 //			json = this.setAddNewDomainValues("AddNewDomain.conf", DGRDomain3UUID, "DGR SubDomain 1");
@@ -209,6 +217,24 @@ public class AddRootDomainTest {
 			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+			TestHelpers.writeGraphToJson(alchemyJson, path);
+			
+			System.out.println("Commenti al commento");
+			json = this.query("GetAllCommentComments.conf", "rootNodeUUID", comment2UUID);
+			response = this.executeRemoteCommand(json);
+			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+			resultFilename = dir + "GetAllCommentComments.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+			TestHelpers.writeGraphToJson(alchemyJson, path);
+			
+			System.out.println("Tutti i commenti del dominio");
+			json = this.query("GetAllDomainComments.conf", "rootNodeUUID", DGRDomain1UUID);
+			response = this.executeRemoteCommand(json);
+			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+			resultFilename = dir + "GetAllDomainComments.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			

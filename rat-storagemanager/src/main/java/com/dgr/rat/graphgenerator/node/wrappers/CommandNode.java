@@ -119,7 +119,7 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 			IRATNodeFrame childNode = child.getNode();
 			String edgeUUID = GraphGeneratorHelpers.getUUID(this.get_commandOwner() + "-" + inc);
 			// COMMENT: non utilizzo addAdjacentVertex perché l'interfaccia mi costringe ad usare una label fissa (Comment, in questo caso: vedi IRATNodeFrame.addAdjacentVertex)
-			// e ciò crea dei problemi nella creazione dinamica delle query: DA NON CONCELLARE!
+			// e ciò crea dei problemi nella creazione dinamica delle query: DA NON CANCELLARE!
 			IRATNodeEdgeFrame edgeFrame = parent.addAdjacentVertex(childNode);
 			edgeFrame.setWeight(inc);
 			edgeFrame.setEdgeUUID(edgeUUID);
