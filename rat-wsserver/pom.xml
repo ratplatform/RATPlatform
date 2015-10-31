@@ -8,11 +8,10 @@
   	<version>2.0.0-SNAPSHOT</version>
     </parent>
 
-  <groupId>org.rat.platform</groupId>
   <artifactId>rat-wsserver</artifactId>
   <version>0.9.0-SNAPSHOT</version>
   <name>RATWSServer</name>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
     <developers>
         <developer>

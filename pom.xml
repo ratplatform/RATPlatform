@@ -97,6 +97,7 @@
     <module>rat-storagemanager</module>
     <module>rat-wsserver</module>
     <module>rat-wsserver-webclient</module>
+    <module>Test</module>
   </modules>
 
   <dependencies>
