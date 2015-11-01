@@ -7,8 +7,8 @@ package com.dgr.rat.commons.constants;
 
 import java.nio.file.FileSystems;
 
+// TODO: molte sono inutili: da rimuovere le costanti inutilizzate
 public class RATConstants {
-	
 	public static final String Commands = "Commands";
 	public static final String Queries = "Queries";
 	
@@ -32,7 +32,7 @@ public class RATConstants {
 	public static final String StatusCode = "StatusCode";
 	
 	// RATStorageManager/conf/storage-manager.properties
-	public static final String RootDomain = "root.domain";
+	public static final String RootDomainName = "root.domain.name";
 	public static final String DomainPlaceholder = "domain.placeholder";
 	public static final String RootDomainPlaceholder = "root.domain.placeholder";
 	public static final String RootDomainUUIDPlaceholder = "root.domain.uuid.placeholder";
@@ -43,6 +43,12 @@ public class RATConstants {
 	public static final String QueriesFolder = "queries.folder";
 	public static final String ApplicationVersionField = "application.version";
 	public static final String ApplicationName = "application.name";
+	public static final String StorageType = "storage.type";
+	public static final String DBDefaultAdminName = "db.default.admin.name";
+	public static final String DBDefaultAdminPwd = "db.default.admin.pwd";
+	// TODO: temporanei: leggere commento in SystemCommandsInitializer.loadCommandTemplates
+	public static final String CommandsTemplateUUID = "commands.template.uuid";
+	public static final String QueriesTemplateUUID = "queries.template.uuid";
 			
 	// VertexValue
 	public static final String VertexUUIDField = "VertexUUIDField";
