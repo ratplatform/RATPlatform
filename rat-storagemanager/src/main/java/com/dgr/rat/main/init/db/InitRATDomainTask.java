@@ -6,10 +6,9 @@
 package com.dgr.rat.main.init.db;
 
 import com.dgr.rat.async.dispatcher.ITaskCommand;
-import com.dgr.rat.graphgenerator.JSONObjectBuilder;
+import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
-import com.dgr.rat.messages.MQMessage;
 
 public class InitRATDomainTask implements ITaskCommand<MQMessage>{
 	private String _json = null;
@@ -23,11 +22,9 @@ public class InitRATDomainTask implements ITaskCommand<MQMessage>{
 	 */
 	@Override
 	public MQMessage execute() {
-		MQMessage result = new MQMessage();
 		CommandSink commandSink = new CommandSink();
 		Response response = commandSink.doCommand(_json);
-		String ratJsonResponse = JSONObjectBuilder.buildJSONRatCommandResponse(response);
-		result.setResponseMessage(ratJsonResponse);
+		MQMessage result = new MQMessage(response.getHeader());
 		
 		return result;
 	}

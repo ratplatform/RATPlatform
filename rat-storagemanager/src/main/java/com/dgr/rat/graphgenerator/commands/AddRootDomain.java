@@ -20,7 +20,8 @@ public class AddRootDomain extends AbstractCommand{
 	public void addNodesToGraph() throws Exception{
 		RATDomainNode rootDomainNode = this.buildRootNode(RATDomainNode.class, VertexType.RootDomain.toString());
 		rootDomainNode.addCreateCommandRootVertexInstruction("rootDomainName", "RAT", ReturnType.string);
-
+//		this.setQueryPivot(rootDomainNode, rootDomainNode.getType(), VertexType.RootDomain, "StartQueryPipe", "SetQueryPipe","GetRootDomain");
+		
 		SystemKeyNode isSystemNode = this.buildNode(SystemKeyNode.class,  "is-system");
 		isSystemNode.addCreateVertexInstruction("nodeName", "is-system", ReturnType.string);
 		

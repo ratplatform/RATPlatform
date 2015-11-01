@@ -11,59 +11,21 @@ import javax.jms.Message;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import org.springframework.jms.core.MessageCreator;
-
-import com.dgr.rat.commons.constants.MQConstants;
-import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.commons.mqmessages.MQMessage;
-import com.dgr.rat.commons.mqmessages.MQMessageHelpers;
-import com.dgr.rat.commons.utils.DateUtils;
+import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 
 public class MessageGenerator implements MessageCreator{
 	private String _correlationID = null;
-	private StatusCode _statusCode = StatusCode.Unknown;
-	private String _message = null;
-	
-	public MessageGenerator(String correlationID) {
-		_correlationID = correlationID;
-	}
-	
-	public void setStatusCode(StatusCode statusCode){
-		_statusCode = statusCode;
-	}
-	
-	public void setMessage(String message){
+	private MQMessage _message = null;
+	public MessageGenerator(MQMessage message) {
 		_message = message;
-	}
-	
-	private String createJSONMessage(){
-		MQMessage mqMessage = new MQMessage();
-		mqMessage.setSessionID(_correlationID);
-		mqMessage.setStatusResponse(_statusCode.toString());
-		if(_message != null){
-			mqMessage.setTextMessage(_message);
-		}
-		String date = DateUtils.getNow(MQConstants.DateFormat);
-		mqMessage.setDate(date);
-		// TODO: da rivedere un po' questa parte, mi convince poco
-		// a causa dei field JSON "embedded" nel catch (sono gli
-		// stessi di MQMessage)
-		String result = null;
-		try {
-			result = MQMessageHelpers.serialize(mqMessage);
-		} 
-		catch (Exception e) {
-			// TODO log
-			e.printStackTrace();
-			result = "{\"sessionID\":\"" + _correlationID + "\",\"statusResponse\":\"" + _statusCode.toString() + "\",\"date\":\"" + date + "\"}";
-		}
-
-		return result;
+		_correlationID = message.getSessionID();
 	}
 	
 	@Override
 	public Message createMessage(Session session) {
 		TextMessage response = null;
-		String json = this.createJSONMessage();
+		String json = JSONObjectBuilder.serializeCommandResponse(_message);
 
 		try{
 			response = session.createTextMessage();

@@ -10,10 +10,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
+import com.dgr.rat.commons.mqmessages.IResponse;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.graphgenerator.queries.CreateJsonRemoteQueryRequest;
 import com.dgr.rat.graphgenerator.test.CreateJsonRemoteCommandRequest;
-import com.dgr.rat.json.factory.JsonHeader;
-import com.dgr.rat.json.factory.Response;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -25,14 +25,14 @@ public class JSONObjectBuilder {
 	public static final String Header = "header";
 	public static final String Settings = "settings";
 	
-	public static String buildJSONRatCommandResponse(Response response){
+	public static String serializeCommandResponse(IResponse response){
 		JsonHeader header = response.getHeader();
 		Map<String, String> headerMap = header.getHeaderProperties();
 
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode headerObjectNode = mapper.valueToTree(headerMap);
 		Map<String, Object>map = null;
-		Map<String, Object> commandResponsePropertiesMap = response.getCommandResponse().getResult();
+		Map<String, Object> commandResponsePropertiesMap = response.getResult();
 		if(commandResponsePropertiesMap.containsKey(JSONObjectBuilder.Settings)){
 			map = commandResponsePropertiesMap;
 		}

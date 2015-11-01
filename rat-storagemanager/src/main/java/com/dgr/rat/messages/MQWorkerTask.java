@@ -10,12 +10,17 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 import org.springframework.jms.JmsException;
 import com.dgr.rat.async.dispatcher.ITaskCommand;
+import com.dgr.rat.commons.constants.MessageType;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
-import com.dgr.rat.graphgenerator.JSONObjectBuilder;
+import com.dgr.rat.commons.mqmessages.IResponse;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
+import com.dgr.utils.AppProperties;
 
-public class MQWorkerTask implements ITaskCommand<MQMessage>{
+public class MQWorkerTask implements ITaskCommand<IResponse>{
 	private Message _message = null;
 	private RATMessagingService _owner = null;
 
@@ -33,20 +38,15 @@ public class MQWorkerTask implements ITaskCommand<MQMessage>{
 	// comunque.
 	// TODO: da rivedere implementando un pattern state
 	private MQMessage run(){
-		// TODO: MQMessage è mal gestito
-		MQMessage result = new MQMessage();
+		MQMessage result = null;
 		
 		TextMessage txtMsg = (TextMessage) _message;
 		String sessionID = null;
-		MessageGenerator messageGenerator = null;
 		String messageText = null;
-		StatusCode commandResult = StatusCode.Unknown;
 		StatusCode status = StatusCode.Unknown; // usato come flag per andare avanti
-//		JSONObjectBuilder jsonResponse = null;
-//		Response response = null;
-		String ratJsonResponse = null;
+		StatusCode commandResult = StatusCode.Unknown;
 		
-		// COMMENT: primo caso (grave): se qui viene lanciata unn'Exception
+		// COMMENT: primo caso (grave): se qui viene lanciata un'Exception
 		// non c'è nulla da fare e il messaggio
 		// non può essere inviato in alcun modo. Uscire!
 		// TODO: sa risolvere in qualche modo questo primo caso: pensare ad un modo per inviare un messaggio in ogni caso!
@@ -54,14 +54,10 @@ public class MQWorkerTask implements ITaskCommand<MQMessage>{
 		try {
 			sessionID = _message.getJMSCorrelationID();
 			messageText = txtMsg.getText();
-			// Creo subito il messaggio di ritorno
-			messageGenerator = new MessageGenerator(sessionID);
 			status = StatusCode.Ok;
 		} 
 		catch (JMSException e) {
-			//result.set_statusCode(StatusCode.InternalServerError);
 			status = StatusCode.InternalServerError;
-//			commandResult = status;
 			e.printStackTrace();
 			// TODO log
 			// TODO: ATTENZIONE in questo caso è un casino perché non posso comunicare 
@@ -70,36 +66,59 @@ public class MQWorkerTask implements ITaskCommand<MQMessage>{
 		}
 		
 		if(status == StatusCode.Ok){
+			
 			CommandSink commandSink = new CommandSink();
 			Response response = commandSink.doCommand(messageText);
-			ratJsonResponse = JSONObjectBuilder.buildJSONRatCommandResponse(response);
 			
 			// TODO: poco sicuro da rivedere
 			commandResult = StatusCode.fromString(response.getStatusCode());
+			
+			result = new MQMessage(response.getHeader());
+			result.setCommandResponse(response.getResult());
+			result.setSessionID(sessionID);
+			
 			//TODO: cosa faccio se l'istruzione precedente fallisse restituendo un StatusCode.Unknown?
-			result.setResponseMessage(ratJsonResponse);
-		}
-		
-		// Mando il messaggio di ritorno
-		if(status == StatusCode.Ok){
 			System.out.println("MessagingServerWorker: messageText: " + messageText);
-			messageGenerator.setStatusCode(commandResult);
-			messageGenerator.setMessage(ratJsonResponse);
+			MessageGenerator messageGenerator = new MessageGenerator(result);
 			
 			try {
+				// COMMENT: invio della risposta al sender
 				_owner.getJmsTemplate().send(_message.getJMSReplyTo(), messageGenerator);
 			} 
 			catch (JmsException | JMSException e) {
 				// TODO log
 				e.printStackTrace();
 				commandResult = StatusCode.InternalServerError;
+				result.setStatusResponse(commandResult);
 				// TODO: sa risolvere in qualche modo questo primo caso: pensare ad un modo per inviare un messaggio in ogni caso!
 				// In prima battuta prevedere dall'altro capo della MQ un timeout
 			}
 			
 		}
+		
+		// COMMENT: c'è stato un problema grave....
+		if(result == null){
+			String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
+			String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
+			String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
+			
+			JsonHeader header = new JsonHeader();
+			
+			header.setApplicationName(applicationName);
+			header.setApplicationVersion(applicationVersion);
+			header.setDomainName(placeHolder);
+			header.setMessageType(MessageType.Response);
+			header.setStatusCode(commandResult);
+			
+			result = new MQMessage(header);
+		}
 
+		// COMMENT: restituisco in ogni caso un messaggio, anche se di fatto quello al sender 
+		// viene inviato con _owner.getJmsTemplate().send(_message.getJMSReplyTo(), messageGenerator),
+		// in quanto dentro RATMessagingService.onReceive potrei voler fare dei controlli, oppure altre operazioni.
+		// In altre parole, il messaggio qui restituito viene recuperato da Task<V> ed inviato:
+		// 1) via sendMessage a tutti i suoi listener
+		// 2) restituito al chiamate quando viene fatto Task.get
 		return result;
 	}
-
 }

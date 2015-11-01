@@ -175,7 +175,7 @@ public class AddRootDomainTest {
 			json = this.query("GetAllDomains.conf", "rootNodeUUID", rootDomainUUID);
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			String resultFilename = dir + "GetAllDomains.conf" + "QueryResult";
 			String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -184,7 +184,7 @@ public class AddRootDomainTest {
 			System.out.println("Utenti sotto RAT");
 			json = this.query("GetAllUsers.conf", "rootNodeUUID", rootDomainUUID);
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -193,7 +193,7 @@ public class AddRootDomainTest {
 			System.out.println("Domini dell'utente dgr1");
 			json = this.query("GetAllUserDomains.conf", "rootNodeUUID", dgr1UUID);
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllUserDomains.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -202,7 +202,7 @@ public class AddRootDomainTest {
 			System.out.println("Utenti del dominio DGR Domain 1");
 			json = this.query("GetAllDomainUsers.conf", "rootNodeUUID", DGRDomain1UUID);
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -211,7 +211,7 @@ public class AddRootDomainTest {
 			System.out.println("Commenti dell'utente dgr1");
 			json = this.query("GetAllUserComments.conf", "rootNodeUUID", dgr1UUID);
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -220,7 +220,7 @@ public class AddRootDomainTest {
 			System.out.println("Commenti al commento");
 			json = this.query("GetAllCommentComments.conf", "rootNodeUUID", comment2UUID);
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllCommentComments.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -229,7 +229,7 @@ public class AddRootDomainTest {
 			System.out.println("Tutti i commenti del dominio");
 			json = this.query("GetAllDomainComments.conf", "rootNodeUUID", DGRDomain1UUID);
 			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.buildJSONRatCommandResponse(response);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
 			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			resultFilename = dir + "GetAllDomainComments.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
@@ -605,7 +605,7 @@ public class AddRootDomainTest {
 	
 	private Response executeRemoteCommand(String json)throws Exception{
 		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
-		String rootDomain = AppProperties.getInstance().getStringProperty(RATConstants.RootDomain);
+		String rootDomain = AppProperties.getInstance().getStringProperty(RATConstants.RootDomainName);
 		String input = json.replace(placeHolder, rootDomain);
 		
 		CommandSink commandSink = new CommandSink();

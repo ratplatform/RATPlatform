@@ -19,9 +19,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
-import com.dgr.rat.json.factory.JsonHeader;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.VertexType;
@@ -90,6 +90,8 @@ public class QueryGraphGeneratorTest {
 			// TODO exception
 		}
 		
+		// TODO: se il nodo ha un figlio che punta al nodo stesso, entra in un loop infinito: non fa alcun controllo sui nodi
+		// attraversati; meglio usare una versione di traverse: meno elegante ma più sicura
 		GremlinPipeline<Vertex, Vertex> p = new GremlinPipeline<Vertex, Vertex>(commandVertex);
 		List<List> lists = p.out().loop(1, QueryGraphGeneratorTest.whileFunction, QueryGraphGeneratorTest.emitFunction).path().toList();
 		
@@ -143,6 +145,7 @@ public class QueryGraphGeneratorTest {
 		}
 	};
 	
+	// COMMENT: NON CANCELLARE!
 	private void traverse(Vertex queryPivotVertex){
 		Stack<Vertex>stack = new Stack<Vertex>();
 		List<Vertex> visited = new LinkedList<Vertex>();
@@ -222,6 +225,7 @@ public class QueryGraphGeneratorTest {
 		this.addNodesToGraph("BindFromUserToDomainTemplate.conf", "0.1");
 		this.addNodesToGraph("AddSubCommentTemplate.conf", "0.1");
 		this.addNodesToGraph("AddCommentTemplate.conf", "0.1");
+		this.addNodesToGraph("AddRootDomainTemplate.conf", "0.1");
 		
 //		this.addBindGraphNodesToGraph("BindGraphTemplate.conf", "0.1");
 		

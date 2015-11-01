@@ -35,7 +35,7 @@ public class RATStorageManager {
 		String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
 		systemCommandsInitializer.set_storageType(storageType);
 		
-		// 1) Inizializzo il database (se non esiste il DB allora lo creo)
+		// COMMENT: Inizializzo il database (se non esiste il DB allora lo creo)
 		systemCommandsInitializer.initStorage();
 		
 		systemCommandsInitializer.loadCommandTemplates();

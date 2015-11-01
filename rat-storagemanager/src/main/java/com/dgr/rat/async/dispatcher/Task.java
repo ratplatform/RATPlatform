@@ -49,8 +49,8 @@ public class Task<V> implements Callable<V>{
 	}
 	
 	// COMMENT: In questo modo posso usarlo in due modi diversi:
-	// 1) con sendMessage nel caso di gestione degli eventi via sendMessage
-	// 2) con Future.get
+	// 1) con sendMessage nel caso di gestione degli eventi via sendMessage (ad es.: RATMessagingService.onReceive riceve i messaggi qui prodotti)
+	// 2) con Future.get (in RATMessagingService.onMessage)
 	@Override
 	public V call() throws Exception {
 		V message = this.getTaskCommand().execute();

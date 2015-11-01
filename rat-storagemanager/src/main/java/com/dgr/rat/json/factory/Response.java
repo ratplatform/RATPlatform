@@ -5,9 +5,13 @@
 
 package com.dgr.rat.json.factory;
 
-import com.dgr.rat.command.graph.executor.engine.result.CommandResponse;
+import java.util.Map;
 
-public class Response {
+import com.dgr.rat.command.graph.executor.engine.result.CommandResponse;
+import com.dgr.rat.commons.mqmessages.IResponse;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
+
+public class Response implements IResponse{
 	private CommandResponse _commandResult = null;
 	private JsonHeader _header = null;
 	
@@ -49,5 +53,14 @@ public class Response {
 	 */
 	public void setCommandResponse(CommandResponse commandResult) {
 		this._commandResult = commandResult;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.dgr.rat.commons.mqmessages.IResponse#getResult()
+	 */
+	@Override
+	public Map<String, Object> getResult() {
+		// TODO Auto-generated method stub
+		return this.getCommandResponse().getResult();
 	}
 }
