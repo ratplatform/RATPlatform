@@ -5,19 +5,11 @@
 
 package com.dgr.rat.webservices;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -35,18 +27,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-
 import com.dgr.rat.auth.LoginData;
 import com.dgr.rat.auth.db.IdentityManager;
-import com.dgr.rat.auth.db.User;
 import com.dgr.rat.commons.constants.MQConstants;
 import com.dgr.rat.commons.utils.DateUtils;
-//import com.dgr.rat.auth.db.old.UserRole;
 import com.dgr.rat.login.json.ChooseDomainData;
 import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.rat.session.manager.SessionData;

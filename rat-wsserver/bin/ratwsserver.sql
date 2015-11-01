@@ -23,13 +23,17 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `permissions` VALUES ('1', 'administrator', 'RAT', 'admin');
-INSERT INTO `permissions` VALUES ('2', 'administrator', 'RAT', 'createcollaborationdomain');
-INSERT INTO `permissions` VALUES ('3', 'administrator', 'RAT', 'createnewuser');
-INSERT INTO `permissions` VALUES ('4', 'domainadmin', 'TestDomain', 'createnewuser');
-INSERT INTO `permissions` VALUES ('5', 'domainadmin', 'TestDomain', 'comment');
-INSERT INTO `permissions` VALUES ('6', 'domainadmin', 'TestDomain', 'createcollaborationdomain');
-
+-- INSERT INTO `permissions` VALUES ('1', 'administrator', 'RAT', 'admin');
+-- INSERT INTO `permissions` VALUES ('2', 'administrator', 'RAT', 'createcollaborationdomain');
+-- INSERT INTO `permissions` VALUES ('3', 'administrator', 'RAT', 'createnewuser');
+-- INSERT INTO `permissions` VALUES ('4', 'domainadmin', 'TestDomain', 'createnewuser');
+-- INSERT INTO `permissions` VALUES ('5', 'domainadmin', 'TestDomain', 'comment');
+-- INSERT INTO `permissions` VALUES ('6', 'domainadmin', 'TestDomain', 'createcollaborationdomain');
+-- INSERT INTO `permissions` VALUES ('7', 'domainadmin', 'TestDomain', 'deletecollaborationdomain');
+-- INSERT INTO `permissions` VALUES ('8', 'domainadmin', 'TestDomain', 'deleteuser');
+-- INSERT INTO `permissions` VALUES ('9', 'domainadmin', 'TestDomain', 'deletecomment');
+-- INSERT INTO `permissions` VALUES ('10', 'domainadmin', 'TestDomain', 'executeusercommands');
+-- INSERT INTO `permissions` VALUES ('11', 'domainadmin', 'TestDomain', 'choosedomain');
 -- ----------------------------
 -- user
 -- ----------------------------
@@ -45,8 +49,8 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `user` VALUES ('1', 'admin', 'admin@admin.it', 'admin');
-INSERT INTO `user` VALUES ('2', 'dgr', 'dgr@dgr.it', 'dgr');
+-- INSERT INTO `user` VALUES ('1', 'admin', 'admin@admin.it', 'admin');
+-- INSERT INTO `user` VALUES ('2', 'dgr', 'dgr@dgr.it', 'dgr');
 
 -- ----------------------------
 -- role
@@ -61,8 +65,8 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `role` VALUES ('1', 'administrator');
-INSERT INTO `role` VALUES ('2', 'domainadmin');
+-- INSERT INTO `role` VALUES ('1', 'administrator');
+-- INSERT INTO `role` VALUES ('2', 'domainadmin');
 
 -- ----------------------------
 -- user_role FORSE NON SERVE
@@ -79,8 +83,8 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `user_role` VALUES ('1', 'admin', 'administrator');
-INSERT INTO `user_role` VALUES ('2', 'dgr', 'domainadmin');
+-- INSERT INTO `user_role` VALUES ('1', 'admin', 'administrator');
+-- INSERT INTO `user_role` VALUES ('2', 'dgr', 'domainadmin');
 
 -- ----------------------------
 -- user_domain
@@ -97,9 +101,9 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `user_domain` VALUES ('1', 'admin', 'RAT');
-INSERT INTO `user_domain` VALUES ('2', 'dgr', 'TestDomain');
-INSERT INTO `user_domain` VALUES ('3', 'dgr', 'TestDomain2');
+-- INSERT INTO `user_domain` VALUES ('1', 'admin', 'RAT');
+-- INSERT INTO `user_domain` VALUES ('2', 'dgr', 'TestDomain');
+-- INSERT INTO `user_domain` VALUES ('3', 'dgr', 'TestDomain2');
 
 -- ----------------------------
 -- domain
@@ -114,15 +118,15 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `domain` VALUES ('1', 'RAT');
-INSERT INTO `domain` VALUES ('2', 'TestDomain');
+-- INSERT INTO `domain` VALUES ('1', 'RAT');
+-- INSERT INTO `domain` VALUES ('2', 'TestDomain');
 
 -- ----------------------------
 -- domain_role
 -- ----------------------------
 DROP TABLE IF EXISTS `domain_role`;
 CREATE TABLE `domain_role` (
-	`domainRoleID` int(11) NOT NULL,
+	`domainRoleID` int(11) NOT NULL NULL AUTO_INCREMENT,
 	`domainName` varchar(255) NOT NULL,
 	`userName` varchar(255) NOT NULL,
 	`roleName` varchar(255) NOT NULL,
@@ -133,5 +137,5 @@ ENGINE=InnoDB
 DEFAULT CHARACTER SET utf8
 DEFAULT COLLATE utf8_general_ci;
 
-INSERT INTO `domain_role` VALUES ('1', 'RAT', 'admin', 'administrator');
-INSERT INTO `domain_role` VALUES ('2', 'TestDomain', 'dgr', 'domainadmin');
+-- INSERT INTO `domain_role` VALUES ('1', 'RAT', 'admin', 'administrator');
+-- INSERT INTO `domain_role` VALUES ('2', 'TestDomain', 'dgr', 'domainadmin');
