@@ -19,32 +19,28 @@ public class RATStorageManager {
 	private RATMessagingService _messagingServer = null;
 	
 	public RATStorageManager() throws Exception {
-		//RATStorageManager.checkDB("local:/home/dgr/dev/RATPlatform/RATStorageManager/data/orientdb/rat-orientdb", "admin", "admin");
-		
 		this.init();
 	}
 	
 	private void init() throws Exception{
 		RATHelpers.initProperties(RATConstants.PropertyFile);
+		// TODO questo deve essere letto solo se imposto il DB OrientDB
 		RATHelpers.initProperties(RATConstants.OrientDBPropertyFile);
-
-//		RATHelpers.readProperties(RATConstants.OrientDBPropertyFile);
 		
 		String path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-consumer.xml";
 		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(path);
 		_messagingServer = (RATMessagingService)context.getBean("RATMessagingService");
 
-		path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "start-systemcommands.xml";
-		context = new FileSystemXmlApplicationContext(path);
-		SystemCommandsInitializer systemCommandsInitializer = (SystemCommandsInitializer)context.getBean("InitSystemCommands");
+		SystemCommandsInitializer systemCommandsInitializer = new SystemCommandsInitializer();
+		String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
+		systemCommandsInitializer.set_storageType(storageType);
+		
 		// 1) Inizializzo il database (se non esiste il DB allora lo creo)
 		systemCommandsInitializer.initStorage();
 		
 		systemCommandsInitializer.loadCommandTemplates();
-		// 2) Eseguo tutti i comandi SystemCommands
-		systemCommandsInitializer.runSystemCommands();
-//		// 3) Salvo i template degli UserCommands
-		systemCommandsInitializer.readUserCommandsCommandTemplates();
+		
+		System.out.println("Ready!");
 	}
 	
 	public void shutdownServer() throws Exception{

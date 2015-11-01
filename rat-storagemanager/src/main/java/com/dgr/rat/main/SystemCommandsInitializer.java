@@ -9,24 +9,23 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Future;
-import com.dgr.rat.async.dispatcher.EventManager;
-import com.dgr.rat.async.dispatcher.Task;
+import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.json.RATJsonObject;
+import com.dgr.rat.json.factory.CommandSink;
+import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.main.init.db.InitRATDomainTask;
-import com.dgr.rat.messages.MQMessage;
+import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.rat.storage.provider.StorageType;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
+import com.dgr.utils.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,10 +35,7 @@ import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONReader;
 
 public class SystemCommandsInitializer {
-	private Map<String, String> _componentMap = new HashMap<String, String>();
-	private Map<String, String> _userCommandToRead = new HashMap<String, String>();
 	private IStorage _storage = null;
-	private String[] _executionOrder = null;
 	private String _storageType = null;
 	
 	public SystemCommandsInitializer() {
@@ -50,38 +46,35 @@ public class SystemCommandsInitializer {
 		this._storageType = storageType;
 	}
 	
-	public void set_componentMap(Map<String, String> map){
-		this._componentMap = map;
-	}
-	
-	public void set_userCommandToRead(Map<String, String> map){
-		this._userCommandToRead = map;
-	}
-	
-	public void set_executionOrder(String[] executionOrder) {
-		this._executionOrder = executionOrder;
-	}
-	
 	public void initStorage() throws Exception{
 		StorageType storageType = StorageType.fromString(_storageType);
 		StorageBridge.getInstance().init(storageType);
 		_storage = StorageBridge.getInstance().getStorage();
 	}
 	
-	// TODO: così non va bene ed è temporaneo: devo trovare il modo per eseguirlo come tutti gli altri
+	// TODO: così non va bene ed è temporaneo: devo trovare il modo per eseguirlo come tutti gli altri comandi.
 	public void loadCommandTemplates() throws Exception{
 		String templatesPath = RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder);
 		String json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadCommandsTemplate.conf");
-		this.loadCommandTemplates(templatesPath, json, "42fc1097-b340-41a1-8ab2-e4d718ad48b9");
+		String commandsTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
+		this.loadCommandTemplates(templatesPath, json, commandsTemplateUUID);
 		
 		json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadQueriesTemplate.conf");
+		String queriesTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
 		templatesPath = RATHelpers.getCommandsPath(RATConstants.QueryTemplatesFolder);
-		this.loadCommandTemplates(templatesPath, json, "309c67c5-fd6e-4124-8cb6-8a455de32233");
+		this.loadCommandTemplates(templatesPath, json, queriesTemplateUUID);
+		
+		// TODO: per ora eseguo tutto in modo sincrono, in seconda battuta vedremo. Questa parte è tutta da rivedere in quanto
+		// i nomi dei parametri sono contenuti nelle due funzioni che seguono e così non va bene.
+		String rootDomainUUID = this.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+		
+		String userAdminName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
+		String userAdminPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
+		this.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID, userAdminName, userAdminPwd);
 	}
 	
 	private void loadCommandTemplates(String commandTemplatesPath, String json, String commandUUID) throws Exception{
 		// Leggo il file coi comandi
-//		String json = FileUtils.fileRead(commandTemplatesPath + FileSystems.getDefault().getSeparator() + commandFileName);
 		try{
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -94,12 +87,14 @@ public class SystemCommandsInitializer {
 	
 			Iterable<Vertex> iterable = graph.getVertices(RATConstants.VertexUUIDField, commandUUID);
 			if(iterable == null){
-				// TODO: exception
+				throw new Exception();
+				// TODO: log
 			}
 			
 			Iterator<Vertex> it = iterable.iterator();
 			if(!it.hasNext()){
-				// TODO: exception
+				throw new Exception();
+				// TODO: log
 			}
 			
 			Vertex commandsVertex = null;
@@ -162,61 +157,91 @@ public class SystemCommandsInitializer {
 		}
 	}
 	
-	public void runSystemCommands() throws Exception{
-		String commandsPath = RATHelpers.getCommandsPath(RATConstants.CommandsFolder);
+	private Response execute(String commandJSON) throws Exception{
+		CommandSink commandSink = new CommandSink();
+		Response response = commandSink.doCommand(commandJSON);
 		
-		for(String key :_executionOrder){
-			String fileName = _componentMap.get(key);
-			
-			StringBuffer pathBuffer = new StringBuffer();
-			pathBuffer.append(commandsPath);
-			pathBuffer.append(fileName);
-			
-			String templatePath = pathBuffer.toString();
-			String input = FileUtils.fileRead(templatePath);
-			
-			String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
-			String rootDomain = AppProperties.getInstance().getStringProperty(RATConstants.RootDomain);
-			input = input.replace(placeHolder, rootDomain);
-			
-			InitRATDomainTask setRATDomainTask = new InitRATDomainTask(input);
-			Task<MQMessage> task = new Task<MQMessage>(setRATDomainTask);
-			Future<MQMessage> result = EventManager.getInstance().addTask(task);
-			MQMessage resultMessage = result.get();
-			
-			System.out.println("SetRATDomainTask result: " + resultMessage.getResponseMessage().toString());
+		StatusCode statusCode = StatusCode.fromString(response.getStatusCode());
+		System.out.println("StatusCode " + statusCode.toString());
+		if(statusCode != StatusCode.Ok){
+			throw new Exception();
+			// TODO: log
+		}
+		
+		return response;
+	}
+	
+	private void createAddRootDomainAdminUser(String fileName, String rootDomainUUID, String userAdminName, String userAdminPwd) throws Exception{
+		String json = this.readCommandJSONFile(fileName);
+		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		
+		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		
+		int changed = remoteCommandsContainer.setValue("nodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("userName", userAdminName, ReturnType.string);
+		System.out.println("userName changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("userPwd", userAdminPwd, ReturnType.string);
+		System.out.println("userPwd changed in " + fileName + ": " + changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+		
+		Response response = this.execute(commandJSON);
+		Object newRootUUID = response.getCommandResponse().getProperty(RATConstants.VertexUUIDField);
+		if(newRootUUID == null){
+			throw new Exception();
+			// TODO: log
+		}
+		if(!Utils.isUUID(newRootUUID.toString())){
+			throw new Exception();
+			// TODO: log
 		}
 	}
 	
-	// ATTENZIONE: è importante che vengano eseguita DOPO runSystemCommands
-	public void readUserCommandsCommandTemplates() throws Exception{
-		Iterator<String> it = _userCommandToRead.keySet().iterator();
-		while(it.hasNext()){
-			String commandName = it.next();
-			String commandFile = _userCommandToRead.get(commandName);
-			
-			StringBuffer pathBuffer = new StringBuffer();
-			pathBuffer.append(RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder));
-			pathBuffer.append(commandFile);
-			
-			String templatePath = pathBuffer.toString();
-			String input = FileUtils.fileRead(templatePath);
-//			input = this.setRootDomain(input);
-			
-			UUID uuid = _storage.getRootDomainUUID();
-			if(uuid == null){
-				// TODO da gestire
-				throw new Exception();
-			}
-			String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.RootDomainUUIDPlaceholder);
-			input = input.replace(placeHolder, uuid.toString());
-			
-			InitRATDomainTask initRATDomainTask = new InitRATDomainTask(input);
-			Task<MQMessage> task = new Task<MQMessage>(initRATDomainTask);
-			Future<MQMessage> result = EventManager.getInstance().addTask(task);
-			MQMessage resultMessage = result.get();
-			
-			System.out.println("SetRATDomainTask result: " + resultMessage.getResponseMessage().toString());
+	private String createRootDomain(String fileName, String commandsNodeUUID, String queriesNodeUUID) throws Exception{
+		String json = this.readCommandJSONFile(fileName);
+		
+		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		
+		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		int changed = remoteCommandsContainer.setValue("commandsNodeUUID", commandsNodeUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("queriesNodeUUID", queriesNodeUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
+		
+		Response response = this.execute(commandJSON);
+		Object newRootUUID = response.getCommandResponse().getProperty(RATConstants.VertexUUIDField);
+		if(newRootUUID == null){
+			throw new Exception();
+			// TODO: log
 		}
+		if(!Utils.isUUID(newRootUUID.toString())){
+			throw new Exception();
+			// TODO: log
+		}
+		
+		return newRootUUID.toString();
+	}
+	
+	private String readCommandJSONFile(String fileName) throws Exception{
+		String commandsPath = RATHelpers.getCommandsPath(RATConstants.CommandsFolder);
+		StringBuffer pathBuffer = new StringBuffer();
+		pathBuffer.append(commandsPath);
+		pathBuffer.append(fileName);
+		
+		String templatePath = pathBuffer.toString();
+		String input = FileUtils.fileRead(templatePath);
+		
+		return input;
 	}
 }
