@@ -4,15 +4,15 @@
 
 <context-param>
     <param-name>spring-producer</param-name>
-    <param-value>//home/dgr/dev/RATPlatform/RATWSServer/WebContent/WEB-INF/conf/spring-producer.xml</param-value>
+    <param-value>//home/dgr/dev/RATPlatform/rat-wsserver/WebContent/WEB-INF/conf/spring-producer.xml</param-value>
 </context-param>
 <context-param>
     <param-name>shiroConfigLocations</param-name>
-    <param-value>/WEB-INF/conf/shiro.ini</param-value>
+    <param-value>//home/dgr/dev/RATPlatform/rat-wsserver/WebContent/WEB-INF/conf/shiro.ini</param-value>
 </context-param>
 <context-param>
     <param-name>persistence</param-name>
-    <param-value>/home/dgr/dev/RATPlatform/RATWSServer/WebContent/WEB-INF/conf/persistence.xml</param-value>
+    <param-value>/META-INF/persistence.xml</param-value>
 </context-param>
 
 <!-- Shiro -->
