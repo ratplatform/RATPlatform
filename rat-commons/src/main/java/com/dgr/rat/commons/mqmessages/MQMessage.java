@@ -44,6 +44,10 @@ public class MQMessage implements IResponse{
 	public void buildResponse(IResponse response){
 		_header = response.getHeader();
 	}
+	
+	public Object getHeaderProperty(String key){
+		return _commandResponseMap.get(key);
+	}
 
 	@Override
 	public JsonHeader getHeader() {

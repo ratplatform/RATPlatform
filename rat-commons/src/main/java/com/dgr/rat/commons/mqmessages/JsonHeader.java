@@ -20,6 +20,10 @@ public class JsonHeader {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public void setHeaderProperties(Map<String, String> map){
+		_headerProperties = map;
+	}
+	
 	public Map<String, String> getHeaderProperties(){
 		return _headerProperties; 
 	}
