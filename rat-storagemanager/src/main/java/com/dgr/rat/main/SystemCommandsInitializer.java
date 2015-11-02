@@ -83,7 +83,7 @@ public class SystemCommandsInitializer {
 //		SystemInitializerHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID, userAdminName, userAdminPwd);
 		
 		// COMMENT: restituisco la connection al pool delle connection
-		_storage.shutDown();
+//		_storage.shutDown();
 	}
 	
 	private void loadCommandTemplates(String commandTemplatesPath, String json, String commandUUID) throws Exception{

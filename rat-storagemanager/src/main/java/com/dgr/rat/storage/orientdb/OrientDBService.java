@@ -43,7 +43,7 @@ public class OrientDBService{
 	            _password = AppProperties.getInstance().getStringProperty("orientdb.default.admin.pwd", "admin");
 	            _poolMinSize = AppProperties.getInstance().getIntProperty("orientdb.pool.minimum.size", OrientDBService.DEFAULT_POOL_MIN_SIZE);
 	            _poolMaxSize = AppProperties.getInstance().getIntProperty("orientdb.pool.max.size", OrientDBService.DEFAULT_POOL_MAX_SIZE);
-	            
+
 	        	_factory = new OrientGraphFactory(_dbURL);
 	        	_factory.setupPool(_poolMinSize, _poolMaxSize);
 	        } 

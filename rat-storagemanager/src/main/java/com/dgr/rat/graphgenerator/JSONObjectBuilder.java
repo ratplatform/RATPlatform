@@ -12,11 +12,15 @@ import java.util.Map;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.commons.mqmessages.IResponse;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.graphgenerator.queries.CreateJsonRemoteQueryRequest;
 import com.dgr.rat.graphgenerator.test.CreateJsonRemoteCommandRequest;
+import com.dgr.rat.json.RATJsonObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
@@ -46,6 +50,26 @@ public class JSONObjectBuilder {
 		String result = ratJsonObject.toString();
 		
 		return result;
+	}
+	
+	public static MQMessage deserializeCommandResponse(String ratJson) throws Exception{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		TypeFactory typeFactory = mapper.getTypeFactory();
+		
+		MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, String.class);
+		HashMap<String, String> map = mapper.readValue(jsonHeader.getHeader(), mapType);
+		JsonHeader header = new JsonHeader();
+		header.setHeaderProperties(map);
+		
+		mapType = typeFactory.constructMapType(HashMap.class, String.class, Object.class);
+		String settings = mapper.writeValueAsString(jsonHeader.getSettings());
+//		System.out.println(settings);
+		HashMap<String, Object> map2 = mapper.readValue(settings, mapType);
+		MQMessage message = new MQMessage(header);
+		message.setCommandResponse(map2);
+		
+		return message;
 	}
 	
 //	public static String buildJSONRatCommandResponse(Response response){

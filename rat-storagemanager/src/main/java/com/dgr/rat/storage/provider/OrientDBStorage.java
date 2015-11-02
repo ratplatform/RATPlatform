@@ -23,7 +23,6 @@ public class OrientDBStorage implements IStorage{
     	OGlobalConfiguration.MEMORY_USE_UNSAFE.setValue(false);
     	OGlobalConfiguration.STORAGE_COMPRESSION_METHOD.setValue("gzip");
     	OGlobalConfiguration.JNA_DISABLE_USE_SYSTEM_LIBRARY.setValue(true);
-//    	OGlobalConfiguration.CACHE_LOCAL_ENABLED.setValue(false);
     	
 		_orientGraph = OrientDBService.getInstance().getConnection();
 	}
@@ -189,5 +188,4 @@ public class OrientDBStorage implements IStorage{
 	public void close() throws Exception {
 		OrientDBService.getInstance().close();
 	}
-
 }
