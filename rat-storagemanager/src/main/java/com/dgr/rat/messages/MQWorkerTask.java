@@ -18,6 +18,8 @@ import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
+import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.utils.AppProperties;
 
 public class MQWorkerTask implements ITaskCommand<IResponse>{
@@ -98,18 +100,8 @@ public class MQWorkerTask implements ITaskCommand<IResponse>{
 		
 		// COMMENT: c'è stato un problema grave....
 		if(result == null){
-			String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
-			String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
-			String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
-			
-			JsonHeader header = new JsonHeader();
-			
-			header.setApplicationName(applicationName);
-			header.setApplicationVersion(applicationVersion);
-			header.setDomainName(placeHolder);
-			header.setMessageType(MessageType.Response);
-			header.setStatusCode(commandResult);
-			
+			JsonHeader header = RATJsonUtils.getJsonHeader(commandResult, MessageType.Response);
+
 			result = new MQMessage(header);
 		}
 

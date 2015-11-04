@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.IResponse;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.commons.mqmessages.MQMessage;
@@ -26,8 +27,6 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 
 public class JSONObjectBuilder {
-	public static final String Header = "header";
-	public static final String Settings = "settings";
 	
 	public static String serializeCommandResponse(IResponse response){
 		JsonHeader header = response.getHeader();
@@ -37,14 +36,14 @@ public class JSONObjectBuilder {
 		ObjectNode headerObjectNode = mapper.valueToTree(headerMap);
 		Map<String, Object>map = null;
 		Map<String, Object> commandResponsePropertiesMap = response.getResult();
-		if(commandResponsePropertiesMap.containsKey(JSONObjectBuilder.Settings)){
+		if(commandResponsePropertiesMap.containsKey(RATConstants.Settings)){
 			map = commandResponsePropertiesMap;
 		}
 		else{
 			map = new HashMap<String, Object>();
-			map.put(JSONObjectBuilder.Settings, commandResponsePropertiesMap);
+			map.put(RATConstants.Settings, commandResponsePropertiesMap);
 		}
-		map.put(JSONObjectBuilder.Header, headerObjectNode);
+		map.put(RATConstants.Header, headerObjectNode);
 
 		ObjectNode ratJsonObject = mapper.valueToTree(map);
 		String result = ratJsonObject.toString();
@@ -104,8 +103,8 @@ public class JSONObjectBuilder {
 		JsonNode remoteRequestJsonObj = mapper.readTree(remoteRequestJson);
 		
 		Map<String, Object>map = new HashMap<String, Object>();
-		map.put(JSONObjectBuilder.Header, headerObjectNode);
-		map.put(JSONObjectBuilder.Settings, remoteRequestJsonObj);
+		map.put(RATConstants.Header, headerObjectNode);
+		map.put(RATConstants.Settings, remoteRequestJsonObj);
 		
 		ObjectNode ratJsonObject = mapper.valueToTree(map);
 		String result = ratJsonObject.toString();
@@ -124,8 +123,8 @@ public class JSONObjectBuilder {
 		JsonNode remoteRequestJsonObj = mapper.readTree(remoteRequestJson);
 		
 		Map<String, Object>map = new HashMap<String, Object>();
-		map.put(JSONObjectBuilder.Header, headerObjectNode);
-		map.put(JSONObjectBuilder.Settings, remoteRequestJsonObj);
+		map.put(RATConstants.Header, headerObjectNode);
+		map.put(RATConstants.Settings, remoteRequestJsonObj);
 		
 		ObjectNode ratJsonObject = mapper.valueToTree(map);
 		String result = ratJsonObject.toString();
@@ -154,8 +153,8 @@ public class JSONObjectBuilder {
 		ObjectNode headerObjectNode = mapper.valueToTree(headerMap);
 		
 		Map<String, Object>map = new HashMap<String, Object>();
-		map.put(JSONObjectBuilder.Header, headerObjectNode);
-		map.put(JSONObjectBuilder.Settings, actualObj);
+		map.put(RATConstants.Header, headerObjectNode);
+		map.put(RATConstants.Settings, actualObj);
 		
 		ObjectNode ratJsonObject = mapper.valueToTree(map);
 		String result = ratJsonObject.toString();

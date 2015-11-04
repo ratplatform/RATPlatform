@@ -41,6 +41,7 @@ import com.dgr.rat.graphgenerator.commands.LoadCommands;
 import com.dgr.rat.graphgenerator.commands.LoadQueries;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -305,7 +306,7 @@ public class CommandGraphGeneratorTest {
 	private void saveForTest(String ratJson, String clientJsonCommand) throws JsonParseException, JsonMappingException, IOException{
 		_ratJSONs.add(ratJson);
 		
-		String commandName = RATHelpers.getRATJsonHeaderProperty(ratJson, RATConstants.CommandName);
+		String commandName = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.CommandName);
 		_clientJsonCommands.put(commandName, clientJsonCommand);
 	}
 	
@@ -387,10 +388,10 @@ public class CommandGraphGeneratorTest {
 		boolean exists = false;
 		
 		for(String ratJSON : _ratJSONs){
-			String commandUUID = RATHelpers.getRATJsonHeaderProperty(ratJSON, RATConstants.CommandGraphUUID);
-			String commandName = RATHelpers.getRATJsonHeaderProperty(ratJSON, RATConstants.CommandName);
-			String rootVertexUUID = RATHelpers.getRATJsonHeaderProperty(ratJSON, RATConstants.RootVertexUUID);
-			Graph settingsGraph = RATHelpers.getRATJsonSettingsGraph(ratJSON);
+			String commandUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJSON, RATConstants.CommandGraphUUID);
+			String commandName = RATJsonUtils.getRATJsonHeaderProperty(ratJSON, RATConstants.CommandName);
+			String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJSON, RATConstants.RootVertexUUID);
+			Graph settingsGraph = RATJsonUtils.getRATJsonSettingsGraph(ratJSON);
 			FramedGraph<Graph> framedGraph =  new FramedGraphFactory(new JavaHandlerModule()).create(settingsGraph);
 			exists = commandUUIDs.containsKey(commandUUID);
 			Assert.assertFalse(exists);

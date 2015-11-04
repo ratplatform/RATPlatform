@@ -24,6 +24,7 @@ import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
@@ -79,8 +80,8 @@ public class QueryGraphGeneratorTest {
 		
 		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
 		
-		Graph commandGraph = RATHelpers.getRATJsonSettingsGraph(ratJson);
-		String rootVertexUUID = RATHelpers.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
+		Graph commandGraph = RATJsonUtils.getRATJsonSettingsGraph(ratJson);
+		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
 		if(!Utils.isUUID(rootVertexUUID)){
 			// TODO exception
 		}
@@ -114,8 +115,8 @@ public class QueryGraphGeneratorTest {
 		
 		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
 		
-		Graph commandGraph = RATHelpers.getRATJsonSettingsGraph(ratJson);
-		String rootVertexUUID = RATHelpers.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
+		Graph commandGraph = RATJsonUtils.getRATJsonSettingsGraph(ratJson);
+		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
 		if(!Utils.isUUID(rootVertexUUID)){
 			// TODO exception
 		}
@@ -276,7 +277,7 @@ public class QueryGraphGeneratorTest {
 	private void saveForTest(String ratJson, String clientJsonCommand) throws JsonParseException, JsonMappingException, IOException{
 		_ratJSONs.add(ratJson);
 		
-		String commandName = RATHelpers.getRATJsonHeaderProperty(ratJson, RATConstants.CommandName);
+		String commandName = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.CommandName);
 		_clientJsonCommands.put(commandName, clientJsonCommand);
 	}
 	

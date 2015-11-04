@@ -6,7 +6,6 @@
 package com.dgr.rat.json.factory;
 
 import java.util.UUID;
-
 import com.dgr.rat.command.graph.executor.engine.CommandData;
 import com.dgr.rat.command.graph.executor.engine.CommandTemplateInvoker;
 import com.dgr.rat.command.graph.executor.engine.ICommandGraphVisitableFactory;
@@ -29,9 +28,9 @@ import com.dgr.rat.commons.errors.ResourceException;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.rat.storage.provider.StorageBridge;
-import com.dgr.utils.AppProperties;
 import com.dgr.utils.Utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -45,17 +44,8 @@ public class CommandSink {
 	}
 	
 	public Response doCommand(String json){
-		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
-		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
-		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
-		
 		Response response = new Response();
-		JsonHeader header = new JsonHeader();
-		
-		header.setApplicationName(applicationName);
-		header.setApplicationVersion(applicationVersion);
-		header.setDomainName(placeHolder);
-		header.setMessageType(MessageType.Response);
+		JsonHeader header = RATJsonUtils.getJsonHeader(StatusCode.Unknown, MessageType.Response);
 		
 		IStorage storage = null;
 		try {
@@ -68,8 +58,10 @@ public class CommandSink {
 		}
 		
 		try{
-			RATJsonObject ratJsonObject = RATHelpers.getRATJsonObject(json);
-			CommandResponse commandResponse = this.buildCommand(ratJsonObject, header, storage);
+			RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(json);
+			JSONType commandType = JSONType.fromString(ratJsonObject.getHeaderProperty(RATConstants.CommandType));
+			
+			CommandResponse commandResponse = this.buildCommand(commandType, ratJsonObject, header, storage);
 			response.setCommandResponse(commandResponse);
 			
 			header.setStatusCode(commandResponse.getStatusCode());
@@ -94,9 +86,9 @@ public class CommandSink {
 		return response;
 	}
 	
-	private CommandResponse buildCommand(final RATJsonObject ratJsonObject, JsonHeader headerOut, IStorage storage) throws Exception {
+	private CommandResponse buildCommand(final JSONType commandType, final RATJsonObject ratJsonObject, JsonHeader headerOut, IStorage storage) throws Exception {
 		String errorMessage = "Error retrieving the %s from JSON";
-		JSONType commandType = JSONType.fromString(ratJsonObject.getHeaderProperty(RATConstants.CommandType));
+		
 		if(commandType == null || commandType == JSONType.Unknown){
 			errorMessage = String.format(errorMessage, RATConstants.CommandType);
 			throw ResourceException.getException(ErrorType.JSON_PARSE_ERROR, errorMessage);

@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.apache.lucene.queryparser.classic.ParseException;
+
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.utils.AppProperties;

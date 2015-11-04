@@ -16,6 +16,7 @@ import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.tests.RATSessionManager;
 import com.dgr.utils.FileUtils;
@@ -25,10 +26,10 @@ public class SystemInitializerHelpers {
 	public static String createRootDomain(String fileName, String commandsNodeUUID, String queriesNodeUUID) throws Exception{
 		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
 		
-		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
-		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		int changed = remoteCommandsContainer.setValue("commandsNodeUUID", commandsNodeUUID, ReturnType.uuid);
 		System.out.println("Changed in " + fileName + ": " + changed);
 		
@@ -36,7 +37,7 @@ public class SystemInitializerHelpers {
 		System.out.println("Changed in " + fileName + ": " + changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
 		
 		return commandJSON;
@@ -44,10 +45,10 @@ public class SystemInitializerHelpers {
 	
 	public static String createAddRootDomainAdminUser(String fileName, String rootDomainUUID, String userAdminName, String userAdminPwd) throws Exception{
 		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
-		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
-		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
 		int changed = remoteCommandsContainer.setValue("nodeUUID", rootDomainUUID, ReturnType.uuid);
 		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
@@ -59,7 +60,7 @@ public class SystemInitializerHelpers {
 		System.out.println("userPwd changed in " + fileName + ": " + changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
 		
 		return commandJSON;
 	}
@@ -95,10 +96,10 @@ public class SystemInitializerHelpers {
 	public static String createNewUser(String fileName, String rootDomainUUID, String userName, String pwd) throws Exception{
 		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
 		
-		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
-		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
 		int changed = remoteCommandsContainer.setValue("ratNodeUUID", rootDomainUUID, ReturnType.uuid);
 		System.out.println("ratNodeUUID changed in " + fileName + ": " + changed);
@@ -110,17 +111,17 @@ public class SystemInitializerHelpers {
 		System.out.println("userPwd changed in " + fileName + ": " + changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
 		
 		return commandJSON;
 	}
 	
 	public static String createNewDomain(String fileName, String rootDomainUUID, String domainName) throws Exception{
 		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
-		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
-		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
 		int changed = remoteCommandsContainer.setValue("nodeUUID", rootDomainUUID, ReturnType.uuid);
 		System.out.println("Changed in " + fileName + ": " + changed);
@@ -135,7 +136,7 @@ public class SystemInitializerHelpers {
 		Assert.assertEquals(1, changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
 		
 		return commandJSON;
@@ -144,10 +145,10 @@ public class SystemInitializerHelpers {
 	public static String bindUserToDomain(String fileName, String domainUUID, String userUUID) throws Exception{
 		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
 		
-		RATJsonObject jsonHeader = RATHelpers.getRATJsonObject(json);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
-		remoteCommandsContainer.deserialize(RATHelpers.getSettings(jsonHeader));
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
 		int changed = remoteCommandsContainer.setValue("domainUUID", domainUUID, ReturnType.uuid);
 		System.out.println("Changed in " + fileName + ": " + changed);
@@ -156,7 +157,7 @@ public class SystemInitializerHelpers {
 		System.out.println("Changed in " + fileName + ": " + changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATHelpers.getRATJson(jsonHeader);
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
 		
 		return commandJSON;

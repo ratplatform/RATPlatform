@@ -13,6 +13,7 @@ import com.dgr.rat.command.graph.executor.engine.result.CommandResponse;
 import com.dgr.rat.command.graph.executor.engine.result.IResultDriller;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
 import com.dgr.rat.command.graph.executor.engine.result.instructions.InstructionResultInfo;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,6 +64,6 @@ public class QueryResultDriller implements IResultDriller{
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNode = mapper.readTree(json);
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		_commandResponsePropertiesMap.put(JSONObjectBuilder.Settings, jsonNode);
+		_commandResponsePropertiesMap.put(RATConstants.Settings, jsonNode);
 	}
 }
