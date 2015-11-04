@@ -11,6 +11,7 @@ public enum JSONType {
 	SystemCommands("SystemCommands"),
 	ConfigurationCommands("ConfigurationCommands"),
 	LoadCommands("LoadCommands"),
+	KeepAlive("KeepAlive"),
 	Query("Query"),
 	Unknown ("Unknown");
 	

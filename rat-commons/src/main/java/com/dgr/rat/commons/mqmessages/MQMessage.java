@@ -6,10 +6,7 @@
 package com.dgr.rat.commons.mqmessages;
 
 import java.util.Map;
-
-import com.dgr.rat.commons.constants.MQConstants;
 import com.dgr.rat.commons.constants.StatusCode;
-import com.dgr.rat.commons.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
@@ -20,9 +17,6 @@ public class MQMessage implements IResponse{
 	
 	public MQMessage(JsonHeader header) {
 		_header = header;
-		
-		String date = DateUtils.getNow(MQConstants.DateFormat);
-		this.setDate(date);
 	}
 	
 	public void setSessionID(String sessionID) {
@@ -31,10 +25,6 @@ public class MQMessage implements IResponse{
 	
 	public String getSessionID(){
 		return _header.getHeaderProperty("sessionID");
-	}
-	
-	private void setDate(String date) {
-		_header.addHeaderProperty("date", date);
 	}
 	
 	public void setCommandResponse(Map<String, Object> commandResponseMap){

@@ -12,12 +12,14 @@ import com.dgr.rat.commons.constants.JSONType;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.commons.utils.DateUtils;
 
 public class JsonHeader {
 	private Map<String, String>_headerProperties = new HashMap<String, String>();
 	
 	public JsonHeader() {
-		// TODO Auto-generated constructor stub
+		String date = DateUtils.getNow(RATConstants.DateFormat);
+		this.setDate(date);
 	}
 	
 	public void setHeaderProperties(Map<String, String> map){
@@ -34,6 +36,14 @@ public class JsonHeader {
 	
 	public String getHeaderProperty(String key){
 		return _headerProperties.get(key);
+	}
+	
+	public void setDate(String date){
+		this.addHeaderProperty(RATConstants.Time, date);
+	}
+	
+	public String getDate(){
+		return this.getHeaderProperty(RATConstants.Time);
 	}
 	
 	public String getStatusCode() {

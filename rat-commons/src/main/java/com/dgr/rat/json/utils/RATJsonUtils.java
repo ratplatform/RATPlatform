@@ -5,7 +5,24 @@
 
 package com.dgr.rat.json.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import com.dgr.rat.commons.constants.MessageType;
+import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.json.RATJsonObject;
+import com.dgr.utils.AppProperties;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
+import com.tinkerpop.blueprints.util.io.graphson.GraphSONReader;
 
 public class RATJsonUtils {
 	public static String jsonPrettyPrinter(String json) throws Exception{
@@ -14,5 +31,94 @@ public class RATJsonUtils {
 	    String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
 	    
 	    return indented;
+	}
+	
+	public static JsonHeader getJsonHeader(StatusCode commandResult, MessageType messageType){
+		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
+		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
+		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
+		
+		JsonHeader header = new JsonHeader();
+		
+		header.setApplicationName(applicationName);
+		header.setApplicationVersion(applicationVersion);
+		header.setDomainName(placeHolder);
+		header.setMessageType(messageType);
+		header.setStatusCode(commandResult);
+		
+		return header;
+	}
+	
+	public static String getSettings(RATJsonObject ratJson) throws JsonProcessingException{
+		ObjectMapper mapper = new ObjectMapper();
+		String settings = mapper.writeValueAsString(ratJson.getSettings());
+		
+		return settings;
+	}
+	
+	public static String getHeader(RATJsonObject ratJson) throws JsonProcessingException{
+		ObjectMapper mapper = new ObjectMapper();
+		String settings = mapper.writeValueAsString(ratJson.getHeader());
+		
+		return settings;
+	}
+	
+	public static String getRATJson(RATJsonObject ratJson) throws JsonProcessingException{
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(ratJson);
+		
+		return json;
+	}
+	
+
+	public static String getRATJsonHeaderProperty(String ratJson, String propertyName) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		String propertyValue = jsonHeader.getHeaderProperty(propertyName);
+		
+		return propertyValue;
+	}
+	
+//	public static String getResponseJsonProperty(String responseJson, String propertyName) throws JsonParseException, JsonMappingException, IOException{
+//		ObjectMapper mapper = new ObjectMapper();
+//		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(responseJson, RATJsonObject.class);
+//		String propertyValue = jsonHeader.getHeaderProperty(propertyName);
+//		
+//		return propertyValue;
+//	}
+	
+	public static String getRATJsonSettings(String ratJson) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		String output = mapper.writeValueAsString(jsonHeader.getSettings());
+		
+		return output;
+	}
+	
+	public static Graph getRATJsonSettingsGraph(String ratJson) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		String output = mapper.writeValueAsString(jsonHeader.getSettings());
+		JsonNode actualObj = mapper.readTree(output);
+		Graph graph = new TinkerGraph();
+		InputStream inputStream = new ByteArrayInputStream(actualObj.toString().getBytes());
+		GraphSONReader.inputGraph(graph, inputStream);
+		
+		return graph;
+	}
+	
+	public static RATJsonObject getRATJsonObject(String json) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject ratJsonObject = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
+		
+		return ratJsonObject;
+	}
+	
+	public static String getRATJsonObjectHeader(String ratJson) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		String output = mapper.writeValueAsString(jsonHeader.getHeader());
+		
+		return output;
 	}
 }

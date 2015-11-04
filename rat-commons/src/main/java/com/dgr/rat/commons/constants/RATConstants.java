@@ -17,6 +17,9 @@ public class RATConstants {
 	public static final String PropertyFile = ConfigurationFolder + FileSystems.getDefault().getSeparator() + "storage-manager.properties";
 	public static final String OrientDBPropertyFile = ConfigurationFolder + FileSystems.getDefault().getSeparator() + "orientdb.properties";
 	
+	// KeepAlive
+	public static final String CorrelationID = "CorrelationID";
+	
 	// JSON Header
 	public static final String CommandVersion = "commandVersion";
 	public static final String ApplicationVersion = "applicationVersion";
@@ -30,6 +33,8 @@ public class RATConstants {
 	public static final String RootVertexUUID = "RootVertexUUID";
 	public static final String MessageType = "MessageType";
 	public static final String StatusCode = "StatusCode";
+	public static final String Time = "time";
+	public static final String DateFormat = "yyyy-MM-dd HH:mm:ss.SSS"; 
 	
 	// RATStorageManager/conf/storage-manager.properties
 	public static final String RootDomainName = "root.domain.name";
