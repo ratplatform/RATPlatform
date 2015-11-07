@@ -7,6 +7,9 @@ package com.dgr.rat.webservices;
 
 import java.io.File;
 import java.nio.file.FileSystems;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,21 +22,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import com.dgr.rat.session.manager.KeepAlive;
 import com.dgr.rat.session.manager.RATSessionManager;
 
 public class RATWebServicesContextListener implements ServletContextListener{
     public final static String MessageSenderContextKey = "MessageSenderContextKey";
+    public final static String KeepAliveSent = "KeepAliveSent";
+    public final static String KeepAliveReceived = "KeepAliveReceived";
+    public final static String KeepAliveStatus = "KeepAliveStatus";
     public final static String HibernateFactoryKey = "HibernateFactoryKey";
-    //public final static String ThreadPool = "ThreadPool";
-    
-    // TODO: fare attenzione: io li metto nel servletcontext, ma il servletcontext è unico per tutte le applicazioni web
-    // del tomcat corrente! Ciò significa che tutti i messaggi di tutte le istanze di questa web app vanno nell'unico
-    // thread dell'ExecutorService
-	//private RATMessagingClient _messagingClient = null;
-	//private ExecutorService _executor = (ExecutorService)Executors.newFixedThreadPool(1);
-	//private CompletionService<String> _pool = new ExecutorCompletionService<String>(_executor);
-	//private RATSessionManager _sessionManager = new RATSessionManager();
-	
+//    private ScheduledExecutorService _scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+	private KeepAlive _keepAlive = null;
     private static EntityManagerFactory _entityManagerFactory = null;
     
 	public RATWebServicesContextListener() {
@@ -76,35 +75,15 @@ public class RATWebServicesContextListener implements ServletContextListener{
 			ServletContext servletContext = servletContextEvent.getServletContext();
 			
 			RATSessionManager.init();
-			//String shiroIniPath = servletContext.getInitParameter("shiro-ini");
-			//Authenticator.init(shiroIniPath);
 			
 			String springProducer = servletContext.getInitParameter("spring-producer");
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(springProducer);
 			servletContext.setAttribute(MessageSenderContextKey, context);
 			
 			_entityManagerFactory = Persistence.createEntityManagerFactory("ratwsserver");
-			
-			/*
-			Configuration configuration = new Configuration();
-			String persistence = servletContext.getInitParameter("persistence");
-	        configuration.configure(new File(persistence));
-	        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-	        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-	        servletContext.setAttribute(HibernateFactoryKey, sessionFactory);
-	        */
-			
-//			String path = "conf" + FileSystems.getDefault().getSeparator() + "spring-consumer.xml";
-//			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(path);
-//			_messagingServer = (MessageSender)context.getBean("MessageSender");
-			
-//			_messagingClient = new RATMessagingClient();
-//			
-//			// TODO: fare attenzione li metto nel servletcontext, ma il servletcontext è unico per tutte le applicazioni web
-//			// sarebbe meglio usare la session
-//			ServletContext servletContext = servletContextEvent.getServletContext();
-//			servletContext.setAttribute(MessageSender, _messagingClient);
-//			servletContext.setAttribute(ThreadPool, _pool);
+			_keepAlive = new KeepAlive(servletContext);
+			_keepAlive.start();
+//			_scheduledExecutorService.scheduleAtFixedRate(keepAlive, 1, 2, TimeUnit.SECONDS);
 		} 
 		catch (Exception e) {
 			//TODO log e gestione

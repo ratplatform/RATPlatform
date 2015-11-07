@@ -5,9 +5,6 @@
 
 package com.dgr.rat.session.manager;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 public class SessionWorker implements Runnable{
 	private RATSessionManager _owner = null;
 	private boolean _stop = false;

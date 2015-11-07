@@ -8,35 +8,26 @@ package com.dgr.rat.session.manager;
 import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletionService;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import javax.servlet.ServletContext;
-
-import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
-
-import com.dgr.rat.messages.MessageSender;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 // TODO: tutta questa parte non è fatta benissimo e va rivista interamente: poiché manca completamente il meccanismo di login, per ora 
-// la faccio funzionare così.
+// la faccio funzionare così. Inoltre 
 public class RATSessionManager {
-	private ExecutorService _messageSenderExecutor = (ExecutorService)Executors.newFixedThreadPool(10);
-	private CompletionService<String> _pool = new ExecutorCompletionService<String>(_messageSenderExecutor);
-	
-	// TODO mi serve per attivare i sessionworker che creano i sessionmonitor. Per ora ne creo solo uno
-	private ExecutorService _sessionWorkerExecutor = (ExecutorService)Executors.newFixedThreadPool(1);
+	private final int _numberOfCores = Runtime.getRuntime().availableProcessors();
+
+	private ExecutorService _sessionWorkerExecutor = (ExecutorService)Executors.newFixedThreadPool(_numberOfCores);
 	private BlockingQueue<String> _queue = new ArrayBlockingQueue<String>(1024);
 	private ConcurrentMap<String, SessionMonitor> _sharedMap = new ConcurrentHashMap<String, SessionMonitor>();
 	private ConcurrentMap<String, SessionData> _sessionDataMap = new ConcurrentHashMap<String, SessionData>();
 	private static RATSessionManager _instance = null;
+	private final ReadWriteLock _monitor = new ReentrantReadWriteLock();
 	
 	// TODO: vedi nota alla classe TimerTask
 	private ScheduledExecutorService _scheduledExecutor = Executors.newScheduledThreadPool(1);
@@ -47,6 +38,11 @@ public class RATSessionManager {
 		// TODO: vedi nota alla classe TimerTask
 		_scheduledExecutor.scheduleAtFixedRate(task, 1, 2, TimeUnit.SECONDS);
 		
+		// COMMENT per ora creo un SessionWorker, ma potrei crearne di più in quanto 
+		// lavorano in modo autonomo
+		// TODO: così come è concepito non va bene in quanto esiste anche TimerTask; quindi 
+		// non vedo la ragione per la quale il sessionWOrker non debba essere esso stesso un timer
+		// oppure perché TimerTask non debba fare il lavoro di sessionWOrker: da rivedere.
 		_sessionWorkerExecutor.submit(new SessionWorker(this));
 	}
 	
@@ -65,33 +61,43 @@ public class RATSessionManager {
 		return _instance;
 	}
 	
-	public void shutdown(){
-		System.out.println("Start shutdown ....");
-		_messageSenderExecutor.shutdown();
-		
+	public void shutdown() throws InterruptedException{
 		// TODO: vedi nota alla classe TimerTask
+
 		_scheduledExecutor.shutdown();
 		System.out.println("End shutdown");
 	}
 	
-	public synchronized String sendMessage(FileSystemXmlApplicationContext context, String sessionID, String data) throws Exception{
-		MessageSender messageSender = (MessageSender)context.getBean("messageSender");
-		messageSender.setMessage(data);
-		messageSender.setSessionID(sessionID);
-		messageSender.setSharedMap(_sharedMap);
+	private boolean resetSessionMonitor(String sessionID){
+		boolean result = false;
 		
-		_pool.submit(messageSender);
-		
-		System.out.println("RATSessionManager enter in polling");
-		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
-		String result = null;
-		if(task != null){
-			result = task.get();
+		if(this.sessionIDExists(sessionID)){
+			SessionMonitor sessionMonitor = _sharedMap.get(sessionID);
+			sessionMonitor.resetTime();
+			result = true;
 		}
-		System.out.println("RATSessionManager exit from polling, result: " + result);
 		
 		return result;
 	}
+	
+//	public synchronized String sendMessage(FileSystemXmlApplicationContext context, String sessionID, String data) throws Exception{
+//		MessageSender messageSender = (MessageSender)context.getBean("messageSender");
+//		messageSender.setMessage(data);
+//		messageSender.setSessionID(sessionID);
+//		messageSender.setSharedMap(_sharedMap);
+//		
+//		_pool.submit(messageSender);
+//		
+//		System.out.println("RATSessionManager enter in polling");
+//		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
+//		String result = null;
+//		if(task != null){
+//			result = task.get();
+//		}
+//		System.out.println("RATSessionManager exit from polling, result: " + result);
+//		
+//		return result;
+//	}
 	
 //	public synchronized Session getActiveMQSession() throws JMSException{
 //		return _messagingClient.getSession();
