@@ -9,6 +9,9 @@ import java.util.concurrent.Callable;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
+
+import com.dgr.rat.commons.constants.StatusCode;
+
 import javax.jms.DeliveryMode;
 import javax.jms.Destination; 
 import javax.jms.JMSException;
@@ -50,35 +53,39 @@ public class MessageSender implements MessageListener, Callable<String>{
 			System.out.println("MessageSender: Received result: " + _response);
 		} 
 		catch (JMSException e) {
-			_result = "error";
+			_result = StatusCode.InternalServerError.toString();
 			e.printStackTrace();
 			// TODO da loggare e gestire
 		}
 
-		finally{
-			synchronized(this){
-				_stop = true;
-				notifyAll();
-			}
-		}
+		this.setStop(true);
 	}
 
 	@Override
+//	public String call() throws Exception {
+//		System.out.println("MessageSender: call ");
+//		try {
+//		Thread.sleep(300000);
+//		
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        return "test";
+//	}
 	public String call() throws Exception {
-		System.out.println("MessageSender: looking for sessionID: " + _sessionID);
+		//System.out.println("MessageSender: call ");
 
 		try {
 			MessageCreator message = new MessageGenerator();
 			_jmsTemplate.send(_destination, message);
 			
-		    synchronized(this){
-		        while(!_stop){
-		            wait();
-		        }
-		    }
+	        while(!_stop){
+	            Thread.sleep(50);
+	        }
+		    //System.out.println("Exit for MessageSender.call ");
 		} catch (Exception e) {
 			_result = "error";
-			_stop = true;
+			this.setStop(true);
 			e.printStackTrace();
 		}
 
@@ -99,6 +106,20 @@ public class MessageSender implements MessageListener, Callable<String>{
 
 	public void setMessage(String message) {
 		this._message = message;
+	}
+
+	/**
+	 * @return the stop
+	 */
+	public boolean isStopped() {
+		return _stop;
+	}
+
+	/**
+	 * @param stop the stop to set
+	 */
+	public synchronized void setStop(boolean stop) {
+		this._stop = stop;
 	}
 
 	public class MessageGenerator implements MessageCreator{

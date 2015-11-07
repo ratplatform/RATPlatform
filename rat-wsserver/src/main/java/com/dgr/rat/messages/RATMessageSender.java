@@ -79,7 +79,7 @@ public class RATMessageSender {
 	        		}
             	}
         		catch(Exception e){
-        			if(responseStatus.compareTo(StatusCode.Ok) != 0){
+        			if(responseStatus.compareTo(StatusCode.Ok) == 0){
         				e.printStackTrace();
         				responseStatus = StatusCode.InternalServerError;
         			}

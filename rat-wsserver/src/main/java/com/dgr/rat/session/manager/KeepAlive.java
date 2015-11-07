@@ -23,7 +23,7 @@ public class KeepAlive {
 	@SuppressWarnings("unchecked")
 	public void start(){
 		KeepAliveTask task = new KeepAliveTask(_servletContext);
-		_scheduledFuture = (ScheduledFuture<KeepAliveTask>) _scheduledExecutorService.scheduleAtFixedRate(task, 60, 10, TimeUnit.SECONDS);
+		_scheduledFuture = (ScheduledFuture<KeepAliveTask>) _scheduledExecutorService.scheduleAtFixedRate(task, 10, 1, TimeUnit.SECONDS);
 	}
 	
 	public void shutdown() throws Exception{

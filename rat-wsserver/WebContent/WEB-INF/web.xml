@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:javaee="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   <display-name>RATWSServer</display-name>
+  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -9,9 +10,10 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
 <context-param>
     <param-name>spring-producer</param-name>
-    <param-value>${app.base}/WEB-INF/spring-producer.xml</param-value>
+    <param-value>${app.base}/conf/spring-producer.xml</param-value>
 </context-param>
 <context-param>
     <param-name>shiroConfigLocations</param-name>
@@ -19,11 +21,11 @@
 </context-param>
 <context-param>
     <param-name>persistence</param-name>
-    <param-value>${app.base}/WEB-INF/persistence.xml</param-value>
+    <param-value>${app.base}/conf/persistence.xml</param-value>
 </context-param>
 <context-param>
     <param-name>application.properties</param-name>
-    <param-value>${app.base}/WEB-INF/application.properties</param-value>
+    <param-value>${app.base}/conf/application.properties</param-value>
 </context-param>
 
 <!-- Shiro -->
@@ -62,7 +64,7 @@
     <servlet-name>RATWebServices</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
-  
+
       <listener>
         <listener-class>com.dgr.rat.webservices.RATWebServicesContextListener</listener-class>
         <listener-class>com.dgr.rat.webservices.RATWebServiceSessionListener</listener-class>

@@ -23,9 +23,9 @@ import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.commons.utils.DateUtils;
 import com.dgr.rat.json.KeepAliveHelpers;
-import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.messages.MessageSender;
 import com.dgr.rat.webservices.RATWebServicesContextListener;
+import com.dgr.utils.AppProperties;
 
 public class KeepAliveTask implements Runnable{
 	private ServletContext _servletContext = null;
@@ -41,29 +41,46 @@ public class KeepAliveTask implements Runnable{
 	public void run() {
 		System.out.println("Send KeepAlive");
 		
+		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
+		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
+		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
+		
 		UUID uuid = UUID.randomUUID();
 		JsonHeader header = new JsonHeader();
 		header.addHeaderProperty(RATConstants.CorrelationID, uuid.toString());
 		header.setCommandType(JSONType.KeepAlive);
 		header.setMessageType(MessageType.Request);
-		header.setApplicationName("RATWSServer");
+		header.setApplicationName(applicationName);
+		header.setApplicationVersion(applicationVersion);
+		header.setDomainName(placeHolder);
+		
 		String json = KeepAliveHelpers.serializeKeepAliveJson(header);
 		
 		_map.put(uuid.toString(), header.getDate());
 		
     	StatusCode responseStatus = StatusCode.Ok;
     	String result = null;
+    	MessageSender messageSender = null;
     	
 		try{
 			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) _servletContext.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
-    		MessageSender messageSender = (MessageSender)context.getBean("messageSender");
+    		messageSender = (MessageSender)context.getBean("messageSender");
     		messageSender.setMessage(json);
     		messageSender.setSessionID(null);
         	_pool.submit(messageSender);
     	
     		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
+//    		Future<String>task = _pool.take();
     		if(task != null){
     			result = task.get();
+    			if(result == null){
+    				responseStatus = StatusCode.RequestTimeout;
+    				throw new Exception(StatusCode.RequestTimeout.toString());
+    			}
+    			else if(result.equalsIgnoreCase(StatusCode.InternalServerError.toString())){
+    				responseStatus = StatusCode.InternalServerError;
+    				throw new Exception(StatusCode.InternalServerError.toString());
+    			}
     		}
     		else{
     			responseStatus = StatusCode.RequestTimeout;
@@ -71,23 +88,30 @@ public class KeepAliveTask implements Runnable{
     		}
 		}
 		catch (Exception e) {
-			if(responseStatus.compareTo(StatusCode.Ok) != 0){
-				e.printStackTrace();
-				responseStatus = StatusCode.InternalServerError;
+			if(messageSender != null){
+				// TODO da rivedere: attivare il timeout di ActiveMQ via spring; se necessario togliere spring
+				// e gestire le connectionPool manualmente (e non via spring come faccio ora)
+				messageSender.setStop(true);
 			}
 			
-			JsonHeader jsonHeader = RATJsonUtils.getJsonHeader(responseStatus, MessageType.Response);
-			result = KeepAliveHelpers.serializeKeepAliveJson(jsonHeader);
+			if(responseStatus.compareTo(StatusCode.Ok) == 0){
+				responseStatus = StatusCode.InternalServerError;
+			}
+			header.setStatusCode(responseStatus);
+			result = KeepAliveHelpers.serializeKeepAliveJson(header);
 			
-			e.printStackTrace();
+//			System.out.println(result);
+//			e.printStackTrace();
 			// TODO log
 		}
 		
+//		System.out.println("setMessageReceived");
 		this.setMessageReceived(result);
 	}
 
 	private void setMessageReceived(final String message) {
-		System.out.println(message);
+//		System.out.println(message);
+		
 		String statusCode = null;
 		String startDate = null;
 		// TODO: da rivedere: se lancia un'Exception, dentro _map rimangono dei dati che non verranno mai
@@ -105,7 +129,7 @@ public class KeepAliveTask implements Runnable{
 		catch (Exception e) {
 			// TODO log
 			statusCode = StatusCode.InternalServerError.toString();
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		
 		String now = DateUtils.getNow(RATConstants.DateFormat);

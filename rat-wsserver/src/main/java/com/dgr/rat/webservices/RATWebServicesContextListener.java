@@ -18,7 +18,6 @@ import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.utils.AppProperties;
 
 public class RATWebServicesContextListener implements ServletContextListener{
-	private final static String ApplicationPropertyFilePath = "/WEB-INF/" + RATConstants.PropertyFileName;
     public final static String MessageSenderContextKey = "MessageSenderContextKey";
     public final static String KeepAliveSent = "KeepAliveSent";
     public final static String KeepAliveReceived = "KeepAliveReceived";
@@ -45,6 +44,7 @@ public class RATWebServicesContextListener implements ServletContextListener{
 		System.out.println("RATWebServicesListener.contextDestroyed");
 		try {
 			_entityManagerFactory.close();
+			_keepAlive.shutdown();
 			RATSessionManager.getInstance().shutdown();
 		} 
 		catch (Exception e) {
@@ -68,7 +68,9 @@ public class RATWebServicesContextListener implements ServletContextListener{
 			ServletContext servletContext = servletContextEvent.getServletContext();
 			
 			RATSessionManager.init();
-			AppProperties.getInstance().init(ApplicationPropertyFilePath);
+			
+			String applicationProperties = servletContext.getInitParameter(RATConstants.PropertyFileName);
+			AppProperties.getInstance().init(applicationProperties);
 			
 			String springProducer = servletContext.getInitParameter("spring-producer");
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(springProducer);

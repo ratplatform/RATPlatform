@@ -55,8 +55,8 @@ public class RATWebServices {
 	@Context 
 	private HttpServletRequest _request;
 	
-	@Inject
-	RATMessageSender _ratMessageSender;
+//	@Inject
+//	RATMessageSender _ratMessageSender;
 	
 	public RATWebServices() {
 		System.out.println("RATWebServices");
@@ -231,7 +231,7 @@ public class RATWebServices {
 		System.out.println("createcollaborationdomain roleName: " + roleName);
 		System.out.println("send createcollaborationdomain");
 		
-		_ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data, "createcollaborationdomain");
+//		_ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data, "createcollaborationdomain");
 	}
 	
 //	@POST @Path("/choosedomain")
