@@ -224,61 +224,14 @@ public class RATWebServices {
 	@POST @Path("/createcollaborationdomain")
 	@Consumes (MediaType.TEXT_PLAIN)
 	@Asynchronous
-	public void createCollaborationDomain(String data, @QueryParam("sessionid") String sessionID, @QueryParam("domainName") String domainName, @QueryParam("roleName") String roleName, @Suspended AsyncResponse asyncResponse) {
+	public void createCollaborationDomain(String data, @QueryParam("sessionid") String sessionID, @QueryParam("domainName") String domainName, 
+			@QueryParam("roleName") String roleName, @Suspended final AsyncResponse asyncResponse) {
 		System.out.println("createcollaborationdomain id: " + sessionID);
 		System.out.println("createcollaborationdomain domainName: " + domainName);
 		System.out.println("createcollaborationdomain roleName: " + roleName);
 		System.out.println("send createcollaborationdomain");
 		
-        int responseStatus = 200;
-        Map<String, String> result = null;
-        ObjectMapper mapper = null;
-        String json = null;
-		try {
-    		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
-    			responseStatus = 401;
-				throw new Exception("sessionID is empty");
-    		}
-    		
-			boolean sessionIDExists = RATSessionManager.getInstance().sessionIDExists(sessionID);
-			if(!sessionIDExists){
-				responseStatus = 401;
-				throw new Exception("sessionID does not exist");
-			}
-			
-			Subject requestSubject = new Subject.Builder().sessionId(sessionID).buildSubject();
-			System.out.println("Is Authenticated = " + requestSubject.isAuthenticated());
-			
-			// TODO: attenzione, gestisco la sessione shiro in modo separato e quando la mia
-			// piattaforma cancella la sessione conrrente,, dovrebbe anche eseguire il 
-			// logout da shiro ASSOLUTAMENTE. Per ora non lo faccio, ma andrà fatto (se shiro verrà mantenuto).
-			boolean isPermitted = requestSubject.isPermitted("createcollaborationdomain");
-			responseStatus = isPermitted ? 200 : 401;
-			System.out.println("createCollaborationDomain responseStatus " + responseStatus);
-
-			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) _context.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
-//			json = RATSessionManager.getInstance().sendMessage(context, sessionID, data);
-			WSAsyncResponse listener = new WSAsyncResponse();
-			_ratMessageSender.sendMessage(listener, context, sessionID, data);
-
-			json = listener.getMessage();
-			
-			System.out.println("RATWebServices createcollaborationdomain response received; message: " + json);
-		} 
-        catch (Exception e) {
-			// TODO log
-			if(responseStatus == 200){
-				e.printStackTrace();
-				responseStatus = 500;
-			}
-			String date = DateUtils.getNow(RATConstants.DateFormat);
-			json = "{\"sessionID\":\"" + sessionID + "\",\"statusResponse\":\"" + String.valueOf(responseStatus) + "\",\"date\":\"" + date + "\"}";
-			
-			e.printStackTrace();
-		}
-        finally{
-			asyncResponse.resume(Response.status(responseStatus).entity(json).build());
-        }
+		_ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data, "createcollaborationdomain");
 	}
 	
 //	@POST @Path("/choosedomain")

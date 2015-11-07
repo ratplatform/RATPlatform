@@ -5,12 +5,6 @@
 
 package com.dgr.rat.webservices;
 
-import java.io.File;
-import java.nio.file.FileSystems;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -18,14 +12,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.session.manager.KeepAlive;
 import com.dgr.rat.session.manager.RATSessionManager;
+import com.dgr.utils.AppProperties;
 
 public class RATWebServicesContextListener implements ServletContextListener{
+	private final static String ApplicationPropertyFilePath = "/WEB-INF/" + RATConstants.PropertyFileName;
     public final static String MessageSenderContextKey = "MessageSenderContextKey";
     public final static String KeepAliveSent = "KeepAliveSent";
     public final static String KeepAliveReceived = "KeepAliveReceived";
@@ -75,6 +68,7 @@ public class RATWebServicesContextListener implements ServletContextListener{
 			ServletContext servletContext = servletContextEvent.getServletContext();
 			
 			RATSessionManager.init();
+			AppProperties.getInstance().init(ApplicationPropertyFilePath);
 			
 			String springProducer = servletContext.getInitParameter("spring-producer");
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(springProducer);

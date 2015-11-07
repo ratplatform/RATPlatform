@@ -21,6 +21,10 @@
     <param-name>persistence</param-name>
     <param-value>${app.base}/WEB-INF/persistence.xml</param-value>
 </context-param>
+<context-param>
+    <param-name>application.properties</param-name>
+    <param-value>${app.base}/WEB-INF/application.properties</param-value>
+</context-param>
 
 <!-- Shiro -->
  <listener>

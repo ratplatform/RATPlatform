@@ -5,17 +5,10 @@
 
 package com.dgr.rat.messages;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentMap;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
-import com.dgr.rat.session.manager.SessionMonitor;
-import com.dgr.rat.webservices.IDispatcherListener;
-
 import javax.jms.DeliveryMode;
 import javax.jms.Destination; 
 import javax.jms.JMSException;
@@ -25,7 +18,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 @Component("messageSender")
-public class MessageSender implements MessageListener, Runnable{
+public class MessageSender implements MessageListener, Callable<String>{
 	private JmsTemplate _jmsTemplate = null;
 	private Destination _destination = null;
 	private Destination _response = null; 
@@ -33,33 +26,9 @@ public class MessageSender implements MessageListener, Runnable{
 	private String _message = null;
 	private boolean _stop = false;
 	private String _result = null;
-//	private ConcurrentMap<String, SessionMonitor> _sharedMap = null;
-	private List<IDispatcherListener> _listeners = new ArrayList<IDispatcherListener>();
 	
 	public MessageSender() {
 
-	}
-	
-	public synchronized boolean addListener(IDispatcherListener subscriber) {
-		boolean result = false;
-		
-		if(!this.listenerExist(subscriber)){
-			result = _listeners.add(subscriber);
-		}
-		
-		return result;
-	}
-	
-	public synchronized boolean listenerExist(IDispatcherListener subscriber){
-		return _listeners.contains(subscriber);
-	}
-	
-	private void sendMessageToListeners(String message){
-		Iterator<IDispatcherListener> it = _listeners.iterator();
-		while(it.hasNext()){
-			IDispatcherListener listener = it.next();
-			listener.onReceive(message);
-		}
 	}
 	
 	public void setJmsTemplate(JmsTemplate jmsTemplate){
@@ -95,8 +64,7 @@ public class MessageSender implements MessageListener, Runnable{
 	}
 
 	@Override
-	//public String call() throws Exception {
-	public void run() {
+	public String call() throws Exception {
 		System.out.println("MessageSender: looking for sessionID: " + _sessionID);
 
 		try {
@@ -113,10 +81,8 @@ public class MessageSender implements MessageListener, Runnable{
 			_stop = true;
 			e.printStackTrace();
 		}
-        
-        this.sendMessageToListeners(_result);
-        
-//        return _result;
+
+        return _result;
 	}
 
 	public String getSessionID() {
@@ -134,14 +100,6 @@ public class MessageSender implements MessageListener, Runnable{
 	public void setMessage(String message) {
 		this._message = message;
 	}
-
-//	public ConcurrentMap<String, SessionMonitor> getSharedMap() {
-//		return _sharedMap;
-//	}
-//
-//	public void setSharedMap(ConcurrentMap<String, SessionMonitor> sharedMap) {
-//		this._sharedMap = sharedMap;
-//	}
 
 	public class MessageGenerator implements MessageCreator{
 		public MessageGenerator() {
