@@ -39,7 +39,7 @@ public class KeepAliveTask implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("Send KeepAlive");
+		//System.out.println("Send KeepAlive");
 		
 		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
 		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
