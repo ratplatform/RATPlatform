@@ -5,10 +5,7 @@
 
 package com.dgr.rat.json.utils;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
@@ -18,11 +15,7 @@ import com.dgr.utils.AppProperties;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
-import com.tinkerpop.blueprints.util.io.graphson.GraphSONReader;
 
 public class RATJsonUtils {
 	public static String jsonPrettyPrinter(String json) throws Exception{
@@ -95,17 +88,7 @@ public class RATJsonUtils {
 		return output;
 	}
 	
-	public static Graph getRATJsonSettingsGraph(String ratJson) throws JsonParseException, JsonMappingException, IOException{
-		ObjectMapper mapper = new ObjectMapper();
-		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
-		String output = mapper.writeValueAsString(jsonHeader.getSettings());
-		JsonNode actualObj = mapper.readTree(output);
-		Graph graph = new TinkerGraph();
-		InputStream inputStream = new ByteArrayInputStream(actualObj.toString().getBytes());
-		GraphSONReader.inputGraph(graph, inputStream);
-		
-		return graph;
-	}
+
 	
 	public static RATJsonObject getRATJsonObject(String json) throws JsonParseException, JsonMappingException, IOException{
 		ObjectMapper mapper = new ObjectMapper();

@@ -14,7 +14,8 @@ public class RATConstants {
 	
 	// Files & folders
 	public static final String ConfigurationFolder = "conf";
-	public static final String PropertyFile = ConfigurationFolder + FileSystems.getDefault().getSeparator() + "storage-manager.properties";
+	public static final String PropertyFileName = "application.properties";
+	public static final String PropertyFile = ConfigurationFolder + FileSystems.getDefault().getSeparator() + PropertyFileName;
 	public static final String OrientDBPropertyFile = ConfigurationFolder + FileSystems.getDefault().getSeparator() + "orientdb.properties";
 	
 	// KeepAlive
@@ -36,7 +37,7 @@ public class RATConstants {
 	public static final String Time = "time";
 	public static final String DateFormat = "yyyy-MM-dd HH:mm:ss.SSS"; 
 	
-	// RATStorageManager/conf/storage-manager.properties
+	// RATStorageManager/conf/application.properties
 	public static final String RootDomainName = "root.domain.name";
 	public static final String DomainPlaceholder = "domain.placeholder";
 	public static final String RootDomainPlaceholder = "root.domain.placeholder";
