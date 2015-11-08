@@ -47,7 +47,7 @@ public class RATMessagingService implements MessageListener, IDispatcherListener
 	// COMMENT: arriva il messaggio dal sender
 	@Override
 	public void onMessage(Message message) {
-		System.out.println("RATMessagingServer: Received message");
+		//System.out.println("RATMessagingServer: message Received");
 		try {
 			if (message instanceof TextMessage) {
 				MQWorkerTask mqWorker = new MQWorkerTask(message, this);
