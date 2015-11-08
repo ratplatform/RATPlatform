@@ -24,8 +24,19 @@
         </developer>
     </developers>
 
+	<dependencies>
+		<!--Jackson-->
 
+		<dependency>
+			<groupId>org.rat.platform</groupId>
+			<artifactId>json-dependencies</artifactId>
+			<version>1.0.0</version>
+			<type>pom</type>
+		</dependency>
 
+		<!--End Jackson-->
+
+	</dependencies>
   <build>
         <plugins>
             <plugin>
