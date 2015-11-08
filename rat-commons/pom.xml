@@ -1,49 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	 
-  <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>ratplatform-project</artifactId>
-        <groupId>org.rat.platform</groupId>
-  	<version>2.0.0-SNAPSHOT</version>
-    </parent>
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.rat.platform</groupId>
-  <artifactId>rat-commons</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
-  <name>RATCommons</name>
-  <packaging>jar</packaging>
+	<parent>
+		<artifactId>ratplatform-project</artifactId>
+		<groupId>org.rat.platform</groupId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
 
-    <developers>
-        <developer>
-            <name>Daniele Grignani</name>
-            <email>grignani.d@gmail.com</email>
-        </developer>
-        <developer>
-            <name>Angela Locoro</name>
-        </developer>
-    </developers>
+	<groupId>org.rat.platform</groupId>
+	<artifactId>rat-commons</artifactId>
+	<version>0.9.0-SNAPSHOT</version>
+	<name>RATCommons</name>
+	<packaging>jar</packaging>
+
+	<developers>
+		<developer>
+		<name>Daniele Grignani</name>
+		<email>grignani.d@gmail.com</email>
+		</developer>
+
+		<developer>
+		<name>Angela Locoro</name>
+		</developer>
+	</developers>
 
 	<dependencies>
-		<!--Jackson-->
-
+		<!--Jackson (JSON)-->
 		<dependency>
 			<groupId>org.rat.platform</groupId>
 			<artifactId>json-dependencies</artifactId>
 			<version>1.0.0</version>
 			<type>pom</type>
 		</dependency>
-
 		<!--End Jackson-->
-
 	</dependencies>
-  <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-            </plugin>
-	</plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>maven-bundle-plugin</artifactId>
+			<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+			<artifactId>ratplatform-project</artifactId>
+			<groupId>ratplatform-project</groupId>
+			<version>2.0.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+				<groupId>org.rat.platform</groupId>
+				<artifactId>tinkerpop-dependencies</artifactId>
+				</exclusion>
+				<exclusion>
+				<groupId>org.rat.platform</groupId>
+				<artifactId>orientdb-dependencies</artifactId>
+				</exclusion>
+			</exclusions>
+			</dependency>
+
+			<dependency>
+			<artifactId>rat-storagemanager</artifactId>
+			<groupId>org.rat.platform</groupId>
+			<version>0.9.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+				<groupId>org.rat.platform</groupId>
+				<artifactId>tinkerpop-dependencies</artifactId>
+				</exclusion>
+				<exclusion>
+				<groupId>org.rat.platform</groupId>
+				<artifactId>orientdb-dependencies</artifactId>
+				</exclusion>
+			</exclusions>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
