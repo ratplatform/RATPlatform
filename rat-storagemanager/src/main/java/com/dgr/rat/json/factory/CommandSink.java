@@ -43,10 +43,43 @@ public class CommandSink {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Response doCommand(String json){
+	private Response keepAlive(JsonHeader header){
 		Response response = new Response();
+		header.setStatusCode(StatusCode.Ok);
+		response.setHeader(header);
+		return response;
+	}
+	
+	public Response doCommand(String json){
+		Response response = null;
 		JsonHeader header = RATJsonUtils.getJsonHeader(StatusCode.Unknown, MessageType.Response);
+
+		try{
+			RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(json);
+			JSONType commandType = JSONType.fromString(ratJsonObject.getHeaderProperty(RATConstants.CommandType));
+			if(commandType.equals(JSONType.KeepAlive)){
+				response = this.keepAlive(header);
+			}
+			else{
+				response = this.doCommand(commandType, ratJsonObject, header);
+			}
+		} 
+		catch (JsonParseException | JsonMappingException e) {
+			e.printStackTrace();
+			// TODO log
+			header.setStatusCode(StatusCode.InternalServerError);
+		}
+		catch(Exception e){
+        	e.printStackTrace();
+        	// TODO log
+        	header.setStatusCode(StatusCode.InternalServerError);
+		}
 		
+		return response;
+	}
+	
+	private Response doCommand(JSONType commandType, RATJsonObject ratJsonObject, JsonHeader header){
+		Response response = new Response();
 		IStorage storage = null;
 		try {
 			storage = StorageBridge.getInstance().getStorage();
@@ -58,9 +91,6 @@ public class CommandSink {
 		}
 		
 		try{
-			RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(json);
-			JSONType commandType = JSONType.fromString(ratJsonObject.getHeaderProperty(RATConstants.CommandType));
-			
 			CommandResponse commandResponse = this.buildCommand(commandType, ratJsonObject, header, storage);
 			response.setCommandResponse(commandResponse);
 			

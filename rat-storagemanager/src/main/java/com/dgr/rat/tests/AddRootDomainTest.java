@@ -19,12 +19,13 @@ import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
 import com.dgr.rat.command.graph.executor.engine.result.CommandResponse;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
+import com.dgr.rat.graphgenerator.MakeSigmaJSON;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
@@ -167,7 +168,7 @@ public class AddRootDomainTest {
 				e.printStackTrace();
 			}
 			
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "storage-manager.properties");
+			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
 			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			
 			String dir = "";//".." + FileSystems.getDefault().getSeparator();
@@ -361,7 +362,7 @@ public class AddRootDomainTest {
 		String commandTemplatesPath = RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder);
 		String ratJson = FileUtils.fileRead(commandTemplatesPath + FileSystems.getDefault().getSeparator() + fileName);
 
-		Graph commandGraph = RATJsonUtils.getRATJsonSettingsGraph(ratJson);
+		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);
 		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
 		if(!Utils.isUUID(rootVertexUUID)){
 			// TODO exception
@@ -634,7 +635,7 @@ public class AddRootDomainTest {
 	public void verify(){
 		// Anche in caso di exception voglio che scriva lo stesso i risultati per vederli
 		try {
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "storage-manager.properties");
+			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
 			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			
 			String resultFilename = this.getClass().getSimpleName() + "Result";

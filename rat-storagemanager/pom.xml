@@ -26,19 +26,41 @@
 
 
 	<dependencies>
-	<dependency>
-	<groupId>org.rat.platform</groupId>
-	<artifactId>rat-commons</artifactId>
-	<version>0.9.0-SNAPSHOT</version>
-	<scope>compile</scope>
-	</dependency>
+		<!--OrientDB-->
 
-	<!--Temporanea: solo per initDB-->
-	<dependency>
-	<groupId>mysql</groupId>
-	<artifactId>mysql-connector-java</artifactId>
-	<version>5.1.13</version>
-	</dependency>
+		<dependency>
+			<groupId>org.rat.platform</groupId>
+			<artifactId>orientdb-dependencies</artifactId>
+			<version>1.0.0</version>
+			<type>pom</type>
+		</dependency>
+
+		<!--End OrientDB-->
+
+		<!--tinkerpop-->
+
+		<dependency>
+			<groupId>org.rat.platform</groupId>
+			<artifactId>tinkerpop-dependencies</artifactId>
+			<version>1.0.0</version>
+			<type>pom</type>
+		</dependency>
+
+		<!--End tinkerpop-->
+
+		<dependency>
+		<groupId>org.rat.platform</groupId>
+		<artifactId>rat-commons</artifactId>
+		<version>0.9.0-SNAPSHOT</version>
+		<scope>compile</scope>
+		</dependency>
+
+		<!--Temporanea: solo per initDB-->
+		<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.13</version>
+		</dependency>
 	</dependencies>
 
   <build>

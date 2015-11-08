@@ -34,7 +34,7 @@ public class LoadCommandsTest {
 	public void init(){
 		try {
 			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "storage-manager.properties");
+			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
 			
 //			StorageType storageType = StorageType.TinkerGraph;
 //			StorageBridge.getInstance().init(storageType);

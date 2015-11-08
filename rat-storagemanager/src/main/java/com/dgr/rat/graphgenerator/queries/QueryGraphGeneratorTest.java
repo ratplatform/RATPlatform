@@ -22,8 +22,8 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
+import com.dgr.rat.graphgenerator.MakeSigmaJSON;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
@@ -80,7 +80,7 @@ public class QueryGraphGeneratorTest {
 		
 		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
 		
-		Graph commandGraph = RATJsonUtils.getRATJsonSettingsGraph(ratJson);
+		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);
 		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
 		if(!Utils.isUUID(rootVertexUUID)){
 			// TODO exception
@@ -115,7 +115,7 @@ public class QueryGraphGeneratorTest {
 		
 		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
 		
-		Graph commandGraph = RATJsonUtils.getRATJsonSettingsGraph(ratJson);
+		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);
 		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
 		if(!Utils.isUUID(rootVertexUUID)){
 			// TODO exception

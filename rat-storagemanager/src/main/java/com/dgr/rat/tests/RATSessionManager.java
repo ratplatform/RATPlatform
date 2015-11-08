@@ -14,7 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 
 public class RATSessionManager {
-	private ExecutorService _messageSenderExecutor = (ExecutorService)Executors.newFixedThreadPool(10);
+	private ExecutorService _messageSenderExecutor = Executors.newFixedThreadPool(10);
 	private CompletionService<String> _pool = new ExecutorCompletionService<String>(_messageSenderExecutor);
 	private static RATSessionManager _instance = null;
 	private ScheduledExecutorService _scheduledExecutor = Executors.newScheduledThreadPool(1);
