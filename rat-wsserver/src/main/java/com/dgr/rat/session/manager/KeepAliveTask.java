@@ -69,22 +69,22 @@ public class KeepAliveTask implements Runnable{
     		messageSender.setSessionID(null);
         	_pool.submit(messageSender);
     	
-    		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
+    		Future<String>task = _pool.poll(1000, TimeUnit.MILLISECONDS);
 //    		Future<String>task = _pool.take();
     		if(task != null){
     			result = task.get();
     			if(result == null){
     				responseStatus = StatusCode.RequestTimeout;
-    				throw new Exception(StatusCode.RequestTimeout.toString());
+    				throw new Exception("Error " + StatusCode.RequestTimeout.toString());
     			}
     			else if(result.equalsIgnoreCase(StatusCode.InternalServerError.toString())){
     				responseStatus = StatusCode.InternalServerError;
-    				throw new Exception(StatusCode.InternalServerError.toString());
+    				throw new Exception("Error " + StatusCode.InternalServerError.toString());
     			}
     		}
     		else{
     			responseStatus = StatusCode.RequestTimeout;
-    			throw new Exception("Future<String>task is null!");
+    			throw new Exception("Error " + StatusCode.RequestTimeout.toString());
     		}
 		}
 		catch (Exception e) {
@@ -100,7 +100,7 @@ public class KeepAliveTask implements Runnable{
 			header.setStatusCode(responseStatus);
 			result = KeepAliveHelpers.serializeKeepAliveJson(header);
 			
-//			System.out.println(result);
+//			System.out.println("Error " + responseStatus);
 //			e.printStackTrace();
 			// TODO log
 		}

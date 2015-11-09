@@ -21,9 +21,15 @@ public class UserDomains {
 	@Column(name = "domainName")
 	private String _domainName = null;
 	
+	@Column(name = "domainUUID")
+	private String _domainUUID = null;
 	
 	public UserDomains() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public String get_domainUUID(){
+		return _domainUUID; 
 	}
 	
 	public String get_domainName(){

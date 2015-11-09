@@ -10,6 +10,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
+import com.dgr.rat.ratwsserver.helpers.Constants;
+import com.dgr.utils.AppProperties;
 
 public class KeepAlive {
 	private ScheduledExecutorService _scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
@@ -22,8 +24,12 @@ public class KeepAlive {
 	
 	@SuppressWarnings("unchecked")
 	public void start(){
+		int keepAliveInitialDelay = AppProperties.getInstance().getIntProperty(Constants.KeepAliveInitialDelay);
+		int keepAlivePeriod = AppProperties.getInstance().getIntProperty(Constants.KeepAlivePeriod);
+		
 		KeepAliveTask task = new KeepAliveTask(_servletContext);
-		_scheduledFuture = (ScheduledFuture<KeepAliveTask>) _scheduledExecutorService.scheduleAtFixedRate(task, 10, 1, TimeUnit.SECONDS);
+		_scheduledFuture = (ScheduledFuture<KeepAliveTask>) _scheduledExecutorService.scheduleAtFixedRate(task, 
+				keepAliveInitialDelay, keepAlivePeriod, TimeUnit.MILLISECONDS);
 	}
 	
 	public void shutdown() throws Exception{

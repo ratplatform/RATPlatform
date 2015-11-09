@@ -50,7 +50,7 @@ public class MessageSender implements MessageListener, Callable<String>{
 	public void onMessage(Message message) {
 		try {
 			_result = ((TextMessage) message).getText();
-			System.out.println("MessageSender: Received result: " + _response);
+			//System.out.println("MessageSender: Received result: " + _response);
 		} 
 		catch (JMSException e) {
 			_result = StatusCode.InternalServerError.toString();
@@ -74,7 +74,9 @@ public class MessageSender implements MessageListener, Callable<String>{
 //	}
 	public String call() throws Exception {
 		//System.out.println("MessageSender: call ");
-
+		this.setStop(false);
+		_result = null;
+		
 		try {
 			MessageCreator message = new MessageGenerator();
 			_jmsTemplate.send(_destination, message);

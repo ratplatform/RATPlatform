@@ -31,15 +31,16 @@ public class IdentityManager {
 		query.setParameter("userName", userName);
 		@SuppressWarnings("unchecked")
 		List<UserDomains> userDomains = query.getResultList();
-		List<String> list = new ArrayList<String>();
+		Map<String, String> map = new HashMap<String, String>();
 		for(UserDomains userDomain : userDomains){
-			list.add(userDomain.get_domainName());
+//			list.add(userDomain.get_domainName());
+			map.put(userDomain.get_domainName(), userDomain.get_domainUUID());
 		}
-		
+
 		//System.out.println(user.get_email());
 		result.put("sessionID", sessionID);
 		result.put("userName", userName);
-		result.put("userDomains", list);
+		result.put("userDomains", map);
 		
 		return result;
 	}

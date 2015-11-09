@@ -94,7 +94,8 @@ CREATE TABLE `user_domain` (
 	`userDomainID` int(11) NOT NULL AUTO_INCREMENT,
 	`userName` varchar(255) NOT NULL,
 	`domainName` varchar(255) NOT NULL,
-	
+	`domainUUID` varchar(255) NOT NULL,
+
 	primary key (userDomainID)
 )
 ENGINE=InnoDB 
@@ -112,6 +113,7 @@ DROP TABLE IF EXISTS `domain`;
 CREATE TABLE `domain` (
 	`domainID` int(11) NOT NULL AUTO_INCREMENT,
 	`domainName` varchar(255) NOT NULL,
+	`domainUUID` varchar(255) NOT NULL,
 	PRIMARY KEY (`domainID`)
 )
 ENGINE=InnoDB 
