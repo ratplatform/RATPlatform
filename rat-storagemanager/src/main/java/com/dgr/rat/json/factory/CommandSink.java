@@ -43,10 +43,20 @@ public class CommandSink {
 		// TODO Auto-generated constructor stub
 	}
 	
-	private Response keepAlive(JsonHeader header){
-		Response response = new Response();
+	private Response keepAlive(RATJsonObject ratJsonObject, JsonHeader header) throws Exception{
+		CommandResponse commandResponse = new CommandResponse();
+		commandResponse.setCommandName("KeepAlive");
+		commandResponse.setStatusCode(StatusCode.Ok);
+		commandResponse.setCommandType(JSONType.KeepAlive);
+		commandResponse.drill(new KeepAliveDriller());
+		
 		header.setStatusCode(StatusCode.Ok);
+		header.addHeaderProperty(RATConstants.CorrelationID, ratJsonObject.getHeaderProperty(RATConstants.CorrelationID));
+		
+		Response response = new Response();
 		response.setHeader(header);
+		response.setCommandResponse(commandResponse);
+		
 		return response;
 	}
 	
@@ -58,7 +68,7 @@ public class CommandSink {
 			RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(json);
 			JSONType commandType = JSONType.fromString(ratJsonObject.getHeaderProperty(RATConstants.CommandType));
 			if(commandType.equals(JSONType.KeepAlive)){
-				response = this.keepAlive(header);
+				response = this.keepAlive(ratJsonObject, header);
 			}
 			else{
 				response = this.doCommand(commandType, ratJsonObject, header);
@@ -82,7 +92,9 @@ public class CommandSink {
 		Response response = new Response();
 		IStorage storage = null;
 		try {
+			// TODO: spostare la opeConnection su getStorage
 			storage = StorageBridge.getInstance().getStorage();
+			storage.openConnection();
 		} 
 		catch (Exception e1) {
 			// TODO log

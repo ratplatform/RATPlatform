@@ -40,6 +40,11 @@ public class CreateRootVertex implements IInstruction{
 		UUID storedNodeUUID = nodeCaller.getStoredNodeUUID();
 		Vertex vertex = null;
 		
+		// TODO: in realtà è un errore: lo storedNodeUUID viene creato 
+		// quando viene creato il nodo inMemory (RATNodeProxy): da correggere aggiungendo un
+		// attributo di tipo hash del nome ed un altro che conservi  anche l'inMemoryNodeUUID
+		// la ricerca andrà fatta sia sull'hash del nome che sull'inMemoryNodeUUID, se possibile, altrimenti
+		// eliminare vertexExists (col rischio di creare nodi doppi: cercare di evitarlo)
 		if (!storage.vertexExists(storedNodeUUID)){
 			vertex = storage.addVertex(storedNodeUUID);
 			Set<String> keys = nodeCaller.getPropertyKeys();

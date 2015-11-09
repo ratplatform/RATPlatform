@@ -22,7 +22,7 @@ public class LoadCommandsTest {
 	public void test() {
 		SystemCommandsInitializer systemCommandsInitializer = TestHelpers.getSystemCommandsInitializer();
 		try {
-			systemCommandsInitializer.loadCommandTemplates();
+			systemCommandsInitializer.addCommandTemplates();
 			_storage = StorageBridge.getInstance().getStorage();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

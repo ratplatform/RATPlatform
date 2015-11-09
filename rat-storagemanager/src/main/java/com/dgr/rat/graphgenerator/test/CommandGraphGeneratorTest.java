@@ -32,7 +32,7 @@ import com.dgr.rat.graphgenerator.commands.AbstractCommand;
 import com.dgr.rat.graphgenerator.commands.AddComment;
 import com.dgr.rat.graphgenerator.commands.AddNewDomain;
 import com.dgr.rat.graphgenerator.commands.AddNewUser;
-import com.dgr.rat.graphgenerator.commands.AddRootDomain;
+import com.dgr.rat.graphgenerator.commands.AddRootPlatformNode;
 import com.dgr.rat.graphgenerator.commands.AddRootDomainAdminUser;
 import com.dgr.rat.graphgenerator.commands.AddSubComment;
 import com.dgr.rat.graphgenerator.commands.BindFromDomainToUser;
@@ -53,8 +53,10 @@ import com.tinkerpop.frames.FramedGraphFactory;
 import com.tinkerpop.frames.modules.javahandler.JavaHandlerModule;
 
 public class CommandGraphGeneratorTest {
+	// TODO: da aprire dal file di properties
 	public static final String LoadCommandsUUID = "42fc1097-b340-41a1-8ab2-e4d718ad48b9";
 	public static final String LoadQueriesUUID = "309c67c5-fd6e-4124-8cb6-8a455de32233";
+	public static final String RootDomainUUID = "b5876c07-5714-4f22-ab46-00f072d503cb";
 	
 	List<String>_ratJSONs = new ArrayList<String>();
 	Map<String, String>_clientJsonCommands = new HashMap<String, String>();
@@ -62,7 +64,7 @@ public class CommandGraphGeneratorTest {
 	private ICommandCreator addRootDomain(String commandVersion) throws Exception{
 		String commandName = "AddRootDomain";
 		
-		AbstractCommand command = new AddRootDomain(commandName, commandVersion);
+		AbstractCommand command = new AddRootPlatformNode(commandName, commandVersion);
 		command.set_commandType(JSONType.SystemCommands);
 		command.addNodesToGraph();
 		command.buildGraph();
@@ -199,6 +201,7 @@ public class CommandGraphGeneratorTest {
 	private void addCommands() throws Exception{
 		GraphGeneratorHelpers.storeUUID(RATConstants.Commands, UUID.fromString(LoadCommandsUUID));
 		GraphGeneratorHelpers.storeUUID(RATConstants.Queries, UUID.fromString(LoadQueriesUUID));
+		GraphGeneratorHelpers.storeUUID(VertexType.RootDomain.toString(), UUID.fromString(RootDomainUUID));
 		
 		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
 		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);

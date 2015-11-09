@@ -5,7 +5,9 @@
 
 package com.dgr.rat.json.toolkit;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -16,11 +18,18 @@ import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IInstructionNod
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeEdgeFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.json.RATJsonObject;
 import com.dgr.utils.AppProperties;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
+import com.tinkerpop.blueprints.util.io.graphson.GraphSONReader;
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 import com.tinkerpop.frames.FramedGraph;
 import com.tinkerpop.frames.FramedGraphFactory;
@@ -28,6 +37,18 @@ import com.tinkerpop.frames.modules.javahandler.JavaHandlerModule;
 
 public class RATHelpers {
 
+	public static Graph fromRatJsonToGraph(String ratJson) throws Exception{
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		String output = mapper.writeValueAsString(jsonHeader.getSettings());
+		JsonNode actualObj = mapper.readTree(output);
+		Graph graph = new TinkerGraph();
+		InputStream inputStream = new ByteArrayInputStream(actualObj.toString().getBytes());
+		GraphSONReader.inputGraph(graph, inputStream);
+		
+		return graph;
+	}
 	
 	public static void initProperties(String propertiesFile) throws Exception{
 		Path path = FileSystems.getDefault().getPath(propertiesFile);

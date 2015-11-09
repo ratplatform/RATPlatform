@@ -8,6 +8,7 @@ package com.dgr.rat.storage.provider;
 import java.util.List;
 import java.util.UUID;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.storage.orientdb.StorageInternalError;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
@@ -49,7 +50,7 @@ public class TinkerGraphStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#vertexExists(java.lang.String)
 	 */
 	@Override
-	public Vertex getVertex(String label, String value) {
+	public Vertex getVertex(String label, String value) throws Exception{
 		Vertex vertex = null;
 		
 		if(this.vertexExists(label, value)){
@@ -90,7 +91,7 @@ public class TinkerGraphStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getVertex(java.util.UUID)
 	 */
 	@Override
-	public Vertex getVertex(UUID vertexUUID) {
+	public Vertex getVertex(UUID vertexUUID) throws Exception{
 		return this.getVertex(RATConstants.VertexUUIDField, vertexUUID.toString());
 	}
 
@@ -107,7 +108,7 @@ public class TinkerGraphStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getRootDomainUUID()
 	 */
 	@Override
-	public UUID getRootDomainUUID() {
+	public UUID getRootDomainUUID() throws Exception{
 		UUID result = null;
 		Vertex vertex = this.getVertex(RATConstants.VertexTypeField, RATConstants.VertexTypeValueRootDomain);
 		if(vertex != null){
@@ -134,7 +135,7 @@ public class TinkerGraphStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getRootDomain()
 	 */
 	@Override
-	public Vertex getRootDomain() {
+	public Vertex getRootDomain() throws Exception{
 		Vertex vertex = this.getVertex(RATConstants.VertexTypeField, RATConstants.VertexTypeValueRootDomain);
 		
 		return vertex;
@@ -179,7 +180,16 @@ public class TinkerGraphStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#close()
 	 */
 	@Override
-	public void close() throws Exception {
+	public void closeConnection() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.dgr.rat.storage.provider.IStorage#openConnection()
+	 */
+	@Override
+	public void openConnection() throws StorageInternalError, Exception{
 		// TODO Auto-generated method stub
 		
 	}

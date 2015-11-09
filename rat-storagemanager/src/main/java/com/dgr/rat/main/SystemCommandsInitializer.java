@@ -12,8 +12,14 @@ import java.nio.file.FileSystems;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
+
+import org.junit.Assert;
+
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.json.RATJsonObject;
+import com.dgr.rat.json.factory.CommandSink;
+import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.rat.storage.provider.StorageBridge;
@@ -48,7 +54,9 @@ public class SystemCommandsInitializer {
 	}
 	
 	// TODO: così non va bene ed è temporaneo: devo trovare il modo per eseguirlo come tutti gli altri comandi.
-	public void loadCommandTemplates() throws Exception{
+	public void addCommandTemplates() throws Exception{
+		_storage.openConnection();
+		
 		String templatesPath = RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder);
 		String json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadCommandsTemplate.conf");
 		// COMMENT: modo corretto per ottenere  il commandsTemplateUUID
@@ -59,7 +67,7 @@ public class SystemCommandsInitializer {
 			throw new Exception();
 			// TODO: log
 		}
-		this.loadCommandTemplates(templatesPath, json, commandsTemplateUUID);
+		this.addCommandTemplates(templatesPath, json, commandsTemplateUUID);
 		
 		json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadQueriesTemplate.conf");
 		// COMMENT: modo corretto per ottenere  il queriesTemplateUUID
@@ -71,33 +79,39 @@ public class SystemCommandsInitializer {
 			// TODO: log
 		}
 		templatesPath = RATHelpers.getCommandsPath(RATConstants.QueryTemplatesFolder);
-		this.loadCommandTemplates(templatesPath, json, queriesTemplateUUID);
+		this.addCommandTemplates(templatesPath, json, queriesTemplateUUID);
 		
-		// COMMENT: le istruzioni qui commentate, per semplificare l'avvio del sistema in questa fase, sono state spostate in InitDB
-//		// TODO: per ora eseguo tutto in modo sincrono, in seconda battuta vedremo. Questa parte è tutta da rivedere in quanto
-//		// i nomi dei parametri sono contenuti nelle due funzioni che seguono e così non va bene.
-//		String rootDomainUUID = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
-//		
-//		String userAdminName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
-//		String userAdminPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
-//		SystemInitializerHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID, userAdminName, userAdminPwd);
+
+		String commandJson = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+		this.addRootPlatformDomainNode(commandJson);
+//		String realRootDomainUUID = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainUUID);
+//		templatesPath = RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder);
+//		String templateJson = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "AddRootDomainTemplate.conf");
 		
 		// COMMENT: restituisco la connection al pool delle connection
-//		_storage.shutDown();
+		_storage.shutDown();
 	}
 	
-	private void loadCommandTemplates(String commandTemplatesPath, String json, String commandUUID) throws Exception{
+	private Response addRootPlatformDomainNode(String json)throws Exception{
+		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
+		String rootDomain = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
+		String input = json.replace(placeHolder, rootDomain);
+		
+		CommandSink commandSink = new CommandSink();
+		Response response = commandSink.doCommand(input);
+		
+		StatusCode statusCode = StatusCode.fromString(response.getStatusCode());
+		System.out.println("StatusCode " + statusCode.toString());
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandResponse.getResponse()));
+
+		return response;
+	}
+	
+	private void addCommandTemplates(String commandTemplatesPath, String json, String commandUUID) throws Exception{
 		// COMMENT: Leggo il file contenente i comandi
 		try{
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
-			String output = mapper.writeValueAsString(jsonHeader.getSettings());
-			JsonNode actualObj = mapper.readTree(output);
-			Graph graph = new TinkerGraph();
-			InputStream inputStream = new ByteArrayInputStream(actualObj.toString().getBytes());
-			GraphSONReader.inputGraph(graph, inputStream);
-	
+			Graph graph = RATHelpers.fromRatJsonToGraph(json); 
+					
 			Iterable<Vertex> iterable = graph.getVertices(RATConstants.VertexUUIDField, commandUUID);
 			if(iterable == null){
 				throw new Exception();
@@ -138,14 +152,15 @@ public class SystemCommandsInitializer {
 			// TODO: valutare l'ipotesi di modificare il comportamento e rendere il comando un grafo linkato
 			// al vertice commandsVertex, e non come ora salvare il contenuto del JSON dentro il nodo del
 			// comando
+			ObjectMapper mapper = new ObjectMapper();
 			File[] templates = FileUtils.listingFiles(false, commandTemplatesPath, ".conf");
 			for(File template : templates){
 				String pathFileName = template.getAbsolutePath();
 	//			System.out.println(pathFileName);
 				json = FileUtils.fileRead(pathFileName);
-				jsonHeader = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
-				String commandName = jsonHeader.getHeaderProperty(RATConstants.CommandName);
-				uuid = jsonHeader.getHeaderProperty(RATConstants.CommandGraphUUID);
+				RATJsonObject jsonObject = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
+				String commandName = jsonObject.getHeaderProperty(RATConstants.CommandName);
+				uuid = jsonObject.getHeaderProperty(RATConstants.CommandGraphUUID);
 				
 				if(!_storage.vertexExists(UUID.fromString(uuid))){
 					Vertex command = _storage.addVertex(UUID.fromString(uuid));

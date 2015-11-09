@@ -145,6 +145,11 @@ public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNo
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public void setStoredNodeUUID(UUID uuid) {
+		throw new UnsupportedOperationException();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.command.graph.ICommandProxyNodeVisitable#setRotNode(boolean)

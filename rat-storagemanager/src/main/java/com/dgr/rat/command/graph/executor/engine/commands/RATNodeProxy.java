@@ -208,4 +208,12 @@ public class RATNodeProxy implements ICommandNodeVisitable{
 		// TODO Auto-generated method stub
 		return _node.getIsRootVertexField();
 	}
+
+	/* (non-Javadoc)
+	 * @see com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable#setStoredNodeUUID(java.util.UUID)
+	 */
+	@Override
+	public void setStoredNodeUUID(UUID uuid) {
+		_ratNodeUUID = uuid;
+	}
 }

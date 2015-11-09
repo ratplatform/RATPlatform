@@ -16,7 +16,7 @@ public class LoadCommands extends AbstractCommand{
 	}
 	
 	public void addNodesToGraph() throws Exception{
-		Commands rootNode = this.buildRootNode(Commands.class, RATConstants.Commands);//new Commands(this, true);
+		Commands rootNode = this.buildRootNode(Commands.class, RATConstants.Commands);
 		rootNode.addCreateCommandRootVertexInstruction("name", RATConstants.Commands, ReturnType.string);
 		rootNode.addInstruction("LoadCommandsAction", "folder", RATConstants.VertexContentUndefined, ReturnType.string);
 	}

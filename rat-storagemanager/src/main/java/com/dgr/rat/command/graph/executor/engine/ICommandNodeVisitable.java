@@ -18,6 +18,7 @@ public interface ICommandNodeVisitable {
 	public boolean isExplored();
 	public String getCommandName();
 	public UUID getStoredNodeUUID();
+	public void setStoredNodeUUID(UUID uuid);
 	public void setRotNode(boolean isRotNode);
 	public UUID getCommandGraphUUID();
 	public boolean isRootNode();

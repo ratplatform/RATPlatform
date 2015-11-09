@@ -14,7 +14,6 @@ import com.dgr.rat.command.graph.executor.engine.result.IResultDriller;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
 import com.dgr.rat.command.graph.executor.engine.result.instructions.InstructionResultInfo;
 import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -77,6 +77,6 @@ public class RATMessagingService implements MessageListener, IDispatcherListener
 	@Override
 	public void onReceive(IResponse message) {
 		// COMMENT: usato solo per controllo in quanto il messaggio di ritorno viene spedito direttamente da MQWorkerTask
-		System.out.println("RATMessagingServer.onReceive: message: " + JSONObjectBuilder.serializeCommandResponse(message));
+		//System.out.println("RATMessagingServer.onReceive: message: " + JSONObjectBuilder.serializeCommandResponse(message));
 	}
 }

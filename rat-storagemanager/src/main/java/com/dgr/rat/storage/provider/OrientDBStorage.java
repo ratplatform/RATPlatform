@@ -12,18 +12,22 @@ import com.dgr.rat.storage.orientdb.OrientDBService;
 import com.dgr.rat.storage.orientdb.StorageInternalError;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class OrientDBStorage implements IStorage{
-	private OrientGraph	_orientGraph = null;
+	private TransactionalGraph	_orientGraph = null;
 	
-	public OrientDBStorage() throws StorageInternalError, Exception{
+	public OrientDBStorage() {
     	OGlobalConfiguration.MEMORY_USE_UNSAFE.setValue(false);
     	OGlobalConfiguration.STORAGE_COMPRESSION_METHOD.setValue("gzip");
     	OGlobalConfiguration.JNA_DISABLE_USE_SYSTEM_LIBRARY.setValue(true);
-    	
+	}
+	
+	@Override
+	public void openConnection() throws StorageInternalError, Exception {
 		_orientGraph = OrientDBService.getInstance().getConnection();
 	}
 	
@@ -59,7 +63,7 @@ public class OrientDBStorage implements IStorage{
 	 */
 	@Override
 	public boolean vertexExists(String label, String value) {
-		System.out.println(_orientGraph.countVertices());
+//		System.out.println(_orientGraph.countVertices());
 		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(_orientGraph.getVertices(label, value));
 		List<Vertex> list = pipe.toList();
 		return !list.isEmpty();
@@ -91,7 +95,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getVertex(java.util.UUID)
 	 */
 	@Override
-	public Vertex getVertex(UUID vertexUUID) {
+	public Vertex getVertex(UUID vertexUUID) throws Exception {
 		// TODO: Orient Parrebbe avere dei problemi con alcuni caratteri: per ora me la risolvo così, poi devo trovare una soluzione migliore in quanto potrebbe rallentare
 		String escapedUUID = this.escape(vertexUUID.toString());
 		
@@ -102,13 +106,19 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getVertex(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Vertex getVertex(String label, String value) {
+	public Vertex getVertex(String label, String value) throws Exception {
 		Vertex vertex = null;
+		try{
 		// TODO: attenzion: per il problema del carattere "-" (cone le UUID), non posso fare chiamare vertexExists qui
 		// perché non conosco il valore di label; pertanto se fosse per caso VertexUUIDField (controllare non è il massimo),
 		// non facendo escape, il vertex non verrebbe trovato e la funzione fallirebbe
 		Iterable<Vertex> iterable = _orientGraph.getVertices(label, value);
 		vertex = iterable.iterator().next();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			throw new Exception(e);
+		}
 		
 		return vertex;
 	}
@@ -128,7 +138,7 @@ public class OrientDBStorage implements IStorage{
 	// TODO: funzione davvero discutibile: se applicata ad un grafo complesso come rat, i rootVertex sarebbero molti, moltissimi e qui ne restituisco uno.
 	// Da rivedere
 	@Override
-	public UUID getRootDomainUUID() {
+	public UUID getRootDomainUUID() throws Exception {
 		UUID result = null;
 		Vertex vertex = this.getVertex(RATConstants.VertexTypeField, RATConstants.VertexTypeValueRootDomain);
 		if(vertex != null){
@@ -143,7 +153,7 @@ public class OrientDBStorage implements IStorage{
 	 */
 	// TODO: funzione davvero discutibile: idem come sopra
 	@Override
-	public Vertex getRootDomain() {
+	public Vertex getRootDomain() throws Exception {
 		Vertex vertex = this.getVertex(RATConstants.VertexTypeField, RATConstants.VertexTypeValueRootDomain);
 		
 		return vertex;
@@ -185,7 +195,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#close()
 	 */
 	@Override
-	public void close() throws Exception {
+	public void closeConnection() throws Exception {
 		OrientDBService.getInstance().close();
 	}
 }

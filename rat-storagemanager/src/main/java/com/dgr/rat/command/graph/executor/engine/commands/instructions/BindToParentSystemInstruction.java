@@ -162,6 +162,11 @@ public class BindToParentSystemInstruction implements ICommandNodeVisitable, IIn
 	public UUID getStoredNodeUUID() {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public void setStoredNodeUUID(UUID uuid) {
+		throw new UnsupportedOperationException();
+	}
 
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable#setRotNode(boolean)

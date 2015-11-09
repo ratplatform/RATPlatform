@@ -38,7 +38,7 @@ public class RATStorageManager {
 		// COMMENT: Inizializzo il database (se non esiste il DB allora lo creo)
 		systemCommandsInitializer.initStorage();
 		
-		systemCommandsInitializer.loadCommandTemplates();
+		systemCommandsInitializer.addCommandTemplates();
 		
 		System.out.println("Ready!");
 	}

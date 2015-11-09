@@ -68,10 +68,13 @@ public class InitDB {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void closeDB() throws SQLException{
+	public void closeDB() throws Exception{
 		if(_connect != null){
 			_connect.close();
 		}
+		
+		_context.close();
+		RATSessionManager.getInstance().shutdown();
 	}
 	
 	public void openDB() throws Exception{
@@ -128,32 +131,56 @@ public class InitDB {
 	}
 	
 	private void addRootDomain() throws Exception{
-		String rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootDomainName);
-		String queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
-		String commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
-		
-		String commandJSON = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
-		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+		String rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
+		PreparedStatement preparedStatement = null;
+		try{
+			String queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
+			String commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
+			
+			String commandJSON = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 
-		MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
-		_rootDomainUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
-		if(!Utils.isUUID(_rootDomainUUID)){
-			throw new Exception();
-			// TODO log
+			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
+			_rootDomainUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
+			if(!Utils.isUUID(_rootDomainUUID)){
+				throw new Exception();
+				// TODO log
+			}
+			
+		    if(!this.exists("SELECT count(*) from ratwsserver.domain where domainName = '" + rootDomainName + "'")){
+				preparedStatement = _connect.prepareStatement("insert into ratwsserver.domain values (default, ?, ?)");
+				preparedStatement.setString(1, rootDomainName);
+				preparedStatement.setString(2, _rootDomainUUID);
+				preparedStatement.executeUpdate();
+				_domain = rootDomainName;
+		    }
+		    else{
+		    	preparedStatement = _connect.prepareStatement("UPDATE domain SET domainUUID = ? WHERE domainName = ?");
+		    	preparedStatement.setString(1, _rootDomainUUID);
+		    	preparedStatement.setString(2, rootDomainName);
+		    	
+		    	preparedStatement.executeUpdate();
+		    }
 		}
-		
-		this.setDomain(rootDomainName);
+		catch(Exception e){
+			throw new Exception(e);
+		}
+		finally{
+			if(preparedStatement != null){
+				preparedStatement.close();
+			}
+		}
 	}
 	
 	private void addAdmin() throws Exception{
 		String userAdminName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
 		String userAdminPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
-		String rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootDomainName);
+		String rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
 		
 		this.setUsers(userAdminName, "admin@email.com", userAdminPwd);
 		this.setUsersRole(userAdminName, "administrator");
 		this.setDomainRoles(rootDomainName, userAdminName, "administrator");
-		this.setUserDomain(userAdminName, rootDomainName);
+		this.setUserDomain(userAdminName, rootDomainName, _rootDomainUUID);
 		
 		this.setAdminPermissions("administrator", rootDomainName, "createcollaborationdomain");
 		this.setAdminPermissions("administrator", rootDomainName, "createnewuser");
@@ -213,8 +240,19 @@ public class InitDB {
 		PreparedStatement preparedStatement = null;
 		try{
 		    if(!this.exists("SELECT count(*) from ratwsserver.domain where domainName = '" + domain + "'")){
-				preparedStatement = _connect.prepareStatement("insert into ratwsserver.domain values (default, ?)");
+				String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", _rootDomainUUID, domain);
+				String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+	
+				MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
+				_domainUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
+				if(!Utils.isUUID(_domainUUID)){
+					throw new Exception();
+					// TODO log
+				}
+				
+				preparedStatement = _connect.prepareStatement("insert into ratwsserver.domain values (default, ?, ?)");
 				preparedStatement.setString(1, domain);
+				preparedStatement.setString(2, _domainUUID);
 				preparedStatement.executeUpdate();
 				_domain = domain;
 				
@@ -226,16 +264,6 @@ public class InitDB {
 				this.setAdminPermissions("domainadmin", _domain, "deletecomment");
 				this.setAdminPermissions("domainadmin", _domain, "executeusercommands");
 				this.setAdminPermissions("domainadmin", _domain, "choosedomain");
-				
-				String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", _rootDomainUUID, domain);
-				String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
-	
-				MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
-				_domainUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
-				if(!Utils.isUUID(_domainUUID)){
-					throw new Exception();
-					// TODO log
-				}
 		    }
 		}
 		catch(Exception e){
@@ -250,7 +278,7 @@ public class InitDB {
 	
 	private void setBind() throws Exception{
 		this.setDomainRoles(_domain, _userName, "domainadmin");
-		this.setUserDomain(_userName, _domain);
+		this.setUserDomain(_userName, _domain, _domainUUID);
 		
 		String commandJSON = SystemInitializerHelpers.bindUserToDomain("BindFromUserToDomain.conf", _domainUUID, _userUUID);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
@@ -285,16 +313,24 @@ public class InitDB {
 		}
 	}
 	
-	private void setUserDomain(String userName, String domain) throws Exception{
+	private void setUserDomain(String userName, String domain, String domainUUID) throws Exception{
 		PreparedStatement preparedStatement = null;
 		try{
 			if(!this.exists("SELECT count(*) from ratwsserver.user_domain where domainName = '" + domain + "' and " +
 					"userName = '" + userName + "'")){
-				preparedStatement = _connect.prepareStatement("insert into  ratwsserver.user_domain values (default, ?, ?)");
+				preparedStatement = _connect.prepareStatement("insert into  ratwsserver.user_domain values (default, ?, ?, ?)");
 				preparedStatement.setString(1, userName);
 				preparedStatement.setString(2, domain);
+				preparedStatement.setString(3, domainUUID);
 				preparedStatement.executeUpdate();
 			}
+		    else{
+		    	preparedStatement = _connect.prepareStatement("UPDATE user_domain SET domainUUID = ? WHERE domainName = ?");
+		    	preparedStatement.setString(1, domainUUID);
+		    	preparedStatement.setString(2, domain);
+		    	
+		    	preparedStatement.executeUpdate();
+		    }
 		}
 		catch(Exception e){
 			throw new Exception(e);
@@ -471,7 +507,7 @@ public class InitDB {
 			if(initDB != null){
 				try {
 					initDB.closeDB();
-				} catch (SQLException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

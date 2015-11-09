@@ -63,7 +63,7 @@ public class AddRootDomainTest {
 		Assert.assertNotNull(systemCommandsInitializer);
 
 		try {
-			systemCommandsInitializer.loadCommandTemplates();
+			systemCommandsInitializer.addCommandTemplates();
 			
 			String json = this.setAddRootDomainValues("AddRootDomain.conf");
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
@@ -607,7 +607,7 @@ public class AddRootDomainTest {
 	
 	private Response executeRemoteCommand(String json)throws Exception{
 		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
-		String rootDomain = AppProperties.getInstance().getStringProperty(RATConstants.RootDomainName);
+		String rootDomain = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
 		String input = json.replace(placeHolder, rootDomain);
 		
 		CommandSink commandSink = new CommandSink();

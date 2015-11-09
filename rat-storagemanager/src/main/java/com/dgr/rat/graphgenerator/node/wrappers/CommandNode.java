@@ -65,6 +65,10 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 		this.addInstruction("CreateRootVertex", paramName, paramValue, returnType);
 	}
 	
+	public void addCreateRootPlatformVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
+		this.addInstruction("CreateRootPlatformVertex", paramName, paramValue, returnType);
+	}
+	
 	public void addCreateVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
 		this.addInstruction("CreateVertex", paramName, paramValue, returnType);
 	}

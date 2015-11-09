@@ -61,7 +61,7 @@ public class CreateVertex implements IInstruction{
 			}
 		}
 		else{
-			vertex = storage.getVertex(inMemoryNodeUUID);
+			vertex = storage.getVertex(storedNodeUUID);
 			// TODO log
 		}
 		storage.commit();

@@ -80,7 +80,7 @@ public class MQWorkerTask implements ITaskCommand<IResponse>{
 			result.setSessionID(sessionID);
 			
 			//TODO: cosa faccio se l'istruzione precedente fallisse restituendo un StatusCode.Unknown?
-			System.out.println("MessagingServerWorker: messageText: " + messageText);
+			//System.out.println("MessagingServerWorker: messageText: " + messageText);
 			MessageGenerator messageGenerator = new MessageGenerator(result);
 			
 			try {
