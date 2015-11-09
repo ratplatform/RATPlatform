@@ -15,15 +15,14 @@ import com.dgr.rat.login.json.LoginResponse;
 /**
  * Servlet implementation class Index
  */
-//@WebServlet("/Index")
-@WebServlet(name="IndexServel", urlPatterns={"/index"})
-public class IndexServlet extends HttpServlet {
+@WebServlet(name="LoginServlet", urlPatterns={"/login"})
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public IndexServlet() {
+    public LoginServlet() {
         super();
         System.out.println("IndexServlet");
     }

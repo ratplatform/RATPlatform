@@ -6,7 +6,7 @@
         <title>JSP Example</title>
     </head>
     <body>
-        <form method="post" action="index">
+        <form method="post" action="login">
             <center>
             <table border="1" width="30%" cellpadding="3">
                 <thead>
@@ -30,9 +30,6 @@
                     <tr>
                         <td><input type="submit" value="Login" /></td>
                         <td><input type="reset" value="Reset" /></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Yet Not Registered!! <a href="reg.jsp">Register Here</a></td>
                     </tr>
                 </tbody>
             </table>

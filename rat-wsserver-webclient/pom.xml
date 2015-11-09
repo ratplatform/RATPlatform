@@ -1,232 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	 
-  <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>ratplatform-project</artifactId>
-        <groupId>org.rat.platform</groupId>
-  	<version>2.0.0-SNAPSHOT</version>
-    </parent>
+	<modelVersion>4.0.0</modelVersion>
 
-  <artifactId>rat-wsserver-webclient</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
-  <name>RATWSServer WebClient</name>
-  <packaging>war</packaging>
+	<parent>
+		<artifactId>ratplatform-project</artifactId>
+		<groupId>org.rat.platform</groupId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
 
-    <developers>
-        <developer>
-            <name>Daniele Grignani</name>
-            <email>grignani.d@gmail.com</email>
-        </developer>
-        <developer>
-            <name>Angela Locoro</name>
-        </developer>
-    </developers>
-
- <dependencies>
-	<dependency>
-	<groupId>org.rat.platform</groupId>
-	<artifactId>rat-commons</artifactId>
+	<artifactId>rat-wsserver-webclient</artifactId>
 	<version>0.9.0-SNAPSHOT</version>
-	<scope>compile</scope>
-	</dependency>
-<dependency>
-    <groupId>org.glassfish.hk2.external</groupId>
-    <artifactId>aopalliance-repackaged</artifactId>
-    <version>2.4.0-b32</version>
-</dependency>
-	<dependency>
-		<groupId>commons-codec</groupId>
-		<artifactId>commons-codec</artifactId>
-		<version>1.8</version>
-	</dependency>
-	<dependency>
-		<groupId>commons-logging</groupId>
-		<artifactId>commons-logging</artifactId>
-		<version>1.0.3</version>
-	</dependency>
-<dependency>
-    <groupId>org.glassfish.grizzly</groupId>
-    <artifactId>grizzly-framework</artifactId>
-    <version>2.3.23</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.grizzly</groupId>
-    <artifactId>grizzly-http-all</artifactId>
-    <version>2.3.23</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.grizzly</groupId>
-    <artifactId>grizzly-http-client</artifactId>
-    <version>1.9</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.grizzly</groupId>
-    <artifactId>grizzly-websockets</artifactId>
-    <version>2.3.23</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.hk2</groupId>
-    <artifactId>hk2-api</artifactId>
-    <version>2.4.0-b32</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.hk2</groupId>
-    <artifactId>hk2-locator</artifactId>
-    <version>2.4.0-b32</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.hk2</groupId>
-    <artifactId>hk2-utils</artifactId>
-    <version>2.4.0-b32</version>
-</dependency>
-	<dependency>
-		<groupId>org.codehaus.jackson</groupId>
-		<artifactId>jackson-mapper-asl</artifactId>
-		<version>1.9.12</version>
-	</dependency>
-	<dependency>
-		<groupId>com.fasterxml.jackson.module</groupId>
-		<artifactId>jackson-module-afterburner</artifactId>
-		<version>2.4.3</version>
-	</dependency>
-	<dependency>
-		<groupId>com.fasterxml.jackson.core</groupId>
-		<artifactId>jackson-core</artifactId>
-		<version>2.5.1</version>
-	</dependency>
-	<dependency>
-		<groupId>com.fasterxml.jackson.core</groupId>
-		<artifactId>jackson-databind</artifactId>
-		<version>2.5.1</version>
-	</dependency>
+	<name>RATWSServer WebClient</name>
+	<packaging>war</packaging>
 
-	<dependency>
-		<groupId>com.fasterxml.jackson.core</groupId>
-		<artifactId>jackson-annotations</artifactId>
-		<version>2.5.0</version>
-	</dependency>
-	<dependency>
-		<groupId>org.javassist</groupId>
-		<artifactId>javassist</artifactId>
-		<version>3.20.0-GA</version>
-	</dependency>
-<dependency>
-    <groupId>javax.annotation</groupId>
-    <artifactId>javax.annotation-api</artifactId>
-    <version>1.2</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.hk2.external</groupId>
-    <artifactId>javax.inject</artifactId>
-    <version>2.4.0-b32</version>
-</dependency>
-<dependency>
-    <groupId>javax.ws.rs</groupId>
-    <artifactId>javax.ws.rs-api</artifactId>
-    <version>2.0.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.connectors</groupId>
-    <artifactId>jersey-apache-connector</artifactId>
-    <version>2.22.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.core</groupId>
-    <artifactId>jersey-client</artifactId>
-    <version>2.22.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.core</groupId>
-    <artifactId>jersey-common</artifactId>
-    <version>2.22.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.connectors</groupId>
-    <artifactId>jersey-grizzly-connector</artifactId>
-    <version>2.22.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.bundles.repackaged</groupId>
-    <artifactId>jersey-guava</artifactId>
-    <version>2.22.1</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.jersey.connectors</groupId>
-    <artifactId>jersey-jetty-connector</artifactId>
-    <version>2.22.1</version>
-</dependency>
-<dependency>
-    <groupId>org.eclipse.jetty</groupId>
-    <artifactId>jetty-client</artifactId>
-    <version>9.3.5.v20151012</version>
-</dependency>
-   <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-http</artifactId>
-      <version>9.3.5.v20151012</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-io</artifactId>
-      <version>9.3.5.v20151012</version>
-    </dependency>
-<dependency>
-    <groupId>org.eclipse.jetty</groupId>
-    <artifactId>jetty-util</artifactId>
-    <version>9.3.5.v20151012</version>
-</dependency>
-<dependency>
-    <groupId>org.glassfish.hk2</groupId>
-    <artifactId>osgi-resource-locator</artifactId>
-    <version>1.0.1</version>
-</dependency>
-<dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-api</artifactId>
-    <version>1.7.12</version>
-</dependency>
- </dependencies>
+	<properties>
+		<context.root>RATWebClient</context.root>
+	</properties>
 
-  <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-            </plugin>
-       <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat7-maven-plugin</artifactId>
-          <version>2.0-SNAPSHOT</version>
-        </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <webXml>WebContent/WEB-INF/web.xml</webXml>
+	<developers>
+		<developer>
+		<name>Daniele Grignani</name>
+		<email>grignani.d@gmail.com</email>
+		</developer>
 
-      <webResources>
-        <resource>
-           <directory>${basedir}/WebContent/WEB-INF</directory>
-           <filtering>true</filtering>
-           <targetPath>WEB-INF</targetPath>
-        </resource>
-      </webResources>
-                </configuration>
-            </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.5.1</version>
-          <configuration>
-            <source>${cs.jdk.version}</source>
-            <target>${cs.jdk.version}</target>
+		<developer>
+		<name>Angela Locoro</name>
+		<email>angela.locoro@gmail.com</email>
+		</developer>
+	</developers>
+
+	<dependencies>
+		<dependency>
+		<groupId>org.rat.platform</groupId>
+		<artifactId>rat-commons</artifactId>
+		<version>0.9.0-SNAPSHOT</version>
+		<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+		<groupId>javax.ws.rs</groupId>
+		<artifactId>javax.ws.rs-api</artifactId>
+		<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
+		<groupId>javax.persistence</groupId>
+		<artifactId>persistence-api</artifactId>
+		<version>1.0.2</version>
+		</dependency>
+
+		<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
+		<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+		<groupId>javax.ejb</groupId>
+		<artifactId>javax.ejb-api</artifactId>
+		<version>3.2</version>
+		</dependency>
+
+		<!--org.glassfish-->
+		<dependency>
+		<groupId>org.rat.platform</groupId>
+		<artifactId>org.glassfish-dependencies</artifactId>
+		<version>1.0.0</version>
+		<type>pom</type>
+		</dependency>
+		<!--End org.glassfish-->	</dependencies>
+
+	<build>
+		<plugins>
+			<!--
+			<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.0-SNAPSHOT</version>
+			</plugin>
+			-->
+			<!--
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<configuration>
+			<webXml>WebContent/WEB-INF/web.xml</webXml>
+			<webResources>
+			<resource>
+			<directory>${basedir}/WebContent/WEB-INF</directory>
+			<filtering>true</filtering>
+			<targetPath>WEB-INF</targetPath>
+			</resource>
+			</webResources>
+			</configuration>
+			</plugin>
+			-->
+
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-war-plugin</artifactId>
+			<configuration>
+			<webResources>
+			<resource>
+			<directory>${basedir}/WebContent/WEB-INF</directory>
+			<filtering>true</filtering>
+			<targetPath>WEB-INF</targetPath>
+			</resource>
+			</webResources>
+			</configuration>
+			</plugin>
+
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>2.5.1</version>
+			<configuration>
+			<source>${jvm.source}</source>
+			<target>${jvm.target}</target>
 			<fork>true</fork>
-          	<meminitial>128m</meminitial>
-          	<maxmem>512m</maxmem>            
-          </configuration>
-        </plugin>
-	</plugins>
-  </build>
+			<meminitial>128m</meminitial>
+			<maxmem>512m</maxmem>            
+			</configuration>
+			</plugin>
+
+			<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-eclipse-plugin</artifactId>
+			<version>2.9</version>
+			<configuration>
+			<wtpversion>2.0</wtpversion>
+			<wtpContextName>${context.root}</wtpContextName>
+			</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
