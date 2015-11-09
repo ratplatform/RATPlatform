@@ -38,9 +38,9 @@ public class RATConstants {
 	public static final String DateFormat = "yyyy-MM-dd HH:mm:ss.SSS"; 
 	
 	// RATStorageManager/conf/application.properties
-	public static final String RootDomainName = "root.domain.name";
+	public static final String RootPlatformDomainName = "root.domain.name";
 	public static final String DomainPlaceholder = "domain.placeholder";
-	public static final String RootDomainPlaceholder = "root.domain.placeholder";
+	public static final String RootPlatformDomainPlaceholder = "root.domain.placeholder";
 	public static final String RootDomainUUIDPlaceholder = "root.domain.uuid.placeholder";
 //	public static final String SystemCommandsFolder = "systemcommands.folder";
 	public static final String CommandTemplatesFolder = "command.templates.folder";
@@ -55,6 +55,7 @@ public class RATConstants {
 	// TODO: temporanei: leggere commento in SystemCommandsInitializer.loadCommandTemplates
 	public static final String CommandsTemplateUUID = "commands.template.uuid";
 	public static final String QueriesTemplateUUID = "queries.template.uuid";
+	public static final String RootPlatformDomainUUID = "root.domain.uuid";
 			
 	// VertexValue
 	public static final String VertexUUIDField = "VertexUUIDField";
