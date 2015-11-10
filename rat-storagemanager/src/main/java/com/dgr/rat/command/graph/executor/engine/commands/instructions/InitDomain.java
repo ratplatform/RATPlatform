@@ -123,7 +123,7 @@ public class InitDomain implements IInstruction{
 		
 		newDomainVertex.addEdge(commandName, newCommandsVertex);
 		
-		storage.commit();
+//		storage.commit();
 		
 //		UUID inrMemoryNodeUUID = nodeCaller.getInMemoryNodeUUID();
 //		InstructionResult commandResult = new InstructionResult();

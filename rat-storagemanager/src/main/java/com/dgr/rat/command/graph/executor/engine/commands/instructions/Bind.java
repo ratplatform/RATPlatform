@@ -44,7 +44,7 @@ public class Bind implements IInstruction{
 			edge.setProperty(RATConstants.EdgeUUIDField, edgeUUID.toString());
 		}
 		
-		storage.commit();
+//		storage.commit();
 		
 		InstructionResult commandResult = new InstructionResult(nodeCaller.getInMemoryNodeUUID());
 		commandResult.setNewObjectUUID(edgeUUID);

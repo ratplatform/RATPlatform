@@ -80,16 +80,11 @@ public class SystemCommandsInitializer {
 		}
 		templatesPath = RATHelpers.getCommandsPath(RATConstants.QueryTemplatesFolder);
 		this.addCommandTemplates(templatesPath, json, queriesTemplateUUID);
-		
+		_storage.shutDown();
 
+		// COMMENT: qui aprirò e chiuderò una nuova connection
 		String commandJson = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
 		this.addRootPlatformDomainNode(commandJson);
-//		String realRootDomainUUID = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainUUID);
-//		templatesPath = RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder);
-//		String templateJson = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "AddRootDomainTemplate.conf");
-		
-		// COMMENT: restituisco la connection al pool delle connection
-		_storage.shutDown();
 	}
 	
 	private Response addRootPlatformDomainNode(String json)throws Exception{

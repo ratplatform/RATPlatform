@@ -27,7 +27,8 @@ public class OrientDBStorage implements IStorage{
 	}
 	
 	@Override
-	public void openConnection() throws StorageInternalError, Exception {
+	public synchronized void openConnection() throws StorageInternalError, Exception {
+		System.out.println("_orientGraph.openConnection()");
 		_orientGraph = OrientDBService.getInstance().getConnection();
 	}
 	
@@ -39,7 +40,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#addVertex(java.lang.Object)
 	 */
 	@Override
-	public Vertex addVertex(UUID vertexUUID) {
+	public synchronized Vertex addVertex(UUID vertexUUID) {
 		// TODO: OrientParrebbe avere dei problemi con alcuni caratteri: per ora me la risolvo così, poi devo trovare una soluzione migliore in quanto potrebbe rallentare
 		String escapedUUID = this.escape(vertexUUID.toString());
 		
@@ -53,7 +54,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#addVertex()
 	 */
 	@Override
-	public Vertex addVertex() {
+	public synchronized Vertex addVertex() {
 		Vertex vertex = _orientGraph.addVertex(null);
 		return vertex;
 	}
@@ -62,7 +63,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#vertexExists(java.lang.String)
 	 */
 	@Override
-	public boolean vertexExists(String label, String value) {
+	public synchronized boolean vertexExists(String label, String value) {
 //		System.out.println(_orientGraph.countVertices());
 		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(_orientGraph.getVertices(label, value));
 		List<Vertex> list = pipe.toList();
@@ -73,7 +74,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#vertexExists(java.lang.String)
 	 */
 	@Override
-	public boolean vertexExists(UUID vertexUUID) {
+	public synchronized boolean vertexExists(UUID vertexUUID) {
 		// TODO: Orient Parrebbe avere dei problemi con alcuni caratteri: per ora me la risolvo così, poi devo trovare una soluzione migliore in quanto potrebbe rallentare
 		String escapedUUID = this.escape(vertexUUID.toString());
 		
@@ -84,7 +85,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#edgeExists(java.util.UUID)
 	 */
 	@Override
-	public boolean edgeExists(UUID vertexUUID) {
+	public synchronized boolean edgeExists(UUID vertexUUID) {
 		// TODO: Orient Parrebbe avere dei problemi con alcuni caratteri: per ora me la risolvo così, poi devo trovare una soluzione migliore in quanto potrebbe rallentare
 		String escapedUUID = this.escape(vertexUUID.toString());
 		
@@ -95,7 +96,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getVertex(java.util.UUID)
 	 */
 	@Override
-	public Vertex getVertex(UUID vertexUUID) throws Exception {
+	public synchronized Vertex getVertex(UUID vertexUUID) throws Exception {
 		// TODO: Orient Parrebbe avere dei problemi con alcuni caratteri: per ora me la risolvo così, poi devo trovare una soluzione migliore in quanto potrebbe rallentare
 		String escapedUUID = this.escape(vertexUUID.toString());
 		
@@ -106,7 +107,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getVertex(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Vertex getVertex(String label, String value) throws Exception {
+	public synchronized Vertex getVertex(String label, String value) throws Exception {
 		Vertex vertex = null;
 		try{
 		// TODO: attenzion: per il problema del carattere "-" (cone le UUID), non posso fare chiamare vertexExists qui
@@ -127,7 +128,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#getGraph()
 	 */
 	@Override
-	public Graph getGraph() {
+	public synchronized Graph getGraph() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -138,7 +139,7 @@ public class OrientDBStorage implements IStorage{
 	// TODO: funzione davvero discutibile: se applicata ad un grafo complesso come rat, i rootVertex sarebbero molti, moltissimi e qui ne restituisco uno.
 	// Da rivedere
 	@Override
-	public UUID getRootDomainUUID() throws Exception {
+	public synchronized UUID getRootDomainUUID() throws Exception {
 		UUID result = null;
 		Vertex vertex = this.getVertex(RATConstants.VertexTypeField, RATConstants.VertexTypeValueRootDomain);
 		if(vertex != null){
@@ -153,7 +154,7 @@ public class OrientDBStorage implements IStorage{
 	 */
 	// TODO: funzione davvero discutibile: idem come sopra
 	@Override
-	public Vertex getRootDomain() throws Exception {
+	public synchronized Vertex getRootDomain() throws Exception {
 		Vertex vertex = this.getVertex(RATConstants.VertexTypeField, RATConstants.VertexTypeValueRootDomain);
 		
 		return vertex;
@@ -163,7 +164,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#commit()
 	 */
 	@Override
-	public void commit() {
+	public synchronized void commit() {
 		_orientGraph.commit();
 	}
 
@@ -171,7 +172,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#rollBack()
 	 */
 	@Override
-	public void rollBack() {
+	public synchronized void rollBack() {
 		_orientGraph.rollback();
 	}
 
@@ -179,7 +180,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#addIndex()
 	 */
 	@Override
-	public void addIndex() {
+	public synchronized void addIndex() {
 //		_orientGraph.createIndex(indexName, indexClass, indexParameters)
 	}
 
@@ -187,7 +188,8 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#shutDown()
 	 */
 	@Override
-	public void shutDown() {
+	public synchronized void shutDown() {
+		System.out.println("_orientGraph.shutdown()");
 		_orientGraph.shutdown();
 	}
 
@@ -195,7 +197,7 @@ public class OrientDBStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#close()
 	 */
 	@Override
-	public void closeConnection() throws Exception {
+	public synchronized void closeConnection() throws Exception {
 		OrientDBService.getInstance().close();
 	}
 }

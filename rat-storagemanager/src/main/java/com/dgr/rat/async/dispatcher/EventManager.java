@@ -13,9 +13,9 @@ import java.util.concurrent.Future;
 public class EventManager {
 	private static EventManager _instance = null;
 	//private BlockingQueue<Task<?>> _queue = new ArrayBlockingQueue<Task<?>>(1024);
-	// TODO: modificare il numero di threads usando i core che ospitano l'applicazione Runtime.getRuntime().availableProcessors();
 	// TODO: inoltre cercare e sostituire tutti i synchronized con reentrantlock
-	private ExecutorService _executor = (ExecutorService)Executors.newFixedThreadPool(10);
+	private final int _numberOfCores = Runtime.getRuntime().availableProcessors();
+	private ExecutorService _executor = (ExecutorService)Executors.newFixedThreadPool(1);
 	
 	private EventManager() {
 	}

@@ -1,0 +1,19 @@
+{
+    "dgr": {
+        "name": "dgr",
+        "password": "dgr",
+        "email": "dgr@gmail.com",
+        "domains": [
+            "domain dgr",
+            "domain dgr1"
+        ]
+    },
+    "dgr1": {
+        "name": "dgr1",
+        "password": "dgr1",
+        "email": "dgr1@gmail.com",
+        "domains": [
+            "domain dgr1"
+        ]
+    }
+}

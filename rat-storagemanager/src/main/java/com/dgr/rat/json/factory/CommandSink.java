@@ -94,7 +94,7 @@ public class CommandSink {
 		try {
 			// TODO: spostare la opeConnection su getStorage
 			storage = StorageBridge.getInstance().getStorage();
-			storage.openConnection();
+//			storage.openConnection();
 		} 
 		catch (Exception e1) {
 			// TODO log
@@ -118,12 +118,12 @@ public class CommandSink {
         	// TODO log
         	header.setStatusCode(StatusCode.InternalServerError);
 		}
-		finally{
-			if(storage != null){
-				storage.shutDown();
-			}
-			response.setHeader(header);
-		}
+
+//		if(storage != null){
+//			storage.shutDown();
+//		}
+		response.setHeader(header);
+		
 
 		return response;
 	}

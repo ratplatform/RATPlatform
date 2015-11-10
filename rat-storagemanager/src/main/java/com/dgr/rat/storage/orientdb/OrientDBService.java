@@ -11,6 +11,8 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.errors.InternalServerErrorException;
 import com.dgr.utils.AppProperties;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
+import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentPool;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;

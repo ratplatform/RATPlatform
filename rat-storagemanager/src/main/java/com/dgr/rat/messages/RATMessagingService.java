@@ -21,9 +21,9 @@ import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 // TODO verificare che non sia meglio implementare un reactor e far girare RATMessagingServer
 // in un thread
 public class RATMessagingService implements MessageListener, IDispatcherListener<IResponse>{
-	// TODO: modificare il numero di threads usando i core che ospitano l'applicazione Runtime.getRuntime().availableProcessors();
+	private final int _numberOfCores = Runtime.getRuntime().availableProcessors();
 	// TODO: inoltre cercare e sostituire tutti i synchronized con reentrantlock
-	private ExecutorService _executor = (ExecutorService)Executors.newFixedThreadPool(10);
+	private ExecutorService _executor = (ExecutorService)Executors.newFixedThreadPool(1);
 	
 	private JmsTemplate _jmsTemplate = null;
 	private Destination _receiver = null; 

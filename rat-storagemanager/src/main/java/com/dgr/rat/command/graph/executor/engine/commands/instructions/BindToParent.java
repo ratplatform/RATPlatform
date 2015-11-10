@@ -49,7 +49,7 @@ public class BindToParent implements IInstruction{
 		edge.setProperty(RATConstants.EdgeUUIDField, edgeUUID.toString());
 		edge.setProperty(RATConstants.CommandGraphUUID, nodeCaller.getCommandGraphUUID());
 		
-		storage.commit();
+//		storage.commit();
 		
 		InstructionResult commandResult = new InstructionResult(nodeCaller.getInMemoryNodeUUID());
 		commandResult.setNewObjectUUID(edgeUUID);

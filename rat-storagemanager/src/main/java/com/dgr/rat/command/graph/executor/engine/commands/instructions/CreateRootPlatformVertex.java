@@ -62,7 +62,7 @@ public class CreateRootPlatformVertex implements IInstruction{
 			vertex = storage.getVertex(inMemoryNodeUUID);
 			// TODO log
 		}
-		storage.commit();
+//		storage.commit();
 		
 		InstructionResult commandResult = new InstructionResult(inMemoryNodeUUID);
 		commandResult.setNewObjectUUID(inMemoryNodeUUID);

@@ -38,7 +38,7 @@ public class SetVertexProperty implements IInstruction{
 			vertexCaller.setProperty(paramName, paramValue);
 		}
 		
-		storage.commit();
+//		storage.commit();
 
 		InstructionResult commandResult = new InstructionResult(nodeCaller.getInMemoryNodeUUID());
 		commandResult.setNewObjectUUID(vertexCallerUUID);

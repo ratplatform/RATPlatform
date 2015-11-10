@@ -153,10 +153,21 @@ public class InstructionInvoker implements IInstructionInvoker{
 			// TODO log
 		}
 		
-		IInstructionResult instructionResult = executable.execute(this, invokable.getCallerNode());
-		
-		if(instructionResult != null){
-			this.addInstructionResult(invokable.getCallerNode(), instructionResult, _currentInstruction);
+		// COMMENT: non sono convinto di openConnection,  commit e shutdown qui.
+		_storage.openConnection();
+		try{
+			IInstructionResult instructionResult = executable.execute(this, invokable.getCallerNode());
+			_storage.commit();
+			
+			if(instructionResult != null){
+				this.addInstructionResult(invokable.getCallerNode(), instructionResult, _currentInstruction);
+			}
+		}
+		catch(Exception e){
+			throw new Exception(e);
+		}
+		finally{
+			_storage.shutDown();
 		}
 	}
 	

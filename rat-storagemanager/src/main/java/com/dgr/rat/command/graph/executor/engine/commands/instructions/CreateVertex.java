@@ -64,7 +64,7 @@ public class CreateVertex implements IInstruction{
 			vertex = storage.getVertex(storedNodeUUID);
 			// TODO log
 		}
-		storage.commit();
+//		storage.commit();
 		
 		InstructionResult commandResult = new InstructionResult(inMemoryNodeUUID);
 		commandResult.setNewObjectUUID(storedNodeUUID);

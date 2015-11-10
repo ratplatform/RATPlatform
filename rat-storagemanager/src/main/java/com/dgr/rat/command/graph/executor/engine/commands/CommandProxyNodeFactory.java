@@ -34,9 +34,11 @@ public class CommandProxyNodeFactory implements ICommandGraphVisitableFactory{
 	public ICommandGraphData buildGraph(CommandData commandData) throws Exception{
 		UUID commandUUID = commandData.getCommandUUID();
 		CommandTemplateGraph graph = null;
+		IStorage storage = commandData.getStorage();
+		try{
 		if(commandUUID != null){
-			IStorage storage = commandData.getStorage();
 			// Prendo il nodo root del comando
+			storage.openConnection();
 			Vertex vertex = storage.getVertex(commandUUID);
 			if(vertex == null){
 				// TODO: exception e log
@@ -57,6 +59,14 @@ public class CommandProxyNodeFactory implements ICommandGraphVisitableFactory{
 		}
 		else{
 			// TODO: exception e log
+		}
+		}
+		catch(Exception e){
+			throw new Exception(e);
+		}
+		
+		finally{
+			storage.shutDown();
 		}
 
 		return graph;
