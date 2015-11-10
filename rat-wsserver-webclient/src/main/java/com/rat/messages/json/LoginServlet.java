@@ -1,8 +1,6 @@
-package com.dgr.rat.wsclient;
+package com.rat.messages.json;
 
 import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.login.json.LoginResponse;
+import com.dgr.rat.wsclient.LoginHelper;
 
 /**
  * Servlet implementation class Index
@@ -44,15 +44,17 @@ public class LoginServlet extends HttpServlet {
 	    String userName = request.getParameter("username");
 	    String password = request.getParameter("password");
 	    String wsURL = request.getParameter("wsurl");
-	    
+
 	    LoginHelper loginHelper = new LoginHelper(wsURL);
 	    LoginResponse wsResponse = loginHelper.login(userName, password);
-	    String status = wsResponse.getStatusResponse();
-	    if(status.equals("200")){
-	    	String path = this.getServletContext().getContextPath() + "/domain";
+	    StatusCode status = StatusCode.fromString(wsResponse.getStatusCode().toString());
+	    if(status.equals(StatusCode.Ok)){
+	    	String path = this.getServletContext().getContextPath() + "/domains";
 	        HttpSession session = request.getSession(false);
+	        
 	        session.setAttribute("wsResponse", wsResponse);
 	        session.setAttribute("wsURL", wsURL);
+	        session.setAttribute("sessionID", wsResponse.get_sessionID());
 	        
 	    	response.sendRedirect(path);
 	    }

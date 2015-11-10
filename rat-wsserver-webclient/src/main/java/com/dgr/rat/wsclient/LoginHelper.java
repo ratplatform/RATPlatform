@@ -22,7 +22,9 @@ import com.dgr.rat.login.json.ChooseDomainResponse;
 import com.dgr.rat.login.json.LoginResponse;
 import com.dgr.rat.login.json.LoginResponseDeserializer;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoginHelper {
 	private Client _client = null;
@@ -42,12 +44,18 @@ public class LoginHelper {
     	WebTarget target = _client.target(this.getBaseURI(_wsURL));
     	
     	Response response = target.path("login").request().post(Entity.entity(json, MediaType.TEXT_PLAIN_TYPE));
-    	json = response.readEntity(String.class);
-    	System.out.println("Login response: " + json);
+    	String result = response.readEntity(String.class);
+    	System.out.println("Login response: " + result);
     	
-    	LoginResponseDeserializer loginResponseDeserializer = new LoginResponseDeserializer();
-    	// TODO: questi deserializer sono da ridurre ad uno solo generico
-    	LoginResponse loginResponse = loginResponseDeserializer.deserialize(LoginResponse.class, json);
+		ObjectMapper mapper = new ObjectMapper();
+    	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//		String jsonResult = mapper.writeValueAsString(json);
+    	LoginResponse loginResponse = mapper.readValue(result, LoginResponse.class);
+//		System.out.println(json);
+    	
+//    	LoginResponseDeserializer loginResponseDeserializer = new LoginResponseDeserializer();
+//    	// TODO: questi deserializer sono da ridurre ad uno solo generico
+//    	LoginResponse loginResponse = loginResponseDeserializer.deserialize(LoginResponse.class, json);
     	
     	return loginResponse;
     }

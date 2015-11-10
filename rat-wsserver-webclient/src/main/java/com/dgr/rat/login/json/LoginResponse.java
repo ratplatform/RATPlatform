@@ -5,8 +5,8 @@
 
 package com.dgr.rat.login.json;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,25 +15,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LoginResponse {
 	private String _sessionID = null;
 	private String _userName = null;
-	private List<String> _domains = new ArrayList<String>();
-	private String _statusResponse = null;
+	private Map<String, String> _userDomains = new HashMap<String, String>();
+	private Object _statusCode = null;
 	
     public String get_sessionID() {
 		return _sessionID;
 	}
 
     @JsonProperty("sessionID")
-    public void setSessionID(String sessionID) {
+    public void set_sessionID(String sessionID) {
 		this._sessionID = sessionID;
 	}
 
 	@JsonProperty("userDomains")
-	public void setUserDomains(List<String> domains) {
-		this._domains = domains;
+	public void set_userDomains(Map<String, String> userDomains) {
+		this._userDomains = userDomains;
 	}
 	
-	public String[] getUserDomains(){
-		return _domains.toArray(new String[_domains.size()]);
+	public Map<String, String> getUserDomains(){
+		return _userDomains;
 	}
 	
 	public String getUserName() {
@@ -41,16 +41,16 @@ public class LoginResponse {
 	}
 
 	@JsonProperty("userName")
-	public void setUserName(String userName) {
+	public void set_userName(String userName) {
 		this._userName = userName;
 	}
 
-	public String getStatusResponse() {
-		return _statusResponse;
+	public Object getStatusCode() {
+		return _statusCode;
 	}
 
-	@JsonProperty("statusResponse")
-	public void setStatusResponse(String statusResponse) {
-		this._statusResponse = statusResponse;
+	@JsonProperty("StatusCode")
+	public void set_statusCode(Object statusCode) {
+		this._statusCode = statusCode;
 	}
 }

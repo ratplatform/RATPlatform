@@ -1,7 +1,6 @@
 package com.dgr.rat.wsclient;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +12,6 @@ import javax.servlet.http.HttpSession;
 import com.dgr.rat.login.json.ChooseDomainResponse;
 import com.dgr.rat.login.json.LoginResponse;
 
-/**
- * Servlet implementation class DomainServlet
- */
-//@WebServlet("/DomainServlet")
 @WebServlet(name="DomainServlet", urlPatterns={"/domain"})
 public class DomainServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,10 +23,6 @@ public class DomainServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("domain.jsp").forward(request, response);
 	}
@@ -84,5 +75,4 @@ public class DomainServlet extends HttpServlet {
 	       }
 		}
 	}
-
 }
