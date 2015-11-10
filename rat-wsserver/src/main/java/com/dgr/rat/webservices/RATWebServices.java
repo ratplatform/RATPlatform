@@ -47,7 +47,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RATWebServices {
 	public static final String CURRENT_USER_KEY = "user";
 	public static final String CURRENT_USER_PWD = "pwd";
-	public static final String STATUS_RESPONSE = "statusResponse";
+//	public static final String STATUS_RESPONSE = "statusResponse";
 	//@PersistenceContext(unitName="ratwsserver")
 //	private EntityManager _entityManager = RATWebServicesContextListener.createEntityManager(); 
 	@Context
@@ -137,7 +137,7 @@ public class RATWebServices {
         finally{
         	String json = null;
         	
-            result.put(STATUS_RESPONSE, String.valueOf(responseStatus));
+            result.put(RATConstants.StatusCode, responseStatus);
             if(mapper == null){
             	mapper = new ObjectMapper();
             	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -201,7 +201,7 @@ public class RATWebServices {
         finally{
         	String json = null;
         	
-            result.put(STATUS_RESPONSE, String.valueOf(responseStatus));
+            result.put(RATConstants.StatusCode, responseStatus);
             if(mapper == null){
             	mapper = new ObjectMapper();
             	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);

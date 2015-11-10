@@ -10,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.dgr.rat.webservices.RATWebServicesContextListener;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class IdentityManager {
@@ -20,7 +22,7 @@ public class IdentityManager {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Map<String, Object> getUserDomains(String sessionID, String userName){
+	public Map<String, Object> getUserDomains(String sessionID, String userName) throws JsonProcessingException{
 		Map<String, Object> result = new HashMap<String, Object>();
 		//Corretto ma per ora non serve
 //		Query query = _entityManager.createNamedQuery("findUserByName");
@@ -31,6 +33,7 @@ public class IdentityManager {
 		query.setParameter("userName", userName);
 		@SuppressWarnings("unchecked")
 		List<UserDomains> userDomains = query.getResultList();
+		
 		Map<String, String> map = new HashMap<String, String>();
 		for(UserDomains userDomain : userDomains){
 //			list.add(userDomain.get_domainName());

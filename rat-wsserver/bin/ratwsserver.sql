@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
 	`permissionID` int(11) NOT NULL AUTO_INCREMENT,
 	`roleName` varchar(255) NOT NULL,
-	`domainName` varchar(255) NOT NULL,
+	`domainUUID` varchar(255) NOT NULL,
 	`permissionName` varchar(255) NOT NULL,
 	PRIMARY KEY (`permissionID`)
 ) 
@@ -43,6 +43,7 @@ CREATE TABLE `user` (
 	`userName` varchar(255) NOT NULL,
 	`email` varchar(255) NOT NULL,
 	`password` varchar(255) NOT NULL,
+	`userUUID` varchar(255) NOT NULL,
 	PRIMARY KEY (`userID`)
 )
 ENGINE=InnoDB 
@@ -74,7 +75,7 @@ DEFAULT COLLATE utf8_general_ci;
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
 	`userRoleID` int(11) NOT NULL AUTO_INCREMENT,
-	`userName` varchar(255) NOT NULL,
+	`userUUID` varchar(255) NOT NULL,
 	`roleName` varchar(255) NOT NULL,
 	
 	PRIMARY KEY (`userRoleID`)
@@ -92,9 +93,9 @@ DEFAULT COLLATE utf8_general_ci;
 DROP TABLE IF EXISTS `user_domain`;
 CREATE TABLE `user_domain` (
 	`userDomainID` int(11) NOT NULL AUTO_INCREMENT,
-	`userName` varchar(255) NOT NULL,
-	`domainName` varchar(255) NOT NULL,
+	`userUUID` varchar(255) NOT NULL,
 	`domainUUID` varchar(255) NOT NULL,
+	`domainName` varchar(255) NOT NULL,
 
 	primary key (userDomainID)
 )
@@ -129,8 +130,8 @@ DEFAULT COLLATE utf8_general_ci;
 DROP TABLE IF EXISTS `domain_role`;
 CREATE TABLE `domain_role` (
 	`domainRoleID` int(11) NOT NULL NULL AUTO_INCREMENT,
-	`domainName` varchar(255) NOT NULL,
-	`userName` varchar(255) NOT NULL,
+	`domainUUID` varchar(255) NOT NULL,
+	`userUUID` varchar(255) NOT NULL,
 	`roleName` varchar(255) NOT NULL,
 	primary key (domainRoleID)
 
