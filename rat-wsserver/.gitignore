@@ -3,3 +3,4 @@
 .gitignore~
 /.settings/org.eclipse.wst.common.project.facet.core.xml~
 /tomcatlog.txt
+/js-test

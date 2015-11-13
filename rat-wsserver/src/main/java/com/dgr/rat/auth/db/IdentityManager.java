@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.dgr.rat.webservices.RATWebServicesContextListener;
+import com.dgr.utils.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,28 +23,35 @@ public class IdentityManager {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Map<String, Object> getUserDomains(String sessionID, String userName) throws JsonProcessingException{
+	public Map<String, Object> getUserDomains(String sessionID, String email) throws JsonProcessingException{
 		Map<String, Object> result = new HashMap<String, Object>();
-		//Corretto ma per ora non serve
-//		Query query = _entityManager.createNamedQuery("findUserByName");
-//		query.setParameter("userName", userName);
-//		User user = (User) query.getSingleResult();
+		Query query = _entityManager.createNamedQuery("findUserByEmail");
+		query.setParameter("email", email);
+		// TODO: in realtà dovrei farmi restituire una lista e verificare il numero degli elementi e lanciare un'exception se è != 1
+		Object obj = query.getSingleResult();
+		if(obj == null){
+			// TODO: log + exception
+		}
+		String uuid = obj.toString();
+		if(!Utils.isUUID(uuid)){
+			// TODO: log + exception
+		}
 		
-		Query query = _entityManager.createNamedQuery("findDomainsByUserName");
-		query.setParameter("userName", userName);
+		query = _entityManager.createNamedQuery("findDomainsByUserUUID");
+		query.setParameter("userUUID", uuid);
 		@SuppressWarnings("unchecked")
 		List<UserDomains> userDomains = query.getResultList();
 		
 		Map<String, String> map = new HashMap<String, String>();
 		for(UserDomains userDomain : userDomains){
-//			list.add(userDomain.get_domainName());
 			map.put(userDomain.get_domainName(), userDomain.get_domainUUID());
 		}
 
 		//System.out.println(user.get_email());
 		result.put("sessionID", sessionID);
-		result.put("userName", userName);
+		result.put("email", email);
 		result.put("userDomains", map);
+		result.put("userUUID", uuid);
 		
 		return result;
 	}

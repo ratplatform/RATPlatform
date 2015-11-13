@@ -9,14 +9,14 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "user_domain")
-@NamedQuery(name = "findDomainsByUserName", query="select d from UserDomains d where d._userName = :userName")
+@NamedQuery(name = "findDomainsByUserUUID", query="select d from UserDomains d where d._userUUID = :userUUID")
 public class UserDomains {
 	@Id @GeneratedValue
 	@Column(name = "userDomainID")
 	private int _userDomainID = -1;
 
-	@Column(name = "userName")
-	private String _userName = null;
+	@Column(name = "userUUID")
+	private String _userUUID = null;
 	
 	@Column(name = "domainName")
 	private String _domainName = null;
@@ -36,12 +36,11 @@ public class UserDomains {
 		return _domainName; 
 	}
 	
-	public String get_userName(){
-		return _userName; 
+	public String get_userUUID(){
+		return _userUUID; 
 	}
 
 	public int get_userDomainID() {
 		return _userDomainID;
 	}
-
 }

@@ -26,7 +26,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "user")
-@NamedQuery(name = "findUserByName", query="select u from User u where u._userName = :userName")
+@NamedQuery(name = "findUserByEmail", query="select u from User u where u._email = :email")
 public class User implements Visitable{
 	@Id @GeneratedValue
 	@Column(name = "userID")
@@ -37,46 +37,16 @@ public class User implements Visitable{
 	private String _email = null;
 	@Column(name = "password")
 	private String _password = null;
+	@Column(name = "userUUID")
+	private String _userUUID = null;
 
 	public User() {
-		//this.setDomains();
 	}
 	
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
 	}
-	
-//	public Map<String, String> getUserDomains(){
-//		Map<String, String>map = new HashMap<String, String>();
-//		if(_userDomains != null){
-//			System.out.println("this.get_userID: " + this.get_userID());
-//			for(UserDomains userDomain : _userDomains){
-//				// TODO: sarebbe meglio fare un controllo sullo String.valueOf
-//				map.put(userDomain.get_domainName(), String.valueOf(userDomain.get_domainID()));
-////				System.out.println("userDomain.get_userID: " + userDomain.get_userID());
-////				System.out.println("userDomain.get_domainID: " + userDomain.get_domainID());
-////				System.out.println("userDomain.get_domainID: " + userDomain.get_domainName());
-//			}
-//		}
-//		
-//		return map;
-//	}
-	
-//	public Map<Integer, String> get_userRoles(){
-//		Map<Integer, String>map = new HashMap<Integer, String>();
-//		if(_userRoles != null){
-//			for(UserRole userRole : _userRoles){
-//				map.put(userRole.get_roleID(), userRole.get_roleName());
-////				System.out.println("userRole.get_role().get_roleID(): " + userRole.get_role().get_roleID());
-////				System.out.println("userRole.get_role().get_name(): " + userRole.get_role().get_name());
-////				System.out.println("get_userID: " + userRole.get_userID());
-////				System.out.println("get_roleID: " + userRole.get_roleID());
-////				System.out.println("roleName: " + roleName);
-//			}
-//		}
-//		return map;
-//	}
 
 	public int get_userID() {
 		return _userID;
@@ -92,5 +62,13 @@ public class User implements Visitable{
 
 	public String get_password() {
 		return _password;
+	}
+
+	public String get_userUUID() {
+		return _userUUID;
+	}
+
+	public void set_userUUID(String userUUID) {
+		this._userUUID = userUUID;
 	}
 }

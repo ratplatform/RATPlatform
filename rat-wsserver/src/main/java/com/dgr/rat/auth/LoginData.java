@@ -6,20 +6,20 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.PUBLIC_ONLY)
 public class LoginData {
-	private String _userName = null;
+	private String _email = null;
 	private String _password = null;
 
 	public LoginData() {
 		// TODO Auto-generated constructor stub
 	}
 	
-    public String getUserName() {
-		return _userName;
+    public String get_email() {
+		return _email;
 	}
 
-    @JsonProperty("userName")
-    public void setUserName(String userName) {
-		this._userName = userName;
+    @JsonProperty("email")
+    public void set_email(String email) {
+		this._email = email;
 	}
 
     public String getPassword() {

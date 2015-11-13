@@ -97,7 +97,7 @@ public class RATWebServices {
     	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     	    LoginData authenticationData = mapper.readValue(data, LoginData.class);
     	    
-    		String login = authenticationData.getUserName();
+    		String login = authenticationData.get_email();
     		String password = authenticationData.getPassword();
             UsernamePasswordToken token = new UsernamePasswordToken(login, password);
             Subject currentUser = SecurityUtils.getSubject();
@@ -134,26 +134,26 @@ public class RATWebServices {
 			responseStatus = 500;
             result = new HashMap<String, Object>();
 		}
-        finally{
-        	String json = null;
-        	
-            result.put(RATConstants.StatusCode, responseStatus);
-            if(mapper == null){
-            	mapper = new ObjectMapper();
-            	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            }
-            
-			try {
-				json = mapper.writeValueAsString(result);
-				System.out.println(json);
-			} 
-			catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-        	response = Response.status(responseStatus).entity(json).build();
+
+    	String json = null;
+    	
+        result.put(RATConstants.StatusCode, responseStatus);
+        if(mapper == null){
+        	mapper = new ObjectMapper();
+        	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         }
+        
+		try {
+			json = mapper.writeValueAsString(result);
+			System.out.println(json);
+		} 
+		catch (JsonProcessingException e) {
+			// TODO: gestire l'errore creando un JSON con errore e statuscode 
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    	response = Response.status(responseStatus).entity(json).build();
         
         return response;
 	}
