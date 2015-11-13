@@ -10,7 +10,7 @@ import com.dgr.rat.json.utils.ReturnType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RemoteParameter {
-//	private String _uuid = null;
+	private String _uuid = null;
 	private Integer _instructionOrder = 0;
 	private ReturnType _returnType = ReturnType.unknown;
 	private String _parameterName = null;
@@ -20,13 +20,13 @@ public class RemoteParameter {
 		// TODO Auto-generated constructor stub
 	}
 	
-//	@JsonProperty(RATConstants.VertexUUIDField)
-//    public void setVertexUUIDField(final String uuid){
-//		_uuid = uuid;
-//	}
-//    public String getVertexUUIDField(){
-//    	return _uuid;
-//    }
+	@JsonProperty(RATConstants.VertexUUIDField)
+    public void setVertexUUIDField(final String uuid){
+		_uuid = uuid;
+	}
+    public String getVertexUUIDField(){
+    	return _uuid;
+    }
     
 	@JsonProperty(RATConstants.InstructionOrderField)
 	public void setInstructionOrder(final Integer instructionOrder){

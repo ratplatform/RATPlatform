@@ -124,10 +124,11 @@ public class InstructionInvoker implements IInstructionInvoker{
 		}
 		
 		// COMMENT: creo la mappa coi parametri previsti dal grafo
-		for(int i = 0; i < num; i++){
-			IInstructionParam instructionParameter = invokable.getInstructionParameter(i);
+		Iterator<String>it = invokable.getInstructionParameterNameIterator();
+		while(it.hasNext()){
+			String paramName = it.next();
+			IInstructionParam instructionParameter = invokable.getInstructionParameter(paramName);
 			String paramValue = instructionParameter.getInstructionsParameterValueField();
-			String paramName = instructionParameter.getInstructionsParameterNameField();
 			ReturnType returnType = instructionParameter.getInstructionsParameterReturnTypeField();
 			
 			if(paramValue.equalsIgnoreCase(RATConstants.VertexContentUndefined)){
@@ -170,6 +171,66 @@ public class InstructionInvoker implements IInstructionInvoker{
 			_storage.shutDown();
 		}
 	}
+//	public void invoke(IInstructionNodeWrapper invokable) throws Exception {
+//		_currentInstruction = invokable.getInstructionName();
+//		
+//		int maxNum = invokable.getMaxNumParameters();
+//		IInstruction executable = this.getInstruction(_currentInstruction);
+//		_parameters.clear();
+//		
+//		int num = invokable.getNumberOfInstructionParameters();
+//		if(num != maxNum){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		// COMMENT: creo la mappa coi parametri previsti dal grafo
+//		for(int i = 0; i < num; i++){
+//			IInstructionParam instructionParameter = invokable.getInstructionParameter(i);
+//			String paramValue = instructionParameter.getInstructionsParameterValueField();
+//			String paramName = instructionParameter.getInstructionsParameterNameField();
+//			ReturnType returnType = instructionParameter.getInstructionsParameterReturnTypeField();
+//			
+//			if(paramValue.equalsIgnoreCase(RATConstants.VertexContentUndefined)){
+//				paramValue = _remoteCommandsContainer.getParameter(instructionParameter);
+//			}
+//			
+//			if(_parameters.containsKey(paramName)){
+//				throw new Exception();
+//				// TODO log
+//			}
+//			// TODO: creare un wrapper per i parametri che sia una template, cossì posso gestire 
+//			// tutti i parametri che voglio, anche oggetti; la classe deve essere creata in this.verifyParam
+//			if(!this.verifyParam(returnType, paramValue)){
+//				throw ResourceException.getException(ErrorType.BAD_REQUEST);
+//				// TODO log; inoltre da capire se è meglio lanciare l'eccezione oppure continuare con quello successivo
+//			}
+//			_parameters.put(paramName, paramValue);
+//		}
+//		
+//		// COMMENT: verifico che ci sia coerenza tra i parametri previsti dal grafo e quelli trovati 
+//		if(_parameters.isEmpty() || _parameters.size() != maxNum){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		// COMMENT: non sono convinto di openConnection,  commit e shutdown qui.
+//		_storage.openConnection();
+//		try{
+//			IInstructionResult instructionResult = executable.execute(this, invokable.getCallerNode());
+//			_storage.commit();
+//			
+//			if(instructionResult != null){
+//				this.addInstructionResult(invokable.getCallerNode(), instructionResult, _currentInstruction);
+//			}
+//		}
+//		catch(Exception e){
+//			throw new Exception(e);
+//		}
+//		finally{
+//			_storage.shutDown();
+//		}
+//	}
 	
 	public void addCommandResponse(ICommandNodeVisitable visited, IInstructionResult instructionResult) throws Exception{
 		if(_commandResult != null){

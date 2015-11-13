@@ -5,8 +5,8 @@
 
 package com.dgr.rat.command.graph.executor.engine;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -17,7 +17,7 @@ import com.dgr.rat.commons.constants.RATConstants;
 public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNodeWrapper{
 	private IInstructionNodeFrame _instruction = null;
 	private boolean _isAlreadyInvoked = false;
-	private Map<Integer, InstructionParameterNodeWrapper> _neighbors = new HashMap<Integer, InstructionParameterNodeWrapper>();
+	private Map<String, InstructionParameterNodeWrapper> _neighbors = new LinkedHashMap<String, InstructionParameterNodeWrapper>();
 	private ICommandNodeVisitable _caller = null;
 	
 	public InstructionWrapper(IInstructionNodeFrame instruction) {
@@ -43,15 +43,20 @@ public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNo
 	}
 	
 	private void readInstructionParameters() throws Exception{
-		Iterator<IInstructionParameterNodeFrame> it = _instruction.getUserCommandsInstructionParameters().iterator();
-		
-		while(it.hasNext()){
-			IInstructionParameterNodeFrame neighbor = it.next();
+		int num = (int) _instruction.getNumberOfInstructionParameters();
+		for(int inc = 0; inc < num; inc++){
+			IInstructionParameterNodeFrame neighbor = _instruction.getInstructionParameter(inc);
 			InstructionParameterNodeWrapper instructionParameterNodeWrapper = new InstructionParameterNodeWrapper(neighbor);
-			_neighbors.put(neighbor.getInstructionOrderField(), instructionParameterNodeWrapper);
+			if(_neighbors.containsKey(neighbor.getVertexUserCommandsInstructionsParameterNameField())){
+				throw new Exception();
+				// TODO log
+			}
+			_neighbors.put(neighbor.getVertexUserCommandsInstructionsParameterNameField(), instructionParameterNodeWrapper);
 		}
 		
 		if(_neighbors.size() != this.getNumberOfInstructionParameters()){
+			System.out.println("_neighbors.size(): " + _neighbors.size());
+			System.out.println("this.getNumberOfInstructionParameters(): " + this.getNumberOfInstructionParameters());
 			throw new Exception();
 			// TODO: log
 		}
@@ -61,6 +66,24 @@ public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNo
 			// TODO: log
 		}
 	}
+//	private void readInstructionParameters() throws Exception{
+//		Iterator<IInstructionParameterNodeFrame> it = _instruction.getUserCommandsInstructionParameters().iterator();
+//		while(it.hasNext()){
+//			IInstructionParameterNodeFrame neighbor = it.next();
+//			InstructionParameterNodeWrapper instructionParameterNodeWrapper = new InstructionParameterNodeWrapper(neighbor);
+//			_neighbors.put(neighbor.getInstructionOrderField(), instructionParameterNodeWrapper);
+//		}
+//		
+//		if(_neighbors.size() != this.getNumberOfInstructionParameters()){
+//			throw new Exception();
+//			// TODO: log
+//		}
+//		
+//		if(_neighbors.isEmpty()){
+//			throw new Exception();
+//			// TODO: log
+//		}
+//	}
 	
 	public int getNumberOfInstructionParameters() {
 		return (int) _instruction.getNumberOfInstructionParameters();
@@ -200,13 +223,20 @@ public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNo
 	 * @see com.dgr.rat.command.graph.instruction.IInstructionNodeWrapper#getInstructionParameter(int)
 	 */
 	@Override
-	public IInstructionParam getInstructionParameter(int num) throws Exception {
-		if(num > _neighbors.size()){
+	public IInstructionParam getInstructionParameter(String paramName) throws Exception {
+		if(!_neighbors.containsKey(paramName)){
 			throw new Exception();
 			// TODO log
 		}
-		return _neighbors.get(num);
+		return _neighbors.get(paramName);
 	}
+//	public IInstructionParam getInstructionParameter(int num) throws Exception {
+//		if(num > _neighbors.size()){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		return _neighbors.get(num);
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable#isRootNode()
@@ -224,6 +254,15 @@ public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNo
 	public ICommandNodeVisitable getParent() {
 		// TODO Auto-generated method stub
 		return _caller;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.dgr.rat.command.graph.executor.engine.IInstructionNodeWrapper#getInstructionParameterNameIterator()
+	 */
+	@Override
+	public Iterator<String> getInstructionParameterNameIterator() {
+		// TODO Auto-generated method stub
+		return _neighbors.keySet().iterator();
 	}
 
 }

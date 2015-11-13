@@ -36,19 +36,19 @@ public class AddNewUser extends AbstractCommand{
 		SystemKeyNode isUserOfNode = this.buildNode(SystemKeyNode.class, "is-user-of");
 		isUserOfNode.addCreateVertexInstruction("nodeName", "is-user-of", ReturnType.string);
 		// COMMENT: bind verso il RATNode
-		isUserOfNode.addBindInstruction("ratNodeUUID", RATConstants.VertexContentUndefined);
+		isUserOfNode.addBindInstruction("isUserOfNodeUUID", RATConstants.VertexContentUndefined);
 		this.setQueryPivot(isUserOfNode, rootNode.getType(), VertexType.RootDomain, "StartQueryPipe", "SetQueryPipe", "GetAllUsers");
 		
 		SystemKeyNode isPutByNode = this.buildNode(SystemKeyNode.class, "is-put-by");
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: bind verso il RATNode
-		isPutByNode.addBindInstruction("ratNodeUUID", RATConstants.VertexContentUndefined);
+		isPutByNode.addBindInstruction("isPutByNodeUUID", RATConstants.VertexContentUndefined);
 //		this.setQueryPivot(isPutByNode, VertexType.RootDomain);
 		
 		SystemKeyNode isPutByNode2 = this.buildNode(SystemKeyNode.class, "is-put-by");
 		isPutByNode2.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: bind verso il RATNode
-		isPutByNode2.addBindInstruction("ratNodeUUID", RATConstants.VertexContentUndefined);
+		isPutByNode2.addBindInstruction("isPutByNode2UUID", RATConstants.VertexContentUndefined);
 //		this.setQueryPivot(isPutByNode2, VertexType.RootDomain);
 		
 //		NewDomainNode domain = this.buildNode(NewDomainNode.class, VertexType.Domain.toString());

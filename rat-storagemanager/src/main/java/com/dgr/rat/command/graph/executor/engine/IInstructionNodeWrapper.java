@@ -5,13 +5,13 @@
 
 package com.dgr.rat.command.graph.executor.engine;
 
+import java.util.Iterator;
+
 public interface IInstructionNodeWrapper {
 	public String getInstructionName();
 	public ICommandNodeVisitable getCallerNode();
-//	public String getCallerNodeName();
-//	public String getCallerNodeUUID();
-//	public String getInstructionUUID();
 	public int getNumberOfInstructionParameters();
 	public int getMaxNumParameters();
-	public IInstructionParam getInstructionParameter(int num)  throws Exception;
+	public IInstructionParam getInstructionParameter(String paramName)  throws Exception;
+	public Iterator<String> getInstructionParameterNameIterator();
 }

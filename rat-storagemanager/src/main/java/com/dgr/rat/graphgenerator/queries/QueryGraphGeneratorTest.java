@@ -226,7 +226,7 @@ public class QueryGraphGeneratorTest {
 		this.addNodesToGraph("BindFromUserToDomainTemplate.conf", "0.1");
 		this.addNodesToGraph("AddSubCommentTemplate.conf", "0.1");
 		this.addNodesToGraph("AddCommentTemplate.conf", "0.1");
-		this.addNodesToGraph("AddRootDomainTemplate.conf", "0.1");
+//		this.addNodesToGraph("AddRootDomainTemplate.conf", "0.1");
 		
 //		this.addBindGraphNodesToGraph("BindGraphTemplate.conf", "0.1");
 		

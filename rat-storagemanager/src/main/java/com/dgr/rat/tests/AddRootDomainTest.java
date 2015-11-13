@@ -555,9 +555,17 @@ public class AddRootDomainTest {
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
-		int changed = remoteCommandsContainer.setValue("ratNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("ratNodeUUID changed in " + fileName + ": " + changed);
-		Assert.assertEquals(3, changed);
+		int changed = remoteCommandsContainer.setValue("isPutByNode2UUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isPutByNode2UUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("isUserOfNodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isUserOfNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("isPutByNodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isPutByNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		changed = remoteCommandsContainer.setValue("userName", userName, ReturnType.string);
 		System.out.println("userName changed in " + fileName + ": " + changed);
@@ -580,9 +588,13 @@ public class AddRootDomainTest {
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
-		int changed = remoteCommandsContainer.setValue("nodeUUID", newRootDomainUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		Assert.assertEquals(2, changed);
+		int changed = remoteCommandsContainer.setValue("isUserOfNodeUUID", newRootDomainUUID, ReturnType.uuid);
+		System.out.println("isUserOfNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("isPutByNodeUUID", newRootDomainUUID, ReturnType.uuid);
+		System.out.println("isPutByNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		changed = remoteCommandsContainer.setValue("userName", "admin", ReturnType.string);
 		System.out.println("userName changed in " + fileName + ": " + changed);

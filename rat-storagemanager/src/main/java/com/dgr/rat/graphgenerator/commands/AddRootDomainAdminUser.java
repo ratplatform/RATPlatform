@@ -30,12 +30,12 @@ public class AddRootDomainAdminUser extends AbstractCommand{
 		
 		SystemKeyNode isUserOfNode = this.buildNode(SystemKeyNode.class,  "is-user-of");
 		isUserOfNode.addCreateVertexInstruction("nodeName", "is-user-of", ReturnType.string);
-		isUserOfNode.addBindInstruction(RATConstants.VertexContentUndefined);
+		isUserOfNode.addBindInstruction("isUserOfNodeUUID", RATConstants.VertexContentUndefined);
 		this.setQueryPivot(isUserOfNode, rootNode.getType(), VertexType.RootDomain, "StartQueryPipe", "SetQueryPipe","GetAllAdminUsers");
 		
 		SystemKeyNode isPutByNode = this.buildNode(SystemKeyNode.class,  "is-put-by");
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
-		isPutByNode.addBindInstruction(RATConstants.VertexContentUndefined);
+		isPutByNode.addBindInstruction("isPutByNodeUUID", RATConstants.VertexContentUndefined);
 //		this.setQueryPivot(isPutByNode, VertexType.RootDomain);
 		
 		SystemKeyNode isUserNode = this.buildNode(SystemKeyNode.class,  "is-user");

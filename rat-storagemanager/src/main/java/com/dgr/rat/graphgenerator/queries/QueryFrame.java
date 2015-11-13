@@ -168,7 +168,6 @@ public class QueryFrame{
 				break;
 				
 			case SystemKey:{
-
 				IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter(RATConstants.VertexContentField, 
 						vertex.getProperty(RATConstants.VertexContentField).toString(), ReturnType.string, 0);
 				IInstructionNodeFrame instruction = this.addInstruction(instructionParameter, _internalPipeInstruction);

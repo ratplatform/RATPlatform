@@ -6,6 +6,8 @@
 package com.dgr.rat.command.graph.executor.engine.commands.instructions;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -13,13 +15,15 @@ import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
 import com.dgr.rat.command.graph.executor.engine.IGraphVisitor;
 import com.dgr.rat.command.graph.executor.engine.IInstructionNodeWrapper;
 import com.dgr.rat.command.graph.executor.engine.IInstructionParam;
+import com.dgr.rat.command.graph.executor.engine.InstructionParameterNodeWrapper;
 import com.dgr.rat.json.utils.ReturnType;
 
 public class BindToParentSystemInstruction implements ICommandNodeVisitable, IInstructionNodeWrapper{
 	private final static String BindToParent = "BindToParent";
 	private boolean _isAlreadyInvoked = false;
 	private ICommandNodeVisitable _parentNode = null;
-	private Map<Integer, IInstructionParam> _neighbors = new HashMap<Integer, IInstructionParam>();
+//	private Map<Integer, IInstructionParam> _neighbors = new HashMap<Integer, IInstructionParam>();
+	private Map<String, IInstructionParam> _neighbors = new LinkedHashMap<String, IInstructionParam>();
 	private ICommandNodeVisitable _caller = null;
 	private UUID _nodeUUID = UUID.randomUUID();
 	
@@ -43,7 +47,7 @@ public class BindToParentSystemInstruction implements ICommandNodeVisitable, IIn
 			bindToParentParameter.setParameter("parentUUID", _parentNode.getStoredNodeUUID().toString());
 			bindToParentParameter.setParameterUUID(UUID.randomUUID().toString());
 			bindToParentParameter.setReturnType(ReturnType.uuid);
-			_neighbors.put(0, bindToParentParameter);
+			_neighbors.put(bindToParentParameter.getInstructionsParameterNameField(), bindToParentParameter);
 			
 			visitor.invoke(this);
 			
@@ -90,13 +94,20 @@ public class BindToParentSystemInstruction implements ICommandNodeVisitable, IIn
 	 * @see com.dgr.rat.command.graph.instruction.IInvokable#getInstructionParameter(int)
 	 */
 	@Override
-	public IInstructionParam getInstructionParameter(int num) throws Exception {
-		if(num > _neighbors.size()){
+	public IInstructionParam getInstructionParameter(String paramName) throws Exception {
+		if(!_neighbors.containsKey(paramName)){
 			throw new Exception();
 			// TODO log
 		}
-		return _neighbors.get(num);
+		return _neighbors.get(paramName);
 	}
+//	public IInstructionParam getInstructionParameter(int num) throws Exception {
+//		if(num > _neighbors.size()){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		return _neighbors.get(num);
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable#getProperty(java.lang.String)
@@ -200,5 +211,14 @@ public class BindToParentSystemInstruction implements ICommandNodeVisitable, IIn
 	public ICommandNodeVisitable getParent() {
 		// TODO Auto-generated method stub
 		return _parentNode;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.dgr.rat.command.graph.executor.engine.IInstructionNodeWrapper#getInstructionParameterNameIterator()
+	 */
+	@Override
+	public Iterator<String> getInstructionParameterNameIterator() {
+		// TODO Auto-generated method stub
+		return _neighbors.keySet().iterator();
 	}
 }

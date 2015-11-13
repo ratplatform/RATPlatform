@@ -51,10 +51,12 @@ public class CreateJsonRemoteQueryRequest {
 				Vertex param = list.get(0);
 				RemoteParameter parameter = new RemoteParameter();
 				parameter.setInstructionOrder(0);
+				parameter.setVertexUUIDField(param.getProperty(RATConstants.VertexUUIDField).toString());
 				parameter.setParameterName(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString());
 				parameter.setParameterValue(param.getProperty(RATConstants.VertexInstructionParameterValueField).toString());
 				parameter.setReturnType(ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));
-				_parameters.put(param.getProperty(RATConstants.VertexUUIDField).toString(), parameter);
+				_parameters.put(parameter.getParameterName(), parameter);
+//				_parameters.put(param.getProperty(RATConstants.VertexUUIDField).toString(), parameter);
 			}
 			else{
 				// COMMENT: faccio tutto 'sto rigiro perché nel caso ci fosse un errore VertexType.fromString lancia un'exception

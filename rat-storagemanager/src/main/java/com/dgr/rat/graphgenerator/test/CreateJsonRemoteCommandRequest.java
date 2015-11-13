@@ -84,7 +84,7 @@ public class CreateJsonRemoteCommandRequest {
 		}
 	}
 	
-	private void getRemoteClientCommandInstructions(IInstructionNodeFrame instruction){
+	private void getRemoteClientCommandInstructions(IInstructionNodeFrame instruction) throws Exception{
 		long num = instruction.getNumberOfInstructionParameters();
 		for(int inc = 0; inc < num; inc++){
 			IInstructionParameterNodeFrame param = instruction.getInstructionParameter(inc);
@@ -92,14 +92,18 @@ public class CreateJsonRemoteCommandRequest {
 		}
 	}
 	
-	private void getInstructionParameters(IInstructionParameterNodeFrame param){
+	private void getInstructionParameters(IInstructionParameterNodeFrame param) throws Exception{
 		RemoteParameter parameter = new RemoteParameter();
 		parameter.setInstructionOrder(param.getInstructionOrderField());
 		parameter.setParameterName(param.getVertexUserCommandsInstructionsParameterNameField());
 		parameter.setParameterValue(param.getVertexUserCommandsInstructionsParameterValueField());
 		parameter.setReturnType(param.getVertexUserCommandsInstructionsParameterReturnTypeField());
-//		parameter.setVertexUUIDField(param.getVertexUUIDField());
-		_parameters.put(param.getVertexUUIDField(), parameter);
+		parameter.setVertexUUIDField(param.getVertexUUIDField());
+//		_parameters.put(param.getVertexUUIDField(), parameter);
+		if(_parameters.containsKey(param.getVertexUserCommandsInstructionsParameterNameField())){
+			throw new Exception();
+		}
+		_parameters.put(param.getVertexUserCommandsInstructionsParameterNameField(), parameter);
 	}
 	
 	private static final PipeFunction<Vertex, Boolean> isParam = new PipesFunction<Vertex, Boolean>(){

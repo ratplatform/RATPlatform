@@ -47,9 +47,13 @@ public class TestHelpers {
 			String path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-consumer.xml";
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(path);
 
-			path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "start-systemcommands.xml";
-			context = new FileSystemXmlApplicationContext(path);
-			systemCommandsInitializer = (SystemCommandsInitializer)context.getBean("InitSystemCommands");
+//			path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "start-systemcommands.xml";
+//			context = new FileSystemXmlApplicationContext(path);
+//			systemCommandsInitializer = (SystemCommandsInitializer)context.getBean("InitSystemCommands");
+//			systemCommandsInitializer.initStorage();
+			systemCommandsInitializer = new SystemCommandsInitializer();
+			String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
+			systemCommandsInitializer.set_storageType(storageType);
 			systemCommandsInitializer.initStorage();
 		} 
 		catch (Exception e) {

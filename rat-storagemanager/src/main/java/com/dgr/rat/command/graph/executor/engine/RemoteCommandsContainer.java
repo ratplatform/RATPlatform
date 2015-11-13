@@ -81,12 +81,16 @@ public class RemoteCommandsContainer{
 			// TODO log
 		}
 		
-		if(!_parameters.containsKey(paramUUID)){
+		String paramName = instructionParameter.getInstructionsParameterNameField();
+		if(!_parameters.containsKey(paramName)){
 			throw new Exception();
 			// TODO log
 		}
 		
-		RemoteParameter remoteParameter = _parameters.get(paramUUID);
+		RemoteParameter remoteParameter = _parameters.get(paramName);
+		if(!paramUUID.equalsIgnoreCase(remoteParameter.getVertexUUIDField())){
+			throw new Exception();
+		}
 		
 		ReturnType remoteParameterReturnType = remoteParameter.getReturnType();
 		ReturnType type = instructionParameter.getInstructionsParameterReturnTypeField();
@@ -95,7 +99,6 @@ public class RemoteCommandsContainer{
 			// TODO log
 		}
 		
-		String paramName = instructionParameter.getInstructionsParameterNameField();
 		String remoteParameterName = remoteParameter.getParameterName();
 		if(!paramName.toString().equalsIgnoreCase(remoteParameterName)){
 			throw new Exception();
@@ -106,4 +109,37 @@ public class RemoteCommandsContainer{
 		
 		return remoteParamValue;
 	}
+	
+//	public String getParameter(final IInstructionParam instructionParameter) throws Exception{
+//		String paramUUID = instructionParameter.getParamUUID();
+//		if(!Utils.isUUID(paramUUID)){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		if(!_parameters.containsKey(paramUUID)){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		RemoteParameter remoteParameter = _parameters.get(paramUUID);
+//		
+//		ReturnType remoteParameterReturnType = remoteParameter.getReturnType();
+//		ReturnType type = instructionParameter.getInstructionsParameterReturnTypeField();
+//		if(!type.toString().equalsIgnoreCase(remoteParameterReturnType.toString())){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		String paramName = instructionParameter.getInstructionsParameterNameField();
+//		String remoteParameterName = remoteParameter.getParameterName();
+//		if(!paramName.toString().equalsIgnoreCase(remoteParameterName)){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		String remoteParamValue = remoteParameter.getParameterValue();
+//		
+//		return remoteParamValue;
+//	}
 }

@@ -146,15 +146,17 @@ public class QueryNodeWrapper implements ICommandNodeVisitable{
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.command.graph.ICommandProxyNodeVisitable#getConcreteNodeUUID()
 	 */
+	// TODO da rivedere
 	@Override
 	public UUID getStoredNodeUUID() {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+//		throw new UnsupportedOperationException();
+		return null;
 	}
 	
 	@Override
 	public void setStoredNodeUUID(UUID uuid) {
-		throw new UnsupportedOperationException();
+//		throw new UnsupportedOperationException();
 	}
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.command.graph.ICommandProxyNodeVisitable#setRotNode(boolean)
