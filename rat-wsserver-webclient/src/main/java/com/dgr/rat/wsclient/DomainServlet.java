@@ -24,12 +24,12 @@ public class DomainServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String domainName = request.getParameter("domainName");
+		String domainUUID = request.getParameter("domainUUID");
+		
 		request.getRequestDispatcher("domain.jsp").forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("domainSelect") != null){
 		   String selectedDomain = request.getParameter("domainSelect");

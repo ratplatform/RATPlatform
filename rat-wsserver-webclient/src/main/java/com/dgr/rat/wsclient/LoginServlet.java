@@ -1,4 +1,4 @@
-package com.rat.messages.json;
+package com.dgr.rat.wsclient;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.login.json.LoginResponse;
-import com.dgr.rat.wsclient.LoginHelper;
 
 /**
  * Servlet implementation class Index
@@ -41,12 +40,12 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost");
 		
-	    String userName = request.getParameter("username");
+	    String email = request.getParameter("email");
 	    String password = request.getParameter("password");
 	    String wsURL = request.getParameter("wsurl");
 
 	    LoginHelper loginHelper = new LoginHelper(wsURL);
-	    LoginResponse wsResponse = loginHelper.login(userName, password);
+	    LoginResponse wsResponse = loginHelper.login(email, password);
 	    StatusCode status = StatusCode.fromString(wsResponse.getStatusCode().toString());
 	    if(status.equals(StatusCode.Ok)){
 	    	String path = this.getServletContext().getContextPath() + "/domains";
@@ -55,6 +54,7 @@ public class LoginServlet extends HttpServlet {
 	        session.setAttribute("wsResponse", wsResponse);
 	        session.setAttribute("wsURL", wsURL);
 	        session.setAttribute("sessionID", wsResponse.get_sessionID());
+	        session.setAttribute("userUUID", wsResponse.get_userUIID());
 	        
 	    	response.sendRedirect(path);
 	    }

@@ -39,8 +39,8 @@ public class LoginHelper {
         return UriBuilder.fromUri(uri).build();
     }
     
-    public LoginResponse login(String userName, String password) throws JsonParseException, JsonMappingException, IOException{
-    	String json = "{\"userName\":\"" + userName + "\",\"password\":\"" + password + "\"}";
+    public LoginResponse login(String email, String password) throws JsonParseException, JsonMappingException, IOException{
+    	String json = "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}";
     	WebTarget target = _client.target(this.getBaseURI(_wsURL));
     	
     	Response response = target.path("login").request().post(Entity.entity(json, MediaType.TEXT_PLAIN_TYPE));

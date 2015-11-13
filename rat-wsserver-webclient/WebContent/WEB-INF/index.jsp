@@ -20,8 +20,8 @@
                         <td><input type="text" name="wsurl" value="http://localhost:8080/RATWSServer/rat" /></td>
                     </tr>
                     <tr>
-                        <td>User Name</td>
-                        <td><input type="text" name="username" value="dgr" /></td>
+                        <td>User email</td>
+                        <td><input type="text" name="email" value="dgr@gmail.com" /></td>
                     </tr>
                     <tr>
                         <td>Password</td>
