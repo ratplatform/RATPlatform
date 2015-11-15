@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonAutoDetect(fieldVisibility = Visibility.NONE, getterVisibility = Visibility.PUBLIC_ONLY)
 public class LoginResponse {
 	private String _sessionID = null;
-	private String _userUIID = null;
+	private String _userUUID = null;
 	private String _userName = null;
 	private Map<String, String> _userDomains = new HashMap<String, String>();
 	private Object _statusCode = null;
@@ -55,12 +55,12 @@ public class LoginResponse {
 		this._statusCode = statusCode;
 	}
 
-	public String get_userUIID() {
-		return _userUIID;
+	public String get_userUUID() {
+		return _userUUID;
 	}
 	
-	@JsonProperty("userUIID")
-	public void set_userUIID(String userUIID) {
-		this._userUIID = userUIID;
+	@JsonProperty("userUUID")
+	public void set_userUUID(String userUUID) {
+		this._userUUID = userUUID;
 	}
 }

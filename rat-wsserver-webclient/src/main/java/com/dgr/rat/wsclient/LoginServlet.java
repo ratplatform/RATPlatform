@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.login.json.LoginResponse;
+import com.dgr.rat.wsclient.LoginHelper;
 
 /**
  * Servlet implementation class Index
@@ -52,9 +52,9 @@ public class LoginServlet extends HttpServlet {
 	        HttpSession session = request.getSession(false);
 	        
 	        session.setAttribute("wsResponse", wsResponse);
-	        session.setAttribute("wsURL", wsURL);
+	        session.setAttribute("wsurl", wsURL);
 	        session.setAttribute("sessionID", wsResponse.get_sessionID());
-	        session.setAttribute("userUUID", wsResponse.get_userUIID());
+	        session.setAttribute("userUUID", wsResponse.get_userUUID());
 	        
 	    	response.sendRedirect(path);
 	    }
