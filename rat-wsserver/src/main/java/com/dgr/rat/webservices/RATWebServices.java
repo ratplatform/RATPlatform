@@ -221,6 +221,18 @@ public class RATWebServices {
         return response;
 	}
 	
+	@POST @Path("/v0.1/query")
+	@Consumes (MediaType.TEXT_PLAIN)
+	@Asynchronous
+	public void query(String data, @QueryParam("sessionid") String sessionID, @QueryParam("roleName") String roleName, @Suspended final AsyncResponse asyncResponse) {
+		System.out.println("data: " + data);
+		
+		System.out.println("sessionID: " + sessionID);
+//		System.out.println("createcollaborationdomain domainName: " + domainName);
+		System.out.println("createcollaborationdomain roleName: " + roleName);
+//		System.out.println("send createcollaborationdomain");
+	}
+	
 	@POST @Path("/createcollaborationdomain")
 	@Consumes (MediaType.TEXT_PLAIN)
 	@Asynchronous

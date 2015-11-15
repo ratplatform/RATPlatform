@@ -32,7 +32,9 @@ public class IdentityManager {
 		if(obj == null){
 			// TODO: log + exception
 		}
-		String uuid = obj.toString();
+		User user = (User) obj;
+		
+		String uuid = user.get_userUUID();
 		if(!Utils.isUUID(uuid)){
 			// TODO: log + exception
 		}
