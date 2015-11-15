@@ -28,7 +28,7 @@ public class CreateRootPlatformVertex implements IInstruction{
 		// COMMENT: Siccome in questo caso il parametro è uno soltanto, non utilizzo la key della mappa 
 		Iterator<String>it = invoker.getParameterNameIterator();
 		String paramName = it.next();
-		String paramValue = invoker.getParamValue(paramName);
+		String paramValue = invoker.getNodeParamValue(paramName);
 		IStorage storage = invoker.getStorage();
 		
 		UUID inMemoryNodeUUID = nodeCaller.getInMemoryNodeUUID();

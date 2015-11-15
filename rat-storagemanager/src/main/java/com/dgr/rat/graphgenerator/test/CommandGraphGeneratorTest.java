@@ -281,6 +281,7 @@ public class CommandGraphGeneratorTest {
 		header.setApplicationVersion(applicationVersion);
 		header.setCommandVersion(command.get_commandVersion());
 		header.setDomainName(placeHolder);
+		header.setDomainUUID("null");
 		header.setMessageType(MessageType.Template);
 		header.setCommandType(command.get_commandType());
 		header.setCommandName(command.get_commandName());
@@ -291,12 +292,12 @@ public class CommandGraphGeneratorTest {
 		String remoteRequestJson = JSONObjectBuilder.buildRemoteCommand(header, command.get_rootNode());
 		
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson));
-		GraphGeneratorHelpers.writeGraphToJson(remoteRequestJson, path);
+		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson), path);
 		
 		String commandTemplate = JSONObjectBuilder.buildCommandTemplate(header, command.getGraph());
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandTemplate));
 		path = GraphGeneratorHelpers.CommandTemplatesFolder + GraphGeneratorHelpers.PathSeparator + command.get_commandName() + "Template.conf";
-		GraphGeneratorHelpers.writeGraphToJson(commandTemplate, path);
+		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(commandTemplate), path);
 
 		//Alchemy command template JSON
 		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);

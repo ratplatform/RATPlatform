@@ -5,6 +5,7 @@
 
 package com.dgr.rat.graphgenerator.queries;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Stack;
@@ -40,6 +41,7 @@ public class QueryFrame{
 	private UUID _rootNodeUUID = null;
 	private FramedGraph<Graph> _queryGraph = null;
 	private IQueryFrame _rootNode = null;
+	private List<IInstructionParameterNodeFrame>_instructionParameters = new ArrayList<IInstructionParameterNodeFrame>();
 	
 	public QueryFrame(String commandVersion) {
 		set_commandVersion(commandVersion);
@@ -61,6 +63,24 @@ public class QueryFrame{
 		return instructionParameter;
 	}
 	
+	private void addInstructionParameter(String paramName, String paramValue, ReturnType returnType){
+		IInstructionParameterNodeFrame instructionParameter = _queryGraph.addVertex(null, IInstructionParameterNodeFrame.class);
+		instructionParameter.setVertexUserCommandsInstructionsParameterNameField(paramName);
+		instructionParameter.setVertexUserCommandsInstructionsParameterValueField(paramValue);
+		instructionParameter.setVertexUserCommandsInstructionsParameterReturnTypeField(returnType);
+		instructionParameter.setVertexLabelField(VertexType.InstructionParameter.toString());
+		instructionParameter.setVertexContentField(VertexType.InstructionParameter.toString());
+		instructionParameter.setVertexUUIDField(UUID.randomUUID().toString());
+		instructionParameter.setVertexRoleValueRootField(false);
+		instructionParameter.setVertexTypeField(VertexType.InstructionParameter);
+		
+		int orderField = _instructionParameters.size() - 1;
+		orderField = orderField < 0 ? 1 : orderField;
+		instructionParameter.setInstructionOrderField(orderField);
+		
+		_instructionParameters.add(instructionParameter);
+	}
+	
 	private IInstructionNodeFrame addInstruction(IInstructionParameterNodeFrame instructionParameter, String commandName){
 		IInstructionNodeFrame instruction = _queryGraph.addVertex(null, IInstructionNodeFrame.class);
 		instruction.setInstructionOrderField(1);
@@ -79,6 +99,28 @@ public class QueryFrame{
 		return instruction;
 	}
 	
+	private IInstructionNodeFrame addInstruction(List<IInstructionParameterNodeFrame>instructionParameters, String commandName){
+		IInstructionNodeFrame instruction = _queryGraph.addVertex(null, IInstructionNodeFrame.class);
+		instruction.setInstructionOrderField(1);
+		instruction.setVertexContentField(commandName);
+		instruction.setVertexLabelField(commandName);
+		instruction.setVertexRoleValueRootField(false);
+		instruction.setVertexTypeField(VertexType.Instruction);
+		UUID uuid = UUID.randomUUID();
+		instruction.setVertexUUIDField(uuid.toString());
+		instruction.setMaxNumParameters(instructionParameters.size());
+		
+		int inc = 0;
+		for(IInstructionParameterNodeFrame instructionParameter : instructionParameters){
+			Edge edge = instruction.asVertex().addEdge(RATConstants.EdgeInstructionParameter, instructionParameter.asVertex());
+			IInstructionParameterEdgeFrame framedEdge = _queryGraph.frame(edge, IInstructionParameterEdgeFrame.class);
+			framedEdge.setWeight(inc);
+			inc++;
+		}
+		
+		return instruction;
+	}
+	
 	private void addParameter(IInstructionNodeFrame instruction, IInstructionParameterNodeFrame instructionParameter, int maxNum, int weight){
 		instruction.setMaxNumParameters(maxNum);
 		Edge edge = instruction.asVertex().addEdge(RATConstants.EdgeInstructionParameter, instructionParameter.asVertex());
@@ -86,7 +128,7 @@ public class QueryFrame{
 		framedEdge.setWeight(weight);
 	}
 	
-	public void addNodesToGraph(List<Vertex> list, Vertex commandVertex) throws Exception {
+	public void addNodesToGraph(List<Vertex> list, Vertex commandVertex, String param, ReturnType type, String queryName) throws Exception {
 		// COMMENT: per risolvere il problema di BindToGraph che non ha root vertex finali come tutti gli altri
 		// TODO: questo problema è da risolvere usando la proprietà del TowardNode del QueryPivot
 		int size = list.size();
@@ -117,7 +159,7 @@ public class QueryFrame{
 			list.add(0, newVertex);
 			size = list.size();
 		}
-		
+		_instructionParameters.clear();
 		ListIterator<Vertex> lIt = list.listIterator(list.size());
 		while(lIt.hasPrevious()) {
 			Vertex vertex = lIt.previous();
@@ -135,15 +177,19 @@ public class QueryFrame{
 				_internalPipeInstruction = vertex.getProperty(RATConstants.InternalPipeInstruction);
 				_endPipeInstruction = vertex.getProperty(RATConstants.EndPipeInstruction);
 				
-//				this.set_instructionName(commandName);
 		        String commandUUIDstr = GraphGeneratorHelpers.getUUID(_endPipeInstruction);
 		        _commandUUID = UUID.fromString(commandUUIDstr);
 
-		        IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid, 0);
+//		        IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid, 0);
+		        this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+//		        if(startPipeParam != null && type != null && queryName != null && queryName.equalsIgnoreCase(_endPipeInstruction)){
+//		        	this.addInstructionParameter(startPipeParam, RATConstants.VertexContentUndefined, type);
+//		        }
 		        
 				UUID uuid = UUID.randomUUID();
 				
-				IInstructionNodeFrame instruction = this.addInstruction(instructionParameter, commandName);
+				IInstructionNodeFrame instruction = this.addInstruction(_instructionParameters, commandName);
+//				IInstructionNodeFrame instruction = this.addInstruction(instructionParameter, commandName);
 				
 				_rootNode = _queryGraph.addVertex(null, IQueryFrame.class);
 				_rootNode.setVertexCommandOwnerField(commandName);
@@ -202,21 +248,35 @@ public class QueryFrame{
 				break;
 				
 			default:{
-				this.buildFinalNode(vertex, edgeLabel, stack, _endPipeInstruction);
+				_instructionParameters.clear();
+				if(param != null && type != null && queryName != null && queryName.equalsIgnoreCase(_endPipeInstruction)){
+					this.buildFinalNode(vertex, edgeLabel, stack, _endPipeInstruction, param, type);
+				}
+				else{
+					this.buildFinalNode(vertex, edgeLabel, stack, _endPipeInstruction, null, null);
+				}
 			}
 				break;
 					
 			}
 		}
 	}
-	
-	private void buildFinalNode(Vertex vertex, String edgeLabel, Stack<IRATVertexFrame>stack, String queryName){
-		IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter(RATConstants.VertexTypeField, 
-				vertex.getProperty(RATConstants.VertexTypeField).toString(), ReturnType.string, 0);
-		IInstructionNodeFrame instruction = this.addInstruction(instructionParameter, queryName);
+    
+	private void buildFinalNode(Vertex vertex, String edgeLabel, Stack<IRATVertexFrame>stack, String queryName, String param, ReturnType type){
+	    
+//		IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter(RATConstants.VertexTypeField, 
+//				vertex.getProperty(RATConstants.VertexTypeField).toString(), ReturnType.string, 0);
+//		IInstructionNodeFrame instruction = this.addInstruction(instructionParameter, queryName);
 		
-		instructionParameter = this.addInstructionParameter("edgeLabel", edgeLabel, ReturnType.string, 1);
-		this.addParameter(instruction, instructionParameter, 2, 1);
+//		instructionParameter = this.addInstructionParameter("edgeLabel", edgeLabel, ReturnType.string, 1);
+//		this.addParameter(instruction, instructionParameter, 2, 1);
+		
+		this.addInstructionParameter(RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField).toString(), ReturnType.string);
+		this.addInstructionParameter("edgeLabel", edgeLabel, ReturnType.string);
+	    if(param != null && type != null){
+	    	this.addInstructionParameter(param, RATConstants.VertexContentUndefined, type);
+	    }
+	    IInstructionNodeFrame instruction = this.addInstruction(_instructionParameters, queryName);
 		
 		IRATVertexFrame node = _queryGraph.addVertex(null, IQueryFrame.class);
 		node.setVertexCommandOwnerField(vertex.getProperty(RATConstants.VertexCommandOwnerField).toString());
@@ -239,6 +299,36 @@ public class QueryFrame{
 		framedEdge = _queryGraph.frame(edge, IRATQueryEdgeFrame.class);
 		framedEdge.setWeight(0);
 	}
+	
+//	private void buildFinalNode(Vertex vertex, String edgeLabel, Stack<IRATVertexFrame>stack, String queryName){
+//		IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter(RATConstants.VertexTypeField, 
+//				vertex.getProperty(RATConstants.VertexTypeField).toString(), ReturnType.string, 0);
+//		IInstructionNodeFrame instruction = this.addInstruction(instructionParameter, queryName);
+//		
+//		instructionParameter = this.addInstructionParameter("edgeLabel", edgeLabel, ReturnType.string, 1);
+//		this.addParameter(instruction, instructionParameter, 2, 1);
+//		
+//		IRATVertexFrame node = _queryGraph.addVertex(null, IQueryFrame.class);
+//		node.setVertexCommandOwnerField(vertex.getProperty(RATConstants.VertexCommandOwnerField).toString());
+//		node.setVertexContentField(vertex.getProperty(RATConstants.VertexContentField).toString());
+//		node.setVertexLabelField(vertex.getProperty(RATConstants.VertexLabelField).toString());
+//		node.setIsRootVertexField(false);
+//		node.setVertexTypeField(VertexType.fromString(vertex.getProperty(RATConstants.VertexTypeField).toString()));
+//		node.setCommandGraphUUID(_commandUUID.toString());
+//		UUID uuid = UUID.randomUUID();
+//		node.setVertexUUIDField(uuid.toString());
+//		
+//		IRATVertexFrame prev = stack.pop();
+//		// TODO: da spostare dentro la classe Impl in IRATVertexFrame utilizzando @JavaHandler
+//		Edge edge = prev.asVertex().addEdge(edgeLabel, node.asVertex());
+//		IRATQueryEdgeFrame framedEdge = _queryGraph.frame(edge, IRATQueryEdgeFrame.class);
+//		framedEdge.setWeight(0);
+//		framedEdge.setCommandGraphUUID(_commandUUID.toString());
+//		
+//		edge = node.asVertex().addEdge(RATConstants.EdgeInstruction, instruction.asVertex());
+//		framedEdge = _queryGraph.frame(edge, IRATQueryEdgeFrame.class);
+//		framedEdge.setWeight(0);
+//	}
 	
 	/**
 	 * @return the _commandVersion

@@ -5,16 +5,11 @@
 
 package com.dgr.rat.main;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
-
-import org.junit.Assert;
-
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.json.RATJsonObject;
@@ -27,13 +22,9 @@ import com.dgr.rat.storage.provider.StorageType;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
 import com.dgr.utils.Utils;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
-import com.tinkerpop.blueprints.util.io.graphson.GraphSONReader;
 
 public class SystemCommandsInitializer {
 	private IStorage _storage = null;

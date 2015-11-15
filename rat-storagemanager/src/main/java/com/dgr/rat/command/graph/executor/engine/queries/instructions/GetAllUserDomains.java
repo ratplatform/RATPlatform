@@ -29,86 +29,6 @@ public class GetAllUserDomains implements IInstruction{
 		// TODO Auto-generated constructor stub
 	}
 	
-//	public static final PipeFunction<LoopPipe.LoopBundle<Vertex>,Boolean> whileFunction = new PipeFunction<LoopPipe.LoopBundle<Vertex>,Boolean>(){
-//		@Override
-//		public Boolean compute(LoopPipe.LoopBundle<Vertex> argument) {
-//			return true;
-//		}
-//	};
-//	
-//	public static final PipeFunction<LoopPipe.LoopBundle<Vertex>,Boolean> emitFunction = new PipeFunction<LoopPipe.LoopBundle<Vertex>,Boolean>(){
-//		@Override
-//		public Boolean compute(LoopPipe.LoopBundle<Vertex> argument) {
-//			Vertex vertex = argument.getObject();
-//			if(vertex == null){
-////				System.out.println("vertex == null");
-//				return false;
-//			}
-//			Object property = vertex.getProperty(RATConstants.VertexTypeField);
-//			if(property == null){
-////				System.out.println("property == null");
-//				return false;
-//			}
-//        	boolean result = property.toString().equalsIgnoreCase(VertexType.SystemKey.toString());
-//        	System.out.println(property.toString() + ": " + result);
-//            return result;
-//		}
-//	};
-//	
-//	@SuppressWarnings({ "rawtypes", "deprecation", "unchecked" })
-//	private void execute(Vertex commandVertex, UUID rootUUID, IStorage storage, String edgeLabel){
-//		GremlinPipeline<Vertex, Vertex> p = new GremlinPipeline<Vertex, Vertex>(commandVertex);
-//		List<List> lists = p.out().loop(1, GetAllUserDomains.whileFunction, GetAllUserDomains.emitFunction).path().toList();
-//		
-//		System.out.println(lists);
-//		for(List list: lists){
-//			
-//			GremlinPipeline<Vertex, Vertex> queryPipe = null;
-//			Iterator<Object>it = list.iterator();
-//			
-//			while(it.hasNext()) {
-//				Object obj = it.next();
-//				Vertex vertex = (Vertex) obj;
-////				System.out.println("Current vertex: " + vertex);
-//				
-//				VertexType vertexType = VertexType.fromString(vertex.getProperty(RATConstants.VertexTypeField).toString());
-//				switch(vertexType){
-//				case QueryPivot:
-//					Vertex rootVertex = storage.getVertex(rootUUID);
-//					queryPipe = new GremlinPipeline<Vertex, Vertex>(rootVertex);
-//					break;
-//					
-//				case SystemKey:
-//					String content = vertex.getProperty(RATConstants.VertexContentField);
-//					queryPipe.in(edgeLabel).has(RATConstants.VertexContentField, content);
-//					break;
-//					
-//				default:
-//					queryPipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
-//					break;
-//						
-//				}
-//				
-////				System.out.println(queryPipe);
-//			}
-//			Object result = queryPipe.toList();
-//			System.out.println(result.toString());
-//		}
-//	}
-//
-//	
-//	private static final PipeFunction<Edge, Boolean> filterFunction = new PipesFunction<Edge, Boolean>(){
-//		@Override
-//		public Boolean compute(Edge edge){
-//			boolean result = false;
-//			Vertex vertex = edge.getVertex(Direction.IN);
-//			String content = vertex.getProperty(RATConstants.VertexTypeField);
-//			
-//			result = content.equalsIgnoreCase(VertexType.SystemKey.toString()) ? true : false;
-//			return result;
-//		}
-//	};
-	
 	private static final PipeFunction<Vertex, Boolean> userNamefilterFunction = new PipesFunction<Vertex, Boolean>(){
 		@Override
 		public Boolean compute(Vertex vertex){
@@ -121,10 +41,10 @@ public class GetAllUserDomains implements IInstruction{
 	};
 	
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String type = invoker.getParamValue(RATConstants.VertexTypeField);
+		String type = invoker.getNodeParamValue(RATConstants.VertexTypeField);
 		VertexType vertexType = VertexType.fromString(type);
 		
-		String edgeLabel = invoker.getParamValue("edgeLabel");
+		String edgeLabel = invoker.getNodeParamValue("edgeLabel");
 		
 		// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
 		// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.

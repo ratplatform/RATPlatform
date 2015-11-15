@@ -60,13 +60,22 @@ public class InstructionInvoker implements IInstructionInvoker{
 		return _parameters.keySet().iterator();
 	}
 	
-	public String getParamValue(String paramName){
+	public String getNodeParamValue(String paramName){
 		String result = null;
 		if(_parameters.containsKey(paramName)){
 			result = _parameters.get(paramName);
 		}
 		
 		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.dgr.rat.command.graph.executor.engine.IInstructionInvoker#getCommandParamValue(java.lang.String)
+	 */
+	@Override
+	public String getCommandParamValue(String paramName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	private boolean verifyParam(ReturnType returnType, String paramValue) {

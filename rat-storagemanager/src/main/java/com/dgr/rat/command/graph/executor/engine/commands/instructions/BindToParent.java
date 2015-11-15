@@ -29,10 +29,11 @@ public class BindToParent implements IInstruction{
 	 */
 	@Override
 	public IInstructionResult execute(final IInstructionInvoker invoker, final ICommandNodeVisitable nodeCaller) throws Exception{
+		System.out.println("Enter in bindtoparent");
 		// COMMENT: Siccome in questo caso il parametro è uno soltanto, non utilizzo la key della mappa 
 		Iterator<String>it = invoker.getParameterNameIterator();
 		String paramName = it.next();
-		String paramValue = invoker.getParamValue(paramName);
+		String paramValue = invoker.getNodeParamValue(paramName);
 		if(!Utils.isUUID(paramValue)){
 			throw new Exception();
 			// TODO log
@@ -54,6 +55,7 @@ public class BindToParent implements IInstruction{
 		InstructionResult commandResult = new InstructionResult(nodeCaller.getInMemoryNodeUUID());
 		commandResult.setNewObjectUUID(edgeUUID);
 		
+		System.out.println("Exit from bindtoparent");
 		// COMMENT: i risultati dell'instruction bindToParent non mi interessano...
 		return commandResult;
 	}

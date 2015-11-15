@@ -26,8 +26,8 @@ public class SetQueryPipe implements IInstruction{
 	// TODO: passare direttamente la classe coi parametri
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String content = invoker.getParamValue(RATConstants.VertexContentField);
-		String edgeLabel = invoker.getParamValue("edgeLabel");
+		String content = invoker.getNodeParamValue(RATConstants.VertexContentField);
+		String edgeLabel = invoker.getNodeParamValue("edgeLabel");
 		
 		// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
 		// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.

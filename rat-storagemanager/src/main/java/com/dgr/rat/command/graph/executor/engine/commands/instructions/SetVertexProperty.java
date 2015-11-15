@@ -32,7 +32,7 @@ public class SetVertexProperty implements IInstruction{
 		Iterator<String>it = invoker.getParameterNameIterator();
 		while(it.hasNext()){
 			String paramName = it.next();
-			String paramValue = invoker.getParamValue(paramName);
+			String paramValue = invoker.getNodeParamValue(paramName);
 			
 			Vertex vertexCaller = storage.getVertex(vertexCallerUUID);
 			vertexCaller.setProperty(paramName, paramValue);

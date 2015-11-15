@@ -14,17 +14,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.UUID;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.dgr.rat.commons.constants.JSONType;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.MakeSigmaJSON;
+import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
+import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
@@ -72,12 +78,29 @@ public class QueryGraphGeneratorTest {
 		}
 	};
 	
-	@SuppressWarnings({ "rawtypes", "deprecation" })
-	public void addNodesToGraph(String fileName, String commandVersion) throws Exception {
-		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
-		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
-		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
+	private void addQueries() throws Exception{
+		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
+		BuildQueryJavaScript buildQueryJavaScript = new BuildQueryJavaScript();
+		String queryVersion = "0.1";
+		// TODO: prendere tutti i file direttamente dentro la directory
+		this.addNodesToGraph("AddNewDomainTemplate.conf", queryVersion, buildQueryJavaScript, null, null, null);
+		this.addNodesToGraph("AddNewUserTemplate.conf", queryVersion, buildQueryJavaScript, null, null, null);
+		this.addNodesToGraph("AddCommentTemplate.conf", queryVersion, buildQueryJavaScript, null, null, null);
+		this.addNodesToGraph("BindFromDomainToUserTemplate.conf", queryVersion, buildQueryJavaScript, null, null, null);
+		this.addNodesToGraph("AddSubCommentTemplate.conf", queryVersion, buildQueryJavaScript, null, null, null);
+		this.addNodesToGraph("BindFromUserToDomainTemplate.conf", queryVersion, buildQueryJavaScript, "domainName", ReturnType.string, "GetUserDomainByName");
 		
+		String javaScript = buildQueryJavaScript.getJavaScript();
+//		System.out.println(javaScript);
+		GraphGeneratorHelpers.writeJavaScript("queries", javaScript);
+		
+//		this.addNodesToGraph("AddRootDomainTemplate.conf", "0.1");
+		
+//		this.addBindGraphNodesToGraph("BindGraphTemplate.conf", "0.1");
+	}
+	
+	@SuppressWarnings({ "rawtypes", "deprecation" })
+	public void addNodesToGraph(String fileName, String commandVersion, BuildQueryJavaScript buildQueryJavaScript, String startPipeParam, ReturnType type, String queryName) throws Exception {
 		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
 		
 		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);
@@ -99,137 +122,52 @@ public class QueryGraphGeneratorTest {
 		for(List<Vertex> list : lists){
 			
 			QueryFrame query = new QueryFrame(commandVersion);
-//			query.set_instructionName(instructionName);
-//			query.set_centralPipeName(centralPipeName);
-			query.addNodesToGraph(list, commandVertex);
+			query.addNodesToGraph(list, commandVertex, startPipeParam, type, queryName);
 			
-			this.writeAll(query, placeHolder, applicationName, applicationVersion);
+			this.writeAll(query, buildQueryJavaScript);
 		}
 	}
 	
-	@SuppressWarnings({ "rawtypes", "deprecation" })
-	public void addBindGraphNodesToGraph(String fileName, String commandVersion) throws Exception {
+	public void writeAll(QueryFrame query, BuildQueryJavaScript buildQueryJavaScript) throws Exception{
 		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
 		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
 		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
 		
-		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
+		JsonHeader header = new JsonHeader();
+		header.setApplicationName(applicationName);
+		header.setApplicationVersion(applicationVersion);
+		header.setCommandVersion(query.get_commandVersion());
+		header.setDomainName(placeHolder);
+		header.setDomainUUID("null");
+		header.setMessageType(MessageType.Request);
+		header.setCommandType(query.get_commandType());
+		header.setCommandName(query.getEndPipeInstruction());
+		header.setCommandGraphUUID(query.get_commandUUID());
+		header.setRootVertexUUID(query.get_rootNodeUUID());
 		
-		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);
-		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
-		if(!Utils.isUUID(rootVertexUUID)){
-			// TODO exception
-		}
-		Iterable<Vertex>iterable = commandGraph.getVertices(RATConstants.VertexUUIDField, rootVertexUUID);
-		Vertex commandVertex = iterable.iterator().next();
-		if(commandVertex == null){
-			// TODO exception
-		}
+		String path = GraphGeneratorHelpers.QueriesFolder + GraphGeneratorHelpers.PathSeparator + query.getEndPipeInstruction() + ".conf";
+		String remoteRequestJson = JSONObjectBuilder.buildRemoteQuery(header, query.get_rootNode());
 		
-		GremlinPipeline<Vertex, Vertex> p = new GremlinPipeline<Vertex, Vertex>(commandVertex);
-		List<Vertex> vertices = p.out().loop(1, QueryGraphGeneratorTest.whileFunction, QueryGraphGeneratorTest.emitFunction).filter(QueryGraphGeneratorTest.filterFunction).toList();
-		System.out.println(vertices.toString());
-		for(Vertex vertex : vertices){
-			this.traverse(vertex);
+		RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(remoteRequestJson);
+		if(buildQueryJavaScript.getHeader() == null){
+			buildQueryJavaScript.setHeader(header);
 		}
-	}
-	
-	private static final PipeFunction<Edge, Boolean> edgeFilterFunction = new PipesFunction<Edge, Boolean>(){
-		@Override
-		public Boolean compute(Edge edge){
-			boolean result = false;
-			Vertex vertex = edge.getVertex(Direction.OUT);
-			String content = vertex.getProperty(RATConstants.VertexTypeField);
-			
-			result = content.equalsIgnoreCase(VertexType.SystemKey.toString()) ? true : false;
-			return result;
-		}
-	};
-	
-	// COMMENT: NON CANCELLARE!
-	private void traverse(Vertex queryPivotVertex){
-		Stack<Vertex>stack = new Stack<Vertex>();
-		List<Vertex> visited = new LinkedList<Vertex>();
-		stack.push(queryPivotVertex);
-		// COMMENT: do per scontato che la label dell'edge che collega la queryPivotVertex alla sua systemKey abbia
-		// lo stesso nome delle edge che collegano le systemkey tra loro. Inoltre do per scontato che 
-		// queryPivotVertex abbia sempre una sola edge inE
-		GremlinPipeline<Vertex, Edge> p = new GremlinPipeline<Vertex, Edge>(queryPivotVertex);
-		Edge edge = p.inE().filter(QueryGraphGeneratorTest.edgeFilterFunction).next();
-		String edgeLabel = edge.getLabel();
+		buildQueryJavaScript.make(query.getEndPipeInstruction(), ratJsonObject);
+		
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson));
+		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson), path);
+		
+		String commandTemplate = JSONObjectBuilder.buildCommandTemplate(header, query.getGraph());
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandTemplate));
+		path = GraphGeneratorHelpers.QueryTemplatesFolder + GraphGeneratorHelpers.PathSeparator + query.getEndPipeInstruction() + "Template.conf";
+		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(commandTemplate), path);
 
-		while(!stack.isEmpty()){
-			Vertex parent = stack.pop();
-			visited.add(parent);
-			System.out.println(parent);
-			String vertexType = parent.getProperty(RATConstants.VertexTypeField).toString();
-			Iterator<Vertex>it = parent.getVertices(Direction.BOTH, edgeLabel).iterator();
-			while(it.hasNext()){
-				Vertex child = it.next();
-				vertexType = child.getProperty(RATConstants.VertexTypeField).toString();
-				if(VertexType.SystemKey.toString().equalsIgnoreCase(vertexType)){
-					if(!visited.contains(child) ){
-						Direction direction = this.getDirection(Direction.OUT, parent, child, edgeLabel);
-						if(direction == null){
-							direction = this.getDirection(Direction.IN, parent, child, edgeLabel);
-						}
-//						System.out.println("Da " + parent + " al child " +  child + " la direzione è: " + direction);
-						
-						stack.push(child);
-					}
-				}
-			}
-		}
-	}
-	
-	private Direction getDirection(Direction startDirection, Vertex parent, Vertex child, String label){
-		Iterator<Edge>it = parent.getEdges(startDirection, label).iterator();
-		Direction result = null;
-		
-		while(it.hasNext()){
-			Edge edge = it.next();
-			Vertex vertex = edge.getVertex(Direction.OUT);
-			if(vertex == child){
-				result = Direction.OUT;
-				break;
-			}
-			else{
-				vertex = edge.getVertex(Direction.IN);
-				if(vertex == child){
-					result = Direction.IN;
-					break;
-				}
-			}
-		}
-		return result;
-	}
-	
-	private static final PipeFunction<Vertex, Boolean> filterFunction = new PipesFunction<Vertex, Boolean>(){
-		@Override
-		public Boolean compute(Vertex vertex){
-			boolean result = false;
-			String content = vertex.getProperty(RATConstants.VertexTypeField);
-			
-			result = content.equalsIgnoreCase(VertexType.QueryPivot.toString()) ? true : false;
-			return result;
-		}
-	};
-	
-	private void addQueries() throws Exception{
-		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
-		
-		// TODO: prendere tutti i file direttamente dentro la directory
-		this.addNodesToGraph("AddNewDomainTemplate.conf", "0.1");
-		this.addNodesToGraph("AddNewUserTemplate.conf", "0.1");
-		this.addNodesToGraph("AddCommentTemplate.conf", "0.1");
-		this.addNodesToGraph("BindFromDomainToUserTemplate.conf", "0.1");
-		this.addNodesToGraph("BindFromUserToDomainTemplate.conf", "0.1");
-		this.addNodesToGraph("AddSubCommentTemplate.conf", "0.1");
-		this.addNodesToGraph("AddCommentTemplate.conf", "0.1");
-//		this.addNodesToGraph("AddRootDomainTemplate.conf", "0.1");
-		
-//		this.addBindGraphNodesToGraph("BindGraphTemplate.conf", "0.1");
-		
+		//Alchemy command template JSON
+		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);
+		GraphGeneratorHelpers.writeAlchemyJson(query.getEndPipeInstruction() + "Template", query.get_commandVersion(), alchemyJSON, "queries");
+
+		this.saveForTest(commandTemplate, remoteRequestJson);
+//		JSONObjectBuilder.buildQuery(header, command.get_rootNode().getNode().asVertex());
 	}
 	
 	@Test
@@ -243,37 +181,6 @@ public class QueryGraphGeneratorTest {
 		}
 	}
 	
-	public void writeAll(QueryFrame query, String placeHolder, String applicationName, String applicationVersion) throws Exception{
-		JsonHeader header = new JsonHeader();
-		header.setApplicationName(applicationName);
-		header.setApplicationVersion(applicationVersion);
-		header.setCommandVersion(query.get_commandVersion());
-		header.setDomainName(placeHolder);
-		header.setMessageType(MessageType.Template);
-		header.setCommandType(query.get_commandType());
-		header.setCommandName(query.getEndPipeInstruction());
-		header.setCommandGraphUUID(query.get_commandUUID());
-		header.setRootVertexUUID(query.get_rootNodeUUID());
-		
-		String path = GraphGeneratorHelpers.QueriesFolder + GraphGeneratorHelpers.PathSeparator + query.getEndPipeInstruction() + ".conf";
-		String remoteRequestJson = JSONObjectBuilder.buildRemoteQuery(header, query.get_rootNode());
-		
-//		System.out.println(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson));
-		GraphGeneratorHelpers.writeGraphToJson(remoteRequestJson, path);
-		
-		String commandTemplate = JSONObjectBuilder.buildCommandTemplate(header, query.getGraph());
-//		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandTemplate));
-		path = GraphGeneratorHelpers.QueryTemplatesFolder + GraphGeneratorHelpers.PathSeparator + query.getEndPipeInstruction() + "Template.conf";
-		GraphGeneratorHelpers.writeGraphToJson(commandTemplate, path);
-
-		//Alchemy command template JSON
-		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);
-		GraphGeneratorHelpers.writeAlchemyJson(query.getEndPipeInstruction() + "Template", query.get_commandVersion(), alchemyJSON, "queries");
-
-		this.saveForTest(commandTemplate, remoteRequestJson);
-//		JSONObjectBuilder.buildQuery(header, command.get_rootNode().getNode().asVertex());
-	}
-	
 	private void saveForTest(String ratJson, String clientJsonCommand) throws JsonParseException, JsonMappingException, IOException{
 		_ratJSONs.add(ratJson);
 		
@@ -281,14 +188,124 @@ public class QueryGraphGeneratorTest {
 		_clientJsonCommands.put(commandName, clientJsonCommand);
 	}
 	
-	@After
-	public void after(){
-		try {
-//			this.verifyUUID();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.assertTrue(false);
-		}
-	}
+	
+//	@SuppressWarnings({ "rawtypes", "deprecation" })
+//	public void addBindGraphNodesToGraph(String fileName, String commandVersion) throws Exception {
+//		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
+//		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
+//		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
+//		
+//		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
+//		
+//		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);
+//		String rootVertexUUID = RATJsonUtils.getRATJsonHeaderProperty(ratJson, RATConstants.RootVertexUUID);
+//		if(!Utils.isUUID(rootVertexUUID)){
+//			// TODO exception
+//		}
+//		Iterable<Vertex>iterable = commandGraph.getVertices(RATConstants.VertexUUIDField, rootVertexUUID);
+//		Vertex commandVertex = iterable.iterator().next();
+//		if(commandVertex == null){
+//			// TODO exception
+//		}
+//		
+//		GremlinPipeline<Vertex, Vertex> p = new GremlinPipeline<Vertex, Vertex>(commandVertex);
+//		List<Vertex> vertices = p.out().loop(1, QueryGraphGeneratorTest.whileFunction, QueryGraphGeneratorTest.emitFunction).filter(QueryGraphGeneratorTest.filterFunction).toList();
+//		System.out.println(vertices.toString());
+//		for(Vertex vertex : vertices){
+//			this.traverse(vertex);
+//		}
+//	}
+	
+//	private static final PipeFunction<Edge, Boolean> edgeFilterFunction = new PipesFunction<Edge, Boolean>(){
+//		@Override
+//		public Boolean compute(Edge edge){
+//			boolean result = false;
+//			Vertex vertex = edge.getVertex(Direction.OUT);
+//			String content = vertex.getProperty(RATConstants.VertexTypeField);
+//			
+//			result = content.equalsIgnoreCase(VertexType.SystemKey.toString()) ? true : false;
+//			return result;
+//		}
+//	};
+	
+//	// COMMENT: NON CANCELLARE!
+//	private void traverse(Vertex queryPivotVertex){
+//		Stack<Vertex>stack = new Stack<Vertex>();
+//		List<Vertex> visited = new LinkedList<Vertex>();
+//		stack.push(queryPivotVertex);
+//		// COMMENT: do per scontato che la label dell'edge che collega la queryPivotVertex alla sua systemKey abbia
+//		// lo stesso nome delle edge che collegano le systemkey tra loro. Inoltre do per scontato che 
+//		// queryPivotVertex abbia sempre una sola edge inE
+//		GremlinPipeline<Vertex, Edge> p = new GremlinPipeline<Vertex, Edge>(queryPivotVertex);
+//		Edge edge = p.inE().filter(QueryGraphGeneratorTest.edgeFilterFunction).next();
+//		String edgeLabel = edge.getLabel();
+//
+//		while(!stack.isEmpty()){
+//			Vertex parent = stack.pop();
+//			visited.add(parent);
+//			System.out.println(parent);
+//			String vertexType = parent.getProperty(RATConstants.VertexTypeField).toString();
+//			Iterator<Vertex>it = parent.getVertices(Direction.BOTH, edgeLabel).iterator();
+//			while(it.hasNext()){
+//				Vertex child = it.next();
+//				vertexType = child.getProperty(RATConstants.VertexTypeField).toString();
+//				if(VertexType.SystemKey.toString().equalsIgnoreCase(vertexType)){
+//					if(!visited.contains(child) ){
+//						Direction direction = this.getDirection(Direction.OUT, parent, child, edgeLabel);
+//						if(direction == null){
+//							direction = this.getDirection(Direction.IN, parent, child, edgeLabel);
+//						}
+////						System.out.println("Da " + parent + " al child " +  child + " la direzione è: " + direction);
+//						
+//						stack.push(child);
+//					}
+//				}
+//			}
+//		}
+//	}
+//	
+//	private Direction getDirection(Direction startDirection, Vertex parent, Vertex child, String label){
+//		Iterator<Edge>it = parent.getEdges(startDirection, label).iterator();
+//		Direction result = null;
+//		
+//		while(it.hasNext()){
+//			Edge edge = it.next();
+//			Vertex vertex = edge.getVertex(Direction.OUT);
+//			if(vertex == child){
+//				result = Direction.OUT;
+//				break;
+//			}
+//			else{
+//				vertex = edge.getVertex(Direction.IN);
+//				if(vertex == child){
+//					result = Direction.IN;
+//					break;
+//				}
+//			}
+//		}
+//		return result;
+//	}
+//	
+//	private static final PipeFunction<Vertex, Boolean> filterFunction = new PipesFunction<Vertex, Boolean>(){
+//		@Override
+//		public Boolean compute(Vertex vertex){
+//			boolean result = false;
+//			String content = vertex.getProperty(RATConstants.VertexTypeField);
+//			
+//			result = content.equalsIgnoreCase(VertexType.QueryPivot.toString()) ? true : false;
+//			return result;
+//		}
+//	};
+	
+	
+//	@After
+//	public void after(){
+//		try {
+////			this.verifyUUID();
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			Assert.assertTrue(false);
+//		}
+//	}
 }

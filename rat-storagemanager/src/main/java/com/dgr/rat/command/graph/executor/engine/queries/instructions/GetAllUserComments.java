@@ -33,10 +33,10 @@ public class GetAllUserComments implements IInstruction{
 	 */
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String type = invoker.getParamValue(RATConstants.VertexTypeField);
+		String type = invoker.getNodeParamValue(RATConstants.VertexTypeField);
 		VertexType vertexType = VertexType.fromString(type);
 		
-		String edgeLabel = invoker.getParamValue("edgeLabel");
+		String edgeLabel = invoker.getNodeParamValue("edgeLabel");
 		
 		// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
 		// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.

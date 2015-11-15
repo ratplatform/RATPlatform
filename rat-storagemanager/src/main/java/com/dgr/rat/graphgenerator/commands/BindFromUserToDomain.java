@@ -31,6 +31,7 @@ public class BindFromUserToDomain extends AbstractCommand{
 		// COMMENT: bind verso lo user
 		isPutByNode.addInstruction("BindDomainUser", "userUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
 		this.setQueryPivot(isPutByNode, VertexType.User, VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetAllUserDomains");
+		this.setQueryPivot(isPutByNode, VertexType.User, VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetUserDomainByName");
 		
 		isUserOfNode.addChild(isPutByNode);
 	}

@@ -17,9 +17,6 @@ import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class StartQueryPipe implements IInstruction{
 
-	/**
-	 * 
-	 */
 	public StartQueryPipe() {
 		// TODO Auto-generated constructor stub
 	}
@@ -29,13 +26,13 @@ public class StartQueryPipe implements IInstruction{
 	 */
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String rootDomainUUID = invoker.getParamValue("rootNodeUUID");
+		String rootDomainUUID = invoker.getNodeParamValue("rootNodeUUID");
 		
 		UUID rootUUID = UUID.fromString(rootDomainUUID);
 		
 		Vertex rootVertex = invoker.getStorage().getVertex(rootUUID);
 		GremlinPipeline<Vertex, Vertex> queryPipe = new GremlinPipeline<Vertex, Vertex>(rootVertex);
-		System.out.println(rootVertex);
+		//System.out.println(rootVertex);
 		UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 		PipeResult queryResult = new PipeResult(nodeCallerInMemoryUUID);
 		queryResult.setContent(queryPipe);

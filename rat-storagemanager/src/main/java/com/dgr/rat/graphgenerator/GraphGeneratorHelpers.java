@@ -40,14 +40,14 @@ public class GraphGeneratorHelpers {
 	public static final String QueryTemplatesFolder = "conf" + PathSeparator + "QueryTemplates";
 	public static final String CommandTemplatesFolder = "conf" + PathSeparator + "CommandTemplates";
 	
-	public static void writeGraphToJson(String json, String path) throws IOException{
+	public static void writeText(String json, String path) throws IOException{
         BufferedWriter writer = null;
         
         try {
             File file = new File(path);
 
             writer = new BufferedWriter(new FileWriter(file));
-            writer.write(RATJsonUtils.jsonPrettyPrinter(json));
+            writer.write(json);
         } 
         catch (Exception e) {
             e.printStackTrace();
@@ -85,7 +85,14 @@ public class GraphGeneratorHelpers {
 		html = html.replace(pageTitlePlaceholder, commandName);
 		FileUtils.write(".." + sep + appPath + sep + destinationFolder + sep + commandName + ".html", html, false);
 	    
-		GraphGeneratorHelpers.writeGraphToJson(alchemyJSON, jsonPath);
+		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(alchemyJSON), jsonPath);
+	}
+	
+	public static void writeJavaScript(String name, String javaScript) throws Exception{
+		RATHelpers.initProperties(UnitTestPropertyFile);
+		String sep = FileSystems.getDefault().getSeparator();
+		String destinationFolder = AppProperties.getInstance().getStringProperty("javascript.destination.folder");
+		FileUtils.write(".." + sep + destinationFolder + sep + name + ".js", javaScript, false);
 	}
 	
 	public static void storeUUID(String query, UUID uuid){

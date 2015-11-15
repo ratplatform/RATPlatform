@@ -12,19 +12,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
 import com.dgr.utils.FileUtils;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
-
 import com.dgr.rat.commons.constants.JSONType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
+import com.dgr.rat.graphgenerator.queries.QueryHelpers;
+import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.main.SystemInitializerHelpers;
 import com.dgr.rat.tests.RATSessionManager;
 import com.dgr.utils.AppProperties;
@@ -165,6 +164,9 @@ public class InitDB {
 	    		
 	    		List<String>domains = user.domains;
 	    		for(String domain : domains){
+	    			this.domainExists(_userUUID, domain);
+	    			this.createNewDomain(_rootDomainUUID, domain);
+	    			
 	    			this.setDomain(domain);
 	    			this.setBind();
 	    		}
@@ -172,6 +174,55 @@ public class InitDB {
 	    		System.out.println(node.toString());
 	    	}
 		}
+	}
+	
+	private String createNewDomain(String rootDomainUUID, String domainName) throws Exception{
+		
+		
+		String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, domainName);
+		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+		
+		MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
+		String domainUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
+		if(!Utils.isUUID(domainUUID)){
+			throw new Exception();
+			// TODO log
+		}
+		
+		return domainUUID;
+	}
+	
+	private String getSingleValue(String column, String param, String query) throws Exception{
+		PreparedStatement preparedStatement = null;
+		String result = null;
+		try{
+			preparedStatement = _connect.prepareStatement(query);
+			preparedStatement.setString(1, param);
+			
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    if(resultSet.next()){
+		    	result = resultSet.getString(column);
+		    }
+		}
+		catch(Exception e){
+			throw new Exception(e);
+		}
+		finally{
+			if(preparedStatement != null){
+				preparedStatement.close();
+			}
+		}
+		
+		return result;
+	}
+	
+	private void domainExists(String userUUID, String domainName) throws Exception{
+		String commandJSON  = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", userUUID, domainName);
+		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+//		Response response = QueryHelpers.executeRemoteCommand(json);
+//		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
 	}
 	
 	private void addUser(String userName, String userEmail, String userPWD) throws Exception{
@@ -188,6 +239,9 @@ public class InitDB {
 			this.setUser(userName, userEmail, userPWD, _userUUID);
 			this.setUsersRole(_userUUID, "domainadmin");
 			_userName = userName;
+		}
+		else{
+			_userUUID = this.getSingleValue("userUUID", userEmail, "SELECT userUUID from ratwsserver.user where email = ?");
 		}
 	}
 	

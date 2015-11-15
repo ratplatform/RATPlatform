@@ -32,7 +32,7 @@ public class Bind implements IInstruction{
 		Iterator<String>it = invoker.getParameterNameIterator();
 		while(it.hasNext()){
 			String paramName = it.next();
-			String paramValue = invoker.getParamValue(paramName);
+			String paramValue = invoker.getNodeParamValue(paramName);
 			if(!Utils.isUUID(paramValue)){
 				throw new Exception();
 				// TODO log

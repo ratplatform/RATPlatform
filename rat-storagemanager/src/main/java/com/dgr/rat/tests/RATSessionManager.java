@@ -59,7 +59,10 @@ public class RATSessionManager {
 		String result = null;
 		if(task != null){
 			result = task.get();
+			task.cancel(true);
 		}
+		messageSender.reset();
+
 		System.out.println("RATSessionManager exit from polling, result: " + result);
 		
 		return result;

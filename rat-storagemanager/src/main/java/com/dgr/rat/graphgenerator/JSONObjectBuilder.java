@@ -14,9 +14,11 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.IResponse;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.commons.mqmessages.MQMessage;
+import com.dgr.rat.graphgenerator.queries.BuildQueryJavaScript;
 import com.dgr.rat.graphgenerator.queries.CreateJsonRemoteQueryRequest;
 import com.dgr.rat.graphgenerator.test.CreateJsonRemoteCommandRequest;
 import com.dgr.rat.json.RATJsonObject;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -131,6 +133,16 @@ public class JSONObjectBuilder {
 		
 		return result;
 	}
+	
+//	public static String buildJavaScript(final JsonHeader header, final String remoteRequestJson) throws Exception{
+//		RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(remoteRequestJson);
+//		BuildQueryJavaScript buildQueryJavaScript = new BuildQueryJavaScript();
+//		buildQueryJavaScript.make(ratJsonObject);
+//		if(buildQueryJavaScript.getHeader() == null){
+//			buildQueryJavaScript.setHeader(header);
+//		}
+//		return null;
+//	}
 	
 	public static String buildCommandTemplate(final JsonHeader header, Graph commandTemplateGraph) throws IOException{
 	    OutputStream output = new OutputStream(){

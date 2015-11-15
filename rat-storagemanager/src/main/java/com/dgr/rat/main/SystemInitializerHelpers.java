@@ -50,14 +50,21 @@ public class SystemInitializerHelpers {
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
-		int changed = remoteCommandsContainer.setValue("nodeUUID", rootDomainUUID, ReturnType.uuid);
+		int changed = remoteCommandsContainer.setValue("isUserOfNodeUUID", rootDomainUUID, ReturnType.uuid);
 		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("isPutByNodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isUserOfNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		changed = remoteCommandsContainer.setValue("userName", userAdminName, ReturnType.string);
 		System.out.println("userName changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		changed = remoteCommandsContainer.setValue("userPwd", userAdminPwd, ReturnType.string);
 		System.out.println("userPwd changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
 		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
@@ -93,27 +100,60 @@ public class SystemInitializerHelpers {
 		return newObjectUUID.toString();
 	}
 	
+//	public static String createNewUserA(String fileName, String rootDomainUUID, String userName, String pwd) throws Exception{
+//		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
+//		
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("ratNodeUUID", rootDomainUUID, ReturnType.uuid);
+//		System.out.println("ratNodeUUID changed in " + fileName + ": " + changed);
+//		
+//		changed = remoteCommandsContainer.setValue("userName", userName, ReturnType.string);
+//		System.out.println("userName changed in " + fileName + ": " + changed);
+//		
+//		changed = remoteCommandsContainer.setValue("userPwd", pwd, ReturnType.string);
+//		System.out.println("userPwd changed in " + fileName + ": " + changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
+	
 	public static String createNewUser(String fileName, String rootDomainUUID, String userName, String pwd) throws Exception{
 		String json = SystemInitializerHelpers.readCommandJSONFile(fileName);
-		
 		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
-		int changed = remoteCommandsContainer.setValue("ratNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("ratNodeUUID changed in " + fileName + ": " + changed);
+		int changed = remoteCommandsContainer.setValue("isPutByNode2UUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isPutByNode2UUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("isUserOfNodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isUserOfNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("isPutByNodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("isPutByNodeUUID changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		changed = remoteCommandsContainer.setValue("userName", userName, ReturnType.string);
 		System.out.println("userName changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		changed = remoteCommandsContainer.setValue("userPwd", pwd, ReturnType.string);
 		System.out.println("userPwd changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+		String newJson = RATJsonUtils.getRATJson(jsonHeader);
 		
-		return commandJSON;
+		return newJson;
 	}
 	
 	public static String createNewDomain(String fileName, String rootDomainUUID, String domainName) throws Exception{

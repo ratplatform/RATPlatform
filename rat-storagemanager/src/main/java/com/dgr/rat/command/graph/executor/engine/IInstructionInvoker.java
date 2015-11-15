@@ -17,7 +17,8 @@ public interface IInstructionInvoker {
 	public void invoke(IInstructionNodeWrapper invokable) throws Exception;
 	public Iterator<String>getParameterNameIterator();
 	public IStorage getStorage();
-	public String getParamValue(String paramName);
+	public String getNodeParamValue(String paramName);
+	public String getCommandParamValue(String paramName); 
 	public InstructionResultContainer getInstructionResult(UUID nodeUUID);
 	public CommandResponse getCommandResponse();
 	public void addCommandResponse(ICommandNodeVisitable visited, IInstructionResult instructionResult) throws Exception;
