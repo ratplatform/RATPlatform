@@ -93,6 +93,15 @@ public class JsonHeader {
 	public void setRootVertexUUID(UUID uuid) {
 		this.addHeaderProperty(RATConstants.RootVertexUUID, uuid.toString());
 	}
+	
+	public String getDomainUUID() {
+		return this.getHeaderProperty(RATConstants.DomainUUID);
+	}
+	
+	// COMMENT: in questo caso l'UUID è una stringa perché non lo conosco mai a priori, pertanto devo poter inserire un placeholder
+	public void setDomainUUID(String uuid) {
+		this.addHeaderProperty(RATConstants.DomainUUID, uuid.toString());
+	}
 	/**
 	 * @return the _placeHolder
 	 */

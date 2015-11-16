@@ -26,6 +26,7 @@ public class RATConstants {
 	public static final String ApplicationVersion = "applicationVersion";
 	public static final String Application = "application";
 	public static final String DomainName = "domainName";
+	public static final String DomainUUID = "DomainUUID";
 	public static final String CommandName = "commandName";
 	public static final String CommandType = "commandType";
 	public static final String Settings = "settings";
