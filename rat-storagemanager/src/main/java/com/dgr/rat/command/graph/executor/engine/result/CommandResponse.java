@@ -24,7 +24,8 @@ public class CommandResponse {
 	private JSONType _commandType = null;
 	private String _commandVersion = null;
 	private IResultDriller _driller = null;
-
+	private UUID _rootUUID = null;
+	
 	public CommandResponse() {
 		// TODO Auto-generated constructor stub
 	}
@@ -100,5 +101,13 @@ public class CommandResponse {
 
 	public UUID getCommandUUID() {
 		return _commandUUID;
+	}
+
+	public UUID getRootUUID() {
+		return _rootUUID;
+	}
+
+	public void setRootUUID(UUID rootUUID) {
+		this._rootUUID = rootUUID;
 	}
 }

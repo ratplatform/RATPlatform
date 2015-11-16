@@ -22,6 +22,7 @@ import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.MakeSigmaJSON;
+import com.dgr.rat.graphgenerator.queries.QueryHelpers;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
@@ -183,9 +184,22 @@ public class AddRootDomainTest {
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 			response = this.executeRemoteCommand(json);
 			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 			String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 			String resultFilename = dir + "GetAllDomains.conf" + "QueryResult";
 			String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+			TestHelpers.writeGraphToJson(alchemyJson, path);
+			
+			System.out.println("Dominio dell'utente dgr1 con nome");
+//			json = this.query("GetUserDomainByName.conf", "rootNodeUUID", dgr1UUID);
+			json = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", dgr1UUID, "DGR Domain 1");
+			response = this.executeRemoteCommand(json);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+			int num = RATHelpers.countVertex(json, VertexType.Domain);
+			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			System.out.println("Utenti sotto RAT");

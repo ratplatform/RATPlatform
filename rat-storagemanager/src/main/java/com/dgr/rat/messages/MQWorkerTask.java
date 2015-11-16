@@ -85,7 +85,9 @@ public class MQWorkerTask implements ITaskCommand<IResponse>{
 			
 			try {
 				// COMMENT: invio della risposta al sender
+				System.out.println("Send reply");
 				_owner.getJmsTemplate().send(_message.getJMSReplyTo(), messageGenerator);
+				System.out.println("Reply sent");
 			} 
 			catch (JmsException | JMSException e) {
 				// TODO log

@@ -59,7 +59,7 @@ public class RATSessionManager {
 		String result = null;
 		if(task != null){
 			result = task.get();
-			task.cancel(true);
+			//task.cancel(true);
 		}
 		messageSender.reset();
 

@@ -62,6 +62,10 @@ public class QueryResultDriller implements IResultDriller{
 		String json = RATHelpers.fromGraphToJson(graph);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNode = mapper.readTree(json);
+		
+		// TODO: non sono riuscito a pensare di meglio: da rivedere: rootUUID mi serve nelle risposte delle query 
+		// qual'è il nodo dal quale è partita la query (es user e tutti i domini dello user: rootUUID corrisponde a quella del nodo user)
+		commandResult.setRootUUID(queryResult.getRootUUID());
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 		_commandResponsePropertiesMap.put(RATConstants.Settings, jsonNode);
 	}

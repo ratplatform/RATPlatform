@@ -44,7 +44,6 @@ public class MessageSender implements MessageListener, Callable<String>{
 	}
 	
 	public synchronized void reset(){
-		_response = null; 
 		_sessionID = null;
 		_message = null;
 		_stop = false;

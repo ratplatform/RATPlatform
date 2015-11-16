@@ -13,6 +13,7 @@ import com.tinkerpop.blueprints.Graph;
 public class QueryResult implements IInstructionResult{
 	private Graph _graph = null;
 	private UUID _inMemoryOwnerNodeUUID = null;
+	private UUID _rootUUID = null;
 	
 	public QueryResult(UUID inMemoryOwnerNodeUUID) {
 		_inMemoryOwnerNodeUUID = inMemoryOwnerNodeUUID;
@@ -41,5 +42,19 @@ public class QueryResult implements IInstructionResult{
 	@Override
 	public UUID getInMemoryOwnerNodeUUID() {
 		return _inMemoryOwnerNodeUUID;
+	}
+
+	/**
+	 * @return the _rootUUID
+	 */
+	public UUID getRootUUID() {
+		return _rootUUID;
+	}
+
+	/**
+	 * @param _rootUUID the _rootUUID to set
+	 */
+	public void setRootUUID(UUID rootUUID) {
+		this._rootUUID = rootUUID;
 	}
 }

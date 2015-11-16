@@ -88,18 +88,10 @@ public class GetUserDomainByName implements IInstruction{
 			throw new Exception();
 			// TODO: log
 		}
-		List<Vertex> list = new ArrayList<Vertex>();
+
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
-		System.out.println(pipe);
-		for (Object o : pipe){
-			System.out.println(o.toString());
-		}
-//		Graph graph = new TinkerGraph();
-//		return null;
-		
-//		List<Vertex> result = pipe.toList();
-//		System.out.println(result.toString());
+		@SuppressWarnings("unchecked")
+		List<Vertex> result = (List<Vertex>) pipe.in(edgeLabel).has(RATConstants.VertexContentField, domainName).toList();
 
 		Graph graph = new TinkerGraph();
 		// COMMENT: recupero la rootUUID passata tra i comandi; essa rappresenta il nodo al quale sonop collegati tutti i nodi 
@@ -118,27 +110,22 @@ public class GetUserDomainByName implements IInstruction{
 		newRootVertex.setProperty(RATConstants.VertexContentField, userName);
 		newRootVertex.setProperty(RATConstants.VertexLabelField, userName);
 		
-//		for(Vertex vertex : result){
-//			Vertex newVertex = graph.addVertex(null);
-//			for(String key : vertex.getPropertyKeys()){
-//				Object value = vertex.getProperty(key);
-//				newVertex.setProperty(key, value);
-//			}
-//			newVertex.setProperty(RATConstants.VertexIsRootField, false);
-//			newRootVertex.addEdge("", newVertex);
-//		}
+		for(Vertex vertex : result){
+			Vertex newVertex = graph.addVertex(null);
+			for(String key : vertex.getPropertyKeys()){
+				Object value = vertex.getProperty(key);
+				newVertex.setProperty(key, value);
+			}
+			newVertex.setProperty(RATConstants.VertexIsRootField, false);
+			newRootVertex.addEdge("", newVertex);
+		}
 		
 		QueryResult resultGraph = new QueryResult(queryResult.getInMemoryOwnerNodeUUID());
+		resultGraph.setRootUUID(rootUUID);
 		resultGraph.setGraph(graph);
 		
 		invoker.addCommandResponse(nodeCaller, resultGraph);
 		
 		return resultGraph;
 	}
-//	@Override
-//	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-//		String domainName = invoker.getParamValue("domainName");
-//		return null;
-//	}
-
 }

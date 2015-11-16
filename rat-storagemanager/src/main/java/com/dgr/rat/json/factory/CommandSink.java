@@ -107,6 +107,9 @@ public class CommandSink {
 			response.setCommandResponse(commandResponse);
 			
 			header.setStatusCode(commandResponse.getStatusCode());
+			if(commandResponse.getRootUUID() != null){
+				header.setRootVertexUUID(commandResponse.getRootUUID());
+			}
 		} 
 		catch (JsonParseException | JsonMappingException e) {
 			e.printStackTrace();

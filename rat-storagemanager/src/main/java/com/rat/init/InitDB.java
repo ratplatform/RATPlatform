@@ -24,6 +24,7 @@ import com.dgr.rat.graphgenerator.queries.QueryHelpers;
 import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
+import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.main.SystemInitializerHelpers;
 import com.dgr.rat.tests.RATSessionManager;
 import com.dgr.utils.AppProperties;
@@ -31,6 +32,7 @@ import com.dgr.utils.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tinkerpop.blueprints.Graph;
 
 
 public class InitDB {
@@ -164,10 +166,12 @@ public class InitDB {
 	    		
 	    		List<String>domains = user.domains;
 	    		for(String domain : domains){
-	    			this.domainExists(_userUUID, domain);
-	    			this.createNewDomain(_rootDomainUUID, domain);
-	    			
-	    			this.setDomain(domain);
+	    			_domain = domain;
+	    			if(!this.domainExists(_userUUID, domain)){
+	    				_domainUUID = this.createNewDomain(_rootDomainUUID, domain);
+	    				this.setDomain(domain);
+	    			}
+
 	    			this.setBind();
 	    		}
 	    		
@@ -177,8 +181,6 @@ public class InitDB {
 	}
 	
 	private String createNewDomain(String rootDomainUUID, String domainName) throws Exception{
-		
-		
 		String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, domainName);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
@@ -217,12 +219,13 @@ public class InitDB {
 		return result;
 	}
 	
-	private void domainExists(String userUUID, String domainName) throws Exception{
+	private boolean domainExists(String userUUID, String domainName) throws Exception{
 		String commandJSON  = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", userUUID, domainName);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
-//		Response response = QueryHelpers.executeRemoteCommand(json);
-//		json = JSONObjectBuilder.serializeCommandResponse(response);
+		int num = RATHelpers.countVertex(jsonResponse, VertexType.Domain);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+		
+		return num > 0 ? true : false;
 	}
 	
 	private void addUser(String userName, String userEmail, String userPWD) throws Exception{
@@ -354,7 +357,7 @@ public class InitDB {
 	private void setDomain(String domainName) throws Exception{
 		PreparedStatement preparedStatement = null;
 		try{
-		    if(!this.exists("SELECT count(*) from ratwsserver.domain where domainUUID = '" + domainName + "'")){
+		    if(!this.exists("SELECT count(*) from ratwsserver.domain where domainName = '" + domainName + "'")){
 				String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", _rootDomainUUID, domainName);
 				String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 	

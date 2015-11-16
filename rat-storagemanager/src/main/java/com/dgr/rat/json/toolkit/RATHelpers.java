@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IInstructionNodeFrame;
@@ -19,6 +20,7 @@ import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeEdgeFra
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.RATJsonObject;
+import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -34,6 +36,7 @@ import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 import com.tinkerpop.frames.FramedGraph;
 import com.tinkerpop.frames.FramedGraphFactory;
 import com.tinkerpop.frames.modules.javahandler.JavaHandlerModule;
+import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class RATHelpers {
 
@@ -48,6 +51,13 @@ public class RATHelpers {
 		GraphSONReader.inputGraph(graph, inputStream);
 		
 		return graph;
+	}
+	
+	public static int countVertex(String ratJson, VertexType type) throws Exception{
+		Graph graph = RATHelpers.fromRatJsonToGraph(ratJson);
+		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(graph.getVertices());
+		List<Vertex> list = (List<Vertex>) pipe.both().has(RATConstants.VertexTypeField, type.toString()).toList();
+		return list.size();
 	}
 	
 	public static void initProperties(String propertiesFile) throws Exception{
