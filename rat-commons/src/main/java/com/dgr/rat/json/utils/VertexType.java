@@ -16,8 +16,9 @@ public enum VertexType {
 	SubComment("SubComment"),
 	RootAdminUser("RootAdminUser"),
 	User("User"),
-	UserName("UserName"),
-	UserPwd("UserPwd"),
+	Properties("Properties"),
+//	UserName("UserName"),
+//	UserPwd("UserPwd"),
 	Domain("Domain"),
 	UserContent("UserContent");
 	

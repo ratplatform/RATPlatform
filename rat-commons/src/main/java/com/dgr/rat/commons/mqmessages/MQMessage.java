@@ -35,6 +35,10 @@ public class MQMessage implements IResponse{
 		_header = response.getHeader();
 	}
 	
+//	public Object getHeaderProperty(String key){
+//		return _header.getHeaderProperty(key);
+//	}
+	
 	public Object getHeaderProperty(String key){
 		return _commandResponseMap.get(key);
 	}

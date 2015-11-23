@@ -53,6 +53,7 @@ public class RATConstants {
 	public static final String StorageType = "storage.type";
 	public static final String DBDefaultAdminName = "db.default.admin.name";
 	public static final String DBDefaultAdminPwd = "db.default.admin.pwd";
+	public static final String DBDefaultAdminEmail = "db.default.admin.email";
 	// TODO: temporanei: leggere commento in SystemCommandsInitializer.loadCommandTemplates
 	public static final String CommandsTemplateUUID = "commands.template.uuid";
 	public static final String QueriesTemplateUUID = "queries.template.uuid";
@@ -61,7 +62,7 @@ public class RATConstants {
 	// VertexValue
 	public static final String VertexUUIDField = "VertexUUIDField";
 	public static final String VertexLabelField = "VertexLabelField"; // Contiene il nome del vertice, es. "is-type-of"
-	public static final String VertexCommandOwnerField = "VertexCommandOwnerField";
+	public static final String GraphCommandOwner = "GraphCommandOwner";
 	public static final String VertexContentUndefined = "VertexContentUndefined";
 	
 	//Instructions
@@ -114,9 +115,13 @@ public class RATConstants {
 	public static final String TowardNode = "TowardNode";
 	public static final String FromNode = "FromNode";
 	public static final String QueryName = "QueryName";
-	public static final String StartPipeInstruction = "StartPipeInstruction";
-	public static final String EndPipeInstruction = "EndPipeInstruction";
-	public static final String InternalPipeInstruction = "InternalPipeInstruction";
+//	public static final String StartPipeInstruction = "StartPipeInstruction";
+//	public static final String EndPipeInstruction = "EndPipeInstruction";
+//	public static final String InternalPipeInstruction = "InternalPipeInstruction";
+	public static final String IsRootQueryPivot = "IsRootQueryPivot";
+	public static final String QueryPivotEdgeLabel = "QueryPivotEdge";
+	public static final String CorrelationKey = "CorrelationKey";
+//	public static final String QueryPivotPathLabel = "QueryPivotPath";
 	
 	//VertexActions
 	// Il primo è il field che deve assumere uno dei valori sottostanti

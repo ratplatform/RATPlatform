@@ -35,6 +35,17 @@
 			<type>pom</type>
 		</dependency>
 		<!--End Jackson-->
+		
+		<!--tinkerpop-->
+		<dependency>
+			<groupId>org.rat.platform</groupId>
+			<artifactId>tinkerpop-dependencies</artifactId>
+			<version>1.0.0</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+		<!--End tinkerpop-->
+		
 	</dependencies>
 	<build>
 		<plugins>

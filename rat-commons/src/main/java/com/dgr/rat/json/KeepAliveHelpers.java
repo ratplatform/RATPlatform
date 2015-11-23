@@ -30,17 +30,4 @@ public class KeepAliveHelpers {
 		
 		return result;
 	}
-	
-	public static JsonHeader deserializeKeepAliveJson(final String ratJson) throws JsonParseException, JsonMappingException, IOException{
-		ObjectMapper mapper = new ObjectMapper();
-		RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
-		TypeFactory typeFactory = mapper.getTypeFactory();
-		
-		MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, String.class);
-		HashMap<String, String> map = mapper.readValue(jsonHeader.getHeader(), mapType);
-		JsonHeader header = new JsonHeader();
-		header.setHeaderProperties(map);
-
-		return header;
-	}
 }

@@ -6,6 +6,8 @@
 package com.dgr.rat.json.utils;
 
 import java.io.IOException;
+import java.util.HashMap;
+
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
@@ -16,6 +18,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class RATJsonUtils {
 	public static String jsonPrettyPrinter(String json) throws Exception{
@@ -24,6 +28,19 @@ public class RATJsonUtils {
 	    String indented = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
 	    
 	    return indented;
+	}
+	
+	public static JsonHeader deserializeJsonHeader(final String ratJson) throws JsonParseException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		RATJsonObject ratJsonObject = (RATJsonObject) mapper.readValue(ratJson, RATJsonObject.class);
+		
+		TypeFactory typeFactory = mapper.getTypeFactory();
+		MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, String.class);
+		HashMap<String, String> map = mapper.readValue(ratJsonObject.getHeader(), mapType);
+		JsonHeader header = new JsonHeader();
+		header.setHeaderProperties(map);
+
+		return header;
 	}
 	
 	public static JsonHeader getJsonHeader(StatusCode commandResult, MessageType messageType){
