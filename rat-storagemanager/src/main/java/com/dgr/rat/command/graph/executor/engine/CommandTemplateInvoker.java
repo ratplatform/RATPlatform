@@ -76,7 +76,7 @@ public class CommandTemplateInvoker implements ICommandTemplateInvoker, IGraphVi
 	}
 
 	public void visit(ICommandNodeVisitable visitable, ICommandNodeVisitable parent) throws Exception {
-		System.out.println("Sto esplorando " + visitable.getProperty(RATConstants.VertexContentField));
+		//System.out.println("Sto esplorando " + visitable.getProperty(RATConstants.VertexContentField));
 		
 		if(!visitable.isExplored()){
 			this.addExploredNode(visitable);

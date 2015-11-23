@@ -5,11 +5,13 @@
 
 package com.dgr.rat.graphgenerator.commands;
 
+import java.lang.reflect.Constructor;
+
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.graphgenerator.node.wrappers.CommandNode;
+import com.dgr.rat.graphgenerator.node.wrappers.Properties;
 import com.dgr.rat.graphgenerator.node.wrappers.SystemKeyNode;
 import com.dgr.rat.graphgenerator.node.wrappers.User;
-import com.dgr.rat.graphgenerator.node.wrappers.UserName;
-import com.dgr.rat.graphgenerator.node.wrappers.UserPwd;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 
@@ -27,11 +29,10 @@ public class AddNewUser extends AbstractCommand{
 		User rootNode = this.buildRootNode(User.class, VertexType.User.toString());
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
 		
-		UserName userNameNode = this.buildNode(UserName.class);
-		userNameNode.addCreateVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
-		
-		UserPwd userPwd = this.buildNode(UserPwd.class);
-		userPwd.addCreateVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
+		Properties properties = this.buildNode(Properties.class);
+		properties.addCreateVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
+		properties.addCreateVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
+		properties.addCreateVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		SystemKeyNode isUserOfNode = this.buildNode(SystemKeyNode.class, "is-user-of");
 		isUserOfNode.addCreateVertexInstruction("nodeName", "is-user-of", ReturnType.string);
@@ -43,39 +44,38 @@ public class AddNewUser extends AbstractCommand{
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: bind verso il RATNode
 		isPutByNode.addBindInstruction("isPutByNodeUUID", RATConstants.VertexContentUndefined);
-//		this.setQueryPivot(isPutByNode, VertexType.RootDomain);
 		
 		SystemKeyNode isPutByNode2 = this.buildNode(SystemKeyNode.class, "is-put-by");
 		isPutByNode2.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: bind verso il RATNode
 		isPutByNode2.addBindInstruction("isPutByNode2UUID", RATConstants.VertexContentUndefined);
-//		this.setQueryPivot(isPutByNode2, VertexType.RootDomain);
-		
-//		NewDomainNode domain = this.buildNode(NewDomainNode.class, VertexType.Domain.toString());
-//		domain.addBindInstruction(RATConstants.VertexContentUndefined);
-		
-//		SystemKeyNode isPutByNode2 = this.buildNode(SystemKeyNode.class, "is-put-by");
-//		isPutByNode2.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		
 		SystemKeyNode isUserNode = this.buildNode(SystemKeyNode.class, "is-user");
 		isUserNode.addCreateVertexInstruction("nodeName", "is-user", ReturnType.string);
 		
-//		RATDomainNode rootDomain = this.buildNode(RATDomainNode.class, VertexType.RootDomain.toString());
-//		rootDomain.addBindInstruction(RATConstants.VertexContentUndefined);
-		
-		rootNode.addChild(userNameNode);
-		rootNode.addChild(userPwd);
+		rootNode.addChild(properties);
 		rootNode.addChild(isUserOfNode);
 		rootNode.addChild(isUserNode);
-		
 		isUserNode.addChild(isPutByNode);
-		
 		isUserOfNode.addChild(isPutByNode2);
-//		isUserOfNode.addChild(domain);
-//		
-//		domain.addChild(isPutByNode2);
-		
-//		isPutByNode2.addChild(isUserNode);
-//		isPutByNode2.addChild(rootDomain);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends CommandNode> T buildNode(Class<T> cls) throws Exception {
+		T node = null;
+		try{
+			Class<?> argTypes[] = {AbstractCommand.class};
+	        Constructor<?> ct = cls.getConstructor(argTypes);
+	        Object arglist[] = { this };
+	        Object object = ct.newInstance(arglist);
+	        node = (T) object;
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        	throw new Exception(e);
+        }
+		node.set_nodeUUID(this.createNodeUUID(node));
+        return node;
 	}
 }

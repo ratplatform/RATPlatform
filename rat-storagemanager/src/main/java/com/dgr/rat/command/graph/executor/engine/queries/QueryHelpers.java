@@ -1,15 +1,9 @@
-/**
- * @author Daniele Grignani (dgr)
- * @date Oct 25, 2015
- */
-
-package com.dgr.rat.command.graph.executor.engine.queries.instructions;
+package com.dgr.rat.command.graph.executor.engine.queries;
 
 import java.util.List;
 import java.util.UUID;
 
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
-import com.dgr.rat.command.graph.executor.engine.IInstruction;
 import com.dgr.rat.command.graph.executor.engine.IInstructionInvoker;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
 import com.dgr.rat.command.graph.executor.engine.result.InstructionResultContainer;
@@ -22,19 +16,56 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 import com.tinkerpop.pipes.PipeFunction;
-import com.tinkerpop.pipes.util.PipesFunction;
 
-public class ExecuteGetAllUserDomainsPipe implements IInstruction{
-
-	public ExecuteGetAllUserDomainsPipe() {
-		// TODO Auto-generated constructor stub
+public class QueryHelpers {
+	public static Graph getResultGraph(Vertex rootVertex, final List<Vertex> results){
+		Graph graph = new TinkerGraph();
+		// COMMENT: recupero la rootUUID passata tra i comandi; essa rappresenta il nodo al quale sonop collegati tutti i nodi 
+		// ricavati qui
+		Vertex newRootVertex = graph.addVertex(null);
+		for(String key : rootVertex.getPropertyKeys()){
+			Object value = rootVertex.getProperty(key);
+			newRootVertex.setProperty(key, value);
+		}
+		
+//		GremlinPipeline<Vertex, Vertex> userPipe = new GremlinPipeline<Vertex, Vertex>(rootVertex);
+//		Vertex userNameVertex = userPipe.outE().inV().filter(filterFunction).next();
+//		String userName = userNameVertex.getProperty(RATConstants.VertexContentField);
+//		newRootVertex.setProperty(RATConstants.VertexContentField, userName);
+//		newRootVertex.setProperty(RATConstants.VertexLabelField, userName);
+		
+		for(Vertex vertex : results){
+			Vertex newVertex = graph.addVertex(null);
+			for(String key : vertex.getPropertyKeys()){
+				Object value = vertex.getProperty(key);
+				newVertex.setProperty(key, value);
+			}
+			newVertex.setProperty(RATConstants.VertexIsRootField, false);
+			newRootVertex.addEdge("", newVertex);
+		}
+		
+		return graph;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.dgr.rat.command.graph.executor.engine.IInstruction#execute(com.dgr.rat.command.graph.executor.engine.IInstructionInvoker, com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable)
-	 */
-	@Override
-	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
+	
+	public static IInstructionResult startPipe(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
+		String rootDomainUUID = invoker.getNodeParamValue("rootNodeUUID");
+		
+		UUID rootUUID = UUID.fromString(rootDomainUUID);
+		
+		Vertex rootVertex = invoker.getStorage().getVertex(rootUUID);
+		GremlinPipeline<Vertex, Vertex> queryPipe = new GremlinPipeline<Vertex, Vertex>(rootVertex);
+		
+		UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
+		PipeResult queryResult = new PipeResult(nodeCallerInMemoryUUID);
+		queryResult.setContent(queryPipe);
+		
+		// COMMENT: setto la rootUUID che poi mi servirà nell'ultimo nodo eseguito: ExecuteQueryPipe
+		queryResult.setRootUUID(rootUUID);
+		
+		return queryResult;
+	}
+	
+	public static IInstructionResult executePipe(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		String type = invoker.getNodeParamValue(RATConstants.VertexTypeField);
 		VertexType vertexType = VertexType.fromString(type);
 		
@@ -82,13 +113,8 @@ public class ExecuteGetAllUserDomainsPipe implements IInstruction{
 				Object value = vertex.getProperty(key);
 				newVertex.setProperty(key, value);
 			}
+			newVertex.setProperty(RATConstants.VertexIsRootField, false);
 			newRootVertex.addEdge("", newVertex);
-			
-			GremlinPipeline<Vertex, Vertex> userPipe = new GremlinPipeline<Vertex, Vertex>(vertex);
-			Vertex userNameVertex = userPipe.outE().inV().filter(filterFunction).next();
-			String userName = userNameVertex.getProperty(RATConstants.VertexContentField);
-			newVertex.setProperty(RATConstants.VertexContentField, userName);
-			newVertex.setProperty(RATConstants.VertexLabelField, userName);
 		}
 		
 		QueryResult resultGraph = new QueryResult(queryResult.getInMemoryOwnerNodeUUID());
@@ -98,16 +124,4 @@ public class ExecuteGetAllUserDomainsPipe implements IInstruction{
 
 		return resultGraph;
 	}
-	
-	private static final PipeFunction<Vertex, Boolean> filterFunction = new PipesFunction<Vertex, Boolean>(){
-		@Override
-		public Boolean compute(Vertex vertex){
-			boolean result = false;
-			String content = vertex.getProperty(RATConstants.VertexTypeField);
-			
-			result = content.equalsIgnoreCase(VertexType.UserName.toString()) ? true : false;
-			return result;
-		}
-	};
-
 }

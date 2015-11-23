@@ -29,14 +29,12 @@ public class AddComment extends AbstractCommand{
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: bind verso il nodo dell'utente
 		isPutByNode.addBindInstruction("userNodeUUID", RATConstants.VertexContentUndefined);
-		this.setQueryPivot(isPutByNode, rootNode.getType(), VertexType.User, "StartQueryPipe", "SetQueryPipe", "GetAllUserComments");
 		
 		SystemKeyNode belongsTo = this.buildNode(SystemKeyNode.class, "belongs-to");
 		belongsTo.addCreateVertexInstruction("nodeName", "belongs-to", ReturnType.string);
 		// COMMENT: bind verso il nodo dell'owner (dominio)
 		belongsTo.addBindInstruction("ownerNodeUUID", RATConstants.VertexContentUndefined);
-		this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetAllDomainComments");
-		//this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Comment, "StartQueryPipe", "SetQueryPipe", "GetAllCommentComments");
+		//this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetAllDomainComments");
 		
 		SystemKeyNode isPublic = this.buildNode(SystemKeyNode.class, "is-public");
 		isPublic.addCreateVertexInstruction("nodeName", "is-public", ReturnType.string);
@@ -69,5 +67,13 @@ public class AddComment extends AbstractCommand{
 		content.addChild(start);
 		content.addChild(end);
 		content.addChild(urlDoc);
+		
+		this.setQueryPivot(isPutByNode, "GetAllUserComments", "StartQueryPipe", true);
+		this.setQueryPivot(isPutByNode, "GetAllUserComments", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAllUserComments", "GetAllUserComments", false);
+		
+		this.setQueryPivot(belongsTo, "GetAllDomainComments", "StartQueryPipe", true);
+		this.setQueryPivot(belongsTo, "GetAllDomainComments", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAllDomainComments", "GetAllDomainComments", false);
 	}
 }

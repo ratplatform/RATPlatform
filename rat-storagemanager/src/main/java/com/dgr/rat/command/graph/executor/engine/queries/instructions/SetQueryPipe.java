@@ -51,11 +51,16 @@ public class SetQueryPipe implements IInstruction{
 		
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
 		pipe.in(edgeLabel).has(RATConstants.VertexContentField, content);
+//		System.out.println("queryPipe: " + pipe.toString());
 		
 		UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 		PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);
 		newQueryResult.setContent(pipe);
 		newQueryResult.setRootUUID(queryResult.getRootUUID());
+		
+//		System.out.println("nodeUUID: " + nodeUUID);
+//		System.out.println("nodeCallerInMemoryUUID: " + nodeCallerInMemoryUUID);
+//		System.out.println("queryResult.getRootUUID(): " + queryResult.getRootUUID());
 		
 		return newQueryResult;
 	}

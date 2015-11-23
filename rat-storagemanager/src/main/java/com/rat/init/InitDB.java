@@ -25,7 +25,6 @@ import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
-import com.dgr.rat.main.SystemInitializerHelpers;
 import com.dgr.rat.tests.RATSessionManager;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.Utils;
@@ -72,6 +71,7 @@ public class InitDB {
 	private String _domain = null;
 	private String _userName = null;
 	private FileSystemXmlApplicationContext _context = null;
+	
 	public InitDB() {
 		// TODO Auto-generated constructor stub
 	}
@@ -100,8 +100,8 @@ public class InitDB {
 			String userAdminName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
 			String userAdminPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
 			String rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
-			
 			String userEmail = "admin@email.com";
+			
 			// addAdmin(String userEmail, String userAdminName, String userAdminPwd, String rootDomainName)
 			this.addAdmin(userEmail, userAdminName, userAdminPwd, rootDomainName);
 
@@ -181,7 +181,7 @@ public class InitDB {
 	}
 	
 	private String createNewDomain(String rootDomainUUID, String domainName) throws Exception{
-		String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, domainName);
+		String commandJSON = SystemInitializerTestHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, domainName);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
 		
@@ -230,7 +230,7 @@ public class InitDB {
 	
 	private void addUser(String userName, String userEmail, String userPWD) throws Exception{
 		if(!this.exists("SELECT count(*) from ratwsserver.user where email = '" + userEmail + "'")){
-			String commandJSON = SystemInitializerHelpers.createNewUser("AddNewUser.conf", _rootDomainUUID, userName, userPWD);
+			String commandJSON = SystemInitializerTestHelpers.createNewUser("AddNewUser.conf", _rootDomainUUID, userName, userPWD);
 			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
 			_userUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
@@ -255,7 +255,7 @@ public class InitDB {
 			// COMMENT: se il RootDOmain esiste, non viene creato e viene reatituito l'UUID
 			String queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
 			String commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
-			String commandJSON = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+			String commandJSON = SystemInitializerTestHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
 			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 
 			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
@@ -293,7 +293,7 @@ public class InitDB {
 	
 	private void addAdmin(String userEmail, String userAdminName, String userAdminPwd, String rootDomainName) throws Exception{
 		if(!this.exists("SELECT count(*) from ratwsserver.user where email = '" + userEmail + "'")){
-			String commandJSON = SystemInitializerHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", _rootDomainUUID, userAdminName, userAdminPwd);
+			String commandJSON = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", _rootDomainUUID, userAdminName, userAdminPwd);
 			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 	
 			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
@@ -358,7 +358,7 @@ public class InitDB {
 		PreparedStatement preparedStatement = null;
 		try{
 		    if(!this.exists("SELECT count(*) from ratwsserver.domain where domainName = '" + domainName + "'")){
-				String commandJSON = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", _rootDomainUUID, domainName);
+				String commandJSON = SystemInitializerTestHelpers.createNewDomain("AddNewDomain.conf", _rootDomainUUID, domainName);
 				String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 	
 				MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
@@ -398,7 +398,7 @@ public class InitDB {
 		this.setDomainRoles(_domainUUID, _userUUID, "domainadmin");
 		this.setUserDomain(_userUUID, _domainUUID, _domain);
 		
-		String commandJSON = SystemInitializerHelpers.bindUserToDomain("BindFromUserToDomain.conf", _domainUUID, _userUUID);
+		String commandJSON = SystemInitializerTestHelpers.bindUserToDomain("BindFromUserToDomain.conf", _domainUUID, _userUUID);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 
 		MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);

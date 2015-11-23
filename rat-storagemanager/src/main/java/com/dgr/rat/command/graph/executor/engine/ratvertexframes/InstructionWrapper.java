@@ -7,13 +7,18 @@ package com.dgr.rat.command.graph.executor.engine.ratvertexframes;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
+
+import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.graphgenerator.node.wrappers.QueryPivotNode;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.json.utils.ReturnType;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.frames.FramedGraph;
+import com.tinkerpop.frames.VertexFrame;
 
 public class InstructionWrapper {
 	private class Param{
@@ -30,6 +35,10 @@ public class InstructionWrapper {
 	private UUID _instructionUUID = null;
 	private int _maxNumParameter = 1;
 	private VertexType _vertexType2Bind = null;
+//	private Map<String, LinkedHashMap<String, QueryPivotNode>>_queryPivotNodeParams = new LinkedHashMap<String, LinkedHashMap<String, QueryPivotNode>>();
+//	private Map<String, LinkedList<QueryPivotNode>>_queryPivotNodes = new LinkedHashMap<String, LinkedList<QueryPivotNode>>();
+	
+	private String _lastParamName = null;
 	
 	public InstructionWrapper(String instructionName, int num) {
 		_instructionName = instructionName;
@@ -52,10 +61,111 @@ public class InstructionWrapper {
 		return _instructionName;
 	}
 	
+//	public void addQueryPivot(String key, String query, boolean isStartPivot) throws Exception{
+//		LinkedList<QueryPivotNode>list = null;
+//		if(_queryPivotNodes.containsKey(key)){
+//			list = _queryPivotNodes.get(key);
+//		}
+//		else{
+//			list = new LinkedList<QueryPivotNode>();
+//			_queryPivotNodes.put(key, list);
+//		}
+//		
+//		QueryPivotNode node = new QueryPivotNode(isStartPivot);
+//		node.set_nodeUUID(UUID.randomUUID());
+//		node.setQueryName(query);
+//		node.set_orderField(list.size());
+//		node.set_nodeContent(query);
+//		node.set_correlationKey(key);
+//		
+//		list.add(node);
+//		
+//		this.addQueryParamPivot(key, query);
+//	}
+	
+//	private void addQueryParamPivot(String key, String query) throws Exception{
+//		// COMMENT: prendo l'ultimo paramName inserito
+//		if(_lastParamName == null){
+//			throw new Exception();
+//		}
+//		
+//		LinkedHashMap<String, QueryPivotNode>map = null;
+//		if(_queryPivotNodeParams.containsKey(key)){
+//			map = _queryPivotNodeParams.get(key);
+//		}
+//		else{
+//			map = new LinkedHashMap<String, QueryPivotNode>();
+//			_queryPivotNodeParams.put(key, map);
+//		}
+//		
+//		QueryPivotNode node = new QueryPivotNode(false);
+//		node.set_nodeUUID(UUID.randomUUID());
+//		node.setQueryName(query);
+//		node.set_orderField(map.size());
+//		node.set_nodeContent(query);
+//		node.set_correlationKey(key);
+//		
+//		map.put(_lastParamName, node);
+//	}
+//	
+//	private boolean containsParam(String paramName){
+//		boolean result = false;
+//		Iterator<String>it = _queryPivotNodeParams.keySet().iterator();
+//		while(it.hasNext()){
+//			String key = it.next();
+//			LinkedHashMap<String, QueryPivotNode> map = _queryPivotNodeParams.get(key);
+//			Iterator<String>mapIt = map.keySet().iterator();
+//			while(mapIt.hasNext()){
+//				String name = mapIt.next();
+//				if(paramName.equals(name)){
+//					result = true;
+//					break;
+//				}
+//			}
+//			
+//			if(result){
+//				break;
+//			}
+//		}
+//		
+//		return result;
+//	}
+//	
+//	private void buildParamQueryPivots(FramedGraph<Graph> framedGraph, Vertex instructionParameter, UUID commandUUID) throws Exception{
+//		Iterator<String>it = _queryPivotNodeParams.keySet().iterator();
+//		while(it.hasNext()){
+//			String key = it.next();
+//			LinkedHashMap<String, QueryPivotNode> map = _queryPivotNodeParams.get(key);
+//			Iterator<String>mapIt = map.keySet().iterator();
+//			while(mapIt.hasNext()){
+//				String param = mapIt.next();
+//				QueryPivotNode node = map.get(param);
+//				node.buildNodes(framedGraph, null, commandUUID, RATConstants.QueryPivotEdgeLabel);
+//				IRATNodeQueryPivotFrame childNode = node.getNode();
+//				instructionParameter.addEdge(RATConstants.QueryPivotEdgeLabel, childNode.asVertex());
+//			}
+//		}
+//	}
+//	
+//	private void buildQueryPivots(FramedGraph<Graph> framedGraph, Vertex parent, UUID commandUUID) throws Exception{
+//		Iterator<String>it = _queryPivotNodes.keySet().iterator();
+//		while(it.hasNext()){
+//			String key = it.next();
+//			LinkedList<QueryPivotNode>list = _queryPivotNodes.get(key);
+//			for(QueryPivotNode query : list){
+//				query.buildNodes(framedGraph, null, commandUUID, RATConstants.QueryPivotEdgeLabel);
+//				IRATNodeQueryPivotFrame childNode = query.getNode();
+//				parent.addEdge(RATConstants.QueryPivotEdgeLabel, childNode.asVertex());
+//			}
+//		}
+//	}
+	
 	public void addParam(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
 		if(_parameters.containsKey(paramName)){
 			throw new Exception();
 		}
+		
+		_lastParamName = paramName;
 		
 		Param param = new Param();
 		param.paramName = paramName;
@@ -97,6 +207,8 @@ public class InstructionWrapper {
         _instructionNode.setVertexUUIDField(_instructionUUID.toString());
         _instructionNode.setMaxNumParameters(_maxNumParameter);
         
+//        this.buildQueryPivots(framedGraph, vertex, _instructionUUID);
+        
         Iterator<String> it = _parameters.keySet().iterator();
         while(it.hasNext()){
         	String paramName = it.next();
@@ -105,6 +217,10 @@ public class InstructionWrapper {
         	
         	IInstructionParameterEdgeFrame instructionParameterInfo = _instructionNode.addUserCommandsInstructionsParameter(instructionParameter);
         	instructionParameterInfo.setWeight(param.order);
+        	
+//        	if(this.containsParam(paramName)){
+//        		this.buildParamQueryPivots(framedGraph, instructionParameter.asVertex(), _instructionUUID);
+//        	}
         }
         
         return _instructionNode;

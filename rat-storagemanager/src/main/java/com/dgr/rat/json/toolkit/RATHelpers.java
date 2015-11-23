@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -19,14 +20,18 @@ import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IInstructionNod
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeEdgeFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
+import com.dgr.utils.FileUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -53,6 +58,7 @@ public class RATHelpers {
 		return graph;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static int countVertex(String ratJson, VertexType type) throws Exception{
 		Graph graph = RATHelpers.fromRatJsonToGraph(ratJson);
 		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(graph.getVertices());
@@ -156,5 +162,29 @@ public class RATHelpers {
 		else{
 			newVertexOut.setProperty(RATConstants.VertexUUIDField, vertex.getProperty(RATConstants.VertexUUIDField));
 		}
+	}
+	
+	public static String readQueryJSONFile(String fileName) throws Exception{
+		String commandsPath = RATHelpers.getCommandsPath(RATConstants.QueriesFolder);
+		StringBuffer pathBuffer = new StringBuffer();
+		pathBuffer.append(commandsPath);
+		pathBuffer.append(fileName);
+		
+		String templatePath = pathBuffer.toString();
+		String input = FileUtils.fileRead(templatePath);
+		
+		return input;
+	}
+	
+	public static String readCommandJSONFile(String fileName) throws Exception{
+		String commandsPath = RATHelpers.getCommandsPath(RATConstants.CommandsFolder);
+		StringBuffer pathBuffer = new StringBuffer();
+		pathBuffer.append(commandsPath);
+		pathBuffer.append(fileName);
+		
+		String templatePath = pathBuffer.toString();
+		String input = FileUtils.fileRead(templatePath);
+		
+		return input;
 	}
 }

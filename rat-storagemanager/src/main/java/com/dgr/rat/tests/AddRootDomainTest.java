@@ -19,10 +19,8 @@ import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
 import com.dgr.rat.command.graph.executor.engine.result.CommandResponse;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.commons.mqmessages.RATJSONMessage;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
-import com.dgr.rat.graphgenerator.JSONObjectBuilder;
-import com.dgr.rat.graphgenerator.MakeSigmaJSON;
-import com.dgr.rat.graphgenerator.queries.QueryHelpers;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
@@ -31,12 +29,12 @@ import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.main.SystemCommandsInitializer;
-import com.dgr.rat.main.SystemInitializerHelpers;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
 import com.dgr.utils.Utils;
+import com.rat.init.SystemInitializerTestHelpers;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -74,67 +72,69 @@ public class AddRootDomainTest {
 
 			String userAdminName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
 			String userAdminPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
+			String userAdminEmail = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminEmail);
 			
 			//json = this.setAddRootDomainAdminUserValues("AddRootDomainAdminUser.conf", rootDomainUUID);
-			json = SystemInitializerHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID, userAdminName, userAdminPwd);
+			//createAddRootDomainAdminUser(String fileName, String rootDomainUUID, String userAdminName, String userAdminPwd, String email) 
+			json = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID, userAdminName, userAdminPwd, userAdminEmail);
 			response = this.executeRemoteCommand(json);
 			
-			// Domain
-			json = SystemInitializerHelpers.createNewUser("AddNewUser.conf", rootDomainUUID, "dgr1", "dgr1");
-			response = this.executeRemoteCommand(json);
-			String dgr1UUID = this.getNewRootNodeUUID(response);
-			
-			json = SystemInitializerHelpers.createNewUser("AddNewUser.conf", rootDomainUUID, "dgr3", "dgr3");
-			response = this.executeRemoteCommand(json);
-			String dgr3UUID = this.getNewRootNodeUUID(response);
+//			// Domain
+//			json = SystemInitializerTestHelpers.createNewUser("AddNewUser.conf", rootDomainUUID, "dgr1", "dgr1", "dgr1@gmail.com");
+//			response = this.executeRemoteCommand(json);
+//			String dgr1UUID = this.getNewRootNodeUUID(response);
 //			
-			json = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, "DGR Domain 1");
-			response = this.executeRemoteCommand(json);
-			String DGRDomain1UUID = this.getNewRootNodeUUID(response);
-			String commandGraphUUID = response.getCommandGraphUUID();
+//			json = SystemInitializerTestHelpers.createNewUser("AddNewUser.conf", rootDomainUUID, "dgr3", "dgr3", "dgr2@gmail.com");
+//			response = this.executeRemoteCommand(json);
+//			String dgr3UUID = this.getNewRootNodeUUID(response);
+////			
+//			json = SystemInitializerTestHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, "DGR Domain 1");
+//			response = this.executeRemoteCommand(json);
+//			String DGRDomain1UUID = this.getNewRootNodeUUID(response);
+//			String commandGraphUUID = response.getCommandGraphUUID();
+////			
+//			json = SystemInitializerTestHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain1UUID, dgr1UUID);
+//			response = this.executeRemoteCommand(json);
+////			
+//			json = SystemInitializerTestHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain1UUID, dgr3UUID);
+//			response = this.executeRemoteCommand(json);
+////			
+//			json = SystemInitializerTestHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, "DGR Domain 2");
+//			response = this.executeRemoteCommand(json);
+//			String DGRDomain2UUID = this.getNewRootNodeUUID(response);
+////			
+////			json = this.setBindGraphValues("BindFromUserToDomain.conf", DGRDomain2UUID, dgr3UUID);
+////			response = this.executeRemoteCommand(json);
+////			
+////			json = this.setBindGraphValues("BindFromUserToDomain.conf", DGRDomain2UUID, dgr1UUID);
+////			response = this.executeRemoteCommand(json);
+////			
+//			json = SystemInitializerTestHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, "DGR Domain 3");
+//			response = this.executeRemoteCommand(json);
+//			String DGRDomain3UUID = this.getNewRootNodeUUID(response);
 //			
-			json = SystemInitializerHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain1UUID, dgr1UUID);
-			response = this.executeRemoteCommand(json);
-//			
-			json = SystemInitializerHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain1UUID, dgr3UUID);
-			response = this.executeRemoteCommand(json);
-//			
-			json = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, "DGR Domain 2");
-			response = this.executeRemoteCommand(json);
-			String DGRDomain2UUID = this.getNewRootNodeUUID(response);
-//			
-//			json = this.setBindGraphValues("BindFromUserToDomain.conf", DGRDomain2UUID, dgr3UUID);
+//			json = SystemInitializerTestHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain3UUID, dgr1UUID);
 //			response = this.executeRemoteCommand(json);
 //			
-//			json = this.setBindGraphValues("BindFromUserToDomain.conf", DGRDomain2UUID, dgr1UUID);
+//			json = this.setAddCommentsValues("AddComment.conf", DGRDomain1UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 1");
 //			response = this.executeRemoteCommand(json);
+//			String comment1UUID = this.getNewRootNodeUUID(response);
 //			
-			json = SystemInitializerHelpers.createNewDomain("AddNewDomain.conf", rootDomainUUID, "DGR Domain 3");
-			response = this.executeRemoteCommand(json);
-			String DGRDomain3UUID = this.getNewRootNodeUUID(response);
-			
-			json = SystemInitializerHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain3UUID, dgr1UUID);
-			response = this.executeRemoteCommand(json);
-			
-			json = this.setAddCommentsValues("AddComment.conf", DGRDomain1UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 1");
-			response = this.executeRemoteCommand(json);
-			String comment1UUID = this.getNewRootNodeUUID(response);
-			
-			json = this.setAddCommentsValues("AddComment.conf", DGRDomain1UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 2");
-			response = this.executeRemoteCommand(json);
-			String comment2UUID = this.getNewRootNodeUUID(response);
-			
-			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 4");
-			response = this.executeRemoteCommand(json);
-			String comment3UUID = this.getNewRootNodeUUID(response);
-			
-			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 5");
-			response = this.executeRemoteCommand(json);
-			String comment4UUID = this.getNewRootNodeUUID(response);
-			
-			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 6");
-			response = this.executeRemoteCommand(json);
-			String comment5UUID = this.getNewRootNodeUUID(response);
+//			json = this.setAddCommentsValues("AddComment.conf", DGRDomain1UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 2");
+//			response = this.executeRemoteCommand(json);
+//			String comment2UUID = this.getNewRootNodeUUID(response);
+//			
+//			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 4");
+//			response = this.executeRemoteCommand(json);
+//			String comment3UUID = this.getNewRootNodeUUID(response);
+//			
+//			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 5");
+//			response = this.executeRemoteCommand(json);
+//			String comment4UUID = this.getNewRootNodeUUID(response);
+//			
+//			json = this.setAddCommentsValues("AddSubComment.conf", comment2UUID, dgr1UUID, 567, 899, "http://url.com/test", "Questo è il mio commento numero 6");
+//			response = this.executeRemoteCommand(json);
+//			String comment5UUID = this.getNewRootNodeUUID(response);
 //			
 ////			 SubDomain
 //			json = this.setAddNewDomainValues("AddNewDomain.conf", DGRDomain3UUID, "DGR SubDomain 1");
@@ -179,114 +179,82 @@ public class AddRootDomainTest {
 			
 			String dir = "";//".." + FileSystems.getDefault().getSeparator();
 			
-			System.out.println("Domini sotto RAT");
-			json = this.query("GetAllDomains.conf", "rootNodeUUID", rootDomainUUID);
+//			System.out.println("Domini sotto RAT");
+//			json = this.query("GetAllDomains.conf", "rootNodeUUID", rootDomainUUID);
+////			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+////			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+//			String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			String resultFilename = dir + "GetAllDomains.conf" + "QueryResult";
+//			String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
+//			
+//			System.out.println("Dominio dell'utente dgr1 con nome");
+////			json = this.query("GetUserDomainByName.conf", "rootNodeUUID", dgr1UUID);
+//			json = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", dgr1UUID, "DGR Domain 1");
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-			String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			String resultFilename = dir + "GetAllDomains.conf" + "QueryResult";
-			String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Dominio dell'utente dgr1 con nome");
-//			json = this.query("GetUserDomainByName.conf", "rootNodeUUID", dgr1UUID);
-			json = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", dgr1UUID, "DGR Domain 1");
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-			int num = RATHelpers.countVertex(json, VertexType.Domain);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Utenti sotto RAT");
-			json = this.query("GetAllUsers.conf", "rootNodeUUID", rootDomainUUID);
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Domini dell'utente dgr1");
-			json = this.query("GetAllUserDomains.conf", "rootNodeUUID", dgr1UUID);
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllUserDomains.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Utenti del dominio DGR Domain 1");
-			json = this.query("GetAllDomainUsers.conf", "rootNodeUUID", DGRDomain1UUID);
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Commenti dell'utente dgr1");
-			json = this.query("GetAllUserComments.conf", "rootNodeUUID", dgr1UUID);
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Commenti al commento");
-			json = this.query("GetAllCommentComments.conf", "rootNodeUUID", comment2UUID);
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllCommentComments.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			System.out.println("Tutti i commenti del dominio");
-			json = this.query("GetAllDomainComments.conf", "rootNodeUUID", DGRDomain1UUID);
-			response = this.executeRemoteCommand(json);
-			json = JSONObjectBuilder.serializeCommandResponse(response);
-			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-			resultFilename = dir + "GetAllDomainComments.conf" + "QueryResult";
-			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-//			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-			
-//			this.verifyQueries("AddNewDomainTemplate.conf", rootDomainUUID);
+//			int num = RATHelpers.countVertex(json, VertexType.Domain);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 //			
 //			System.out.println("Utenti sotto RAT");
-//			this.verifyQueries("AddNewUserTemplate.conf", rootDomainUUID);
+//			json = this.query("GetAllUsers.conf", "rootNodeUUID", rootDomainUUID);
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 //			
-//			System.out.println("Commenti dell'utente " + dgr1UUID);
-//			this.verifyQueries("AddCommentTemplate.conf", dgr1UUID);
+//			System.out.println("Domini dell'utente dgr1");
+//			json = this.query("GetAllUserDomains.conf", "rootNodeUUID", dgr1UUID);
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllUserDomains.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 //			
-//			System.out.println("Commenti dell'utente " + dgr2UUID);
-//			this.verifyQueries("AddCommentTemplate.conf", dgr2UUID);
+//			System.out.println("Utenti del dominio DGR Domain 1");
+//			json = this.query("GetAllDomainUsers.conf", "rootNodeUUID", DGRDomain1UUID);
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 //			
-//			System.out.println("Commenti associati al dominio " + DGRDomain1UUID);
-//			this.verifyQueries("AddCommentTemplate.conf", DGRDomain1UUID);
+//			System.out.println("Commenti dell'utente dgr1");
+//			json = this.query("GetAllUserComments.conf", "rootNodeUUID", dgr1UUID);
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 //			
-//			System.out.println("Commenti associati al dominio " + DGRDomain2UUID);
-//			this.verifyQueries("AddCommentTemplate.conf", DGRDomain2UUID);
+//			System.out.println("Commenti al commento");
+//			json = this.query("GetAllCommentComments.conf", "rootNodeUUID", comment2UUID);
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllCommentComments.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 //			
-//			System.out.println("Commenti associati al dominio " + DGRDomain3UUID);
-//			this.verifyQueries("AddCommentTemplate.conf", DGRDomain3UUID);
-//			
-//			System.out.println("Utenti del dominio " + DGRDomain3UUID);
-//			this.verifyQueries("BindGraphTemplate.conf", DGRDomain3UUID);
-//			
-//			System.out.println("Utenti del dominio " + DGRDomain2UUID);
-//			this.verifyQueries("BindGraphTemplate.conf", DGRDomain2UUID);
-//			
-//			System.out.println("Utenti del dominio " + DGRDomain1UUID);
-//			this.verifyQueries("BindGraphTemplate.conf", DGRDomain1UUID);
-			
+//			System.out.println("Tutti i commenti del dominio");
+//			json = this.query("GetAllDomainComments.conf", "rootNodeUUID", DGRDomain1UUID);
+//			response = this.executeRemoteCommand(json);
+//			json = JSONObjectBuilder.serializeCommandResponse(response);
+//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//			resultFilename = dir + "GetAllDomainComments.conf" + "QueryResult";
+//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			
 		} catch (Exception e) {
@@ -409,7 +377,7 @@ public class AddRootDomainTest {
 				Vertex vertex = (Vertex) obj;
 //				System.out.println("Current vertex: " + vertex);
 				
-				String edgeLabel = commandVertex.getProperty(RATConstants.VertexCommandOwnerField);
+				String edgeLabel = commandVertex.getProperty(RATConstants.GraphCommandOwner);
 				VertexType vertexType = VertexType.fromString(vertex.getProperty(RATConstants.VertexTypeField).toString());
 				switch(vertexType){
 				case QueryPivot:

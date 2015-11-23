@@ -10,12 +10,16 @@ import java.nio.file.FileSystems;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
+
+import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
+import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.rat.storage.provider.StorageType;
@@ -74,8 +78,28 @@ public class SystemCommandsInitializer {
 		_storage.shutDown();
 
 		// COMMENT: qui aprirò e chiuderò una nuova connection
-		String commandJson = SystemInitializerHelpers.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+		String commandJson = this.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
 		this.addRootPlatformDomainNode(commandJson);
+	}
+	
+	private String createRootDomain(String fileName, String commandsNodeUUID, String queriesNodeUUID) throws Exception{
+		String json = RATHelpers.readCommandJSONFile(fileName);
+		
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+		
+		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+		int changed = remoteCommandsContainer.setValue("commandsNodeUUID", commandsNodeUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("queriesNodeUUID", queriesNodeUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
+		
+		return commandJSON;
 	}
 	
 	private Response addRootPlatformDomainNode(String json)throws Exception{

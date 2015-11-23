@@ -7,7 +7,9 @@ package com.dgr.rat.graphgenerator.node.wrappers;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeEdgeFra
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeQueryPivotFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.InstructionWrapper;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.json.utils.ReturnType;
 import com.tinkerpop.blueprints.Graph;
@@ -24,9 +27,10 @@ import com.tinkerpop.frames.FramedGraph;
 public class CommandNode extends AbstractNode<IRATNodeFrame>{
 	private boolean _isRootNode = false;
 	private LinkedList<CommandNode>_children = new LinkedList<CommandNode>();
-	private LinkedList<QueryPivotNode>_queryPivotNodes = new LinkedList<QueryPivotNode>();
+//	private LinkedList<QueryPivotNode>_queryPivotNodes = new LinkedList<QueryPivotNode>();
 	// TODO: attenzione: se questo nodo avesse due instruction con lo stesso nome, es Bind, sarebbe un vero problema; da correggere!
 	private Map<String, InstructionWrapper>_instructions = new HashMap<String, InstructionWrapper>();
+//	private Map<String, LinkedList<QueryPivotNode>>_queryPivotNodes = new LinkedHashMap<String, LinkedList<QueryPivotNode>>();
 //	private IRATNodeVertexFrame _node = null;
 	
 	public CommandNode() {
@@ -37,12 +41,32 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 		_children.add(child);
 	}
 	
-	public void addQueryPivot(QueryPivotNode queryPivotNode){
-		_queryPivotNodes.add(queryPivotNode);
-	}
+//	public void addQueryPivot(String key, String query, boolean isStartPivot){
+//		LinkedList<QueryPivotNode>list = null;
+//		if(_queryPivotNodes.containsKey(key)){
+//			list = _queryPivotNodes.get(key);
+//		}
+//		else{
+//			list = new LinkedList<QueryPivotNode>();
+//			_queryPivotNodes.put(key, list);
+//		}
+//		
+//		QueryPivotNode node = new QueryPivotNode(isStartPivot);
+//		node.set_nodeUUID(UUID.randomUUID());
+//		node.setQueryName(query);
+//		node.set_orderField(list.size());
+//		node.set_nodeContent(query);
+//		node.set_correlationKey(key);
+//		
+//		list.add(node);
+//	}
+	
+//	public void addQueryPivot(QueryPivotNode queryPivotNode){
+//		_queryPivotNodes.add(queryPivotNode);
+//	}
 	
 	// TODO: attenzione: se questo nodo avesse due instruction con lo stesso nome, es Bind, sarebbe un vero problema; da correggere!
-	public void addInstruction(final String instructionName, final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
+	public InstructionWrapper addInstruction(final String instructionName, final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
 		InstructionWrapper instructionWrapper = null;
 		if(_instructions.containsKey(instructionName)){
 			instructionWrapper = _instructions.get(instructionName);
@@ -59,26 +83,32 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 		}
 		
 		instructionWrapper.addParam(paramName, paramValue, returnType);
+		
+		return instructionWrapper;
 	}
 	
-	public void addCreateCommandRootVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
-		this.addInstruction("CreateRootVertex", paramName, paramValue, returnType);
+	public InstructionWrapper addCreateCommandRootVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
+		return this.addInstruction("CreateRootVertex", paramName, paramValue, returnType);
 	}
 	
-	public void addCreateRootPlatformVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
-		this.addInstruction("CreateRootPlatformVertex", paramName, paramValue, returnType);
+	public InstructionWrapper addCreateRootPlatformVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
+		return this.addInstruction("CreateRootPlatformVertex", paramName, paramValue, returnType);
 	}
 	
-	public void addCreateVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
-		this.addInstruction("CreateVertex", paramName, paramValue, returnType);
+	public InstructionWrapper addCreateVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
+		return this.addInstruction("CreateVertex", paramName, paramValue, returnType);
 	}
 	
-	public void addBindInstruction(final String paramName, final String node2BindUUID) throws Exception{
-		this.addInstruction("Bind", paramName, node2BindUUID, ReturnType.uuid);
+	public InstructionWrapper addPropertyVertexInstruction(final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
+		return this.addInstruction("AddProperties", paramName, paramValue, returnType);
 	}
 	
-	public void addBindInstruction(final String node2BindUUID) throws Exception{
-		this.addInstruction("Bind", "nodeUUID", node2BindUUID, ReturnType.uuid);
+	public InstructionWrapper addBindInstruction(final String paramName, final String node2BindUUID) throws Exception{
+		return this.addInstruction("Bind", paramName, node2BindUUID, ReturnType.uuid);
+	}
+	
+	public InstructionWrapper addBindInstruction(final String node2BindUUID) throws Exception{
+		return this.addInstruction("Bind", "nodeUUID", node2BindUUID, ReturnType.uuid);
 	}
 	
 	public void addInstruction(InstructionWrapper instructionWrapper) throws Exception{
@@ -111,7 +141,7 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 			this.set_isAlreadyCreated(true);
 			
 			this.buildChildren(framedGraph, this.getNode(), commandName, commandUUID, edgeName);
-			this.buildQueryPivots(framedGraph, this.getNode(), commandName, commandUUID, edgeName);
+//			this.buildQueryPivots(framedGraph, this.getNode(), commandName, commandUUID);
 		}
 	}
 	
@@ -143,17 +173,19 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 		}
 	}
 	
-	private void buildQueryPivots(FramedGraph<Graph> framedGraph, IRATNodeFrame parent, String commandName, UUID commandUUID, String edgeName) throws Exception{
-		for(QueryPivotNode child : _queryPivotNodes){
-			child.buildNodes(framedGraph, commandName, commandUUID, edgeName);
-			IRATNodeQueryPivotFrame childNode = child.getNode();
-			// COMMENT: vedi note in CommandNode.buildChildren. NON RIMUOVERE
-			parent.addAdjacentVertex(childNode);
-//			Edge edge = parent.asVertex().addEdge(commandName, childNode.asVertex());
-//			edge.setProperty(RATConstants.EdgeUUIDField, UUID.randomUUID().toString());
-//			edge.setProperty(RATConstants.CommandGraphUUID, commandUUID.toString());
-		}
-	}
+//	private void buildQueryPivots(FramedGraph<Graph> framedGraph, IRATNodeFrame parent, String commandName, UUID commandUUID) throws Exception{
+//		Iterator<String>it = _queryPivotNodes.keySet().iterator();
+//		while(it.hasNext()){
+//			String key = it.next();
+//			LinkedList<QueryPivotNode>list = _queryPivotNodes.get(key);
+//			for(QueryPivotNode node : list){
+//				node.buildNodes(framedGraph, commandName, commandUUID, RATConstants.QueryPivotEdgeLabel);
+//				IRATNodeQueryPivotFrame childNode = node.getNode();
+//				parent.asVertex().addEdge(RATConstants.QueryPivotEdgeLabel, childNode.asVertex());
+////				parent.addAdjacentVertex(childNode);
+//			}
+//		}
+//	}
 	
 	private void buildInstructions(FramedGraph<Graph> framedGraph, IRATNodeFrame node) throws Exception{
 		Iterator<String> it = _instructions.keySet().iterator();

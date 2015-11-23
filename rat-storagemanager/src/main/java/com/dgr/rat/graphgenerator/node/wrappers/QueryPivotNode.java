@@ -15,13 +15,23 @@ public class QueryPivotNode extends AbstractNode<IRATNodeQueryPivotFrame>{
 	private VertexType _towardNodeType = VertexType.Unknown;
 	private VertexType _fromNodeType = VertexType.Unknown;
 	private String _queryName = null;
-	private String _startPipeInstruction = null;
-    private String _internalPipeInstruction = null;
-    private String _endPipeInstruction = null;
+	private String _correlationKey = null;
+	private int _orderField = 0;
+	private boolean _isRoot = false;
+	private String _paramName = null;
 	
-	public QueryPivotNode() {
+	public QueryPivotNode(boolean isRoot) {
 		this.set_label(VertexType.QueryPivot.toString());
 		this.setType(VertexType.QueryPivot);
+		_isRoot = isRoot;
+	}
+	
+	public String getParamName() {
+		return _paramName;
+	}
+
+	public void setParamName(String paramName) {
+		this._paramName = paramName;
 	}
 	
 	public void setTowardNode(VertexType type){
@@ -52,12 +62,10 @@ public class QueryPivotNode extends AbstractNode<IRATNodeQueryPivotFrame>{
 			this.getNode().setVertexLabelField(this.get_label());
 			this.getNode().setVertexTypeField(this.getType());
 			this.getNode().setCommandGraphUUID(commandUUID.toString());
-			this.getNode().setTowardNode(_towardNodeType);
-			this.getNode().setFromNode(_fromNodeType);
 			this.getNode().setQueryName(_queryName);
-			this.getNode().setStartPipeInstructionName(_startPipeInstruction);
-			this.getNode().setInternalPipeInstruction(_internalPipeInstruction);
-			this.getNode().setEndPipeInstruction(_endPipeInstruction);
+			this.getNode().setInstructionOrderField(_orderField);
+			this.getNode().setCorrelationKey(_correlationKey);
+			this.getNode().setIsRootNode(_isRoot);
 			
 			UUID uuid = this.get_nodeUUID();
 			if(uuid == null){
@@ -84,44 +92,37 @@ public class QueryPivotNode extends AbstractNode<IRATNodeQueryPivotFrame>{
 	}
 
 	/**
-	 * @return the _startPipeInstruction
+	 * @return the _orderField
 	 */
-	public String getStartPipeInstruction() {
-		return _startPipeInstruction;
+	public int get_orderField() {
+		return _orderField;
 	}
 
 	/**
-	 * @param _startPipeInstruction the _startPipeInstruction to set
+	 * @param _orderField the _orderField to set
 	 */
-	public void setStartPipeInstruction(String startPipeInstruction) {
-		this._startPipeInstruction = startPipeInstruction;
+	public void set_orderField(int orderField) {
+		this._orderField = orderField;
 	}
 
 	/**
-	 * @return the _internalPipeInstruction
+	 * @return the _correlationKey
 	 */
-	public String geInternalPipeInstruction() {
-		return _internalPipeInstruction;
+	public String get_correlationKey() {
+		return _correlationKey;
 	}
 
 	/**
-	 * @param _internalPipeInstruction the _internalPipeInstruction to set
+	 * @param _correlationKey the _correlationKey to set
 	 */
-	public void setInternalPipeInstruction(String internalPipeInstruction) {
-		this._internalPipeInstruction = internalPipeInstruction;
+	public void set_correlationKey(String correlationKey) {
+		this._correlationKey = correlationKey;
 	}
 
 	/**
-	 * @return the _endPipeInstruction
+	 * @return the _isRoot
 	 */
-	public String getEndPipeInstruction() {
-		return _endPipeInstruction;
-	}
-
-	/**
-	 * @param _endPipeInstruction the _endPipeInstruction to set
-	 */
-	public void setEndPipeInstruction(String endPipeInstruction) {
-		this._endPipeInstruction = endPipeInstruction;
+	public boolean get_isRoot() {
+		return _isRoot;
 	}
 }

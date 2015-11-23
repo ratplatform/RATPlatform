@@ -26,31 +26,6 @@ public class BuildQueryJavaScript {
 	public BuildQueryJavaScript() {
 		// TODO Auto-generated constructor stub
 	}
-
-//	private String makeHeader(JsonHeader header) {
-//		String result = "var " + RATConstants.Header + " = {\n";
-//		Map<String, String> properties = header.getHeaderProperties();
-//		Iterator<String> it = properties.keySet().iterator();
-//		while(it.hasNext()){
-//			String field = it.next();
-//			String value = null;
-//			if(field.equalsIgnoreCase(RATConstants.Time)){
-//				value = "new Date().toUTCString()";
-//			}
-//			else{
-//				value = "\"" +properties.get(field)+ "\"";
-//			}
-//			result += "\t" + field + ":" + value + ",\n";
-//		}
-//		
-//		result += "\n};\n";
-//		result += "function getHeader(commandName, commandGraphUUID, rootVertexUUID){\n";
-//		result += "\theader.commandName = commandName;\n";
-//		result += "\theader.CommandGraphUUID = commandGraphUUID;\n";
-//		result += "\theader.RootVertexUUID = rootVertexUUID;\n";
-//		result += "\treturn header;\n}\n\n";
-//		return result;
-//	}
 	
 	private String makeSetting(String field, JsonNode jsonSettingsNode, Map<String, String> functionsMap){
 		String result = "\t\t" + field + " : {\n";
@@ -102,43 +77,10 @@ public class BuildQueryJavaScript {
 
 		return result;
 	}
-//	private String makeFunctions(String commandName, Map<String, String> functions, RATJsonObject ratJsonObject){
-//		String result = "";
-//		String rootVertexUUID = ratJsonObject.getHeaderProperty(RATConstants.RootVertexUUID);
-//		String commandGraphUUID = ratJsonObject.getHeaderProperty(RATConstants.CommandGraphUUID);
-//		
-//		Iterator<String>it = functions.keySet().iterator();
-//		while(it.hasNext()){
-//			String key = it.next();
-//			String value = functions.get(key);
-//			result += commandName + "." + RATConstants.Settings + "." + key + "." + "set" + value + " = function(param){\n";
-//			result += "\t" + commandName + "." + RATConstants.Settings + "." + key + "." + value + " = param;\n";
-//			result += "\t" + commandName + "." + RATConstants.Header + " = getHeader(\"" + commandName + "\", \"" + commandGraphUUID + "\", \"" + rootVertexUUID + "\");\n";
-//			result += "};\n\n";
-//		}
-//		
-//		return result;
-//	}
-//	private String makeFunctions(String commandName, Map<String, String> functions, RATJsonObject ratJsonObject){
-//		String result = "";
-//		
-//		Iterator<String>it = functions.keySet().iterator();
-//		while(it.hasNext()){
-//			String key = it.next();
-//			String value = functions.get(key);
-//			result += commandName + "." + RATConstants.Settings + "." + key + "." + "set" + value + " = function(currentDomainUUID, " + key + "){\n";
-//			
-//			result += "\t" + commandName + "." + RATConstants.Header + "." + RATConstants.DomainUUID + " = currentDomainUUID;\n";
-//			result += "\t" + commandName + "." + RATConstants.Settings + "." + key + "." + value + " = " + key + ";\n";
-//			result += "};\n\n";
-//		}
-//		
-//		return result;
-//	}
 	
 	private String makeFunctions(String commandName, Map<String, String> functions, RATJsonObject ratJsonObject){
 		String result = "";
-		result += commandName + "Set" + " = function(";// + key + "){\n";
+		//result += commandName + "Set" + " = function(";// + key + "){\n";
 		String params = "currentDomainUUID, ";
 		String calls = "";
 		int inc = 0;
@@ -160,14 +102,6 @@ public class BuildQueryJavaScript {
 		
 		return result;
 	}
-	
-//	public String getJavaScript(){
-//		String result = null;
-//		String header = this.makeHeader(_header);
-//		result = header + _javaScript + "\n/*Public functions*/\n" + _functions;
-//		
-//		return result;
-//	}
 	
 	public String getJavaScript(){
 		String result = null;

@@ -28,23 +28,41 @@ public interface IRATNodeQueryPivotFrame extends IRATFrame{
     @Property(RATConstants.FromNode)
     public VertexType getFromNode();
     
-    @Property(RATConstants.StartPipeInstruction)
-    public void setStartPipeInstructionName(final String instructionName);
+    @Property(RATConstants.InstructionOrderField)
+    public void setInstructionOrderField(final Integer order);
     
-    @Property(RATConstants.StartPipeInstruction)
-    public String getStartPipeInstructionName();
+    @Property(RATConstants.InstructionOrderField)
+    public Integer getInstructionOrderField();
     
-    @Property(RATConstants.InternalPipeInstruction)
-    public void setInternalPipeInstruction(final String instructionName);
+    @Property(RATConstants.CorrelationKey)
+    public void setCorrelationKey(final String correlationKey);
     
-    @Property(RATConstants.InternalPipeInstruction)
-    public String getInternalPipeInstruction();
+    @Property(RATConstants.CorrelationKey)
+    public String getCorrelationKey();
     
-    @Property(RATConstants.EndPipeInstruction)
-    public void setEndPipeInstruction(final String instructionName);
+    @Property(RATConstants.IsRootQueryPivot)
+    public void setIsRootNode(final Boolean isRoot);
     
-    @Property(RATConstants.EndPipeInstruction)
-    public String getEndPipeInstruction();
+    @Property(RATConstants.IsRootQueryPivot)
+    public Boolean getIsRootNode();
+    
+//    @Property(RATConstants.StartPipeInstruction)
+//    public void setStartPipeInstructionName(final String instructionName);
+//    
+//    @Property(RATConstants.StartPipeInstruction)
+//    public String getStartPipeInstructionName();
+//    
+//    @Property(RATConstants.InternalPipeInstruction)
+//    public void setInternalPipeInstruction(final String instructionName);
+//    
+//    @Property(RATConstants.InternalPipeInstruction)
+//    public String getInternalPipeInstruction();
+//    
+//    @Property(RATConstants.EndPipeInstruction)
+//    public void setEndPipeInstruction(final String instructionName);
+//    
+//    @Property(RATConstants.EndPipeInstruction)
+//    public String getEndPipeInstruction();
 }
 
 

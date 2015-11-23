@@ -6,21 +6,55 @@
 package com.dgr.rat.graphgenerator.commands;
 
 import java.lang.reflect.Constructor;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.UUID;
 
+import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IInstructionParameterNodeFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
+import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeQueryPivotFrame;
+import com.dgr.rat.command.graph.executor.engine.ratvertexframes.InstructionWrapper;
 import com.dgr.rat.commons.constants.JSONType;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.node.wrappers.CommandNode;
 import com.dgr.rat.graphgenerator.node.wrappers.QueryPivotNode;
 import com.dgr.rat.json.utils.VertexType;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.frames.FramedGraph;
 import com.tinkerpop.frames.FramedGraphFactory;
 import com.tinkerpop.frames.modules.javahandler.JavaHandlerModule;
 
 public abstract class AbstractCommand implements ICommandCreator {
+	public class QueryPivotNodeManager{
+		private Object _commandNode = null;
+		private LinkedList<QueryPivotNode>_list = new LinkedList<QueryPivotNode>();
+		
+		public Object getCommandNode() {
+			return _commandNode;
+		}
+
+		public void setCommandNode(Object commandNode) {
+			this._commandNode = commandNode;
+		}
+		
+		public void addQueryPivot(QueryPivotNode queryPivot){
+			_list.add(queryPivot);
+		}
+		
+		public Iterator<QueryPivotNode>getListIterator(){
+			return _list.iterator();
+		}
+		
+		public int size(){
+			return _list.size();
+		}
+	};
+
 	private String _commandName = null;
 	private UUID _commandUUID = null;
 	private UUID _rootNodeUUID = null;
@@ -29,6 +63,7 @@ public abstract class AbstractCommand implements ICommandCreator {
 	private CommandNode _rootNode = null;
 	private String _commandVersion = null;
 	private String _edgeName = null;
+	private Map<String, LinkedList<QueryPivotNodeManager>>_queryPivotNodes = new LinkedHashMap<String, LinkedList<QueryPivotNodeManager>>();
 	
 	public AbstractCommand(String commandName, String commandVersion) {
 		set_commandName(commandName);
@@ -41,27 +76,110 @@ public abstract class AbstractCommand implements ICommandCreator {
 	}
 	
 	public abstract void addNodesToGraph() throws Exception;
-
-	protected void setQueryPivot(CommandNode node, VertexType fromNodeType, VertexType towardNodeType, String startPipeInstruction, String internalPipeInstruction, String endPipeInstruction) throws Exception{
-		// TODO: correggere in seconda battuta: ho il problema che se ho diversi nomi di parametri uguali,
-		// quando setto i parametri non so quale scegliere
-		QueryPivotNode queryPivotNode = this.buildQueryNode();
-		queryPivotNode.set_nodeContent(startPipeInstruction);
-		queryPivotNode.setStartPipeInstruction(startPipeInstruction);
-		queryPivotNode.setInternalPipeInstruction(internalPipeInstruction);
-		queryPivotNode.setEndPipeInstruction(endPipeInstruction);
-		queryPivotNode.setTowardNode(towardNodeType);
-		queryPivotNode.setFromNode(fromNodeType);
+	
+	private QueryPivotNodeManager find(LinkedList<QueryPivotNodeManager>list, Object node){
+		QueryPivotNodeManager result = null;
+		for(QueryPivotNodeManager query : list){
+			if(query.getCommandNode() == node){
+				result = query;
+				break;
+			}
+		}
 		
-		queryPivotNode.setQueryName(startPipeInstruction);
-		node.addQueryPivot(queryPivotNode);
+		return result;
+	}
+	
+	protected void setQueryPivot(Object node, String correlationKey, String queryName, boolean isStartPivot) throws Exception{
+		this.setQueryPivot(node, correlationKey, queryName, isStartPivot, null);
+	}
+	
+	protected void setQueryPivot(Object node, String correlationKey, String queryName, boolean isStartPivot, String paramName) throws Exception{
+		LinkedList<QueryPivotNodeManager>list = null;
+		QueryPivotNodeManager queryPivotNodeManager = null;
+		if(_queryPivotNodes.containsKey(correlationKey)){
+			list = _queryPivotNodes.get(correlationKey);
+			queryPivotNodeManager = this.find(list, node);
+		}
+		else{
+			list = new LinkedList<QueryPivotNodeManager>();
+			_queryPivotNodes.put(correlationKey, list);
+		}
+		
+		if(queryPivotNodeManager == null){
+			queryPivotNodeManager = new QueryPivotNodeManager();
+			list.add(queryPivotNodeManager);
+		}
+
+		QueryPivotNode queryPivotNode = new QueryPivotNode(isStartPivot);
+		queryPivotNode.set_nodeUUID(UUID.randomUUID());
+		queryPivotNode.setQueryName(queryName);
+		int size = queryPivotNodeManager.size();
+		queryPivotNode.set_orderField(size);
+		queryPivotNode.set_nodeContent(queryName);
+		queryPivotNode.set_correlationKey(correlationKey);
+		if(paramName != null){
+			queryPivotNode.setParamName(paramName);
+		}
+		
+		queryPivotNodeManager.addQueryPivot(queryPivotNode);
+		queryPivotNodeManager.setCommandNode(node);
+	}
+	
+	private void buildQueryPivots() throws Exception{
+		Iterator<String>it = _queryPivotNodes.keySet().iterator();
+		while(it.hasNext()){
+			String correlationKey = it.next();
+			LinkedList<QueryPivotNodeManager> list = _queryPivotNodes.get(correlationKey);
+			QueryPivotNode lastQueryPivotNode = null;
+			
+			for(QueryPivotNodeManager queryPivotNodeManager : list){
+				Vertex owner = null;
+				
+				Iterator<QueryPivotNode>qIt = queryPivotNodeManager.getListIterator();
+				
+				while(qIt.hasNext()){
+					QueryPivotNode query = qIt.next();
+					
+					Object obj = queryPivotNodeManager.getCommandNode();
+					if(obj instanceof CommandNode){
+						CommandNode node = (CommandNode) obj;
+						owner = node.getNode().asVertex();
+					}
+					else if(obj instanceof InstructionWrapper){
+						String paramName = query.getParamName();
+						if(paramName == null){
+							throw new Exception();
+						}
+						InstructionWrapper node = (InstructionWrapper) obj;
+						IInstructionParameterNodeFrame param = node.getInstruction().getInstructionParameter(paramName);
+						if(param == null){
+							throw new Exception();
+						}
+						owner = param.asVertex();
+					}
+					else{
+						throw new Exception();
+					}
+					
+					query.buildNodes(_framedGraph, this.get_commandName(), _commandUUID, _edgeName);
+					IRATNodeQueryPivotFrame childNode = query.getNode();
+					owner.addEdge(RATConstants.QueryPivotEdgeLabel, childNode.asVertex());
+					if(lastQueryPivotNode != null){
+						Vertex last = lastQueryPivotNode.getNode().asVertex();
+						Vertex current = query.getNode().asVertex();
+						last.addEdge(correlationKey, current);
+					}
+					lastQueryPivotNode = query;
+				}
+			}
+		}
 	}
 	
 	public FramedGraph<Graph> getFramedGraph(){
 		return _framedGraph;
 	}
 	
-	private UUID createNodeUUID(CommandNode node){
+	protected UUID createNodeUUID(CommandNode node){
 		System.out.println(node.get_nodeContent());
 		UUID result = null;
 		if(node.isRootNode()){
@@ -88,24 +206,6 @@ public abstract class AbstractCommand implements ICommandCreator {
 	
 	public <T extends CommandNode> T buildNode(Class<T> cls, String content) throws Exception {
         return this.build(cls, false, content);
-	}
-	
-	private QueryPivotNode buildQueryNode() throws Exception {
-		QueryPivotNode node = null;
-		try{
-			Class<QueryPivotNode> cls = QueryPivotNode.class;
-			Class<?> argTypes[] = {};
-	        Constructor<?> ct = cls.getConstructor(argTypes);
-	        Object arglist[] = { };
-	        Object object = ct.newInstance(arglist);
-	        node = (QueryPivotNode) object;
-		}
-        catch(Exception e){
-        	e.printStackTrace();
-        	throw new Exception(e);
-        }
-		node.set_nodeUUID(UUID.randomUUID());
-        return node;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -146,6 +246,7 @@ public abstract class AbstractCommand implements ICommandCreator {
 	
 	public void buildGraph() throws Exception{
 		get_rootCommandNode().buildNodes(_framedGraph, this.get_commandName(), _commandUUID, _edgeName);
+		this.buildQueryPivots();
 	}
 	
 	/* (non-Javadoc)

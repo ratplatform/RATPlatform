@@ -36,9 +36,13 @@ public class StartQueryPipe implements IInstruction{
 		UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 		PipeResult queryResult = new PipeResult(nodeCallerInMemoryUUID);
 		queryResult.setContent(queryPipe);
+//		System.out.println("queryPipe: " + queryPipe.toString());
 		
 		// COMMENT: setto la rootUUID che poi mi servirà nell'ultimo nodo eseguito: ExecuteQueryPipe
 		queryResult.setRootUUID(rootUUID);
+		
+//		System.out.println("nodeCallerInMemoryUUID: " + nodeCallerInMemoryUUID);
+//		System.out.println("rootDomainUUID: " + rootDomainUUID);
 		
 		return queryResult;
 	}

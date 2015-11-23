@@ -5,11 +5,15 @@
 
 package com.dgr.rat.graphgenerator.commands;
 
+import java.lang.reflect.Constructor;
+
+import com.dgr.rat.command.graph.executor.engine.ratvertexframes.InstructionWrapper;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.graphgenerator.node.wrappers.CommandNode;
+import com.dgr.rat.graphgenerator.node.wrappers.Properties;
+import com.dgr.rat.graphgenerator.node.wrappers.QueryPivotNode;
 import com.dgr.rat.graphgenerator.node.wrappers.RootAdminUser;
 import com.dgr.rat.graphgenerator.node.wrappers.SystemKeyNode;
-import com.dgr.rat.graphgenerator.node.wrappers.UserName;
-import com.dgr.rat.graphgenerator.node.wrappers.UserPwd;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 
@@ -27,37 +31,55 @@ public class AddRootDomainAdminUser extends AbstractCommand{
 	public void addNodesToGraph() throws Exception {
 		RootAdminUser rootNode = this.buildRootNode(RootAdminUser.class, VertexType.RootAdminUser.toString());
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
-		
+
 		SystemKeyNode isUserOfNode = this.buildNode(SystemKeyNode.class,  "is-user-of");
 		isUserOfNode.addCreateVertexInstruction("nodeName", "is-user-of", ReturnType.string);
 		isUserOfNode.addBindInstruction("isUserOfNodeUUID", RATConstants.VertexContentUndefined);
-		this.setQueryPivot(isUserOfNode, rootNode.getType(), VertexType.RootDomain, "StartQueryPipe", "SetQueryPipe","GetAllAdminUsers");
 		
 		SystemKeyNode isPutByNode = this.buildNode(SystemKeyNode.class,  "is-put-by");
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		isPutByNode.addBindInstruction("isPutByNodeUUID", RATConstants.VertexContentUndefined);
-//		this.setQueryPivot(isPutByNode, VertexType.RootDomain);
 		
 		SystemKeyNode isUserNode = this.buildNode(SystemKeyNode.class,  "is-user");
 		isUserNode.addCreateVertexInstruction("nodeName", "is-user", ReturnType.string);
 		
-		UserName userNameNode = this.buildNode(UserName.class);
-		userNameNode.addCreateVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
-		
-		UserPwd userPwd = this.buildNode(UserPwd.class);
-		userPwd.addCreateVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
-		
-//		RATDomainNode rootDomainNode = this.buildNode(RATDomainNode.class, VertexType.RootDomain.toString());
-//		rootDomainNode.addCreateVertexInstruction("rootDomainUUID", RATConstants.VertexContentUndefined, ReturnType.string);
+		Properties properties = this.buildNode(Properties.class);
+		InstructionWrapper instructionWrapper = properties.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string);
+		properties.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
+		properties.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		rootNode.addChild(isUserNode);
-		rootNode.addChild(userPwd);
-		rootNode.addChild(userNameNode);
+		rootNode.addChild(properties);
 		rootNode.addChild(isUserOfNode);
-		
 		isUserOfNode.addChild(isPutByNode);
-//		isUserOfNode.addChild(rootDomainNode);
-//		
-//		isPutByNode.addChild(rootDomainNode);
+		
+		this.setQueryPivot(isUserOfNode, "GetAllAdminUsers", "StartQueryPipe", true);
+		this.setQueryPivot(isUserOfNode, "GetAllAdminUsers", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAllAdminUsers", "GetAllAdminUsers", false);
+		
+		this.setQueryPivot(isUserOfNode, "GetAdminUsersByEmail", "StartQueryPipe", true);
+		this.setQueryPivot(isUserOfNode, "GetAdminUsersByEmail", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAdminUsersByEmail", "SetQueryPipe", false);
+		this.setQueryPivot(properties, "GetAdminUsersByEmail", "SetQueryPipe", false);
+		this.setQueryPivot(instructionWrapper, "GetAdminUsersByEmail", "GetAdminUsersByEmail", false, "userEmail");
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends CommandNode> T buildNode(Class<T> cls) throws Exception {
+		T node = null;
+		try{
+			Class<?> argTypes[] = {AbstractCommand.class};
+	        Constructor<?> ct = cls.getConstructor(argTypes);
+	        Object arglist[] = { this };
+	        Object object = ct.newInstance(arglist);
+	        node = (T) object;
+		}
+        catch(Exception e){
+        	e.printStackTrace();
+        	throw new Exception(e);
+        }
+		node.set_nodeUUID(this.createNodeUUID(node));
+        return node;
 	}
 }

@@ -139,17 +139,6 @@ public class CommandGraphGeneratorTest {
 		return command;
 	}
 	
-//	private AbstractCommand addGetCommandParams(String commandVersion) throws Exception{
-//		String commandName = "GetCommandParams";
-//		
-//		AbstractCommand command = new GetCommandParams(commandName, commandVersion);
-//		command.set_commandType(JSONType.SystemCommands);
-//		command.addNodesToGraph();
-//		command.buildGraph();
-//
-//		return command;
-//	}
-	
 	private ICommandCreator addBindGraphFromDomainToUser(String commandVersion) throws Exception{
 		String commandName = "BindFromDomainToUser";
 		
@@ -209,15 +198,17 @@ public class CommandGraphGeneratorTest {
 		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);
 		
 		ICommandCreator command = null;
+	
+		// AddRootDomainAdminUser
+		command = this.addRootDomainAdminUser("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+		
+		// AddComment
+		command = this.addAddComment("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// LoadCommands
 		command = this.loadCommands("0.1");
-//		String commandName = JSONType.LoadCommands.toString();
-//		
-//		AbstractCommand command = new LoadCommands(commandName, commandVersion);
-//		command.set_commandType(JSONType.SystemCommands);
-//		command.addNodesToGraph();
-//		command.buildGraph();
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// LoadQueries
@@ -227,41 +218,25 @@ public class CommandGraphGeneratorTest {
 		// AddRootDomain
 		command = this.addRootDomain("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-	
-		// AddRootDomainAdminUser
-		command = this.addRootDomainAdminUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-
-		// AddNewDomain
-		command = this.addNewDomain("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
-		// AddNewUser
-		command = this.addNewUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
-		// BindDomaUser
-		command = this.addBindGraphFromDomainToUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		command = this.addBindGraphFromUserToDomain("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
-		// AddComment
-		command = this.addAddComment("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
-		// AddSubComment
-		command = this.addSubComment("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
-//		/*Queries*/
-//		// GetCommandParams
-//		command = this.addGetCommandParams("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+//
+//		// AddNewDomain
+//		command = this.addNewDomain("0.1");
+//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 //		
-//		// GetAllDomains
-//		command = this.addGetAllDomains("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion);
+//		// AddNewUser
+//		command = this.addNewUser("0.1");
+//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+//		
+//		// BindDomaUser
+//		command = this.addBindGraphFromDomainToUser("0.1");
+//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+//		command = this.addBindGraphFromUserToDomain("0.1");
+//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+//		
+//		
+//		// AddSubComment
+//		command = this.addSubComment("0.1");
+//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 	}
 	
 	@Test

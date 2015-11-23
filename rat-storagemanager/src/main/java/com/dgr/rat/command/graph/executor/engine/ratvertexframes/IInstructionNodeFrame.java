@@ -38,6 +38,9 @@ public interface IInstructionNodeFrame extends IRATInstructionFrame{
     public IInstructionParameterNodeFrame getInstructionParameter(int num);
     
     @JavaHandler
+    public IInstructionParameterNodeFrame getInstructionParameter(String paramName);
+    
+    @JavaHandler
     public long getNumberOfInstructionParameters();
     
     abstract class Impl implements JavaHandlerContext<Vertex>, IInstructionNodeFrame{
@@ -49,6 +52,21 @@ public interface IInstructionNodeFrame extends IRATInstructionFrame{
     		while(it.hasNext()){
     			IInstructionParameterEdgeFrame instructionInfo = it.next();
     			if(instructionInfo.getWeight() == num){
+    				result = instructionInfo.getInstructionParameter();
+    				break;
+    			}
+    		}
+    		return result;
+    	}
+    	
+    	@Override
+    	@JavaHandler
+    	public IInstructionParameterNodeFrame getInstructionParameter(String paramName) {
+    		Iterator<IInstructionParameterEdgeFrame>it = this.getInstructionParameterInfo().iterator();
+    		IInstructionParameterNodeFrame result = null;
+    		while(it.hasNext()){
+    			IInstructionParameterEdgeFrame instructionInfo = it.next();
+    			if(instructionInfo.getInstructionParameter().getVertexUserCommandsInstructionsParameterNameField().equalsIgnoreCase(paramName)){
     				result = instructionInfo.getInstructionParameter();
     				break;
     			}

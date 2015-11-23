@@ -17,15 +17,16 @@ public interface IRATFrame extends VertexFrame{
     @Property(RATConstants.VertexLabelField)
     public String getVertexLabelField();
     
-    @Property(RATConstants.VertexCommandOwnerField)
+    @Property(RATConstants.GraphCommandOwner)
     public void setVertexCommandOwnerField(final String commandOwner);
     
-    @Property(RATConstants.VertexCommandOwnerField)
+    @Property(RATConstants.GraphCommandOwner)
     public String getVertexCommandOwnerField();
     
     // COMMENT: UUID uguale per tutti gli elementi del comando: vertices e UUID
     @Property(RATConstants.CommandGraphUUID)
     public void setCommandGraphUUID(final String uuid);
+    
     @Property(RATConstants.CommandGraphUUID)
     public String geCommandGraphUUID();
     
@@ -38,6 +39,7 @@ public interface IRATFrame extends VertexFrame{
     // COMMENT: UUID che identifica univocamente questo vertice
     @Property(RATConstants.VertexUUIDField)
     public void setVertexUUIDField(final String uuid);
+    
     @Property(RATConstants.VertexUUIDField)
     public String getVertexUUIDField();
 }

@@ -37,7 +37,7 @@ public class GetAllUsers implements IInstruction{
 		String edgeLabel = invoker.getNodeParamValue("edgeLabel");
 		
 		// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
-		// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.
+		// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collegata questa instruction.
 		UUID nodeUUID = nodeCaller.getParent().getInMemoryNodeUUID();
 		InstructionResultContainer commandResponse = invoker.getInstructionResult(nodeUUID);
 		if(commandResponse == null){
