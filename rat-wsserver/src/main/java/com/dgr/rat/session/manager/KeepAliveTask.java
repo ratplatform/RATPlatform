@@ -23,6 +23,7 @@ import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.commons.utils.DateUtils;
 import com.dgr.rat.json.KeepAliveHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.messages.MessageSender;
 import com.dgr.rat.webservices.RATWebServicesContextListener;
 import com.dgr.utils.AppProperties;
@@ -117,7 +118,7 @@ public class KeepAliveTask implements Runnable{
 		// TODO: da rivedere: se lancia un'Exception, dentro _map rimangono dei dati che non verranno mai
 		// rimossi
 		try {
-			JsonHeader header = KeepAliveHelpers.deserializeKeepAliveJson(message);
+			JsonHeader header = RATJsonUtils.deserializeJsonHeader(message);
 			statusCode = header.getStatusCode();
 			// COMMENT: ora in cui RATStorageManager ha inviato il messaggio di risposta
 //			String date = header.getDate();
