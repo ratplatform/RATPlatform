@@ -5,6 +5,7 @@
 
 package com.dgr.rat.graphgenerator.commands;
 
+import com.dgr.rat.command.graph.executor.engine.ratvertexframes.InstructionWrapper;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.graphgenerator.node.wrappers.NewDomainNode;
 import com.dgr.rat.graphgenerator.node.wrappers.SystemKeyNode;
@@ -28,9 +29,10 @@ public class AddNewDomain extends AbstractCommand{
 		// Inoltre paramName e paramValue possono contenere qualuque cosa purché il secondo non sia VertexContentUndefined
 		// altrimenti il comando viene inserito tra quelli di cui l'utente deve valorizzare i parametri
 		rootNode.addInstruction("InitDomain", RATConstants.VertexContentField, "#", ReturnType.string);
+		InstructionWrapper instructionWrapper = rootNode.addPropertyVertexInstruction("domainName", RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
-		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+		//rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		SystemKeyNode isDomainNode = this.buildNode(SystemKeyNode.class,  "is-domain");
 		isDomainNode.addCreateVertexInstruction("nodeName", "is-domain", ReturnType.string);
@@ -42,7 +44,7 @@ public class AddNewDomain extends AbstractCommand{
 		isPutByNode2.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: Bind to RootDomain RAT
 		isPutByNode2.addBindInstruction(RATConstants.VertexContentUndefined);
-		this.setQueryPivot(isPutByNode2, rootNode.getType(), VertexType.RootDomain, "StartQueryPipe", "SetQueryPipe", "GetAllDomains");
+//		this.setQueryPivot(isPutByNode2, rootNode.getType(), VertexType.RootDomain, "StartQueryPipe", "SetQueryPipe", "GetAllDomains");
 		
 //		// TODO: correggere in seconda battuta: ho il problema che se ho diversi nomi di parametri uguali,
 //		// quando setto i parametri non so quale scegliere
@@ -53,5 +55,14 @@ public class AddNewDomain extends AbstractCommand{
 		rootNode.addChild(isPutByNode2);
 		isDomainNode.addChild(isPutByNode);
 //		isPutByNode2.addChild(placeHolderNode);
+		
+		this.setQueryPivot(isPutByNode2, "GetAllDomains", "StartQueryPipe", true);
+		this.setQueryPivot(isPutByNode2, "GetAllDomains", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAllDomains", "GetAllNodesByType", false);
+		
+		this.setQueryPivot(isPutByNode2, "GetDomainByName", "StartQueryPipe", true);
+		this.setQueryPivot(isPutByNode2, "GetDomainByName", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetDomainByName", "SetQueryPipe", false);
+		this.setQueryPivot(instructionWrapper, "GetDomainByName", "GetUserByEmail", false, "domainName");
 	}
 }

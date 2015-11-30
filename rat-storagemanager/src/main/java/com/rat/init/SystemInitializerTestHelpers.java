@@ -7,10 +7,12 @@ package com.rat.init;
 
 import org.junit.Assert;
 import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
+import com.dgr.rat.json.utils.VertexType;
 
 public class SystemInitializerTestHelpers {
 	public static String createAddRootDomainAdminUser(String fileName, String rootDomainUUID, String userAdminName, String userAdminPwd, String email) throws Exception{
@@ -46,7 +48,7 @@ public class SystemInitializerTestHelpers {
 		return commandJSON;
 	}
 	
-	public static String createGetUserByEmail(String fileName, String rootDomainUUID, String userEmail) throws Exception{
+	public static String createGetUserByEmail(String fileName, String rootDomainUUID, String paramName, String paramValue) throws Exception{
 		String json = RATHelpers.readQueryJSONFile(fileName);
 		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
@@ -57,8 +59,25 @@ public class SystemInitializerTestHelpers {
 		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
 		Assert.assertEquals(1, changed);
 		
-		changed = remoteCommandsContainer.setValue("userEmail", userEmail, ReturnType.string);
+		changed = remoteCommandsContainer.setValue(paramName, paramValue, ReturnType.string);
 		System.out.println("userEmail changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+		
+		return commandJSON;
+	}
+	
+	public static String createGetAllNodesByType(String fileName, String rootDomainUUID) throws Exception{
+		String json = RATHelpers.readQueryJSONFile(fileName);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+		
+		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+		
+		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
 		Assert.assertEquals(1, changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
@@ -102,6 +121,36 @@ public class SystemInitializerTestHelpers {
 		String newJson = RATJsonUtils.getRATJson(jsonHeader);
 		
 		return newJson;
+	}
+	
+	public static String createNewDomain(String fileName, String rootDomainUUID, String domainName) throws Exception{
+		String json = RATHelpers.readCommandJSONFile(fileName);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+		
+		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+		
+		int changed = remoteCommandsContainer.setValue("nodeUUID", rootDomainUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("VertexLabelField", domainName, ReturnType.string);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+//		changed = remoteCommandsContainer.setValue("VertexContentField", domainName, ReturnType.string);
+//		System.out.println("Changed in " + fileName + ": " + changed);
+//		Assert.assertEquals(1, changed);
+		
+		changed = remoteCommandsContainer.setValue("domainName", domainName, ReturnType.string);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		Assert.assertEquals(1, changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
+		
+		return commandJSON;
 	}
 	
 //	private static Response execute(String commandJSON) throws Exception{
@@ -155,32 +204,6 @@ public class SystemInitializerTestHelpers {
 //		return commandJSON;
 //	}
 	
-	public static String createNewDomain(String fileName, String rootDomainUUID, String domainName) throws Exception{
-		String json = RATHelpers.readCommandJSONFile(fileName);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("nodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("Changed in " + fileName + ": " + changed);
-		Assert.assertEquals(1, changed);
-		
-		changed = remoteCommandsContainer.setValue("VertexLabelField", domainName, ReturnType.string);
-		System.out.println("Changed in " + fileName + ": " + changed);
-		Assert.assertEquals(1, changed);
-		
-		changed = remoteCommandsContainer.setValue("VertexContentField", domainName, ReturnType.string);
-		System.out.println("Changed in " + fileName + ": " + changed);
-		Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-//		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
-		
-		return commandJSON;
-	}
-	
 	public static String bindUserToDomain(String fileName, String domainUUID, String userUUID) throws Exception{
 		String json = RATHelpers.readCommandJSONFile(fileName);
 		
@@ -189,7 +212,7 @@ public class SystemInitializerTestHelpers {
 		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
-		int changed = remoteCommandsContainer.setValue("domainUUID", domainUUID, ReturnType.uuid);
+		int changed = remoteCommandsContainer.setValue("domainNodeUUID", domainUUID, ReturnType.uuid);
 		System.out.println("Changed in " + fileName + ": " + changed);
 		
 		changed = remoteCommandsContainer.setValue("userUUID", userUUID, ReturnType.uuid);

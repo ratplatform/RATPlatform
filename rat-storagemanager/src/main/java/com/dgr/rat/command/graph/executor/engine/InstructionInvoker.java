@@ -253,7 +253,7 @@ public class InstructionInvoker implements IInstructionInvoker{
 		
 		InstructionResultInfo info = new InstructionResultInfo(uuid);
 		info.setStoredNodeUUID(visited.getStoredNodeUUID());
-		info.setStoredNodeID(visited.getId());
+		info.setStoredNodeID(visited.getInMemoryNodeID());
 		info.setInstructionName(_currentInstruction);
 		
 		_commandResult.setInstructionResult(info, instructionResult);
@@ -273,7 +273,7 @@ public class InstructionInvoker implements IInstructionInvoker{
 		
 		InstructionResultInfo info = new InstructionResultInfo(uuid);
 		info.setStoredNodeUUID(visited.getStoredNodeUUID());
-		info.setStoredNodeID(visited.getId());
+		info.setStoredNodeID(visited.getInMemoryNodeID());
 		info.setInstructionName(instructionName);
 		
 		result.setInstructionResult(info, instructionResult);

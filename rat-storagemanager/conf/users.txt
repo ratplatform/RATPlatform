@@ -5,8 +5,7 @@
         "email": "dgr@gmail.com",
         "domains": [
             "domain dgr",
-            "domain dgr1",
-	    "RAT"
+            "domain dgr1"
         ]
     },
     "dgr1": {
@@ -14,8 +13,7 @@
         "password": "dgr1",
         "email": "dgr1@gmail.com",
         "domains": [
-            "domain dgr1",
-	    "RAT"
+            "domain dgr1"
         ]
     }
 }

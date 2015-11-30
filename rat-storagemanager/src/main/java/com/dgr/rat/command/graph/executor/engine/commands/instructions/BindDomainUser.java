@@ -24,12 +24,13 @@ public class BindDomainUser implements IInstruction{
 	public BindDomainUser() {
 
 	}
-
+	
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		IStorage storage = invoker.getStorage();
 		UUID vertexCallerUUID = nodeCaller.getStoredNodeUUID();
 		Vertex outVertex = storage.getVertex(vertexCallerUUID);
-		UUID edgeUUID = null;
+		UUID edgeUUID = UUID.randomUUID();;
+		
 		Iterator<String>it = invoker.getParameterNameIterator();
 		while(it.hasNext()){
 			String paramName = it.next();
@@ -43,13 +44,12 @@ public class BindDomainUser implements IInstruction{
 			Vertex inVertex = storage.getVertex(UUID.fromString(paramValue));
 			VertexType inVertexType = VertexType.fromString(inVertex.getProperty(RATConstants.VertexTypeField).toString());
 			if(VertexType.compare(inVertexType, VertexType.User)){
-//				edge = inVertex.addEdge(nodeCaller.getCommandName(), outVertex);
 				edge = outVertex.addEdge(nodeCaller.getCommandName(), inVertex);
 			}
 			else{
 				edge = inVertex.addEdge(nodeCaller.getCommandName(), outVertex);
-//				edge = outVertex.addEdge(nodeCaller.getCommandName(), inVertex);
 			}
+			outVertex.setProperty(RATConstants.VertexIsRootField, false);
 
 			edge.setProperty(RATConstants.EdgeUUIDField, edgeUUID.toString());
 		}

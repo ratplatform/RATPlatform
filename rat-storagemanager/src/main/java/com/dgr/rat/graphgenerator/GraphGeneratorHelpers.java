@@ -16,6 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.tools.ant.util.DateUtils;
+
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
@@ -82,6 +84,8 @@ public class GraphGeneratorHelpers {
 //		String jsonPath = ".." + sep + appPath + sep + destinationFolder + sep + commandName + ".json";
 		String jsonPath = ".." + sep + appPath + sep + destinationFolder + sep + commandName + ".json";
 		String html = text.replace(resultPlaceholder, commandName + ".json");
+		String date = DateUtils.getDateForHeader();
+		html = html.replace("@datePlaceholder@", date);
 		html = html.replace(pageTitlePlaceholder, commandName);
 		FileUtils.write(".." + sep + appPath + sep + destinationFolder + sep + commandName + ".html", html, false);
 	    

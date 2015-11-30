@@ -43,13 +43,16 @@ public class AddRootDomainAdminUser extends AbstractCommand{
 		SystemKeyNode isUserNode = this.buildNode(SystemKeyNode.class,  "is-user");
 		isUserNode.addCreateVertexInstruction("nodeName", "is-user", ReturnType.string);
 		
-		Properties properties = this.buildNode(Properties.class);
-		InstructionWrapper instructionWrapper = properties.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string);
-		properties.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
-		properties.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
+//		Properties properties = this.buildNode(Properties.class);
+//		InstructionWrapper instructionWrapper = properties.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string);
+//		properties.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
+//		properties.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
+		InstructionWrapper instructionWrapper = rootNode.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string);
+		rootNode.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
+		rootNode.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		rootNode.addChild(isUserNode);
-		rootNode.addChild(properties);
+//		rootNode.addChild(properties);
 		rootNode.addChild(isUserOfNode);
 		isUserOfNode.addChild(isPutByNode);
 		
@@ -57,11 +60,15 @@ public class AddRootDomainAdminUser extends AbstractCommand{
 		this.setQueryPivot(isUserOfNode, "GetAllAdminUsers", "SetQueryPipe", false);
 		this.setQueryPivot(rootNode, "GetAllAdminUsers", "GetAllAdminUsers", false);
 		
-		this.setQueryPivot(isUserOfNode, "GetAdminUsersByEmail", "StartQueryPipe", true);
-		this.setQueryPivot(isUserOfNode, "GetAdminUsersByEmail", "SetQueryPipe", false);
-		this.setQueryPivot(rootNode, "GetAdminUsersByEmail", "SetQueryPipe", false);
-		this.setQueryPivot(properties, "GetAdminUsersByEmail", "SetQueryPipe", false);
-		this.setQueryPivot(instructionWrapper, "GetAdminUsersByEmail", "GetAdminUsersByEmail", false, "userEmail");
+//		this.setQueryPivot(isUserOfNode, "GetAdminUserByEmail", "StartQueryPipe", true);
+//		this.setQueryPivot(isUserOfNode, "GetAdminUserByEmail", "SetQueryPipe", false);
+//		this.setQueryPivot(rootNode, "GetAdminUserByEmail", "SetQueryPipe", false);
+//		this.setQueryPivot(properties, "GetAdminUserByEmail", "SetQueryPipe", false);
+//		this.setQueryPivot(instructionWrapper, "GetAdminUserByEmail", "GetUserByEmail", false, "userEmail");
+		this.setQueryPivot(isUserOfNode, "GetAdminUserByEmail", "StartQueryPipe", true);
+		this.setQueryPivot(isUserOfNode, "GetAdminUserByEmail", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAdminUserByEmail", "SetQueryPipe", false);
+		this.setQueryPivot(instructionWrapper, "GetAdminUserByEmail", "GetUserByEmail", false, "userEmail");
 	}
 	
 	@Override

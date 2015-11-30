@@ -70,7 +70,7 @@ public class InitDB {
 	private String _domainUUID = null;
 	private String _domain = null;
 	private String _userName = null;
-	private FileSystemXmlApplicationContext _context = null;
+//	private FileSystemXmlApplicationContext _context = null;
 	
 	public InitDB() {
 		// TODO Auto-generated constructor stub
@@ -220,7 +220,7 @@ public class InitDB {
 	}
 	
 	private boolean domainExists(String userUUID, String domainName) throws Exception{
-		String commandJSON  = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", userUUID, domainName);
+		String commandJSON  = QueryHelpers.queryGetUserDomainByName("GetDomainByName.conf", userUUID, domainName);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		int num = RATHelpers.countVertex(jsonResponse, VertexType.Domain);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));

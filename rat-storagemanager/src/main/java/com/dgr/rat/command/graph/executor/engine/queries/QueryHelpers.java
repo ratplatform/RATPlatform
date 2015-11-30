@@ -1,5 +1,6 @@
 package com.dgr.rat.command.graph.executor.engine.queries;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,23 +11,25 @@ import com.dgr.rat.command.graph.executor.engine.result.InstructionResultContain
 import com.dgr.rat.command.graph.executor.engine.result.queries.PipeResult;
 import com.dgr.rat.command.graph.executor.engine.result.queries.QueryResult;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.VertexType;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 import com.tinkerpop.pipes.PipeFunction;
+import com.tinkerpop.pipes.util.PipesFunction;
 
 public class QueryHelpers {
-	public static Graph getResultGraph(Vertex rootVertex, final List<Vertex> results){
+	@SuppressWarnings("unchecked")
+	public static Graph getResultGraph(Vertex rootVertex, final List<Vertex> results) throws Exception{
 		Graph graph = new TinkerGraph();
 		// COMMENT: recupero la rootUUID passata tra i comandi; essa rappresenta il nodo al quale sonop collegati tutti i nodi 
 		// ricavati qui
 		Vertex newRootVertex = graph.addVertex(null);
-		for(String key : rootVertex.getPropertyKeys()){
-			Object value = rootVertex.getProperty(key);
-			newRootVertex.setProperty(key, value);
-		}
+		RATHelpers.duplicateVertex(rootVertex, false, newRootVertex);
 		
 //		GremlinPipeline<Vertex, Vertex> userPipe = new GremlinPipeline<Vertex, Vertex>(rootVertex);
 //		Vertex userNameVertex = userPipe.outE().inV().filter(filterFunction).next();
@@ -36,10 +39,23 @@ public class QueryHelpers {
 		
 		for(Vertex vertex : results){
 			Vertex newVertex = graph.addVertex(null);
-			for(String key : vertex.getPropertyKeys()){
-				Object value = vertex.getProperty(key);
-				newVertex.setProperty(key, value);
-			}
+			RATHelpers.duplicateVertex(vertex, false, newVertex);
+			
+			// COMMENT prenso il nodo di tipo Properties, se c'è.
+//			GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(vertex);
+//			List<Vertex> properties = (List<Vertex>) pipe.both().has(RATConstants.VertexTypeField, VertexType.Properties.toString()).toList();
+//			if(results.size() > 1){
+//				throw new Exception();
+//				// TODO log
+//			}
+//			if(!properties.isEmpty()){
+//				Vertex property = properties.get(0);
+//				Vertex newProperty = graph.addVertex(null);
+//				RATHelpers.duplicateVertex(property, false, newProperty);
+//				newVertex.addEdge("", newProperty);
+//			}
+//			System.out.println(properties.toString());
+			
 			newVertex.setProperty(RATConstants.VertexIsRootField, false);
 			newRootVertex.addEdge("", newVertex);
 		}

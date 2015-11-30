@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
+
+import org.apache.tools.ant.util.DateUtils;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.graphgenerator.MakeSigmaJSON;
@@ -80,6 +82,8 @@ public class TestHelpers {
 		
 		String path = ".." + sep + appPath + sep + destinationFolder + sep + resultFilename + ".json";
 		String html = text.replace(resultPlaceholder, resultFilename + ".json");
+		String date = DateUtils.getDateForHeader();
+		html = html.replace("@datePlaceholder@", date);
 		html = html.replace(pageTitlePlaceholder, resultFilename);
 		
 		FileUtils.write(".." + sep + appPath + sep + destinationFolder + sep + resultFilename + ".html", html, false);

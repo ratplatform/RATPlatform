@@ -25,6 +25,7 @@ import com.tinkerpop.pipes.util.PipesFunction;
 
 public class CreateJsonRemoteCommandRequest {
 	private Map<String, RemoteParameter> _parameters = new HashMap<String, RemoteParameter>();
+//	private List<Map<String, RemoteParameter>> _parameters = new ArrayList<Map<String, RemoteParameter>>();
 	private List<IRATFrame>_alreadyExplored = new ArrayList<IRATFrame>();
 	
 	public CreateJsonRemoteCommandRequest() {
@@ -36,13 +37,20 @@ public class CreateJsonRemoteCommandRequest {
 
 		ObjectMapper mapper = new ObjectMapper();
 		String output = mapper.writeValueAsString(_parameters);
+//		String output = "";
+//		for(Map<String, RemoteParameter> map : _parameters){
+//			if(output.length() > 0){
+//				output += ",";
+//			}
+//			output += mapper.writeValueAsString(map);
+//		}
 		
 		return output;
 	}
 	
-	public Map<String, RemoteParameter> getParameters(){
-		return _parameters;
-	}
+//	public Map<String, RemoteParameter> getParameters(){
+//		return _parameters;
+//	}
 	
 	private void makeRemoteClientCommand(IRATNodeFrame rootNode) throws Exception{
 		if(!_alreadyExplored.contains(rootNode)){
@@ -86,10 +94,26 @@ public class CreateJsonRemoteCommandRequest {
 	
 	private void getRemoteClientCommandInstructions(IInstructionNodeFrame instruction) throws Exception{
 		long num = instruction.getNumberOfInstructionParameters();
+		Map<String, RemoteParameter> instructionParameters = new HashMap<String, RemoteParameter>();
 		for(int inc = 0; inc < num; inc++){
 			IInstructionParameterNodeFrame param = instruction.getInstructionParameter(inc);
+			
+//			RemoteParameter parameter = new RemoteParameter();
+//			parameter.setInstructionOrder(param.getInstructionOrderField());
+//			parameter.setParameterName(param.getVertexUserCommandsInstructionsParameterNameField());
+//			parameter.setParameterValue(param.getVertexUserCommandsInstructionsParameterValueField());
+//			parameter.setReturnType(param.getVertexUserCommandsInstructionsParameterReturnTypeField());
+//			parameter.setVertexUUIDField(param.getVertexUUIDField());
+////			_parameters.put(param.getVertexUUIDField(), parameter);
+//			if(instructionParameters.containsKey(param.getVertexUserCommandsInstructionsParameterNameField())){
+//				throw new Exception();
+//			}
+//			instructionParameters.put(param.getVertexUserCommandsInstructionsParameterNameField(), parameter);
+			
 			this.getInstructionParameters(param);
 		}
+		
+//		_parameters.add(instructionParameters);
 	}
 	
 	private void getInstructionParameters(IInstructionParameterNodeFrame param) throws Exception{

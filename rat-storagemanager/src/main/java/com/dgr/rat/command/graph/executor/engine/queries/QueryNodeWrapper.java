@@ -120,7 +120,7 @@ public class QueryNodeWrapper implements ICommandNodeVisitable{
 	 * @see com.dgr.rat.command.graph.ICommandProxyNodeVisitable#getId()
 	 */
 	@Override
-	public Object getId() {
+	public Object getInMemoryNodeID() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -199,12 +199,8 @@ public class CommandGraphGeneratorTest {
 		
 		ICommandCreator command = null;
 	
-		// AddRootDomainAdminUser
-		command = this.addRootDomainAdminUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
-		// AddComment
-		command = this.addAddComment("0.1");
+		// AddRootDomain
+		command = this.addRootDomain("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
 		// LoadCommands
@@ -215,23 +211,27 @@ public class CommandGraphGeneratorTest {
 		command = this.loadQueries("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		
-		// AddRootDomain
-		command = this.addRootDomain("0.1");
+		// AddRootDomainAdminUser
+		command = this.addRootDomainAdminUser("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-//
-//		// AddNewDomain
-//		command = this.addNewDomain("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+		
+		// AddNewUser
+		command = this.addNewUser("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+		
+		// AddNewDomain
+		command = this.addNewDomain("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 //		
-//		// AddNewUser
-//		command = this.addNewUser("0.1");
+//		// AddComment
+//		command = this.addAddComment("0.1");
 //		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-//		
-//		// BindDomaUser
-//		command = this.addBindGraphFromDomainToUser("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-//		command = this.addBindGraphFromUserToDomain("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+
+//		// BindDomainUser
+		command = this.addBindGraphFromDomainToUser("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+		command = this.addBindGraphFromUserToDomain("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 //		
 //		
 //		// AddSubComment

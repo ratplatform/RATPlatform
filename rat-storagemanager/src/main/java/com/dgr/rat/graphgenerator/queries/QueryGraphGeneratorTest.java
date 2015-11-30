@@ -185,15 +185,18 @@ public class QueryGraphGeneratorTest {
 	private void addQueries() throws Exception{
 		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
 		String queryVersion = "0.1";
-		this.addNodesToGraph("AddRootDomainAdminUserTemplate.conf", queryVersion);
-		this.addNodesToGraph("AddCommentTemplate.conf", queryVersion);
+		
+//		this.addQuery("AddRootDomainAdminUserTemplate.conf", queryVersion);
+//		this.addQuery("AddNewUserTemplate.conf", queryVersion);
+//		this.addQuery("AddNewDomainTemplate.conf", queryVersion);
+		this.addQuery("BindFromUserToDomainTemplate.conf", queryVersion);
 		
 		String javaScript = _buildQueryJavaScript.getJavaScript();
 //		System.out.println(javaScript);
 		GraphGeneratorHelpers.writeJavaScript("queries", javaScript);
 	}
 	
-	public void addNodesToGraph(String fileName, String queryVersion) throws Exception {
+	public void addQuery(String fileName, String queryVersion) throws Exception {
 		String ratJson = FileUtils.fileRead(GraphGeneratorHelpers.CommandTemplatesFolder + FileSystems.getDefault().getSeparator() + fileName);
 		
 		Graph commandGraph = GraphGeneratorHelpers.getRATJsonSettingsGraph(ratJson);

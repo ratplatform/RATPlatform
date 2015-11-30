@@ -121,7 +121,7 @@ public class BindToParentSystemInstruction implements ICommandNodeVisitable, IIn
 	 * @see com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable#getId()
 	 */
 	@Override
-	public Object getId() {
+	public Object getInMemoryNodeID() {
 		throw new UnsupportedOperationException();
 	}
 

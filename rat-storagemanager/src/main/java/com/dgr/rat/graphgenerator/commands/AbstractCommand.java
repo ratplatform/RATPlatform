@@ -21,6 +21,7 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.node.wrappers.CommandNode;
 import com.dgr.rat.graphgenerator.node.wrappers.QueryPivotNode;
+import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -140,10 +141,27 @@ public abstract class AbstractCommand implements ICommandCreator {
 				while(qIt.hasNext()){
 					QueryPivotNode query = qIt.next();
 					
+					query.buildNodes(_framedGraph, this.get_commandName(), _commandUUID, _edgeName);
+					IRATNodeQueryPivotFrame childNode = query.getNode();
+					
 					Object obj = queryPivotNodeManager.getCommandNode();
 					if(obj instanceof CommandNode){
 						CommandNode node = (CommandNode) obj;
 						owner = node.getNode().asVertex();
+						
+						String paramName = query.getParamName();
+						if(paramName != null){
+							IInstructionParameterNodeFrame instructionParameter = _framedGraph.addVertex(null, IInstructionParameterNodeFrame.class);
+							instructionParameter.setVertexUserCommandsInstructionsParameterNameField(paramName);
+							instructionParameter.setVertexUserCommandsInstructionsParameterValueField(RATConstants.VertexContentUndefined);
+							instructionParameter.setVertexUserCommandsInstructionsParameterReturnTypeField(ReturnType.string);
+							instructionParameter.setVertexLabelField(VertexType.InstructionParameter.toString());
+							instructionParameter.setVertexContentField(VertexType.InstructionParameter.toString());
+							instructionParameter.setVertexUUIDField(UUID.randomUUID().toString());
+							instructionParameter.setVertexRoleValueRootField(false);
+							instructionParameter.setVertexTypeField(VertexType.InstructionParameter);
+							childNode.asVertex().addEdge(RATConstants.QueryPivotEdgeLabel, instructionParameter.asVertex());
+						}
 					}
 					else if(obj instanceof InstructionWrapper){
 						String paramName = query.getParamName();
@@ -161,8 +179,6 @@ public abstract class AbstractCommand implements ICommandCreator {
 						throw new Exception();
 					}
 					
-					query.buildNodes(_framedGraph, this.get_commandName(), _commandUUID, _edgeName);
-					IRATNodeQueryPivotFrame childNode = query.getNode();
 					owner.addEdge(RATConstants.QueryPivotEdgeLabel, childNode.asVertex());
 					if(lastQueryPivotNode != null){
 						Vertex last = lastQueryPivotNode.getNode().asVertex();

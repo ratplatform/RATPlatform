@@ -23,6 +23,8 @@ public class SetQueryPipe implements IInstruction{
 
 	}
 
+	// TODO: per una maggiore flessibilità, qui devo poter capire se l'edge che mi collega al nodeCaller è in oppure out
+	// in questo modo posso generare una GremlinPipeline più accurata
 	// TODO: passare direttamente la classe coi parametri
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
@@ -50,7 +52,7 @@ public class SetQueryPipe implements IInstruction{
 		}
 		
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		pipe.in(edgeLabel).has(RATConstants.VertexContentField, content);
+		pipe.both(edgeLabel).has(RATConstants.VertexContentField, content);
 //		System.out.println("queryPipe: " + pipe.toString());
 		
 		UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();

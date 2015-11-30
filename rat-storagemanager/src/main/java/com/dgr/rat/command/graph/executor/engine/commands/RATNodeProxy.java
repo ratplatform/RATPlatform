@@ -133,7 +133,7 @@ public class RATNodeProxy implements ICommandNodeVisitable{
 	 * @see com.dgr.rat.command.decorator.IVisitable#getId()
 	 */
 	@Override
-	public Object getId() {
+	public Object getInMemoryNodeID() {
 		// TODO Auto-generated method stub
 		return _node.asVertex().getId();
 	}

@@ -29,16 +29,16 @@ public class GetAllUserDomains implements IInstruction{
 		// TODO Auto-generated constructor stub
 	}
 	
-	private static final PipeFunction<Vertex, Boolean> userNamefilterFunction = new PipesFunction<Vertex, Boolean>(){
-		@Override
-		public Boolean compute(Vertex vertex){
-			boolean result = false;
-			String content = vertex.getProperty(RATConstants.VertexTypeField);
-			
-			result = content.equalsIgnoreCase(VertexType.UserName.toString()) ? true : false;
-			return result;
-		}
-	};
+//	private static final PipeFunction<Vertex, Boolean> userNamefilterFunction = new PipesFunction<Vertex, Boolean>(){
+//		@Override
+//		public Boolean compute(Vertex vertex){
+//			boolean result = false;
+//			String content = vertex.getProperty(RATConstants.VertexTypeField);
+//			
+//			result = content.equalsIgnoreCase(VertexType.UserName.toString()) ? true : false;
+//			return result;
+//		}
+//	};
 	
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		String type = invoker.getNodeParamValue(RATConstants.VertexTypeField);
