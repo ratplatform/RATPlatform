@@ -35,7 +35,7 @@ public class CreateRootVertex implements IInstruction{
 		String paramName = it.next();
 		String paramValue = invoker.getNodeParamValue(paramName);
 		IStorage storage = invoker.getStorage();
-		
+
 		UUID inMemoryNodeUUID = nodeCaller.getInMemoryNodeUUID();
 		UUID storedNodeUUID = nodeCaller.getStoredNodeUUID();
 		Vertex vertex = null;

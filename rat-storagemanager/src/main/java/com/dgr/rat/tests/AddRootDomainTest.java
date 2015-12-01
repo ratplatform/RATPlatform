@@ -242,7 +242,7 @@ public class AddRootDomainTest {
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
-			commandJSON = SystemInitializerTestHelpers.createGetUserByEmail("GetAllUserDomains.conf", rootDomainUUID, "domainName", "DGR1 Domain 2");
+			commandJSON = SystemInitializerTestHelpers.createGetUsersAndDomains("GetAllUserDomains.conf", dgr1UUID, VertexType.Domain);
 			response = this.executeRemoteCommand(commandJSON);
 			json = JSONObjectBuilder.serializeCommandResponse(response);
 			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
@@ -251,8 +251,23 @@ public class AddRootDomainTest {
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
+			commandJSON = SystemInitializerTestHelpers.createGetUsersAndDomains("GetAllDomainUsers.conf", DGRDomain2UUID, VertexType.User);
+			response = this.executeRemoteCommand(commandJSON);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+			resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
-			
+			commandJSON = SystemInitializerTestHelpers.createGetUserDomainByName("GetUserDomainByName.conf", dgr1UUID, "DGR1 Domain 2", VertexType.User);
+			response = this.executeRemoteCommand(commandJSON);
+			json = JSONObjectBuilder.serializeCommandResponse(response);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+			resultFilename = dir + "GetUserDomainByName.conf" + "QueryResult";
+			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+			TestHelpers.writeGraphToJson(alchemyJson, path);
 			
 			
 			/**/

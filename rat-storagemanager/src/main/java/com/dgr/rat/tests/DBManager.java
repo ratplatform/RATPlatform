@@ -1,15 +1,10 @@
 package com.dgr.rat.tests;
 
-import java.nio.file.FileSystems;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
-
-import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.json.toolkit.RATHelpers;
 
 public class DBManager {
 	private Connection _connect = null;
@@ -17,6 +12,35 @@ public class DBManager {
 	
 	public DBManager(FileSystemXmlApplicationContext context) {
 		_context = context;
+	}
+	
+	public void addDomain(String domainUUID, String domainName) throws Exception{
+		PreparedStatement preparedStatement = null;
+		try{
+			if(!this.exists("domain",  "domainUUID", domainUUID)){
+				preparedStatement = _connect.prepareStatement("insert into ratwsserver.domain values (default, ?, ?)");
+				preparedStatement.setString(1, domainName);
+				preparedStatement.setString(2, domainUUID);
+				preparedStatement.executeUpdate();
+				
+				this.setAdminPermissions("domainadmin", domainUUID, "createcollaborationdomain");
+				this.setAdminPermissions("domainadmin", domainUUID, "createnewuser");
+				this.setAdminPermissions("domainadmin", domainUUID, "deleteuser");
+				this.setAdminPermissions("domainadmin", domainUUID, "deletecollaborationdomain");
+				this.setAdminPermissions("domainadmin", domainUUID, "comment");
+				this.setAdminPermissions("domainadmin", domainUUID, "deletecomment");
+				this.setAdminPermissions("domainadmin", domainUUID, "executeusercommands");
+				this.setAdminPermissions("domainadmin", domainUUID, "choosedomain");
+		    }
+		}
+		catch(Exception e){
+			throw new Exception(e);
+		}
+		finally{
+			if(preparedStatement != null){
+				preparedStatement.close();
+			}
+		}
 	}
 	
 	public void openDB() throws Exception{
@@ -100,7 +124,7 @@ public class DBManager {
 		}
 	}
 	
-	private void setUserDomain(String userUUID, String domainUUID, String domainName) throws Exception{
+	public void setUserDomain(String userUUID, String domainUUID, String domainName) throws Exception{
 		PreparedStatement preparedStatement = null;
 		try{
 			if(!this.exists("user_domain",  "domainUUID", domainUUID)){
@@ -121,7 +145,7 @@ public class DBManager {
 		}
 	}
 	
-	private void setDomainRoles(String domainUUID, String userUUID, String role) throws Exception{
+	public void setDomainRoles(String domainUUID, String userUUID, String role) throws Exception{
 		PreparedStatement preparedStatement = null;
 		try{
 			if(!this.exists("domain_role",  "domainUUID", domainUUID)){

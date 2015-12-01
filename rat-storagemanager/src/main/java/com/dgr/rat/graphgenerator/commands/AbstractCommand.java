@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -93,8 +94,14 @@ public abstract class AbstractCommand implements ICommandCreator {
 	protected void setQueryPivot(Object node, String correlationKey, String queryName, boolean isStartPivot) throws Exception{
 		this.setQueryPivot(node, correlationKey, queryName, isStartPivot, null);
 	}
-	
-	protected void setQueryPivot(Object node, String correlationKey, String queryName, boolean isStartPivot, String paramName) throws Exception{
+//	protected void setQueryPivotParam(String correlationKey, String queryName, String paramName) throws Exception{
+//		if(!_queryPivotNodes.containsKey(correlationKey)){
+//			throw new Exception();
+//		}
+//		
+//		for(_queryPivotNodes)
+//	}
+	protected void setQueryPivot(Object node, String correlationKey, String queryName, boolean isStartPivot, String... params) throws Exception{
 		LinkedList<QueryPivotNodeManager>list = null;
 		QueryPivotNodeManager queryPivotNodeManager = null;
 		if(_queryPivotNodes.containsKey(correlationKey)){
@@ -118,9 +125,16 @@ public abstract class AbstractCommand implements ICommandCreator {
 		queryPivotNode.set_orderField(size);
 		queryPivotNode.set_nodeContent(queryName);
 		queryPivotNode.set_correlationKey(correlationKey);
-		if(paramName != null){
+		
+		if(params != null){
+		for (int i = 0; i < params.length; ++i) {
+			String paramName = params[i];
 			queryPivotNode.setParamName(paramName);
 		}
+		}
+//		if(paramName != null){
+//			queryPivotNode.setParamName(paramName);
+//		}
 		
 		queryPivotNodeManager.addQueryPivot(queryPivotNode);
 		queryPivotNodeManager.setCommandNode(node);
@@ -149,8 +163,10 @@ public abstract class AbstractCommand implements ICommandCreator {
 						CommandNode node = (CommandNode) obj;
 						owner = node.getNode().asVertex();
 						
-						String paramName = query.getParamName();
-						if(paramName != null){
+						List<String>params = query.getParams();
+						for(String paramName : params){
+//						String paramName = query.getParamName();
+//						if(paramName != null){
 							IInstructionParameterNodeFrame instructionParameter = _framedGraph.addVertex(null, IInstructionParameterNodeFrame.class);
 							instructionParameter.setVertexUserCommandsInstructionsParameterNameField(paramName);
 							instructionParameter.setVertexUserCommandsInstructionsParameterValueField(RATConstants.VertexContentUndefined);
@@ -161,13 +177,18 @@ public abstract class AbstractCommand implements ICommandCreator {
 							instructionParameter.setVertexRoleValueRootField(false);
 							instructionParameter.setVertexTypeField(VertexType.InstructionParameter);
 							childNode.asVertex().addEdge(RATConstants.QueryPivotEdgeLabel, instructionParameter.asVertex());
+//						}
 						}
 					}
 					else if(obj instanceof InstructionWrapper){
-						String paramName = query.getParamName();
-						if(paramName == null){
+						// TODO: per ora i parametri connessi a quelli delle instructions li lascio così: non più di uno (in futuro li rimuovo e lascio solo quelli 
+						// connessi esclusivamente alle querypivot)
+//						String paramName = query.getParamName();
+						List<String>params = query.getParams();
+						if(params.size() != 1){
 							throw new Exception();
 						}
+						String paramName = params.get(0);
 						InstructionWrapper node = (InstructionWrapper) obj;
 						IInstructionParameterNodeFrame param = node.getInstruction().getInstructionParameter(paramName);
 						if(param == null){

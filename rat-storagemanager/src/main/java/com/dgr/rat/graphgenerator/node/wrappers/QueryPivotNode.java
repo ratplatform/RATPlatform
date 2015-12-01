@@ -5,6 +5,8 @@
 
 package com.dgr.rat.graphgenerator.node.wrappers;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeQueryPivotFrame;
 import com.dgr.rat.json.utils.VertexType;
@@ -18,7 +20,8 @@ public class QueryPivotNode extends AbstractNode<IRATNodeQueryPivotFrame>{
 	private String _correlationKey = null;
 	private int _orderField = 0;
 	private boolean _isRoot = false;
-	private String _paramName = null;
+//	private String _paramName = null;
+	private List<String>_params = new LinkedList<String>();
 	
 	public QueryPivotNode(boolean isRoot) {
 		this.set_label(VertexType.QueryPivot.toString());
@@ -26,12 +29,24 @@ public class QueryPivotNode extends AbstractNode<IRATNodeQueryPivotFrame>{
 		_isRoot = isRoot;
 	}
 	
-	public String getParamName() {
-		return _paramName;
-	}
+//	public String getParamName() {
+//		return _paramName;
+//	}
 
-	public void setParamName(String paramName) {
-		this._paramName = paramName;
+//	public void setParamName(String paramName) {
+//		this._paramName = paramName;
+//	}
+	
+	public List<String>getParams(){
+		return _params;
+	}
+	
+	public void setParamName(String paramName) throws Exception {
+		if(_params.contains(paramName)){
+			throw new Exception();
+		}
+		
+		_params.add(paramName);
 	}
 	
 	public void setTowardNode(VertexType type){

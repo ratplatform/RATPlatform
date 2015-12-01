@@ -49,11 +49,16 @@ public class BindFromUserToDomain extends AbstractCommand{
 		this.setQueryPivot(isUserOfNode, "GetAllUserDomains", "SetQueryPipe", false);
 		this.setQueryPivot(isUserOfNode, "GetAllUserDomains", "GetUsersAndDomains", false, RATConstants.VertexTypeField);
 		
+		this.setQueryPivot(isPutByNode, "GetUserDomainByName", "StartQueryPipe", true);
+		this.setQueryPivot(isPutByNode, "GetUserDomainByName", "SetQueryPipe", false);
+		this.setQueryPivot(isUserOfNode, "GetUserDomainByName", "SetQueryPipe", false);
+		this.setQueryPivot(isUserOfNode, "GetUserDomainByName", "GetUserDomainByName", false, RATConstants.VertexTypeField, "domainName");
+		
 		this.setQueryPivot(isUserOfNode, "GetAllDomainUsers", "StartQueryPipe", true);
 		this.setQueryPivot(isUserOfNode, "GetAllDomainUsers", "SetQueryPipe", false);
 		this.setQueryPivot(isPutByNode, "GetAllDomainUsers", "SetQueryPipe", false);
 		this.setQueryPivot(isPutByNode, "GetAllDomainUsers", "GetUsersAndDomains", false, RATConstants.VertexTypeField);
 //		this.setQueryPivot(instructionWrapper, "GetAllUserDomains", "GetUserByEmail", false, RATConstants.VertexTypeField);
 	}
-
+	
 }

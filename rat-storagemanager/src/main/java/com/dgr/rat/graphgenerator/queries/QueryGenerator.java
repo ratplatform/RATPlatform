@@ -198,11 +198,18 @@ public class QueryGenerator {
 			List<Vertex> list = (List<Vertex>) p.outE(RATConstants.QueryPivotEdgeLabel).inV().toList();//.has(RATConstants.VertexTypeField, VertexType.InstructionParameter).toList();
 			if(list.size() > 0){
 				// COMMENT me ne aspetto uno solo
-				Vertex param = list.get(0);
-				instructionParameter = this.addInstructionParameter(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString(), 
-						param.getProperty(RATConstants.VertexInstructionParameterValueField).toString(), 
-						ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));
-				instructionParameters.add(instructionParameter);
+//				Vertex param = list.get(0);
+//				instructionParameter = this.addInstructionParameter(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString(), 
+//						param.getProperty(RATConstants.VertexInstructionParameterValueField).toString(), 
+//						ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));
+//				instructionParameters.add(instructionParameter);
+				
+				for(Vertex param : list){
+					instructionParameter = this.addInstructionParameter(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString(), 
+							param.getProperty(RATConstants.VertexInstructionParameterValueField).toString(), 
+							ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));
+					instructionParameters.add(instructionParameter);
+				}
 			}
 			// COMMENT: creo l'instruction
 			IInstructionNodeFrame instruction = this.addInstruction(instructionParameters, queryName);

@@ -186,9 +186,9 @@ public class QueryGraphGeneratorTest {
 		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
 		String queryVersion = "0.1";
 		
-//		this.addQuery("AddRootDomainAdminUserTemplate.conf", queryVersion);
-//		this.addQuery("AddNewUserTemplate.conf", queryVersion);
-//		this.addQuery("AddNewDomainTemplate.conf", queryVersion);
+		this.addQuery("AddRootDomainAdminUserTemplate.conf", queryVersion);
+		this.addQuery("AddNewUserTemplate.conf", queryVersion);
+		this.addQuery("AddNewDomainTemplate.conf", queryVersion);
 		this.addQuery("BindFromUserToDomainTemplate.conf", queryVersion);
 		
 		String javaScript = _buildQueryJavaScript.getJavaScript();

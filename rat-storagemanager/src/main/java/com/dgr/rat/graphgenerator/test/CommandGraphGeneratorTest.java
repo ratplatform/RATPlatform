@@ -35,7 +35,7 @@ import com.dgr.rat.graphgenerator.commands.AddNewUser;
 import com.dgr.rat.graphgenerator.commands.AddRootPlatformNode;
 import com.dgr.rat.graphgenerator.commands.AddRootDomainAdminUser;
 import com.dgr.rat.graphgenerator.commands.AddSubComment;
-import com.dgr.rat.graphgenerator.commands.BindFromDomainToUser;
+
 import com.dgr.rat.graphgenerator.commands.BindFromUserToDomain;
 import com.dgr.rat.graphgenerator.commands.ICommandCreator;
 import com.dgr.rat.graphgenerator.commands.LoadCommands;
@@ -139,18 +139,6 @@ public class CommandGraphGeneratorTest {
 		return command;
 	}
 	
-	private ICommandCreator addBindGraphFromDomainToUser(String commandVersion) throws Exception{
-		String commandName = "BindFromDomainToUser";
-		
-		AbstractCommand command = new BindFromDomainToUser(commandName, commandVersion);
-		command.set_commandType(JSONType.SystemCommands);
-		command.set_edgeName("BindDomainUser");
-		command.addNodesToGraph();
-		command.buildGraph();
-
-		return command;
-	}
-	
 	private ICommandCreator addBindGraphFromUserToDomain(String commandVersion) throws Exception{
 		String commandName = "BindFromUserToDomain";
 		
@@ -228,8 +216,6 @@ public class CommandGraphGeneratorTest {
 //		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 
 //		// BindDomainUser
-		command = this.addBindGraphFromDomainToUser("0.1");
-		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 		command = this.addBindGraphFromUserToDomain("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 //		
