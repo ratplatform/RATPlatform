@@ -1,0 +1,44 @@
+{
+  "title": "RATAddOn",
+  "name": "ratmozillaaddon",
+  "version": "0.0.1",
+  "description": "A basic add-on",
+  "main": "index.js",
+  "author": "daniele grignani",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ],
+    "preferences": [{
+        "name": "ratURL",
+        "title": "RATWSServer URL",
+        "description": "The RAT WS Server URL",
+        "type": "string",
+        "value": "http://localhost:8080/RATWSServer/rat"
+    },
+	{
+        "name": "userEmail",
+        "title": "User email",
+        "description": "User email",
+        "type": "string",
+        "value": "dgr@gmail.com"
+    },
+	{
+        "name": "userPassword",
+        "title": "User password",
+        "description": "User password",
+        "type": "string",
+        "value": "dgr"
+    },
+    {
+        "description": "How many of them we have.",
+        "name": "myInteger",
+        "type": "integer",
+        "value": 8,
+        "title": "How Many?"
+    }]
+}

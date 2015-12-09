@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link href="jqtree.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="userDomains.js"></script>
+	<script type="text/javascript" src="ws.js"></script>
+	<!--script type="text/javascript" src="listen.js"></script-->
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="tree.jquery.js"></script>
+
+	<title>Frames Test</title>
+	<style>
+	.createDomain {
+		float:left;
+		width:99%;
+		height:40%;
+	}
+	.userDomain {
+		float:left;
+		width:99%;
+		height:59%;
+	}
+	</style>
+	</head>
+	<body onload="onLoad()">
+	<iframe class="userDomain" src="userDomains.html" id='userDomains'></iframe>
+	<iframe class="createDomain" src="createDomain.html" id='createDomain'></iframe>
+
+	<!--button name="addNewDomain" onclick='onAddDomains();'>Add new domain</button-->
+
+	<script type="text/javascript">
+	window.addEventListener('message', function(event) {
+		console.log("domainSideBar.html event.data: " + event.data); 
+		console.log("domainSideBar.html event.origin: " + event.origin);
+		
+		sendResponse(event.data);
+		//addon.port.emit("ping", "ziccazicca");
+	}, false);
+
+/*
+	window.addEventListener("message", receiveMessage, false);  
+
+
+	function receiveMessage(event){ 
+	    	var src = event.source.frameElement; //this is the iframe that sent the message
+	    	var msg = event.data; //this is the message
+		console.log("domainSideBar.html src: " + src);
+		console.log("domainSideBar.html msg: " + msg);
+	}
+
+	function onAddDomains(){
+		var win = document.getElementById("createDomain").contentWindow;
+		//console.log("createDomain.html: onAddDomains");
+		var domain = document.getElementById('domainName');
+		//alert(domain);
+		window.postMessage("message xcxcxcx", "*");
+	}
+*/
+	function onLoad(){
+		console.log("domainSideBar.html: onLoad");
+	
+		console.log("domainSideBar.html");
+	//$(function() {
+		var $tree = $("#userDomains").contents().find('#tree1');
+		console.log("domainSideBar: " + data);
+		$tree.tree({
+			data: data,
+			autoOpen: 1
+		});
+
+		$tree.bind('tree.click', function(event) {
+			var node = event.node;
+			console.log(node.id);
+			append(node.id);
+		});
+
+		function append(id){
+			var parent_node = $tree.tree('getNodeById', id);
+
+			$tree.tree('appendNode',{
+				label: 'new_node',
+				id: 456
+			}, parent_node);
+		}
+		/*
+		// Handle a click on the edit link
+		$tree.on('click', '.edit', function(e) {
+			// Get the id from the 'node-id' data property
+			var node_id = $(e.target).data('node-id');
+
+			// Get the node from the tree
+			var node = $tree.tree('getNodeById', node_id);
+
+			if (node) {
+				// Display the node name
+				alert(node.name);
+			}
+		}
+		);
+		*/
+	//});
+	}
+	</script>
+	</body>
+</html>

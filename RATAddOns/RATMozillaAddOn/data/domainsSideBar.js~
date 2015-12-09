@@ -1,0 +1,40 @@
+var sidebar = require("sdk/ui/sidebar");
+var ws = require('./ws');
+
+var domainsSidePanel;
+var workerArray = [];
+
+function openSidePanel(json){
+	//console.log("openSideBar");
+	domainsSidePanel = sidebar.Sidebar({
+		id: 'my-sidebar',
+		title: 'My sidebar',
+		url: data.url("domainSideBar.html"),
+		contentScriptFile: data.url('./userDomains.js'),
+		onHide: hideSidebar,
+		onDetach: detachWorker,
+		onReady: function (worker) {
+			workerArray.push(worker);
+			worker.port.emit("message", json);
+			worker.port.on("message", function(domainName) {
+				console.log("index.js onDomainNameReceived domainName: " + domainName);
+			});
+		}
+	});
+
+	domainsSidePanel.show();
+}
+
+function detachWorker(worker) {
+	console.log("detachWorker worker: " + worker);
+	var index = workerArray.indexOf(worker);
+	if(index != -1) {
+		workerArray.splice(index, 1);
+	}
+}
+
+function hideSidebar(){
+	sidebar.dispose();
+}
+
+exports.openSidePanel = openSidePanel;

@@ -1,0 +1,61 @@
+var Request = require("sdk/request").Request;
+
+/*
+var sessionID;
+var userUUID;
+
+function getSessionID() {
+	return sessionID;
+}
+function getUserUUID() {
+	return userUUID;
+}
+*/
+function post(url, jsonCommand, callback){
+	var post = Request({
+		url: url,
+		content: jsonCommand,
+		contentType: "text/plain",
+		overrideMimeType: "text/plain; charset=latin1",
+		onComplete: callback
+	});
+
+	post.post();
+}
+
+/*
+function login(url, email, password, callback){
+	var json = {email:email, password:password};
+	if (!sessionID){
+		post(url + "/login", JSON.stringify(json), callback);
+	}
+	else{
+		console.log("sessionID: " + sessionID);
+		console.log("userUUID: " + userUUID);
+		console.log("Already logged in!");
+	}
+}
+*/
+/*
+function getStartDomains(response){
+	try {
+		var status = 0;
+		status = response.status;
+		sessionID = response.json.sessionID;
+		userUUID = response.json.userUUID;
+		if(status == 200){
+			//openSideBar(response.text);
+		}
+		else{
+			console.log("status Error: " + status);
+		}
+	}
+	catch (e) {
+		console.log("Error: " + e);
+	}
+}
+*/
+exports.post = post;
+//exports.login = login;
+//exports.getSessionID = getSessionID;
+//exports.getUserUUID = getUserUUID;

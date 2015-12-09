@@ -1,0 +1,208 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link href="styles/vendor.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="alchemy.min.css"/>
+	<script type="text/javascript" src="scripts/vendor.js"></script>
+	<!--script type="text/javascript" src="alchemy.js"></script-->
+	<script type="text/javascript" src="alchemy-graph.js"></script>
+
+	<link href="jqtree.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="userDomains.js"></script>
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="tree.jquery.js"></script>
+	<script type="text/javascript" src="queries.js"></script>
+	<script type="text/javascript" src="ratCommands.js"></script>
+
+	<title>Frames Test</title>
+	<style>
+	.createDomain {
+		float:left;
+		width:99%;
+		height:40%;
+	}
+	.userDomain {
+		float:left;
+		width:99%;
+		height:59%;
+	}
+  div#alchemy {
+    display:none;
+  }
+	</style>
+	</head>
+	<body onload="onLoad()">
+	<div id='currentDomain'>Please select a domain</div>
+	<input id='currentDomainUUID' type="hidden" name="currentDomainUUID" value="null">
+
+	<iframe class="userDomain" src="userDomains.html" id='userDomains'></iframe>
+	<iframe class="createDomain" src="createDomain.html" id='createDomain'></iframe>
+
+	<div class="alchemy" id="alchemy"></div>
+	
+	
+
+	<script type="text/javascript">
+	window.addEventListener('message', function(event) {
+		//console.log("domainSideBar.html event.data: " + event.data); 
+		//console.log("domainSideBar.html event.origin: " + event.origin);
+		var currentDomainUUID = document.getElementById("currentDomainUUID").value;
+		if(currentDomainUUID == 'null'){
+			alert('Please select current domain!');
+		}
+		else{
+			sendResponse("newdomain", event.data, currentDomainUUID);
+		}
+	}, false);
+
+	function onLoad(){
+		console.log("domainSideBar.html: onLoad");
+		console.log("domainSideBar.html");
+		var $tree = $("#userDomains").contents().find('#tree1');
+		var $button = $("#createDomain").contents().find('#addNewDomain');
+		
+		$button.click(function() {
+			alert("click");
+			var currentDomainUUID = document.getElementById("currentDomainUUID").value;
+			console.log("domainSideBar.html currentDomainUUID: " + currentDomainUUID);
+			var $domainName = $("#createDomain").contents().find('#domainName');
+			var domain = $domainName.val();
+			alert(domain);
+			var wsUrl = url + "/v0.1/executeconfigurationcommand?sessionid=" + sessionID;
+			console.log("url: " + wsUrl);
+			addNewCommand(currentDomainUUID, currentDomainUUID, domain, domain);
+			console.log("AddNewCommand: " + JSON.stringify(AddNewCommand));
+			sendRequest(wsUrl, "POST", JSON.stringify(AddNewCommand), newDomain)
+			
+		});
+
+		console.log("domainSideBar $button: " +  $button);
+
+		console.log("domainSideBar: " +  JSON.stringify(data));
+		console.log("domainSideBar $tree: " +  $tree);
+		$tree.tree({
+			data: data,
+			autoOpen: 1
+		});
+
+		$tree.bind('tree.click', function(event) {
+			var node = event.node;
+			console.log(node.id);
+
+			document.getElementById("currentDomain").innerHTML = "Domain selected: " + node.name;
+			document.getElementById("currentDomainUUID").value = node.id;
+			console.log("currentDomainUUID: " + document.getElementById("currentDomainUUID").value);
+
+			getAllDomains(node.id, node.id);
+			console.log("GetAllDomains: " + JSON.stringify(GetAllDomains));
+			var wsUrl = url + "/v0.1/query?sessionid=" + sessionID;
+			console.log("url: " + wsUrl);
+			sendRequest(wsUrl, "POST", JSON.stringify(GetAllDomains), getUserDomains);
+			//post(wsUrl, JSON.stringify(GetAllDomains), getUserDomainsCallBak, transferFailedCallBak);
+			//sendResponse("getuserdomains", node.name, node.id);
+			//append(node.id);
+		});
+	}
+
+	function append(parentNodeID, childNodeName, childNodeID){
+		var $tree = $("#userDomains").contents().find('#tree1');
+		var parent_node = $tree.tree('getNodeById', parentNodeID);
+		var child = $tree.tree('getNodeById', childNodeID);
+		console.log("append node: " + child);
+		if(!child){
+		$tree.tree('appendNode',{
+			label: childNodeName,
+			id: childNodeID
+		}, parent_node);
+		}
+	}
+/*
+	function getUserDomainsCallBak(event){
+		console.log("getUserDomainsCallBak Response received: " + event.responseText);
+	}
+
+	function transferFailedCallBak(event){
+		console.log("transferFailedCallBak Response received: " + event.responseText);
+	}
+*/
+function sendRequest(url, method, json, callback) {
+	var req = new XMLHttpRequest();
+	if (!req) return;
+	//var method = (postData) ? "POST" : "GET";
+	req.open(method, url, true);
+	req.setRequestHeader('User-Agent','XMLHTTP/1.0');
+	req.setRequestHeader('Content-type','text/plain');
+	req.overrideMimeType("text/plain");
+	req.onreadystatechange = function () {
+		if (req.readyState != 4) return;
+		if (req.status != 200 && req.status != 304) {
+			alert('HTTP error ' + req.status);
+			console.log('HTTP error ' + req.status);
+			return;
+		}
+		callback(req);
+	}
+	if (req.readyState == 4) return;
+	req.send(json);
+}
+function getUserDomains(req) {
+	console.log("getUserDomains Response received: " + req.responseText);
+	console.log("getUserDomains Response received: " + req.responseText.indexOf("nodes"));
+	if(req.responseText.indexOf("nodes") > -1){
+		var currentNodeUUID = document.getElementById("currentDomainUUID").value;
+		var config = {dataSource : JSON.parse(req.responseText)};
+		var alchemy = new Alchemy(config);
+		console.log("getUserDomains alchemy.allNodes().length: " + alchemy.allNodes().length);
+		console.log("getUserDomains currentNodeUUID: " + currentNodeUUID);
+		var arrayLength = alchemy.allNodes().length;
+		for (var i = 0; i < arrayLength; i++) {
+		    var node = alchemy.allNodes()[i];//alchemy.getNodes(i);
+			if(typeof node == 'undefined'){
+				console.log("getUserDomains node[0] typeof is undefined ");
+				continue;
+			}
+			console.log("getUserDomains node[0] typeof: " + typeof node);
+			console.log("getUserDomains node.length: " + node.length);
+			var domainUUID = node.getProperties("VertexUUIDField");
+			var domainName = node.getProperties("domainName");
+			console.log("getUserDomains alchemy node domainName: " + domainName);
+			console.log("getUserDomains alchemy node domainUUID: " + domainUUID);
+			//if(vertexUUIDField != currentNodeUUID){
+				append(currentNodeUUID, domainName, domainUUID);
+			//}
+		}
+	}
+}
+
+function newDomain(req) {
+	console.log("newDomain Response received: " + req.responseText);
+	var json = JSON.parse(req.responseText);
+	var newUUID = json.settings.VertexUUIDField;
+	console.log("newDomain Response received newUUID: " + newUUID);
+	getAllDomains(newUUID, newUUID);
+	//console.log("GetAllDomains: " + JSON.stringify(GetAllDomains));
+	var wsUrl = url + "/v0.1/query?sessionid=" + sessionID;
+	//console.log("url: " + wsUrl);
+	sendRequest(wsUrl, "POST", JSON.stringify(GetAllDomains), getUserDomains);
+	//if(req.responseText.indexOf("nodes") > -1){
+		//var currentNodeUUID = document.getElementById("currentDomainUUID").value;
+		//console.log("newDomain currentNodeUUID: " + currentNodeUUID);
+	//}
+}
+
+/*
+	function post(url, json, transferComplete, transferFailed){
+		var request = new XMLHttpRequest();
+		request.open("POST", url);
+		request.setRequestHeader("Content-Type", "text/plain");
+		request.overrideMimeType("text/plain");
+		//request.addEventListener("progress", updateProgress);
+		request.addEventListener("load", transferComplete);
+		request.addEventListener("error", transferFailed);
+		//request.addEventListener("abort", transferCanceled);
+		request.send(json);
+	}
+*/
+	</script>
+	</body>
+</html>

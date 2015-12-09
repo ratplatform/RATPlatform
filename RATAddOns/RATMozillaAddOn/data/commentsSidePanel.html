@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link href="styles/vendor.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="alchemy.min.css"/>
+	<script type="text/javascript" src="scripts/vendor.js"></script>
+	<!--script type="text/javascript" src="alchemy.js"></script-->
+	<script type="text/javascript" src="alchemy-graph.js"></script>
+
+	<link href="jqtree.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="userDomains.js"></script>
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="tree.jquery.js"></script>
+	<script type="text/javascript" src="queries.js"></script>
+	<script type="text/javascript" src="ratCommands.js"></script>
+
+	<title>Frames Test</title>
+	<style>
+	#userComments {
+		float:left;
+		width:99%;
+position: absolute;
+    height: 69%;
+	}
+	#createComment {
+		float:left;
+		width:99%;
+		height:30%;
+position: absolute;
+	}
+  div#alchemy {
+    display:none;
+  }
+	</style>
+	</head>
+	<body onload="onLoad()">
+
+<table>
+<tr>
+<td>
+	<iframe class="userComments" src="userComments.html" id='userComments'></iframe>
+</td>
+</tr>
+
+</table>
+
+	<script type="text/javascript">
+	window.addEventListener('message', function(event) {
+		var currentDomainUUID = document.getElementById("currentDomainUUID").value;
+		if(currentDomainUUID == 'null'){
+			alert('Please select current domain!');
+		}
+		else{
+			sendResponse("newdomain", event.data, currentDomainUUID);
+		}
+	}, false);
+
+	function onLoad(){
+		console.log("commentsSidePanel.html: onLoad");
+	}
+
+
+
+function sendRequest(url, method, json, callback) {
+	var req = new XMLHttpRequest();
+	if (!req) return;
+	//var method = (postData) ? "POST" : "GET";
+	req.open(method, url, true);
+	req.setRequestHeader('User-Agent','XMLHTTP/1.0');
+	req.setRequestHeader('Content-type','text/plain');
+	req.overrideMimeType("text/plain");
+	req.onreadystatechange = function () {
+		if (req.readyState != 4) return;
+		if (req.status != 200 && req.status != 304) {
+			alert('HTTP error ' + req.status);
+			console.log('HTTP error ' + req.status);
+			return;
+		}
+		callback(req);
+	}
+	if (req.readyState == 4) return;
+	req.send(json);
+}
+	</script>
+	</body>
+</html>

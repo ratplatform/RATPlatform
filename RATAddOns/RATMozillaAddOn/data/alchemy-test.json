@@ -1,0 +1,43 @@
+{
+	"header": {
+		"StatusCode": "200",
+		"commandType": "Query",
+		"applicationVersion": "2.0",
+		"application": "RATPlatform",
+		"time": "2015-12-07 23:38:38.794",
+		"sessionID": "ac3c4da5-4ea8-40d0-84b4-8933e26b24f3",
+		"commandVersion": "0.1",
+		"CommandGraphUUID": "109eb7ac-5988-4bd4-a43f-ee2ebe1d7d6e",
+		"commandName": "GetAllDomains",
+		"domainName": "@domainPlaceholder@",
+		"MessageType": "Response"
+	},
+	"nodes": [{
+		"VertexUUIDField": "f6b0d71e-98fe-4c2d-a925-1504aa22cb27",
+		"VertexTypeField": "Domain",
+		"VertexIsRootField": false,
+		"GraphCommandOwner": "AddNewDomain",
+		"CommandGraphUUID": "89417949-fa89-4e09-83d1-26918cf2550c",
+		"domainName": "domain dgr",
+		"VertexLabelField": "domain dgr",
+		"VertexContentField": "Domain",
+		"id": "1",
+		"_type": "vertex"
+	}, {
+		"VertexUUIDField": "f6b0d71e-98fe-4c2d-a925-1504aa22cb27",
+		"VertexTypeField": "Domain",
+		"VertexIsRootField": true,
+		"GraphCommandOwner": "AddNewDomain",
+		"CommandGraphUUID": "89417949-fa89-4e09-83d1-26918cf2550c",
+		"domainName": "domain dgr",
+		"VertexLabelField": "domain dgr",
+		"VertexContentField": "Domain",
+		"id": "0",
+		"_type": "vertex"
+	}],
+	"edges": [{
+		"source": "0",
+		"target": "1",
+		"caption": ""
+	}]
+}
