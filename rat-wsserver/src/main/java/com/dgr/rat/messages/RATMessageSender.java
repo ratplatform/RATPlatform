@@ -19,12 +19,13 @@ import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.KeepAliveHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.rat.webservices.RATWebServicesContextListener;
 
-public class RATMessageSender {
+public class RATMessageSender implements IMessageSender{
 	private ExecutorService _messageSenderExecutor = Executors.newSingleThreadExecutor();
 	private CompletionService<String> _pool = new ExecutorCompletionService<String>(_messageSenderExecutor);
 	
@@ -32,11 +33,11 @@ public class RATMessageSender {
 		System.out.println("RATMessageSender Send");
 	}
 
-	public void sendMessage(final AsyncResponse asyncResponse, final ServletContext servletContext, final String sessionID, final String data, final String action) {
+	public void sendMessage(final AsyncResponse asyncResponse, final ServletContext servletContext, final String sessionID, final String data) {
 		
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        //new Thread(new Runnable() {
+            //@Override
+            //public void run() {
             	StatusCode responseStatus = StatusCode.Ok;
             	String result = null;
             	
@@ -58,9 +59,9 @@ public class RATMessageSender {
 	    			// TODO: attenzione, gestisco la sessione shiro in modo separato e quando la mia
 	    			// piattaforma cancella la sessione conrrente,, dovrebbe anche eseguire il 
 	    			// logout da shiro ASSOLUTAMENTE. Per ora non lo faccio, ma andrà fatto (se shiro verrà mantenuto).
-	    			boolean isPermitted = requestSubject.isPermitted(action);
-	    			responseStatus = isPermitted ? StatusCode.Ok : StatusCode.Unauthorized;
-	    			System.out.println("createCollaborationDomain responseStatus " + responseStatus);
+//	    			boolean isPermitted = requestSubject.isPermitted(action);
+//	    			responseStatus = isPermitted ? StatusCode.Ok : StatusCode.Unauthorized;
+//	    			System.out.println("createCollaborationDomain responseStatus " + responseStatus);
 	    			
 	            	FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) servletContext.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
 	            	
@@ -72,6 +73,11 @@ public class RATMessageSender {
             		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
 	        		if(task != null){
 	        			result = task.get();
+	        			// TODO: sistema di saltare la trasformazione di json davvero brutale: da rivedere
+	        			if(result.contains("vertices")){
+	        				result = MakeSigmaJSON.fromRatJsonToAlchemy(result);
+	        			}
+	        			System.out.println("result = " + result);
 	        		}
 	        		else{
 	        			responseStatus = StatusCode.RequestTimeout;
@@ -91,10 +97,11 @@ public class RATMessageSender {
         			// TODO log
         		}
             	
-            	asyncResponse.resume(Response.status(responseStatus.ordinal()).entity(result).build());
-            }
+            	int response = responseStatus.getValue();
+            	asyncResponse.resume(Response.status(response).entity(result).build());
+            //}
 
-        }, "async-runner-" + sessionID).start();
+        //}, "async-runner-" + sessionID).start();
 	}
 	
 	public void shutdown() throws Exception{

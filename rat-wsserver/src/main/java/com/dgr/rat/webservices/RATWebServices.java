@@ -35,6 +35,7 @@ import com.dgr.rat.auth.db.IdentityManager;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.utils.DateUtils;
 import com.dgr.rat.login.json.ChooseDomainData;
+import com.dgr.rat.messages.IMessageSender;
 import com.dgr.rat.messages.RATMessageSender;
 import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.rat.session.manager.SessionData;
@@ -55,8 +56,8 @@ public class RATWebServices {
 	@Context 
 	private HttpServletRequest _request;
 	
-//	@Inject
-//	RATMessageSender _ratMessageSender;
+	//@Inject
+	//private IMessageSender _ratMessageSender;
 	
 	public RATWebServices() {
 		System.out.println("RATWebServices");
@@ -80,7 +81,7 @@ public class RATWebServices {
          }).start();
 	}
 	
-	@POST @Path("/login")
+	@POST @Path("/v0.1/login")
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes (MediaType.TEXT_PLAIN)
 	public Response login(String data){
@@ -158,67 +159,62 @@ public class RATWebServices {
         return response;
 	}
 	
-	@POST @Path("/choosedomain")
-	@Produces(MediaType.TEXT_PLAIN)
+	@POST @Path("/v0.1/executeconfigurationcommand")
+	@Asynchronous
 	@Consumes (MediaType.TEXT_PLAIN)
-	public Response chooseDomain(String data, @QueryParam("sessionid") String sessionID){
-        System.out.println("choosedomain");
-        System.out.println(data);
-        
-        int responseStatus = 200;
+	public void executeconfigurationcommand(String data, @QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse){
+		System.out.println("data: " + data);
+		System.out.println("sessionID: " + sessionID);
+		
+		int responseStatus = 200;
         Response response = null;
         Map<String, Object> result = null;
         ObjectMapper mapper = null;
         
-        try {
-    		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
-    			responseStatus = 401;
+		try {
+			if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+				responseStatus = 401;
 				throw new Exception("sessionID is empty");
-    		}
-    		
+			}
+			
 			boolean sessionIDExists = RATSessionManager.getInstance().sessionIDExists(sessionID);
 			if(!sessionIDExists){
 				responseStatus = 401;
 				throw new Exception("sessionID does not exist");
 			}
 			
-    		mapper = new ObjectMapper();
-    	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    	    ChooseDomainData domainData = mapper.readValue(data, ChooseDomainData.class);
-
-			IdentityManager identityManager = new IdentityManager();
-			result = identityManager.getDomainRoles(sessionID, domainData.get_userName(), domainData.get_domainName());
-			responseStatus = 200;
-		} 
-        catch (Exception e) {
+			IMessageSender ratMessageSender = new RATMessageSender(); 
+			ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data);
+		}
+		catch (Exception e) {
 			// TODO log
 			if(responseStatus == 200){
-				e.printStackTrace();
 				responseStatus = 500;
 			}
-            result = new HashMap<String, Object>();
-		}
-        finally{
-        	String json = null;
-        	
-            result.put(RATConstants.StatusCode, responseStatus);
-            if(mapper == null){
-            	mapper = new ObjectMapper();
-            	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            }
-            
+			
+			result = new HashMap<String, Object>();
+		
+	    	String json = null;
+	    	
+	        result.put(RATConstants.StatusCode, responseStatus);
+	        if(mapper == null){
+	        	mapper = new ObjectMapper();
+	        	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	        }
+	        
 			try {
 				json = mapper.writeValueAsString(result);
 				System.out.println(json);
 			} 
 			catch (JsonProcessingException ex) {
+				// TODO: gestire l'errore creando un JSON con errore e statuscode 
+				// TODO Auto-generated catch block
 				ex.printStackTrace();
 			}
 			
-        	response = Response.status(responseStatus).entity(json).build();
-        }
-        
-        return response;
+	    	response = Response.status(responseStatus).entity(json).build();
+	    	asyncResponse.resume(result);
+		}
 	}
 	
 	@POST @Path("/v0.1/query")
@@ -226,25 +222,134 @@ public class RATWebServices {
 	@Asynchronous
 	public void query(String data, @QueryParam("sessionid") String sessionID, @QueryParam("roleName") String roleName, @Suspended final AsyncResponse asyncResponse) {
 		System.out.println("data: " + data);
-		
 		System.out.println("sessionID: " + sessionID);
-//		System.out.println("createcollaborationdomain domainName: " + domainName);
-		System.out.println("createcollaborationdomain roleName: " + roleName);
-//		System.out.println("send createcollaborationdomain");
+		
+		int responseStatus = 200;
+        Response response = null;
+        Map<String, Object> result = null;
+        ObjectMapper mapper = null;
+        
+		try {
+			if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+				responseStatus = 401;
+				throw new Exception("sessionID is empty");
+			}
+			
+			boolean sessionIDExists = RATSessionManager.getInstance().sessionIDExists(sessionID);
+			if(!sessionIDExists){
+				responseStatus = 401;
+				throw new Exception("sessionID does not exist");
+			}
+			
+			IMessageSender ratMessageSender = new RATMessageSender(); 
+			ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data);
+		}
+		catch (Exception e) {
+			// TODO log
+			if(responseStatus == 200){
+				responseStatus = 500;
+			}
+			
+			result = new HashMap<String, Object>();
+		
+	    	String json = null;
+	    	
+	        result.put(RATConstants.StatusCode, responseStatus);
+	        if(mapper == null){
+	        	mapper = new ObjectMapper();
+	        	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	        }
+	        
+			try {
+				json = mapper.writeValueAsString(result);
+				System.out.println(json);
+			} 
+			catch (JsonProcessingException ex) {
+				// TODO: gestire l'errore creando un JSON con errore e statuscode 
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}
+			
+	    	response = Response.status(responseStatus).entity(json).build();
+	    	asyncResponse.resume(result);
+		}
 	}
 	
-	@POST @Path("/createcollaborationdomain")
-	@Consumes (MediaType.TEXT_PLAIN)
-	@Asynchronous
-	public void createCollaborationDomain(String data, @QueryParam("sessionid") String sessionID, @QueryParam("domainName") String domainName, 
-			@QueryParam("roleName") String roleName, @Suspended final AsyncResponse asyncResponse) {
-		System.out.println("createcollaborationdomain id: " + sessionID);
-		System.out.println("createcollaborationdomain domainName: " + domainName);
-		System.out.println("createcollaborationdomain roleName: " + roleName);
-		System.out.println("send createcollaborationdomain");
-		
-//		_ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data, "createcollaborationdomain");
-	}
+//	@POST @Path("/choosedomain")
+//	@Produces(MediaType.TEXT_PLAIN)
+//	@Consumes (MediaType.TEXT_PLAIN)
+//	public Response chooseDomain(String data, @QueryParam("sessionid") String sessionID){
+//        System.out.println("choosedomain");
+//        System.out.println(data);
+//        
+//        int responseStatus = 200;
+//        Response response = null;
+//        Map<String, Object> result = null;
+//        ObjectMapper mapper = null;
+//        
+//        try {
+//    		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+//    			responseStatus = 401;
+//				throw new Exception("sessionID is empty");
+//    		}
+//    		
+//			boolean sessionIDExists = RATSessionManager.getInstance().sessionIDExists(sessionID);
+//			if(!sessionIDExists){
+//				responseStatus = 401;
+//				throw new Exception("sessionID does not exist");
+//			}
+//			
+//    		mapper = new ObjectMapper();
+//    	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//    	    ChooseDomainData domainData = mapper.readValue(data, ChooseDomainData.class);
+//
+//			IdentityManager identityManager = new IdentityManager();
+//			result = identityManager.getDomainRoles(sessionID, domainData.get_userName(), domainData.get_domainName());
+//			responseStatus = 200;
+//		} 
+//        catch (Exception e) {
+//			// TODO log
+//			if(responseStatus == 200){
+//				e.printStackTrace();
+//				responseStatus = 500;
+//			}
+//            result = new HashMap<String, Object>();
+//		}
+//        finally{
+//        	String json = null;
+//        	
+//            result.put(RATConstants.StatusCode, responseStatus);
+//            if(mapper == null){
+//            	mapper = new ObjectMapper();
+//            	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//            }
+//            
+//			try {
+//				json = mapper.writeValueAsString(result);
+//				System.out.println(json);
+//			} 
+//			catch (JsonProcessingException ex) {
+//				ex.printStackTrace();
+//			}
+//			
+//        	response = Response.status(responseStatus).entity(json).build();
+//        }
+//        
+//        return response;
+//	}
+	
+//	@POST @Path("/createcollaborationdomain")
+//	@Consumes (MediaType.TEXT_PLAIN)
+//	@Asynchronous
+//	public void createCollaborationDomain(String data, @QueryParam("sessionid") String sessionID, @QueryParam("domainName") String domainName, 
+//			@QueryParam("roleName") String roleName, @Suspended final AsyncResponse asyncResponse) {
+//		System.out.println("createcollaborationdomain id: " + sessionID);
+//		System.out.println("createcollaborationdomain domainName: " + domainName);
+//		System.out.println("createcollaborationdomain roleName: " + roleName);
+//		System.out.println("send createcollaborationdomain");
+//		
+////		_ratMessageSender.sendMessage(asyncResponse, _context, sessionID, data, "createcollaborationdomain");
+//	}
 	
 //	@POST @Path("/choosedomain")
 //	@Produces(MediaType.TEXT_PLAIN)
@@ -368,51 +473,28 @@ public class RATWebServices {
 	 Lato client devo immaginare un meccanismo di creazione dei numeri di sequenza dei messaggi. L'ID del messaggio deve essere composto da: session-id + numero di sequenza.  
 	 */
 	
-	@POST @Path("/executeconfigurationcommand")
-	@Asynchronous
-	@Consumes (MediaType.TEXT_PLAIN)
-	public void executeconfigurationcommand(String data, @QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse){
-//		System.out.println("executeconfigurationcommand");
-//		//System.out.println(data);
-//		System.out.println(sessionID);
-//		
-//		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
-//			asyncResponse.resume(Response.status(401));
-//			return;
-//		}
-//		
-//		// TODO: fare attenzione, con la mia pagina di test genero una sessione nuova ad ogni chiamata del web service
-//		// quindi per ora, fino a che non capirò il meccanismo per bene, vado a generare un uuid
-//		//System.out.println("SessionID: " + _request.getSession().getId());
-//		
-//		System.out.println("send executeconfigurationcommand");
-//		try {
-//			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) _context.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
-//			String result = RATSessionManager.getInstance().sendMessage(context, sessionID, data);
-//			System.out.println("RATWebServices executeconfigurationcommand response received");
-//			asyncResponse.resume(result);
-//		} 
-//		catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-//		catch (ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-//		catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-////		// TODO: capire se conviene fare queste operazioni nel costruttore e non ogni volta che viene chiamato il servizio
-////		RATMessagingClient messageProducer = (RATMessagingClient) _context.getAttribute(RATWebServicesContextListener.MessageSender);
-////		@SuppressWarnings("unchecked")
-////		CompletionService<String> pool = (CompletionService<String>)_context.getAttribute(RATWebServicesContextListener.ThreadPool);
-////		pool.submit(new MessageSender(messageProducer, data));
-////
+//	@POST @Path("/executeconfigurationcommand")
+//	@Asynchronous
+//	@Consumes (MediaType.TEXT_PLAIN)
+//	public void executeconfigurationcommand(String data, @QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse){
+////		System.out.println("executeconfigurationcommand");
+////		//System.out.println(data);
+////		System.out.println(sessionID);
+////		
+////		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+////			asyncResponse.resume(Response.status(401));
+////			return;
+////		}
+////		
+////		// TODO: fare attenzione, con la mia pagina di test genero una sessione nuova ad ogni chiamata del web service
+////		// quindi per ora, fino a che non capirò il meccanismo per bene, vado a generare un uuid
+////		//System.out.println("SessionID: " + _request.getSession().getId());
+////		
+////		System.out.println("send executeconfigurationcommand");
 ////		try {
-////			String result = pool.take().get();
+////			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) _context.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
+////			String result = RATSessionManager.getInstance().sendMessage(context, sessionID, data);
+////			System.out.println("RATWebServices executeconfigurationcommand response received");
 ////			asyncResponse.resume(result);
 ////		} 
 ////		catch (InterruptedException e) {
@@ -422,38 +504,61 @@ public class RATWebServices {
 ////		catch (ExecutionException e) {
 ////			// TODO Auto-generated catch block
 ////			e.printStackTrace();
+////		} 
+////		catch (Exception e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
 ////		}
-	}
+////		
+//////		// TODO: capire se conviene fare queste operazioni nel costruttore e non ogni volta che viene chiamato il servizio
+//////		RATMessagingClient messageProducer = (RATMessagingClient) _context.getAttribute(RATWebServicesContextListener.MessageSender);
+//////		@SuppressWarnings("unchecked")
+//////		CompletionService<String> pool = (CompletionService<String>)_context.getAttribute(RATWebServicesContextListener.ThreadPool);
+//////		pool.submit(new MessageSender(messageProducer, data));
+//////
+//////		try {
+//////			String result = pool.take().get();
+//////			asyncResponse.resume(result);
+//////		} 
+//////		catch (InterruptedException e) {
+//////			// TODO Auto-generated catch block
+//////			e.printStackTrace();
+//////		} 
+//////		catch (ExecutionException e) {
+//////			// TODO Auto-generated catch block
+//////			e.printStackTrace();
+//////		}
+//	}
 	
-	@POST @Path("/createnewuser")
-	@Consumes (MediaType.TEXT_PLAIN)
-	@Asynchronous
-	public void createNewUser(String data, @QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse) {
-//		System.out.println("createnewuser id: " + sessionID);
-//		
-//		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
-//			asyncResponse.resume(Response.status(401));
-//			return;
-//		}
-//		
-//		System.out.println("send createnewuser");
-//		try {
-//			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) _context.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
-//			String result = RATSessionManager.getInstance().sendMessage(context, sessionID, data);
-//			System.out.println("RATWebServices createnewuser response received");
-//			asyncResponse.resume(result);
-//		} 
-//		catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-//		catch (ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} 
-//		catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	}
+//	@POST @Path("/createnewuser")
+//	@Consumes (MediaType.TEXT_PLAIN)
+//	@Asynchronous
+//	public void createNewUser(String data, @QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse) {
+////		System.out.println("createnewuser id: " + sessionID);
+////		
+////		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+////			asyncResponse.resume(Response.status(401));
+////			return;
+////		}
+////		
+////		System.out.println("send createnewuser");
+////		try {
+////			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) _context.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
+////			String result = RATSessionManager.getInstance().sendMessage(context, sessionID, data);
+////			System.out.println("RATWebServices createnewuser response received");
+////			asyncResponse.resume(result);
+////		} 
+////		catch (InterruptedException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		} 
+////		catch (ExecutionException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		} 
+////		catch (Exception e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+//	}
 }
