@@ -16,8 +16,8 @@ import java.nio.file.FileSystems;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.graphgenerator.MakeSigmaJSON;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.main.SystemCommandsInitializer;
 import com.dgr.rat.storage.provider.StorageBridge;
@@ -97,7 +97,8 @@ public class TestHelpers {
 		// ATTENZIONE: il graph ottenuto in questo modo vale solo per il TinkerGraphStorage!
 		Graph graph = storage.getGraph();
 		
-		String result = MakeSigmaJSON.fromRatJsonToAlchemy(graph);
+		String json = RATJsonUtils.serializeGraph(graph);
+		String result = MakeSigmaJSON.fromRatJsonToAlchemy2(json);
 //		System.out.println(result);
 		
 		try {

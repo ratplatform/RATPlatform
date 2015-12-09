@@ -14,9 +14,9 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
-import com.dgr.rat.graphgenerator.MakeSigmaJSON;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 
 import com.dgr.utils.AppProperties;

@@ -38,6 +38,9 @@ public class Bind implements IInstruction{
 				// TODO log
 			}
 			Vertex inVertex = storage.getVertex(UUID.fromString(paramValue));
+			if(inVertex == null){
+				throw new Exception();
+			}
 			
 			edgeUUID = UUID.randomUUID();
 			Edge edge = outVertex.addEdge(nodeCaller.getCommandName(), inVertex);

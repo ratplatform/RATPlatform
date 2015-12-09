@@ -22,11 +22,11 @@ import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.commons.mqmessages.RATJSONMessage;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
-import com.dgr.rat.graphgenerator.MakeSigmaJSON;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
@@ -101,6 +101,10 @@ public class AddRootDomainTest {
 			response = this.executeRemoteCommand(json);
 			String DGRDomain2UUID = this.getNewRootNodeUUID(response);
 //			String commandGraphUUID = response.getCommandGraphUUID();
+			
+			json = SystemInitializerTestHelpers.createNewDomain("AddNewDomain.conf", DGRDomain2UUID, "DGR1 Domain 2.1");
+			response = this.executeRemoteCommand(json);
+			String DGRDomain21UUID = this.getNewRootNodeUUID(response);
 ////			
 			json = SystemInitializerTestHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain1UUID, dgr1UUID);
 			response = this.executeRemoteCommand(json);
