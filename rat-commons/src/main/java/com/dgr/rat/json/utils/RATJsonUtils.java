@@ -6,6 +6,7 @@
 package com.dgr.rat.json.utils;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 
 import com.dgr.rat.commons.constants.MessageType;
@@ -20,6 +21,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 
 public class RATJsonUtils {
 	public static String jsonPrettyPrinter(String json) throws Exception{
@@ -41,6 +44,25 @@ public class RATJsonUtils {
 		header.setHeaderProperties(map);
 
 		return header;
+	}
+	
+	public static String serializeGraph(Graph graph) throws IOException{
+		OutputStream output = new OutputStream(){
+			private StringBuilder string = new StringBuilder();
+        
+			@Override
+			public void write(int b) throws IOException {
+				this.string.append((char) b );
+			}
+			public String toString(){
+				return this.string.toString();
+			}
+		};
+    
+		GraphSONWriter.outputGraph(graph, output);
+		String json = output.toString();
+		
+		return json;
 	}
 	
 	public static JsonHeader getJsonHeader(StatusCode commandResult, MessageType messageType){
