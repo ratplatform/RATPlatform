@@ -12,6 +12,8 @@ import com.dgr.rat.storage.orientdb.OrientDBService;
 import com.dgr.rat.storage.orientdb.StorageInternalError;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.IndexableGraph;
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
@@ -19,6 +21,7 @@ import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class OrientDBStorage implements IStorage{
 	private TransactionalGraph	_orientGraph = null;
+	//private IndexableGraph _orientGraph = null;
 	
 	public OrientDBStorage() {
     	OGlobalConfiguration.MEMORY_USE_UNSAFE.setValue(false);
@@ -177,14 +180,6 @@ public class OrientDBStorage implements IStorage{
 	}
 
 	/* (non-Javadoc)
-	 * @see com.dgr.rat.storage.provider.IStorage#addIndex()
-	 */
-	@Override
-	public synchronized void addIndex() {
-//		_orientGraph.createIndex(indexName, indexClass, indexParameters)
-	}
-
-	/* (non-Javadoc)
 	 * @see com.dgr.rat.storage.provider.IStorage#shutDown()
 	 */
 	@Override
@@ -199,5 +194,30 @@ public class OrientDBStorage implements IStorage{
 	@Override
 	public synchronized void closeConnection() throws Exception {
 		OrientDBService.getInstance().close();
+	}
+
+	@Override
+	public void addToIndex(String indexName, Vertex vertex, String key,
+			Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Vertex getVertex(String indexName, String key, Object value) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean vertexExists(String indexName, String key, Object value) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Index<Vertex> getIndex(String indexName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

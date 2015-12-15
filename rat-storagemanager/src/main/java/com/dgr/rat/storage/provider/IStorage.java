@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import com.dgr.rat.storage.orientdb.StorageInternalError;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.Vertex;
 
 // COMMENT: le funzioni qui restituiscono dei Vertex perché in ogni caso, ossia qualunque sia il DB utilizzato, utilizzo le Tinkerpop
@@ -27,8 +28,13 @@ public interface IStorage {
 	public Vertex getRootDomain()throws Exception;
 	public void commit();
 	public void rollBack();
-	public void addIndex();
 	public void shutDown();
+	
 	public void closeConnection() throws Exception;
 	public void openConnection() throws StorageInternalError, Exception;
+	
+	public void addToIndex(String indexName, Vertex vertex, String key, Object value);
+	public Vertex getVertex(String indexName, String key, Object value);
+	public boolean vertexExists(String indexName, String key, Object value);
+	public Index<Vertex> getIndex(String indexName);
 }

@@ -27,7 +27,7 @@ public class GetAllNodesByType implements IInstruction{
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		// TODO: errore: non deve essere VertexContentField ma VertexTypeField
-		String type = invoker.getNodeParamValue(RATConstants.VertexContentField);
+		String type = invoker.getNodeParamValue(RATConstants.VertexTypeField);
 		VertexType vertexType = VertexType.fromString(type);
 		
 		String edgeLabel = invoker.getNodeParamValue("edgeLabel");

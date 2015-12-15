@@ -39,6 +39,9 @@ import com.dgr.rat.graphgenerator.commands.BindFromUserToDomain;
 import com.dgr.rat.graphgenerator.commands.ICommandCreator;
 import com.dgr.rat.graphgenerator.commands.LoadCommands;
 import com.dgr.rat.graphgenerator.commands.LoadQueries;
+import com.dgr.rat.graphgenerator.queries.BuildQueryJavaScript;
+import com.dgr.rat.graphgenerator.queries.QueryGenerator;
+import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
@@ -57,6 +60,7 @@ public class CommandGraphGeneratorTest {
 	public static final String LoadCommandsUUID = "42fc1097-b340-41a1-8ab2-e4d718ad48b9";
 	public static final String LoadQueriesUUID = "309c67c5-fd6e-4124-8cb6-8a455de32233";
 	public static final String RootDomainUUID = "b5876c07-5714-4f22-ab46-00f072d503cb";
+	private BuildQueryJavaScript _buildQueryJavaScript = new BuildQueryJavaScript();
 	
 	List<String>_ratJSONs = new ArrayList<String>();
 	Map<String, String>_clientJsonCommands = new HashMap<String, String>();
@@ -210,10 +214,10 @@ public class CommandGraphGeneratorTest {
 		// AddNewDomain
 		command = this.addNewDomain("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-//		
-//		// AddComment
-//		command = this.addAddComment("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
+		
+		// AddComment
+		command = this.addAddComment("0.1");
+		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 
 //		// BindDomainUser
 		command = this.addBindGraphFromUserToDomain("0.1");
@@ -251,6 +255,13 @@ public class CommandGraphGeneratorTest {
 		
 		String path = GraphGeneratorHelpers.CommandsFolder + GraphGeneratorHelpers.PathSeparator + command.get_commandName() + ".conf";
 		String remoteRequestJson = JSONObjectBuilder.buildRemoteCommand(header, command.get_rootNode());
+		
+		_buildQueryJavaScript.setHeader(header);
+		_buildQueryJavaScript.setHeader(header);
+		RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(remoteRequestJson);
+		_buildQueryJavaScript.make(command.get_commandName(), ratJsonObject);
+		String javaScript = _buildQueryJavaScript.getJavaScript();
+		GraphGeneratorHelpers.writeJavaScript("commands", javaScript);
 		
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson));
 		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson), path);

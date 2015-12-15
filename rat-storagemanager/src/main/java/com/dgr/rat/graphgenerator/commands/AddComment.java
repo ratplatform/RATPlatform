@@ -24,7 +24,12 @@ public class AddComment extends AbstractCommand{
 	public void addNodesToGraph() throws Exception {
 		CommentNode rootNode = this.buildRootNode(CommentNode.class, VertexType.Comment.toString());
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
-
+		rootNode.addPropertyVertexInstruction("startComment", RATConstants.VertexContentUndefined, ReturnType.integer);
+		rootNode.addPropertyVertexInstruction("endComment", RATConstants.VertexContentUndefined, ReturnType.integer);
+		
+		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
+		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+		
 		SystemKeyNode isPutByNode = this.buildNode(SystemKeyNode.class, "is-put-by");
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
 		// COMMENT: bind verso il nodo dell'utente
@@ -33,7 +38,7 @@ public class AddComment extends AbstractCommand{
 		SystemKeyNode belongsTo = this.buildNode(SystemKeyNode.class, "belongs-to");
 		belongsTo.addCreateVertexInstruction("nodeName", "belongs-to", ReturnType.string);
 		// COMMENT: bind verso il nodo dell'owner (dominio)
-		belongsTo.addBindInstruction("ownerNodeUUID", RATConstants.VertexContentUndefined);
+		belongsTo.addBindInstruction("domainUUID", RATConstants.VertexContentUndefined);
 		//this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetAllDomainComments");
 		
 		SystemKeyNode isPublic = this.buildNode(SystemKeyNode.class, "is-public");
@@ -42,31 +47,32 @@ public class AddComment extends AbstractCommand{
 		SystemKeyNode isUniversal = this.buildNode(SystemKeyNode.class, "is-universal");
 		isUniversal.addCreateVertexInstruction("nodeName", "is-universal", ReturnType.string);
 		
-		SystemKeyNode content = this.buildNode(SystemKeyNode.class, "inputFromUser");
-		content.addCreateVertexInstruction("inputFromUser", "inputFromUser", ReturnType.string);
-		content.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+		//SystemKeyNode content = this.buildNode(SystemKeyNode.class, "inputFromUser");
+		//content.addCreateVertexInstruction("inputFromUser", "inputFromUser", ReturnType.string);
+		//content.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		// TODO: per il momento non uso SetVertexProperty per le istruzioni di seguito,  
 		// se lo facessi, per ora non potrei più distinguere i parametri tra di loro (vedi AddRootDomainTest.setAddCommentsValues).
 		// Da risolvere
-		SystemKeyNode start = this.buildNode(SystemKeyNode.class, "start");
-		start.addCreateVertexInstruction("start", RATConstants.VertexContentUndefined, ReturnType.integer);
+		//SystemKeyNode start = this.buildNode(SystemKeyNode.class, "start");
+		//start.addCreateVertexInstruction("start", RATConstants.VertexContentUndefined, ReturnType.integer);
 		
-		SystemKeyNode end = this.buildNode(SystemKeyNode.class, "end");
-		end.addCreateVertexInstruction("end", RATConstants.VertexContentUndefined, ReturnType.integer);
+		//SystemKeyNode end = this.buildNode(SystemKeyNode.class, "end");
+		//end.addCreateVertexInstruction("end", RATConstants.VertexContentUndefined, ReturnType.integer);
 		
-		SystemKeyNode urlDoc = this.buildNode(SystemKeyNode.class, "urlDocument");
-		urlDoc.addCreateVertexInstruction("urlDocument", RATConstants.VertexContentUndefined, ReturnType.url);
+		SystemKeyNode webDoc = this.buildNode(SystemKeyNode.class, "webDocument");
+		webDoc.addInstruction("CreateWebDocument", "url", RATConstants.VertexContentUndefined, ReturnType.url);
+		//webDoc.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.url);
 		
 		rootNode.addChild(isPutByNode);
 		rootNode.addChild(belongsTo);
 		rootNode.addChild(isPublic);
 		rootNode.addChild(isUniversal);
-		rootNode.addChild(content);
+		rootNode.addChild(webDoc);
 		
-		content.addChild(start);
-		content.addChild(end);
-		content.addChild(urlDoc);
+		//content.addChild(start);
+		//content.addChild(end);
+		//content.addChild(urlDoc);
 		
 		this.setQueryPivot(isPutByNode, "GetAllUserComments", "StartQueryPipe", true);
 		this.setQueryPivot(isPutByNode, "GetAllUserComments", "SetQueryPipe", false);
@@ -74,6 +80,10 @@ public class AddComment extends AbstractCommand{
 		
 		this.setQueryPivot(belongsTo, "GetAllDomainComments", "StartQueryPipe", true);
 		this.setQueryPivot(belongsTo, "GetAllDomainComments", "SetQueryPipe", false);
-		this.setQueryPivot(rootNode, "GetAllDomainComments", "GetAllDomainComments", false);
+		this.setQueryPivot(rootNode, "GetAllDomainComments", "GetAllDomainComments", false, "domainUUID");
+		
+		this.setQueryPivot(belongsTo, "GetAllCommentComments", "StartQueryPipe", true);
+		this.setQueryPivot(belongsTo, "GetAllCommentComments", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetAllCommentComments", "GetAllCommentComments", false);
 	}
 }

@@ -188,8 +188,19 @@ public class QueryGenerator {
 			framedEdge.setCommandGraphUUID(_commandUUID.toString());
 		}
 		else{
-			String content = currentQueryPivotVertexOwner.getProperty(RATConstants.VertexContentField);
-			IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter(RATConstants.VertexContentField, content, ReturnType.string);
+			IInstructionParameterNodeFrame instructionParameter = null;
+			String paramValue = null;
+			String paramName = null;
+			if(vertexType.equals(VertexType.SystemKey)){
+				paramValue = currentQueryPivotVertexOwner.getProperty(RATConstants.VertexContentField).toString();
+				paramName = RATConstants.VertexContentField;
+			}
+			else{
+				// TODO aggiungere il tipo VertexType in ReturnType
+				paramValue = currentQueryPivotVertexOwner.getProperty(RATConstants.VertexTypeField).toString();
+				paramName = RATConstants.VertexTypeField;
+			}
+			instructionParameter = this.addInstructionParameter(paramName, paramValue, ReturnType.string);
 			instructionParameters.add(instructionParameter);
 			instructionParameter = this.addInstructionParameter("edgeLabel", edgeLabel, ReturnType.string);
 			instructionParameters.add(instructionParameter);
@@ -197,13 +208,6 @@ public class QueryGenerator {
 			GremlinPipeline<Vertex, Vertex> p = new GremlinPipeline<Vertex, Vertex>(currentQueryPivotVertex);
 			List<Vertex> list = (List<Vertex>) p.outE(RATConstants.QueryPivotEdgeLabel).inV().toList();//.has(RATConstants.VertexTypeField, VertexType.InstructionParameter).toList();
 			if(list.size() > 0){
-				// COMMENT me ne aspetto uno solo
-//				Vertex param = list.get(0);
-//				instructionParameter = this.addInstructionParameter(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString(), 
-//						param.getProperty(RATConstants.VertexInstructionParameterValueField).toString(), 
-//						ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));
-//				instructionParameters.add(instructionParameter);
-				
 				for(Vertex param : list){
 					instructionParameter = this.addInstructionParameter(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString(), 
 							param.getProperty(RATConstants.VertexInstructionParameterValueField).toString(), 

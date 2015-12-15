@@ -8,6 +8,8 @@ package com.dgr.rat.command.graph.executor.engine;
 import java.util.Set;
 import java.util.UUID;
 
+import com.dgr.rat.json.utils.VertexType;
+
 // TODO ICommandNodeVisitable mi deve permettere di rappresentare anche il nodo equivalente salvato nel DB; per fare ciò devo trasferire 
 // il modote di creazione del nodo al suo interno
 // TODO: deve conoscere anche il graph di origine affinché si possano leggere le label degli edge
@@ -27,4 +29,5 @@ public interface ICommandNodeVisitable {
 	public UUID getCommandGraphUUID();
 	public boolean isRootNode();
 	public ICommandNodeVisitable getParent();
+	public VertexType getVertexType();
 }

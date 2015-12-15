@@ -10,15 +10,20 @@ import java.util.UUID;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.storage.orientdb.StorageInternalError;
 import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Index;
+import com.tinkerpop.blueprints.IndexableGraph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class TinkerGraphStorage implements IStorage{
-	private Graph _graph = null;
+	//private Graph _graph = null;
+	private IndexableGraph _graph = null;
+	//private Map<String, Vertex> _index = new HashMap<String, Vertex>();
 	
 	public TinkerGraphStorage() {
-		_graph = new TinkerGraph();//TinkerGraphFactory.createTinkerGraph();
+		//_graph = new TinkerGraph();//TinkerGraphFactory.createTinkerGraph();
+		_graph = (IndexableGraph) new TinkerGraph();
 	}
 
 	/* (non-Javadoc)
@@ -26,9 +31,6 @@ public class TinkerGraphStorage implements IStorage{
 	 */
 	@Override
 	public Vertex addVertex(UUID vertexUUID) {
-//		for (Vertex vertex : _graph.getVertices()) {
-//			System.out.println(vertex.getId());
-//		}
 		Vertex vertex = _graph.addVertex(null);
 		vertex.setProperty(RATConstants.VertexUUIDField, vertexUUID.toString());
 		return vertex;
@@ -39,8 +41,6 @@ public class TinkerGraphStorage implements IStorage{
 	 */
 	@Override
 	public boolean vertexExists(String label, String value) {
-//		GremlinPipeline pipe = new GremlinPipeline();
-//		Iterable<Vertex> vertex = _graph.getVertices(label, value);
 		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(_graph.getVertices(label, value));
 		List<Vertex> list = pipe.toList();
 		return !list.isEmpty();
@@ -118,19 +118,6 @@ public class TinkerGraphStorage implements IStorage{
 		return result;
 	}
 
-//	private static final PipeFunction<Vertex, Boolean> isParam = new PipesFunction<Vertex, Boolean>(){
-//		@Override
-//		public Boolean compute(Vertex vertex){
-//			boolean result = false;
-//			String paramValue = vertex.getProperty(RATConstants.VertexInstructionParameterValueField);
-//			
-//			result = RATConstants.VertexContentUndefined.equals(paramValue) ? true : false;
-//			return result;
-//		}
-//	};
-//	GremlinPipeline<Vertex, Vertex>pipe = new GremlinPipeline<Vertex, Vertex>(_graph.getVertices());
-//	List<Vertex> list = pipe.outE(RATConstants.EdgeInstruction).inV()
-//			.outE(RATConstants.EdgeInstructionParameter).inV().filter(CreateJsonCommand.isParam).toList();
 	/* (non-Javadoc)
 	 * @see com.dgr.rat.storage.provider.IStorage#getRootDomain()
 	 */
@@ -162,9 +149,38 @@ public class TinkerGraphStorage implements IStorage{
 	 * @see com.dgr.rat.storage.provider.IStorage#addIndex()
 	 */
 	@Override
-	public void addIndex() {
-		// TODO Auto-generated method stub
+	public void addToIndex(String indexName, Vertex vertex, String key, Object value) {
+		Index<Vertex> index = this.getIndex(indexName);
+		index.put(key, value, vertex);
+	}
+	
+	@Override
+	public Vertex getVertex(String indexName, String key, Object value){
+		Vertex result = null;
+		if(this.vertexExists(indexName, key, value)){
+			Index<Vertex> index = this.getIndex(indexName);
+			result = index.get(key, value).iterator().next();
+		}
 		
+		return result;
+	}
+	
+	@Override
+	public boolean vertexExists(String indexName, String key, Object value){
+		Index<Vertex> index = this.getIndex(indexName);
+		long result = index.count(key, value);
+		
+		return result > 0 ? true : false;
+	}
+	
+	@Override
+	public Index<Vertex> getIndex(String indexName){
+		Index<Vertex> index = _graph.getIndex(indexName, Vertex.class);
+		if(index == null){
+			index = _graph.createIndex(indexName, Vertex.class);
+		}
+
+		 return index;
 	}
 
 	/* (non-Javadoc)

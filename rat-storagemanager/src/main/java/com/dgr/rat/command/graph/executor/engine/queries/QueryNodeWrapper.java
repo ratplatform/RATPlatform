@@ -184,4 +184,10 @@ public class QueryNodeWrapper implements ICommandNodeVisitable{
 		// TODO Auto-generated method stub
 		return _node.getIsRootVertexField();
 	}
+	
+	@Override
+	public VertexType getVertexType() {
+		// TODO Auto-generated method stub
+		return _node.getVertexTypeField();
+	}
 }

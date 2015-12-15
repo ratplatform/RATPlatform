@@ -216,4 +216,10 @@ public class RATNodeProxy implements ICommandNodeVisitable{
 	public void setStoredNodeUUID(UUID uuid) {
 		_ratNodeUUID = uuid;
 	}
+	
+	@Override
+	public VertexType getVertexType() {
+		// TODO Auto-generated method stub
+		return _node.getVertexTypeField();
+	}
 }

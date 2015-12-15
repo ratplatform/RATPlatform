@@ -270,4 +270,40 @@ public class SystemInitializerTestHelpers {
 		
 		return commandJSON;
 	}
+	
+	public static String addUserComment(String fileName, String domainUUID, String userNodeUUID, int startComment, int endComment, String url, String vertexContentField, String vertexLabelField) throws Exception{
+		String json = RATHelpers.readCommandJSONFile(fileName);
+		
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+		
+		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+		
+		int changed = remoteCommandsContainer.setValue("domainUUID", domainUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("userNodeUUID", userNodeUUID, ReturnType.uuid);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("startComment", String.valueOf(startComment), ReturnType.integer);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("endComment", String.valueOf(endComment), ReturnType.integer);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("url", url, ReturnType.url);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("VertexContentField", vertexContentField, ReturnType.string);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		changed = remoteCommandsContainer.setValue("VertexLabelField", vertexLabelField, ReturnType.string);
+		System.out.println("Changed in " + fileName + ": " + changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
+		
+		return commandJSON;
+	}
 }

@@ -17,6 +17,7 @@ import com.dgr.rat.command.graph.executor.engine.IInstructionNodeWrapper;
 import com.dgr.rat.command.graph.executor.engine.IInstructionParam;
 import com.dgr.rat.command.graph.executor.engine.InstructionParameterNodeWrapper;
 import com.dgr.rat.json.utils.ReturnType;
+import com.dgr.rat.json.utils.VertexType;
 
 public class BindToParentSystemInstruction implements ICommandNodeVisitable, IInstructionNodeWrapper{
 	private final static String BindToParent = "BindToParent";
@@ -220,5 +221,11 @@ public class BindToParentSystemInstruction implements ICommandNodeVisitable, IIn
 	public Iterator<String> getInstructionParameterNameIterator() {
 		// TODO Auto-generated method stub
 		return _neighbors.keySet().iterator();
+	}
+	
+	@Override
+	public VertexType getVertexType() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -13,6 +13,7 @@ import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IInstructionNodeFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IInstructionParameterNodeFrame;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.json.utils.VertexType;
 
 public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNodeWrapper{
 	private IInstructionNodeFrame _instruction = null;
@@ -263,6 +264,12 @@ public class InstructionWrapper implements ICommandNodeVisitable, IInstructionNo
 	public Iterator<String> getInstructionParameterNameIterator() {
 		// TODO Auto-generated method stub
 		return _neighbors.keySet().iterator();
+	}
+
+	@Override
+	public VertexType getVertexType() {
+		// TODO Auto-generated method stub
+		return _instruction.getVertexTypeField();
 	}
 
 }

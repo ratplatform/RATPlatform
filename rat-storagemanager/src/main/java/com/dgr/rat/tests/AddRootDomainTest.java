@@ -115,6 +115,15 @@ public class AddRootDomainTest {
 			json = SystemInitializerTestHelpers.bindUserToDomain("BindFromUserToDomain.conf", DGRDomain2UUID, dgr2UUID);
 			response = this.executeRemoteCommand(json);
 			
+			//addUserComment(String fileName, String domainUUID, String userNodeUUID, int startComment, int endComment, String url, String vertexContentField, String vertexLabelFie
+			json = SystemInitializerTestHelpers.addUserComment("AddComment.conf", DGRDomain1UUID, dgr1UUID, 25, 345, "http://larepubblica.it", "il mio commento a la repubblica", "larepubblica.it 1");
+			response = this.executeRemoteCommand(json);
+			
+			json = SystemInitializerTestHelpers.addUserComment("AddComment.conf", DGRDomain1UUID, dgr1UUID, 78, 90, "http://larepubblica.it", "il mio secondo commento a la repubblica", "larepubblica.it 2");
+			response = this.executeRemoteCommand(json);
+			
+			json = SystemInitializerTestHelpers.addUserComment("AddComment.conf", DGRDomain1UUID, dgr1UUID, 258, 300, "http://ilfattoquotidiano.it", "il mio commento a ilfattoquotidiano", "ilfattoquotidiano.it 1");
+			response = this.executeRemoteCommand(json);
 //			json = SystemInitializerTestHelpers.bindUserToDomain("BindFromDomainToUser.conf", DGRDomain1UUID, dgr1UUID, VertexType.Domain);
 //			response = this.executeRemoteCommand(json);
 ////			
@@ -272,87 +281,6 @@ public class AddRootDomainTest {
 			resultFilename = dir + "GetUserDomainByName.conf" + "QueryResult";
 			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
-			
-			/**/
-			
-//			System.out.println("Domini sotto RAT");
-//			json = this.query("GetAllDomains.conf", "rootNodeUUID", rootDomainUUID);
-////			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-////			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-//			String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			String resultFilename = dir + "GetAllDomains.conf" + "QueryResult";
-//			String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Dominio dell'utente dgr1 con nome");
-////			json = this.query("GetUserDomainByName.conf", "rootNodeUUID", dgr1UUID);
-//			json = QueryHelpers.queryGetUserDomainByName("GetUserDomainByName.conf", dgr1UUID, "DGR Domain 1");
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-//			int num = RATHelpers.countVertex(json, VertexType.Domain);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Utenti sotto RAT");
-//			json = this.query("GetAllUsers.conf", "rootNodeUUID", rootDomainUUID);
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllUsers.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Domini dell'utente dgr1");
-//			json = this.query("GetAllUserDomains.conf", "rootNodeUUID", dgr1UUID);
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllUserDomains.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Utenti del dominio DGR Domain 1");
-//			json = this.query("GetAllDomainUsers.conf", "rootNodeUUID", DGRDomain1UUID);
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Commenti dell'utente dgr1");
-//			json = this.query("GetAllUserComments.conf", "rootNodeUUID", dgr1UUID);
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Commenti al commento");
-//			json = this.query("GetAllCommentComments.conf", "rootNodeUUID", comment2UUID);
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllCommentComments.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-//			
-//			System.out.println("Tutti i commenti del dominio");
-//			json = this.query("GetAllDomainComments.conf", "rootNodeUUID", DGRDomain1UUID);
-//			response = this.executeRemoteCommand(json);
-//			json = JSONObjectBuilder.serializeCommandResponse(response);
-//			alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
-//			resultFilename = dir + "GetAllDomainComments.conf" + "QueryResult";
-//			path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
-//			TestHelpers.writeGraphToJson(alchemyJson, path);
-			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

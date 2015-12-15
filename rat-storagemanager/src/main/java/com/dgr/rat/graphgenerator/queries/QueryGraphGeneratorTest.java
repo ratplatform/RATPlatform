@@ -190,6 +190,7 @@ public class QueryGraphGeneratorTest {
 		this.addQuery("AddNewUserTemplate.conf", queryVersion);
 		this.addQuery("AddNewDomainTemplate.conf", queryVersion);
 		this.addQuery("BindFromUserToDomainTemplate.conf", queryVersion);
+		this.addQuery("AddCommentTemplate.conf", queryVersion);
 		
 		String javaScript = _buildQueryJavaScript.getJavaScript();
 //		System.out.println(javaScript);

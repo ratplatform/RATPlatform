@@ -13,6 +13,7 @@ import com.dgr.rat.command.graph.executor.engine.result.InstructionResultContain
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
 import com.dgr.rat.command.graph.executor.engine.result.queries.PipeResult;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.json.utils.VertexType;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
@@ -28,7 +29,17 @@ public class SetQueryPipe implements IInstruction{
 	// TODO: passare direttamente la classe coi parametri
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String content = invoker.getNodeParamValue(RATConstants.VertexContentField);
+		String content = null;
+		String contentField = null;
+		if(nodeCaller.getVertexType().equals(VertexType.SystemKey)){
+			contentField = RATConstants.VertexContentField;
+		}
+		else{
+			contentField = RATConstants.VertexTypeField;
+		}
+		
+		content = invoker.getNodeParamValue(contentField);
+		
 		String edgeLabel = invoker.getNodeParamValue("edgeLabel");
 		
 		// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
@@ -52,7 +63,7 @@ public class SetQueryPipe implements IInstruction{
 		}
 		
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		pipe.both(edgeLabel).has(RATConstants.VertexContentField, content);
+		pipe.both(edgeLabel).has(contentField, content);
 //		System.out.println("queryPipe: " + pipe.toString());
 		
 		UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
