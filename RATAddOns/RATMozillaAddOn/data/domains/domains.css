@@ -1,0 +1,43 @@
+.createDomain {
+	float:left;
+	width:99%;
+	height:40%;
+}
+.userDomain {
+	float:left;
+	width:99%;
+	height:59%;
+}
+div#alchemy {
+	display:none;
+}
+div.box
+{
+	width:99%;; 
+	height:69%;
+	background:url(boxbk.png) no-repeat top left;
+	padding:1px 0;
+	font-size:10px
+}
+
+.domains
+{
+		height: 200px;
+		overflow:auto;
+		margin:25px 24px 100; 
+		padding-right:2px
+}
+
+.comments
+{
+	height: 500px;
+	overflow:auto;
+	margin:25px 24px 100; 
+	padding-right:2px;
+}
+
+.border{
+	border: 1px solid #4C3C1B;
+	padding: 8px 8px 80px 8px;
+	width: 99%;
+}

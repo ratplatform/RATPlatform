@@ -1,0 +1,17 @@
+#edit-box {
+   	resize: none;
+	margin: 10px;
+    	width: 358px;
+    	height: 280px;
+}
+
+#title {
+   	resize: none;
+	margin: 10px;
+    	width: 358px;
+    	height: 20px;
+}
+
+body {
+	background-color: gray;
+}

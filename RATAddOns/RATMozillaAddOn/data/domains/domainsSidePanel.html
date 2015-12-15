@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link href="../lib/styles/vendor.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="../lib/alchemy.min.css"/>
+	<script type="text/javascript" src="../lib/scripts/vendor.js"></script>
+	<script type="text/javascript" src="../lib/alchemy.js"></script>
+	<!--script type="text/javascript" src="alchemy-graph.js"></script-->
+
+	<link href="../lib/jqtree.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="domains.css"/>
+	<script type="text/javascript" src="../lib/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="../lib/tree.jquery.js"></script>
+	<script type="text/javascript" src="../lib/queries.js"></script>
+	<script type="text/javascript" src="../lib/ratCommands.js"></script>
+	<script type="text/javascript" src="pageScripts.js"></script>
+	<script type="text/javascript" src="../helpers.js"></script>
+	<script type="text/javascript" src="domainsSidePanel.js"></script>
+
+	<title>Domains</title>
+	</head>
+	<body onload="onLoad()">
+
+	<div id='currentDomain'>Please select a domain</div>
+
+	<div class="box border">
+		<div class="domains">
+			<div class="alchemy" id="alchemy"></div>
+			<div id="userDomainsTree"></div>
+		</div>
+	</div>
+
+	<div class="box border">
+		<div id='newDomain'>
+		New domain name: <input type="text" name="domainName" id='domainName' /><br>
+		<button name="addNewDomain" id='addNewDomain'>Add new domain</button>
+		</div>
+	</div>
+
+	<div class="box border">
+		<div class="comments">
+		sasasas
+		</div>
+	</div>
+	<div class="box border">
+	<button id="addComment">Add comment</button>
+	<button id="delComment">Delete comment</button>
+	</div>
+
+	</body>
+</html>

@@ -19,9 +19,9 @@ var PrivateBrowsingUtils = Cu.import("resource://gre/modules/PrivateBrowsingUtil
 // dgr
 var sidebar = require("sdk/ui/sidebar");
 var simplePrefs = require("sdk/simple-prefs");
-var domainsSidePanel = require('./domainsSidePanel');
-var commentsSidePanel = require('./commentsSidePanel');
-var login = require('./login');
+var domainsSidePanel = require('./domains/domainsSidePanel');
+var commentsSidePanel = require('./comments/commentsSidePanel');
+var login = require('./login/login');
 var ss = require("sdk/simple-storage");
 // end dgr
 
@@ -134,15 +134,16 @@ function toolbarChange(state){
 function popupHide(){
     toolbarButton.state('window',{checked:false});
 }
+//var commentWnd = require('./comment-dlg/commentWnd');
 
 function addToolbarButtons(){
 	toolbarButton = ToggleButton({
         id:'rat-toolbarbutton',
         label:'RAT Addon',
         icon:{
-            "16":'./img/icon-16.png',
-            "32":'./img/icon-32.png',
-            "64":'./img/icon-64.png'
+            "16":'./lib/images/icon-16.png',
+            "32":'./lib/images/icon-32.png',
+            "64":'./lib/images/icon-64.png'
         },
         onChange:toolbarChange
     });
@@ -150,7 +151,7 @@ function addToolbarButtons(){
     popupPanel = panel.Panel({
         width:300,
         height:100,
-        contentURL:data.url('./popup.html'),
+        contentURL:data.url('./menu/menu.html'),
         onHide:popupHide
     });
 
@@ -169,16 +170,26 @@ function addToolbarButtons(){
 		console.log("logout"); 
                 break;
             case 'sidePanelDomains':
-		//console.log("login.getResponseText : " + login.getResponseText);
-		//console.log("login.getUserUUID : " + login.getUserUUID);
-		// TODO: controllare login.getStatus
-		domainsSidePanel.openSidePanel(ss.storage.lastResponseText);
+		if(ss.storage.sessionID){
+			domainsSidePanel.openSidePanel(ss.storage.sessionID, ss.storage.lastResponseText);
+		}
+		else{
+			//alert("Please login");
+			console.log("Please login");
+		}
                 break;
             case 'commentsSidePanel':
 		console.log("commentsSidePanel");
-		//console.log("login.getUserUUID : " + login.getUserUUID);
-		// TODO: controllare login.getStatus
-		commentsSidePanel.openSidePanel(ss.storage.lastResponseText);
+		//commentWnd.openWindow(ss.storage.currentDomainName, ss.storage.currentDomainUUID);
+
+		if(ss.storage.sessionID && ss.storage.currentDomainUUID){
+			commentsSidePanel.openSidePanel(ss.storage.sessionID, ss.storage.userUUID, ss.storage.currentDomainUUID, ss.storage.currentDomainName);
+			
+		}
+		else{
+			//alert("Please login");
+			console.log("Please login");
+		}
                 break;
 
         }
@@ -186,7 +197,7 @@ function addToolbarButtons(){
     });
 }
 
-function init(capture) {
+function init() {
     	removeAll();
 	addToolbarButtons();
 }
