@@ -7,7 +7,7 @@ var GetAdminUserByEmail = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"538dbf8a-1172-4b77-b469-ab138e470dd9",
-		RootVertexUUID:"9a4f2ed9-1288-457f-bb4c-e687db68ea51",
+		RootVertexUUID:"71805c19-c943-4256-8928-aca5c6d58c7b",
 		commandName:"GetAdminUserByEmail",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -15,17 +15,17 @@ var GetAdminUserByEmail = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"80371b8b-2c5d-459f-9983-8989f65c53fb",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"a34da123-db84-4aec-b9d8-bff980f2af98",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userEmail : {
 			VertexInstructionParameterNameField:"userEmail",
-			VertexUUIDField:"91890f13-2231-4f55-ad9d-b7b58e5cc9fe",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"0"
+			VertexUUIDField:"be36b8ab-d38d-4437-9ca6-6a0e2982b8bc",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -39,7 +39,7 @@ var GetAllAdminUsers = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"e2b8d5f3-43d4-40ab-8e77-3ffca7257650",
-		RootVertexUUID:"b55ae5c0-d030-49b0-8fd3-6aafd94e3bcf",
+		RootVertexUUID:"1c0bcd31-81ba-4f47-9f27-a3ed5d3d36e2",
 		commandName:"GetAllAdminUsers",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -47,10 +47,10 @@ var GetAllAdminUsers = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"ebc4f2e0-b87f-4737-881c-3983faebb43b",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"f7590a59-343e-45ca-a758-159341af710f",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -64,7 +64,7 @@ var GetUserByEmail = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"8be954ab-04d4-4c97-b89c-df90bf4b9030",
-		RootVertexUUID:"03d3c8fd-1bf1-4ae9-919c-7c985f9e3d77",
+		RootVertexUUID:"4d08fb13-2214-4295-aae1-c4f99c07b5b4",
 		commandName:"GetUserByEmail",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -72,17 +72,17 @@ var GetUserByEmail = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"4f79232e-9726-431f-bcc4-034ee26b8e1d",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"d6b6166d-3d75-4d65-b4c9-e0bec39446a4",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userEmail : {
 			VertexInstructionParameterNameField:"userEmail",
-			VertexUUIDField:"19769f37-4ca9-465c-b475-06a12a28c04b",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"0"
+			VertexUUIDField:"3cbe96bb-412e-4dde-9641-421d350ff45f",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -96,7 +96,7 @@ var GetAllUsers = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"74e09bbd-51ad-4675-bc2b-81e504e9986c",
-		RootVertexUUID:"460f6f1d-c86f-4a74-91a1-1b881408d85c",
+		RootVertexUUID:"318ec4e1-027b-41ed-9669-6cb85bb1e8c5",
 		commandName:"GetAllUsers",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -104,10 +104,10 @@ var GetAllUsers = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"32990e73-4a48-45b3-b059-8b688cd6198f",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"4ac62665-517a-4988-9225-795c7a9b1995",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -121,7 +121,7 @@ var GetDomainByName = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"833af228-9bf4-4f20-8c05-d917d0f2d452",
-		RootVertexUUID:"c5ee5139-85fb-4952-b627-3184d6f71c68",
+		RootVertexUUID:"227e584d-3dda-4a4f-9a67-dcd2d4520a0f",
 		commandName:"GetDomainByName",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -129,17 +129,17 @@ var GetDomainByName = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"c1f8d6dc-8014-42eb-afbf-3cfd3e31c243",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"73bcb222-7c63-48ba-a56d-1842dda5b8f5",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		domainName : {
 			VertexInstructionParameterNameField:"domainName",
-			VertexUUIDField:"bf16d6ce-22cf-4088-9282-2f993ae9d7c1",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"0"
+			VertexUUIDField:"df8d2e0a-5aeb-4889-bdb3-b7dd366750e7",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -153,7 +153,7 @@ var GetAllDomains = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"109eb7ac-5988-4bd4-a43f-ee2ebe1d7d6e",
-		RootVertexUUID:"2fda3971-65d2-4c48-b0e3-adbf3f344fea",
+		RootVertexUUID:"c2be0fd9-e45b-453c-808f-02452c8d60f1",
 		commandName:"GetAllDomains",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -161,10 +161,10 @@ var GetAllDomains = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"e5dc5ad2-82da-4ba2-906f-ad5c4d1a08bf",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"984c8ce6-902c-4212-a364-05fd9097c7df",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -178,7 +178,7 @@ var GetAllDomainUsers = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"43497ee2-9abe-4120-866e-ab0f1d822fb5",
-		RootVertexUUID:"faafd1e7-ad02-4ec8-b82d-405b0a79bce3",
+		RootVertexUUID:"7ccb4435-6542-495d-b79f-02cc053728e0",
 		commandName:"GetAllDomainUsers",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -186,17 +186,17 @@ var GetAllDomainUsers = {
 	settings : {
 		VertexTypeField : {
 			VertexInstructionParameterNameField:"VertexTypeField",
-			VertexUUIDField:"db37ccb0-2f32-461b-bc5e-cdbf17af3a1b",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"2"
+			VertexUUIDField:"31b5cbc0-a8c4-41e6-ae46-899068ed5e3f",
+			InstructionOrderField:"2",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"7253261f-b8b0-4346-8ae6-86bbd8bbce44",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"8116d544-663f-4925-87f7-a4d4fc8207ef",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -210,7 +210,7 @@ var GetAllUserDomains = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"07e8fe20-0e0d-4820-baf5-2a51e86d23e7",
-		RootVertexUUID:"65a48b78-1ca1-4744-8eba-4d93a23c33a2",
+		RootVertexUUID:"753cc385-0573-44d0-a9b8-a7df45a17344",
 		commandName:"GetAllUserDomains",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -218,17 +218,17 @@ var GetAllUserDomains = {
 	settings : {
 		VertexTypeField : {
 			VertexInstructionParameterNameField:"VertexTypeField",
-			VertexUUIDField:"686cda9b-4e2a-4eab-846e-65a6a6e8ed95",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"2"
+			VertexUUIDField:"b4a730df-8c99-40ef-b4e9-22b09bcb6ffc",
+			InstructionOrderField:"2",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"3af4a318-857a-44a7-a853-02c5301f6d04",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"ffd950f1-7b60-4cd8-aada-471cc233f3d6",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -242,7 +242,7 @@ var GetUserDomainByName = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"4f9c08a0-5730-42ce-b116-ece55f18c513",
-		RootVertexUUID:"5ebd6aca-4b51-4ff9-bf7f-21f91a95bab5",
+		RootVertexUUID:"456cd8d8-d952-4caf-89aa-c031a5016898",
 		commandName:"GetUserDomainByName",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -250,24 +250,24 @@ var GetUserDomainByName = {
 	settings : {
 		VertexTypeField : {
 			VertexInstructionParameterNameField:"VertexTypeField",
-			VertexUUIDField:"e0d221dd-5edf-4453-ad79-7bcf34717465",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"3"
+			VertexUUIDField:"2dc0fee2-0d1c-4631-a9ec-353a04418353",
+			InstructionOrderField:"3",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"8d12f969-d1d5-434f-b11e-2eddf1c1b96c",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"23eed702-fb35-4f83-a855-c5a323bf3241",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		domainName : {
 			VertexInstructionParameterNameField:"domainName",
-			VertexUUIDField:"a471d040-c39b-4314-b0e4-4b2069c5592f",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"string",
-			InstructionOrderField:"2"
+			VertexUUIDField:"6dbd7ce5-a82a-4638-a010-38f4ef448589",
+			InstructionOrderField:"2",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -281,7 +281,7 @@ var GetAllUserComments = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"3b91b726-9c69-4f76-9b61-d6366251201c",
-		RootVertexUUID:"a7ba3b6a-7c48-40c4-8599-75c10e7f581b",
+		RootVertexUUID:"9f5aa25e-77c0-4e04-a180-67f8dca4f87c",
 		commandName:"GetAllUserComments",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
@@ -289,10 +289,10 @@ var GetAllUserComments = {
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"9b12b234-da56-45ad-b601-0d04c3e03ee8",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"199a5139-311a-47e7-9c31-ae0e3a107924",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -306,30 +306,37 @@ var GetAllDomainComments = {
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
 		CommandGraphUUID:"91eb42ac-2834-45ec-a1b1-93b85dabd824",
-		RootVertexUUID:"d1ae96cb-cbd2-4cbf-8aa1-efa055c0c2b0",
+		RootVertexUUID:"bec7277f-92e9-41b2-aa71-c0661bd6382a",
 		commandName:"GetAllDomainComments",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
 	},
 	settings : {
-		domainUUID : {
-			VertexInstructionParameterNameField:"domainUUID",
-			VertexUUIDField:"1f1ff896-d29c-4953-9485-13d72c63470b",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
-			ReturnType:"string",
-			InstructionOrderField:"2"
-		},
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"5523f5b3-2a8f-4b34-a4f4-fe5b174e9532",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"f67a9a70-3d47-4e56-9612-e394fd573442",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
+		},
+		userUUID : {
+			VertexInstructionParameterNameField:"userUUID",
+			ReturnType:"string",
+			VertexUUIDField:"971d3a7e-1c7d-49e3-98e3-399b203a56da",
+			InstructionOrderField:"2",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
+		},
+		url : {
+			VertexInstructionParameterNameField:"url",
+			ReturnType:"string",
+			VertexUUIDField:"cb2f055c-6096-4301-952d-a3ca51064e99",
+			InstructionOrderField:"2",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
 
-var GetAllCommentComments = {
+var GetCommentComments = {
 	header : {
 		commandType:"Query",
 		DomainUUID:"null",
@@ -337,19 +344,19 @@ var GetAllCommentComments = {
 		application:"RATPlatform",
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
-		CommandGraphUUID:"41c59dcf-7ceb-4212-a328-c7d6190b0c65",
-		RootVertexUUID:"403e61eb-59ba-422d-9303-05c230c5204c",
-		commandName:"GetAllCommentComments",
+		CommandGraphUUID:"50caeaeb-0206-46ca-9c8d-c051c6dacae6",
+		RootVertexUUID:"45567dd9-aeb8-4f9d-9d76-d953a5c61cf3",
+		commandName:"GetCommentComments",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Request"
 	},
 	settings : {
 		rootNodeUUID : {
 			VertexInstructionParameterNameField:"rootNodeUUID",
-			VertexUUIDField:"ade6e3e0-4745-4298-980a-3f2def51cb40",
-			VertexInstructionParameterValueField:"VertexContentUndefined",
 			ReturnType:"uuid",
-			InstructionOrderField:"0"
+			VertexUUIDField:"52d382cb-87fe-464d-93f9-f0546b814f14",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
 	}
 };
@@ -413,15 +420,16 @@ GetAllUserCommentsSet = function(currentDomainUUID, param0){
 	GetAllUserComments.header.DomainUUID = currentDomainUUID;
 };
 
-GetAllDomainCommentsSet = function(currentDomainUUID, param0, param1){
-	GetAllDomainComments.settings.domainUUID.VertexInstructionParameterValueField = param0;
-	GetAllDomainComments.settings.rootNodeUUID.VertexInstructionParameterValueField = param1;
+GetAllDomainCommentsSet = function(currentDomainUUID, param0, param1, param2){
+	GetAllDomainComments.settings.rootNodeUUID.VertexInstructionParameterValueField = param0;
+	GetAllDomainComments.settings.userUUID.VertexInstructionParameterValueField = param1;
+	GetAllDomainComments.settings.url.VertexInstructionParameterValueField = param2;
 	GetAllDomainComments.header.DomainUUID = currentDomainUUID;
 };
 
-GetAllCommentCommentsSet = function(currentDomainUUID, param0){
-	GetAllCommentComments.settings.rootNodeUUID.VertexInstructionParameterValueField = param0;
-	GetAllCommentComments.header.DomainUUID = currentDomainUUID;
+GetCommentCommentsSet = function(currentDomainUUID, param0){
+	GetCommentComments.settings.rootNodeUUID.VertexInstructionParameterValueField = param0;
+	GetCommentComments.header.DomainUUID = currentDomainUUID;
 };
 
 

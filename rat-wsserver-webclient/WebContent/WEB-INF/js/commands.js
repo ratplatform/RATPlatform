@@ -15,15 +15,15 @@ var AddRootDomain = {
 	settings : {
 		commandsNodeUUID : {
 			VertexInstructionParameterNameField:"commandsNodeUUID",
-			VertexUUIDField:"61a100b4-2203-4f60-9797-ea6bf776d90a",
 			ReturnType:"uuid",
+			VertexUUIDField:"ee71da81-afda-4d96-a06e-98c8a0989373",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		queriesNodeUUID : {
 			VertexInstructionParameterNameField:"queriesNodeUUID",
-			VertexUUIDField:"77cf03ce-861a-4fa7-bce6-117ad719a576",
 			ReturnType:"uuid",
+			VertexUUIDField:"917302db-9289-447d-be1b-e58df5b9f1f9",
 			InstructionOrderField:"1",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -47,8 +47,8 @@ var LoadCommands = {
 	settings : {
 		folder : {
 			VertexInstructionParameterNameField:"folder",
-			VertexUUIDField:"5ad1298d-dd11-48cf-91df-83751705c1a8",
 			ReturnType:"string",
+			VertexUUIDField:"8848a932-7598-45fa-aee6-752727ba7463",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -72,8 +72,8 @@ var LoadQueries = {
 	settings : {
 		folder : {
 			VertexInstructionParameterNameField:"folder",
-			VertexUUIDField:"77352fa8-7b8f-441f-a8e4-270e662203e8",
 			ReturnType:"string",
+			VertexUUIDField:"7c0e307c-1a1d-4540-8fcb-0b6e2bcec294",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -97,36 +97,36 @@ var AddRootDomainAdminUser = {
 	settings : {
 		isUserOfNodeUUID : {
 			VertexInstructionParameterNameField:"isUserOfNodeUUID",
-			VertexUUIDField:"5f849c60-62ef-4924-8374-c15c04d76710",
 			ReturnType:"uuid",
+			VertexUUIDField:"9056678d-21a7-407e-a568-95e1d52dcd3a",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userPwd : {
 			VertexInstructionParameterNameField:"userPwd",
-			VertexUUIDField:"01be7cc6-42a2-442c-b7bd-268ff7685dfd",
 			ReturnType:"string",
+			VertexUUIDField:"d37358e6-68c7-461e-87c2-ea10b6b8648d",
 			InstructionOrderField:"2",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userName : {
 			VertexInstructionParameterNameField:"userName",
-			VertexUUIDField:"5de5814e-081a-44ca-8ff2-ea8c2cc18074",
 			ReturnType:"string",
+			VertexUUIDField:"dd497e16-73f3-4bba-82cf-6006208d77d9",
 			InstructionOrderField:"1",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userEmail : {
 			VertexInstructionParameterNameField:"userEmail",
-			VertexUUIDField:"1bdb7a42-c3e9-43a1-9de5-2e2c20392681",
 			ReturnType:"string",
+			VertexUUIDField:"ee7cc7a5-4149-4f9b-a756-1c5294e8d5da",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		isPutByNodeUUID : {
 			VertexInstructionParameterNameField:"isPutByNodeUUID",
-			VertexUUIDField:"27338dc1-9ab0-47db-b14c-1b8cb5f44184",
 			ReturnType:"uuid",
+			VertexUUIDField:"62226c88-ecec-4bcb-b02b-64f095b20f29",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -150,43 +150,43 @@ var AddNewUser = {
 	settings : {
 		isPutByNode2UUID : {
 			VertexInstructionParameterNameField:"isPutByNode2UUID",
-			VertexUUIDField:"ebd53f01-7126-4f17-bf0f-d0ce2363dcae",
 			ReturnType:"uuid",
+			VertexUUIDField:"d6342ffe-956e-4851-b663-b04145410e0e",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		isUserOfNodeUUID : {
 			VertexInstructionParameterNameField:"isUserOfNodeUUID",
-			VertexUUIDField:"e1b9b2e7-e0f4-48a2-8ee5-404d6b0ea163",
 			ReturnType:"uuid",
+			VertexUUIDField:"16a98abb-0cee-4c54-a226-711da6d3d188",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userPwd : {
 			VertexInstructionParameterNameField:"userPwd",
-			VertexUUIDField:"dac64700-b4ce-4380-b96a-3e0bcabd3005",
 			ReturnType:"string",
+			VertexUUIDField:"6559e05e-0aa6-475f-988e-81d9eea4fd20",
 			InstructionOrderField:"2",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userName : {
 			VertexInstructionParameterNameField:"userName",
-			VertexUUIDField:"6dbe2ae2-85fe-4af6-9cad-f3b157113d16",
 			ReturnType:"string",
+			VertexUUIDField:"5b8c4094-720a-409d-92dc-582392a97f30",
 			InstructionOrderField:"1",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userEmail : {
 			VertexInstructionParameterNameField:"userEmail",
-			VertexUUIDField:"8fa2b868-4d89-4686-8e62-026ede528b06",
 			ReturnType:"string",
+			VertexUUIDField:"fe07666d-cb97-4455-a342-2d4e8d809452",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		isPutByNodeUUID : {
 			VertexInstructionParameterNameField:"isPutByNodeUUID",
-			VertexUUIDField:"ccb4e4f8-8933-4e39-828e-3c3a814c4d1c",
 			ReturnType:"uuid",
+			VertexUUIDField:"8663aad0-b680-496f-96e4-24b08a0b438f",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -210,22 +210,22 @@ var AddNewDomain = {
 	settings : {
 		nodeUUID : {
 			VertexInstructionParameterNameField:"nodeUUID",
-			VertexUUIDField:"3d951b4c-5629-4378-9f0f-2334b1294d99",
 			ReturnType:"uuid",
+			VertexUUIDField:"54617e9b-9486-45ea-92c1-e112861760ce",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		domainName : {
 			VertexInstructionParameterNameField:"domainName",
-			VertexUUIDField:"3af73426-640b-4f05-9ae8-a692e41661db",
 			ReturnType:"string",
+			VertexUUIDField:"804e326c-bd40-4d8e-b7db-1b46965f3f75",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		VertexLabelField : {
 			VertexInstructionParameterNameField:"VertexLabelField",
-			VertexUUIDField:"59a36477-f870-448b-9c94-edbcedf53cf7",
 			ReturnType:"string",
+			VertexUUIDField:"3efae6b4-c51f-4edb-a3a5-99d3f4590916",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -247,52 +247,66 @@ var AddComment = {
 		MessageType:"Template"
 	},
 	settings : {
-		domainUUID : {
-			VertexInstructionParameterNameField:"domainUUID",
-			VertexUUIDField:"f82bce13-7e6c-469b-b65d-042650bdf25c",
-			ReturnType:"uuid",
-			InstructionOrderField:"0",
+		endPageY : {
+			VertexInstructionParameterNameField:"endPageY",
+			ReturnType:"integer",
+			VertexUUIDField:"cdd2fdb4-5309-435a-8360-5805422abdd4",
+			InstructionOrderField:"3",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
+		},
+		startPageY : {
+			VertexInstructionParameterNameField:"startPageY",
+			ReturnType:"integer",
+			VertexUUIDField:"2980a01e-60a5-44c9-b891-d62e96009939",
+			InstructionOrderField:"1",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
+		},
+		endPageX : {
+			VertexInstructionParameterNameField:"endPageX",
+			ReturnType:"integer",
+			VertexUUIDField:"a4a571a0-0461-418c-8a62-dd097821da1a",
+			InstructionOrderField:"2",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userNodeUUID : {
 			VertexInstructionParameterNameField:"userNodeUUID",
-			VertexUUIDField:"c6713ab7-6dc9-41e9-a965-c0dc86b8b54d",
 			ReturnType:"uuid",
+			VertexUUIDField:"05bf350b-d450-4877-8e3d-ffc7b30bdbed",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
-		startComment : {
-			VertexInstructionParameterNameField:"startComment",
-			VertexUUIDField:"60ce177c-f8d9-4a92-8ef1-c229d0682ba3",
-			ReturnType:"integer",
+		ownerNodeUUID : {
+			VertexInstructionParameterNameField:"ownerNodeUUID",
+			ReturnType:"uuid",
+			VertexUUIDField:"ece40cf9-ca02-4c6c-a58d-ac63bcc7c4e7",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		url : {
 			VertexInstructionParameterNameField:"url",
-			VertexUUIDField:"aae78dcd-2637-46df-bd7c-557017f1d209",
 			ReturnType:"url",
+			VertexUUIDField:"9b21604c-802b-4b13-b092-4df840cd0882",
 			InstructionOrderField:"0",
-			VertexInstructionParameterValueField:"VertexContentUndefined"
-		},
-		endComment : {
-			VertexInstructionParameterNameField:"endComment",
-			VertexUUIDField:"f856f52b-1834-4a80-812d-4c757792dc5b",
-			ReturnType:"integer",
-			InstructionOrderField:"1",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		VertexContentField : {
 			VertexInstructionParameterNameField:"VertexContentField",
-			VertexUUIDField:"f7844c10-7517-4098-af90-68d5d4f9c6dc",
 			ReturnType:"string",
+			VertexUUIDField:"e87fbdb5-be09-4563-8075-2ff3bdee62bc",
 			InstructionOrderField:"1",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		VertexLabelField : {
 			VertexInstructionParameterNameField:"VertexLabelField",
-			VertexUUIDField:"37a8f7d3-6c5b-4f5a-9bef-2e7be2f8fb6f",
 			ReturnType:"string",
+			VertexUUIDField:"e175745d-8e6b-45b8-b120-4a8fc0d8e076",
+			InstructionOrderField:"0",
+			VertexInstructionParameterValueField:"VertexContentUndefined"
+		},
+		startPageX : {
+			VertexInstructionParameterNameField:"startPageX",
+			ReturnType:"integer",
+			VertexUUIDField:"3450c078-b752-4837-9a6e-77eb88c40a67",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -316,15 +330,15 @@ var BindFromUserToDomain = {
 	settings : {
 		domainNodeUUID : {
 			VertexInstructionParameterNameField:"domainNodeUUID",
-			VertexUUIDField:"dd1576e1-709e-419a-855c-bd2525ed1afb",
 			ReturnType:"uuid",
+			VertexUUIDField:"fa34926a-0ac3-40d1-a8cd-4cd446bbbce9",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		},
 		userUUID : {
 			VertexInstructionParameterNameField:"userUUID",
-			VertexUUIDField:"ab4f55ed-a15b-4d3a-927c-b4bf39d6116a",
 			ReturnType:"uuid",
+			VertexUUIDField:"5d491aae-4b38-45a1-8f35-64ca3f085c0f",
 			InstructionOrderField:"0",
 			VertexInstructionParameterValueField:"VertexContentUndefined"
 		}
@@ -375,14 +389,16 @@ AddNewDomainSet = function(currentDomainUUID, param0, param1, param2){
 	AddNewDomain.header.DomainUUID = currentDomainUUID;
 };
 
-AddCommentSet = function(currentDomainUUID, param0, param1, param2, param3, param4, param5, param6){
-	AddComment.settings.domainUUID.VertexInstructionParameterValueField = param0;
-	AddComment.settings.userNodeUUID.VertexInstructionParameterValueField = param1;
-	AddComment.settings.startComment.VertexInstructionParameterValueField = param2;
-	AddComment.settings.endComment.VertexInstructionParameterValueField = param3;
-	AddComment.settings.url.VertexInstructionParameterValueField = param4;
-	AddComment.settings.VertexLabelField.VertexInstructionParameterValueField = param5;
-	AddComment.settings.VertexContentField.VertexInstructionParameterValueField = param6;
+AddCommentSet = function(currentDomainUUID, param0, param1, param2, param3, param4, param5, param6, param7, param8){
+	AddComment.settings.startPageY.VertexInstructionParameterValueField = param0;
+	AddComment.settings.endPageY.VertexInstructionParameterValueField = param1;
+	AddComment.settings.endPageX.VertexInstructionParameterValueField = param2;
+	AddComment.settings.userNodeUUID.VertexInstructionParameterValueField = param3;
+	AddComment.settings.ownerNodeUUID.VertexInstructionParameterValueField = param4;
+	AddComment.settings.url.VertexInstructionParameterValueField = param5;
+	AddComment.settings.startPageX.VertexInstructionParameterValueField = param6;
+	AddComment.settings.VertexLabelField.VertexInstructionParameterValueField = param7;
+	AddComment.settings.VertexContentField.VertexInstructionParameterValueField = param8;
 	AddComment.header.DomainUUID = currentDomainUUID;
 };
 
