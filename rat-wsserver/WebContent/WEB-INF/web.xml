@@ -27,6 +27,10 @@
     <param-name>application.properties</param-name>
     <param-value>${app.base}/conf/application.properties</param-value>
 </context-param>
+<context-param>
+    <param-name>plugInContextMenu</param-name>
+    <param-value>${app.base}/conf/plugInContextMenu.json</param-value>
+</context-param>
 
 <!-- Shiro -->
  <listener>

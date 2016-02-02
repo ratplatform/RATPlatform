@@ -1,0 +1,7 @@
+[{
+	"title": "Reply",
+	"cmd": "reply"
+}, {
+	"title": "Delete",
+	"cmd": "delete"
+}]

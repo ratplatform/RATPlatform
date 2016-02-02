@@ -6,6 +6,7 @@
 package com.dgr.rat.webservices;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import javax.servlet.ServletContext;
@@ -39,8 +40,10 @@ import com.dgr.rat.messages.IMessageSender;
 import com.dgr.rat.messages.RATMessageSender;
 import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.rat.session.manager.SessionData;
+import com.dgr.utils.FileUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("/rat")
@@ -145,10 +148,14 @@ public class RATWebServices {
         }
         
 		try {
+			// TODO: per inviare il menu dei cmmmenti in modo dinamico: da sistemare meglio
+			List <Object> menu = this.readMenu();
+			result.put("plugInContextMenu", menu);
+			
 			json = mapper.writeValueAsString(result);
 			System.out.println(json);
 		} 
-		catch (JsonProcessingException e) {
+		catch (Exception e) {
 			// TODO: gestire l'errore creando un JSON con errore e statuscode 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,6 +164,16 @@ public class RATWebServices {
     	response = Response.status(responseStatus).entity(json).build();
         
         return response;
+	}
+	
+	private List <Object> readMenu() throws Exception{
+		String file = _context.getInitParameter("plugInContextMenu");
+		String json = FileUtils.fileRead(file);
+		ObjectMapper mapper = new ObjectMapper();
+		JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, Object.class);
+		List <Object> objs = mapper.readValue(json, type);
+		
+		return objs;
 	}
 	
 	@POST @Path("/v0.1/executeconfigurationcommand")
