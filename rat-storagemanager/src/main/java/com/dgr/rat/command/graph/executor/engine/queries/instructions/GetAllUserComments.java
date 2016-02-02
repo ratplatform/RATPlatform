@@ -5,7 +5,9 @@
 
 package com.dgr.rat.command.graph.executor.engine.queries.instructions;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import java.util.UUID;
 
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
@@ -58,7 +60,7 @@ public class GetAllUserComments implements IInstruction{
 			// TODO: log
 		}
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
+		//pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
 
 		List<Vertex> result = pipe.toList();
 //		System.out.println(result.toString());
@@ -73,6 +75,40 @@ public class GetAllUserComments implements IInstruction{
 			Object value = rootVertex.getProperty(key);
 			newRootVertex.setProperty(key, value);
 		}
+		
+		//TODO: per il momento questa query restituisce un elenco di tutti i commenti dell'utente, ma io voglio
+		// che essi siano organizzati dentro un grafo che mi mostri commenti e subcommenti: il codice che lo fa è quello
+		// commentato (ma non è finito).
+//		Stack<Vertex>stack = new Stack<Vertex>();
+//		List<Vertex> visited = new LinkedList<Vertex>();
+//		List<Vertex> result2 = pipe.toList();
+//		
+//		for(Vertex vertex : result){
+//			if(visited.contains(vertex)){
+//				continue;
+//			}
+//			stack.push(vertex);
+//			
+//			while(!stack.isEmpty()){
+//				Vertex v = stack.pop();
+//				visited.add(v);
+//				Vertex newVertex = graph.addVertex(null);
+//				for(String key : v.getPropertyKeys()){
+//					Object value = v.getProperty(key);
+//					newVertex.setProperty(key, value);
+//				}
+//				newVertex.setProperty(RATConstants.VertexIsRootField, false);
+//				
+//				pipe = new GremlinPipeline<Vertex, Vertex>(v);
+//				pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());//.in(edgeLabel).has(RATConstants.VertexContentField, "belongs-to").in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
+//				result2 = pipe.toList();
+//				for(Vertex child : result2){
+//					stack.push(child);
+//				}
+//				System.out.println(result.toString());
+//				//}
+//			}
+//		}
 		
 		for(Vertex vertex : result){
 			Vertex newVertex = graph.addVertex(null);

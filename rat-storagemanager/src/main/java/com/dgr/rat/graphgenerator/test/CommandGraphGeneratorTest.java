@@ -33,7 +33,6 @@ import com.dgr.rat.graphgenerator.commands.AddNewDomain;
 import com.dgr.rat.graphgenerator.commands.AddNewUser;
 import com.dgr.rat.graphgenerator.commands.AddRootPlatformNode;
 import com.dgr.rat.graphgenerator.commands.AddRootDomainAdminUser;
-import com.dgr.rat.graphgenerator.commands.AddSubComment;
 
 import com.dgr.rat.graphgenerator.commands.BindFromUserToDomain;
 import com.dgr.rat.graphgenerator.commands.ICommandCreator;
@@ -131,18 +130,6 @@ public class CommandGraphGeneratorTest {
 		return command;
 	}
 	
-	private ICommandCreator addSubComment(String commandVersion) throws Exception{
-		String commandName = "AddSubComment";
-		
-		AbstractCommand command = new AddSubComment(commandName, commandVersion);
-		command.set_commandType(JSONType.SystemCommands);
-		command.set_edgeName("AddSubComment");
-		command.addNodesToGraph();
-		command.buildGraph();
-
-		return command;
-	}
-	
 	private ICommandCreator addBindGraphFromUserToDomain(String commandVersion) throws Exception{
 		String commandName = "BindFromUserToDomain";
 		
@@ -158,6 +145,17 @@ public class CommandGraphGeneratorTest {
 	// TODO: da sistemare in quanto è uno userCommand
 	private ICommandCreator addAddComment(String commandVersion) throws Exception{
 		String commandName = "AddComment";
+		
+		AbstractCommand command = new AddComment(commandName, commandVersion);
+		command.set_commandType(JSONType.SystemCommands);
+		command.addNodesToGraph();
+		command.buildGraph();
+
+		return command;
+	}
+	
+	private ICommandCreator addAddPageAnnotation(String commandVersion) throws Exception{
+		String commandName = "AddPageAnnotation";
 		
 		AbstractCommand command = new AddComment(commandName, commandVersion);
 		command.set_commandType(JSONType.SystemCommands);
@@ -214,7 +212,7 @@ public class CommandGraphGeneratorTest {
 		// AddNewDomain
 		command = this.addNewDomain("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-		
+
 		// AddComment
 		command = this.addAddComment("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
@@ -222,11 +220,6 @@ public class CommandGraphGeneratorTest {
 //		// BindDomainUser
 		command = this.addBindGraphFromUserToDomain("0.1");
 		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
-//		
-//		
-//		// AddSubComment
-//		command = this.addSubComment("0.1");
-//		this.writeAll(command, placeHolder, applicationName, applicationVersion, "commands");
 	}
 	
 	@Test
@@ -261,7 +254,7 @@ public class CommandGraphGeneratorTest {
 		RATJsonObject ratJsonObject = RATJsonUtils.getRATJsonObject(remoteRequestJson);
 		_buildQueryJavaScript.make(command.get_commandName(), ratJsonObject);
 		String javaScript = _buildQueryJavaScript.getJavaScript();
-		GraphGeneratorHelpers.writeJavaScript("commands", javaScript);
+		GraphGeneratorHelpers.writeJavaScript("ratCommands", javaScript);
 		
 //		System.out.println(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson));
 		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(remoteRequestJson), path);

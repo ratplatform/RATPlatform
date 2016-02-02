@@ -8,6 +8,7 @@ package com.dgr.rat.graphgenerator.queries;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -78,19 +79,41 @@ public class BuildQueryJavaScript {
 		return result;
 	}
 	
+//	private String makeFunctions(String commandName, Map<String, String> functions, RATJsonObject ratJsonObject){
+//		String result = "";
+//		//result += commandName + "Set" + " = function(";// + key + "){\n";
+//		String params = "currentDomainUUID, ";
+//		String calls = "";
+//		int inc = 0;
+//		Iterator<String>it = functions.keySet().iterator();
+//		while(it.hasNext()){
+//			String key = it.next();
+//			String value = functions.get(key);
+//			params += "param" + inc + ", ";
+//			calls += "\t" + commandName + "." + RATConstants.Settings + "." + key + "." + value + " = " + "param" + inc + ";\n";
+//			inc++;
+//		}
+//		int pos = params.lastIndexOf(",");
+//		params = params.substring(0, pos);
+//		params = params.trim();
+//		result += commandName + "Set" + " = function(" + params + "){\n";
+//		result += calls;
+//		result += "\t" + commandName + "." + RATConstants.Header + "." + RATConstants.DomainUUID + " = currentDomainUUID;\n";
+//		result += "};\n\n";
+//		
+//		return result;
+//	}
 	private String makeFunctions(String commandName, Map<String, String> functions, RATJsonObject ratJsonObject){
 		String result = "";
 		//result += commandName + "Set" + " = function(";// + key + "){\n";
 		String params = "currentDomainUUID, ";
 		String calls = "";
-		int inc = 0;
 		Iterator<String>it = functions.keySet().iterator();
 		while(it.hasNext()){
 			String key = it.next();
 			String value = functions.get(key);
-			params += "param" + inc + ", ";
-			calls += "\t" + commandName + "." + RATConstants.Settings + "." + key + "." + value + " = " + "param" + inc + ";\n";
-			inc++;
+			params += key.toLowerCase() + ", ";
+			calls += "\t" + commandName + "." + RATConstants.Settings + "." + key + "." + value + " = " + key.toLowerCase() + ";\n";
 		}
 		int pos = params.lastIndexOf(",");
 		params = params.substring(0, pos);
@@ -119,7 +142,7 @@ public class BuildQueryJavaScript {
 		_javaScript += "\t" + RATConstants.Settings + " : {\n#placeholder#\n\t}\n";
 		_javaScript += "};\n\n";
 		
-		Map<String, String> functionsMap = new HashMap<String, String>();
+		Map<String, String> functionsMap = new LinkedHashMap<String, String>();
 		String settings = mapper.writeValueAsString(ratJsonObject.getSettings());
 		JsonNode jsonSettingsNode = mapper.readTree(settings);
 		
@@ -131,6 +154,7 @@ public class BuildQueryJavaScript {
 			Entry<String, JsonNode> entry = it.next();
 			String field = entry.getKey();
 			_settings.add(field);
+			//System.out.println("field: " + field);
 			
 			jsHeader = this.makeHeader(commandName, _header, ratJsonObject);
 			jsSettings += this.makeSetting(field, entry.getValue(), functionsMap);

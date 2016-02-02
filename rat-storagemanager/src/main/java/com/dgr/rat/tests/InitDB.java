@@ -4,8 +4,10 @@ import java.nio.file.FileSystems;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -29,9 +31,10 @@ import com.dgr.utils.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rat.init.Comment;
+import com.rat.init.Comments;
 import com.rat.init.SystemInitializerTestHelpers;
 import com.rat.init.User;
-import com.rat.init.InitDB.Command;
 import com.tinkerpop.blueprints.Vertex;
 
 public class InitDB {
@@ -49,13 +52,21 @@ public class InitDB {
 		// TODO Auto-generated constructor stub
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void before(){
 		try {
 			this.init();
+			
+			Assert.assertNotNull(_dbManager);
+			Assert.assertNotNull(_context);
+			Assert.assertNotNull(_queriesTemplateUUID);
+			Assert.assertNotNull(_commandsTemplateUUID);
+			Assert.assertNotNull(_rootDomainName);
+			Assert.assertNotNull(_rootDomainUUID);
 		} 
 		catch (Exception e) {
-			// TODO Auto-generated catch block
+			Assert.fail();
 			e.printStackTrace();
 		}
 	}
@@ -63,6 +74,7 @@ public class InitDB {
 	@Test
 	public void test() {
 		try {
+//			this.initDB();
 			this.addAdmin();
 			this.bulkCreation();
 		} 
@@ -71,6 +83,21 @@ public class InitDB {
 			e.printStackTrace();
 		}
 	}
+	
+//	private void initDB() throws Exception{
+//		String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
+//		if(storageType.equals(StorageType.OrientDB.toString())){
+//			String orientDBDataDir = AppProperties.getInstance().getStringProperty("orientdb.dir");
+//			if(!FileUtils.fileExists(orientDBDataDir)){
+//				FileUtils.createDir(orientDBDataDir);
+//			}
+//			else{
+//				FileUtils.deleteDirectory(orientDBDataDir);
+//				FileUtils.createDir(orientDBDataDir);
+//			}
+//			
+//		}
+//	}
 	
 	@After
 	public void verify(){
@@ -109,6 +136,7 @@ public class InitDB {
 	    		Assert.assertTrue(result.size() == 1);
 	    		String domainUUID = null;
 	    		
+	    		Map<String, String>domainMap = new HashMap<String, String>();
 	    		List<String>domains = user.domains;
 	    		for(String domain : domains){
 	    			if(!this.domainExists(userUUID, domain)){
@@ -122,16 +150,39 @@ public class InitDB {
 	    	    		Assert.assertTrue(result.size() == 1);
 	    	    		domainUUID = result.get(0).getProperty(RATConstants.VertexUUIDField);
 	    			}
+	    			domainMap.put(domain, domainUUID);
 	    			
     				_dbManager.addDomain(domainUUID, domain);
     				_dbManager.setDomainRoles(domainUUID, userUUID, "domainadmin");
     				_dbManager.setUserDomain(userUUID, domainUUID, domain);
-    				
+	    		}
+	    		
+	    		Comments comments = mapper.readValue(node.toString(), Comments.class);
+	    		List<Comment>commentList = comments.comments;
+	    		if(commentList != null){
+		    		for(Comment comment : commentList){
+		    			domainUUID = domainMap.get(comment.domain);
+		    			System.out.println(domainUUID);
+		    			this.addComment(comment, domainUUID, userUUID);
+		    		}
 	    		}
 	    		
 	    		System.out.println(node.toString());
 	    	}
 		}
+	}
+	
+	private void addComment(Comment comment, String domainUUID, String userUUID) throws Exception{
+//		String commandJSON = SystemInitializerTestHelpers.addUserComment("AddComment.conf", 
+//				userUUID, domainUUID, -1, -1, -1, -1, comment.url, comment.VertexContentField, comment.VertexLabelField);
+		String commandJSON = SystemInitializerTestHelpers.addUserComment("AddComment.conf", 
+				domainUUID, userUUID, -1, -1, -1, -1, comment.url, comment.VertexContentField, comment.VertexLabelField);
+		
+		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+		MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
+		String status = message.getHeader().getStatusCode();
+		Assert.assertEquals("200", status);
 	}
 	
 	private void setBind(String domainUUID, String userUUID) throws Exception{
@@ -214,6 +265,8 @@ public class InitDB {
 	
 	@SuppressWarnings("deprecation")
 	private void addAdmin() throws Exception{
+		Assert.assertNotNull(_context);
+		
 		String userName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
 		String userPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
 		String userEmail = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminEmail);
@@ -279,6 +332,7 @@ public class InitDB {
 			_dbManager.openDB();
 		} 
 		catch (Exception e) {
+			e.printStackTrace();
 			throw new Exception(e);
 		}
 	}

@@ -29,7 +29,7 @@ public class CommandNode extends AbstractNode<IRATNodeFrame>{
 	private LinkedList<CommandNode>_children = new LinkedList<CommandNode>();
 //	private LinkedList<QueryPivotNode>_queryPivotNodes = new LinkedList<QueryPivotNode>();
 	// TODO: attenzione: se questo nodo avesse due instruction con lo stesso nome, es Bind, sarebbe un vero problema; da correggere!
-	private Map<String, InstructionWrapper>_instructions = new HashMap<String, InstructionWrapper>();
+	private Map<String, InstructionWrapper>_instructions = new LinkedHashMap<String, InstructionWrapper>();
 //	private Map<String, LinkedList<QueryPivotNode>>_queryPivotNodes = new LinkedHashMap<String, LinkedList<QueryPivotNode>>();
 //	private IRATNodeVertexFrame _node = null;
 	

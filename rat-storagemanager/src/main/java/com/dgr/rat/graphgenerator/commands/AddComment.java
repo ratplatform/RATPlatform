@@ -11,6 +11,7 @@ import com.dgr.rat.graphgenerator.node.wrappers.SystemKeyNode;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 
+// TODO: da rinominare AddDocumentAnnotation
 public class AddComment extends AbstractCommand{
 
 	public AddComment(String commandName, String commandVersion) {
@@ -24,8 +25,14 @@ public class AddComment extends AbstractCommand{
 	public void addNodesToGraph() throws Exception {
 		CommentNode rootNode = this.buildRootNode(CommentNode.class, VertexType.Comment.toString());
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
-		rootNode.addPropertyVertexInstruction("startComment", RATConstants.VertexContentUndefined, ReturnType.integer);
-		rootNode.addPropertyVertexInstruction("endComment", RATConstants.VertexContentUndefined, ReturnType.integer);
+		// TODO: rimuovere startComment ed endComment che non servono
+//		rootNode.addPropertyVertexInstruction("startComment", RATConstants.VertexContentUndefined, ReturnType.integer);
+//		rootNode.addPropertyVertexInstruction("endComment", RATConstants.VertexContentUndefined, ReturnType.integer);
+		//rootNode.addPropertyVertexInstruction("startPageX", RATConstants.VertexContentUndefined, ReturnType.integer);
+		//rootNode.addPropertyVertexInstruction("endPageX", RATConstants.VertexContentUndefined, ReturnType.integer);
+		//rootNode.addPropertyVertexInstruction("startPageY", RATConstants.VertexContentUndefined, ReturnType.integer);
+		//rootNode.addPropertyVertexInstruction("endPageY", RATConstants.VertexContentUndefined, ReturnType.integer);
+		rootNode.addPropertyVertexInstruction("jsonCoordinates", RATConstants.VertexContentUndefined, ReturnType.string);
 		
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
@@ -38,8 +45,9 @@ public class AddComment extends AbstractCommand{
 		SystemKeyNode belongsTo = this.buildNode(SystemKeyNode.class, "belongs-to");
 		belongsTo.addCreateVertexInstruction("nodeName", "belongs-to", ReturnType.string);
 		// COMMENT: bind verso il nodo dell'owner (dominio)
-		belongsTo.addBindInstruction("domainUUID", RATConstants.VertexContentUndefined);
+		//belongsTo.addBindInstruction("domainUUID", RATConstants.VertexContentUndefined);
 		//this.setQueryPivot(belongsTo, rootNode.getType(), VertexType.Domain, "StartQueryPipe", "SetQueryPipe", "GetAllDomainComments");
+		belongsTo.addInstruction("BindSubComment", "ownerNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
 		
 		SystemKeyNode isPublic = this.buildNode(SystemKeyNode.class, "is-public");
 		isPublic.addCreateVertexInstruction("nodeName", "is-public", ReturnType.string);
@@ -80,10 +88,12 @@ public class AddComment extends AbstractCommand{
 		
 		this.setQueryPivot(belongsTo, "GetAllDomainComments", "StartQueryPipe", true);
 		this.setQueryPivot(belongsTo, "GetAllDomainComments", "SetQueryPipe", false);
-		this.setQueryPivot(rootNode, "GetAllDomainComments", "GetAllDomainComments", false, "domainUUID");
+		this.setQueryPivot(rootNode, "GetAllDomainComments", "GetWebDoc", false, "url");
+		// TODO: nel parametro finale aggiungere anche il tipo, altrimenti è sempre string!
+		this.setQueryPivot(isPutByNode, "GetAllDomainComments", "GetAllDomainComments", false, "userUUID");
 		
-		this.setQueryPivot(belongsTo, "GetAllCommentComments", "StartQueryPipe", true);
-		this.setQueryPivot(belongsTo, "GetAllCommentComments", "SetQueryPipe", false);
-		this.setQueryPivot(rootNode, "GetAllCommentComments", "GetAllCommentComments", false);
+		this.setQueryPivot(belongsTo, "GetCommentComments", "StartQueryPipe", true);
+		this.setQueryPivot(belongsTo, "GetCommentComments", "SetQueryPipe", false);
+		this.setQueryPivot(rootNode, "GetCommentComments", "GetCommentComments", false);
 	}
 }

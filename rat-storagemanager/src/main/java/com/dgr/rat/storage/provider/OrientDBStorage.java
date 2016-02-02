@@ -11,6 +11,8 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.storage.orientdb.OrientDBService;
 import com.dgr.rat.storage.orientdb.StorageInternalError;
 import com.orientechnologies.orient.core.config.OGlobalConfiguration;
+import com.orientechnologies.orient.core.db.ODatabase;
+import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Index;
 import com.tinkerpop.blueprints.IndexableGraph;
@@ -20,7 +22,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class OrientDBStorage implements IStorage{
-	private TransactionalGraph	_orientGraph = null;
+	private IndexableGraph	_graph = null;
 	//private IndexableGraph _orientGraph = null;
 	
 	public OrientDBStorage() {
@@ -32,11 +34,12 @@ public class OrientDBStorage implements IStorage{
 	@Override
 	public synchronized void openConnection() throws StorageInternalError, Exception {
 		System.out.println("_orientGraph.openConnection()");
-		_orientGraph = OrientDBService.getInstance().getConnection();
+		TransactionalGraph orientGraph = OrientDBService.getInstance().getConnection();
+		_graph = (IndexableGraph) orientGraph;
 	}
 	
 	private String escape(String text){
-		return text.replaceAll("-", "&#45;");
+		return text;//text.replaceAll("-", "&#45;");
 	}
 
 	/* (non-Javadoc)
@@ -58,7 +61,7 @@ public class OrientDBStorage implements IStorage{
 	 */
 	@Override
 	public synchronized Vertex addVertex() {
-		Vertex vertex = _orientGraph.addVertex(null);
+		Vertex vertex = _graph.addVertex(null);
 		return vertex;
 	}
 
@@ -68,7 +71,7 @@ public class OrientDBStorage implements IStorage{
 	@Override
 	public synchronized boolean vertexExists(String label, String value) {
 //		System.out.println(_orientGraph.countVertices());
-		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(_orientGraph.getVertices(label, value));
+		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(_graph.getVertices(label, value));
 		List<Vertex> list = pipe.toList();
 		return !list.isEmpty();
 	}
@@ -116,7 +119,7 @@ public class OrientDBStorage implements IStorage{
 		// TODO: attenzion: per il problema del carattere "-" (cone le UUID), non posso fare chiamare vertexExists qui
 		// perché non conosco il valore di label; pertanto se fosse per caso VertexUUIDField (controllare non è il massimo),
 		// non facendo escape, il vertex non verrebbe trovato e la funzione fallirebbe
-		Iterable<Vertex> iterable = _orientGraph.getVertices(label, value);
+		Iterable<Vertex> iterable = _graph.getVertices(label, value);
 		vertex = iterable.iterator().next();
 		}
 		catch(Exception e){
@@ -133,7 +136,7 @@ public class OrientDBStorage implements IStorage{
 	@Override
 	public synchronized Graph getGraph() {
 		// TODO Auto-generated method stub
-		return null;
+		return _graph;
 	}
 
 	/* (non-Javadoc)
@@ -168,7 +171,7 @@ public class OrientDBStorage implements IStorage{
 	 */
 	@Override
 	public synchronized void commit() {
-		_orientGraph.commit();
+		//_orientGraph.commit();
 	}
 
 	/* (non-Javadoc)
@@ -176,7 +179,7 @@ public class OrientDBStorage implements IStorage{
 	 */
 	@Override
 	public synchronized void rollBack() {
-		_orientGraph.rollback();
+		//_orientGraph.rollback();
 	}
 
 	/* (non-Javadoc)
@@ -185,7 +188,7 @@ public class OrientDBStorage implements IStorage{
 	@Override
 	public synchronized void shutDown() {
 		System.out.println("_orientGraph.shutdown()");
-		_orientGraph.shutdown();
+		_graph.shutdown();
 	}
 
 	/* (non-Javadoc)
@@ -197,27 +200,51 @@ public class OrientDBStorage implements IStorage{
 	}
 
 	@Override
-	public void addToIndex(String indexName, Vertex vertex, String key,
-			Object value) {
-		// TODO Auto-generated method stub
+	public void addToIndex(String indexName, Vertex vertex, String key, Object value) {
+		Index<Vertex> index = this.getIndex(indexName);
+		index.put(key, value, vertex);
+	}
+
+	@Override
+	public Vertex getVertex(String indexName, String key, Object value){
+		Vertex result = null;
+		if(this.vertexExists(indexName, key, value)){
+			Index<Vertex> index = this.getIndex(indexName);
+			result = index.get(key, value).iterator().next();
+		}
 		
+		return result;
 	}
 
 	@Override
-	public Vertex getVertex(String indexName, String key, Object value) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean vertexExists(String indexName, String key, Object value){
+		Index<Vertex> index = this.getIndex(indexName);
+		long result = index.count(key, value);
+		
+		return result > 0 ? true : false;
 	}
 
 	@Override
-	public boolean vertexExists(String indexName, String key, Object value) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public Index<Vertex> getIndex(String indexName){
+		Index<Vertex> index = _graph.getIndex(indexName, Vertex.class);
+		if(index == null){
+			index = _graph.createIndex(indexName, Vertex.class);
+		}
 
-	@Override
-	public Index<Vertex> getIndex(String indexName) {
-		// TODO Auto-generated method stub
-		return null;
+		 return index;
 	}
+//	@Override
+//	public Index<Vertex> getIndex(String indexName) {
+////		String sql = "create index MyClass.my_field on MyClass (my_field) unique";
+////		OCommandSQL createIndex = new OCommandSQL(sql);
+////		Object done = db.command(createIndex).execute(new Object[0]);
+//		
+////		ODatabase odb	= ((OrientGraph)_orientGraph).getRawGraph();
+////		OSchema schema = databaseDocumentTx.getMetadata().getSchema();
+////		OClass oClass = schema.createClass("Foo");
+////		oClass.createProperty("name", OType.STRING);
+////		oClass.createIndex("City.name", "FULLTEXT", null, null, "LUCENE", new String[] { "name"});
+////		IndexableGraph indexableGraph = (IndexableGraph) _orientGraph;
+//		return null;
+//	}
 }

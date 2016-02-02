@@ -38,7 +38,12 @@ public class OrientDBService{
 	
     private synchronized void init() throws Exception {
 	        try {
-	            _dbURL = AppProperties.getInstance().getStringProperty("orientdb.url");
+	        	String orientDBUrl = AppProperties.getInstance().getStringProperty("orientdb.url");
+	        	String orientDBDataDir = AppProperties.getInstance().getStringProperty("orientdb.dir");
+	        	if(!orientDBUrl.contains(":")){
+	        		orientDBUrl += ":";
+	        	}
+	            _dbURL = orientDBUrl + orientDBDataDir;
 	            _logger.info(String.format("Use DB at dbURL: %s", _dbURL));
 	
 	            _user = AppProperties.getInstance().getStringProperty("orientdb.default.admin", "admin");

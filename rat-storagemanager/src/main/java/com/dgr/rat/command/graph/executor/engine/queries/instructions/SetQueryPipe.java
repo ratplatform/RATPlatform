@@ -26,7 +26,8 @@ public class SetQueryPipe implements IInstruction{
 
 	// TODO: per una maggiore flessibilità, qui devo poter capire se l'edge che mi collega al nodeCaller è in oppure out
 	// in questo modo posso generare una GremlinPipeline più accurata
-	// TODO: passare direttamente la classe coi parametri
+	// TODO: passare direttamente la classe coi parametri (da vedere)
+	// TODO: aggiungere la possibilità di parametri, ma aoltre al valore del parametro ed al tipo anche il nome della proprietà a cui corrisponde il valore 
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		String content = null;

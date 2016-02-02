@@ -1,6 +1,6 @@
 /**
- * @author: Daniele Grignani
- * @date: Oct 31, 2015
+ * @author Daniele Grignani (dgr)
+ * @date Sep 23, 2015
  */
 
 package com.dgr.rat.command.graph.executor.engine.queries.instructions;
@@ -22,9 +22,9 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
-public class GetAllDomainComments implements IInstruction{
+public class GetCommentComments implements IInstruction{
 
-	public GetAllDomainComments() {
+	public GetCommentComments() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,17 +33,8 @@ public class GetAllDomainComments implements IInstruction{
 	 */
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String userUUID = invoker.getNodeParamValue("userUUID");
-//		VertexType vertexType = VertexType.fromString(type);
-		String content = null;
-		String contentField = null;
-		if(nodeCaller.getVertexType().equals(VertexType.SystemKey)){
-			contentField = RATConstants.VertexContentField;
-		}
-		else{
-			contentField = RATConstants.VertexTypeField;
-		}
-		content = invoker.getNodeParamValue(contentField);
+		String type = invoker.getNodeParamValue(RATConstants.VertexTypeField);
+		VertexType vertexType = VertexType.fromString(type);
 		
 		String edgeLabel = invoker.getNodeParamValue("edgeLabel");
 		
@@ -67,8 +58,8 @@ public class GetAllDomainComments implements IInstruction{
 			// TODO: log
 		}
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		pipe.both(edgeLabel).has(contentField, content).both(edgeLabel).has(RATConstants.VertexUUIDField, userUUID).back(4);
-		//System.out.println("queryPipe: " + pipe.toString());
+		//pipe.back(1).out(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
+		pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
 
 		List<Vertex> result = pipe.toList();
 //		System.out.println(result.toString());
@@ -85,6 +76,12 @@ public class GetAllDomainComments implements IInstruction{
 		}
 		
 		for(Vertex vertex : result){
+			// TODO questo è un trucchetto per aggirare il problema della pipe, la quale per come è congegnata mi restituisce anche 
+			// il vertex del commento del quale cerco i subcommenti
+			if(vertex.getId().toString().equals(rootVertex.getId().toString())){
+				continue;
+			}
+			
 			Vertex newVertex = graph.addVertex(null);
 			for(String key : vertex.getPropertyKeys()){
 				Object value = vertex.getProperty(key);

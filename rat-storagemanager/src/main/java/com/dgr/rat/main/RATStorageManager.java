@@ -60,7 +60,11 @@ public class RATStorageManager {
 			
 			do {
 				str = br.readLine();
-				System.out.println(str);
+				//System.out.println(str);
+				// TODO: naturalmente shutdownServer non può essere eseguito fino a che DumpGraph non smette di "girare"
+				if(str.equals("dump")){
+					DumpGraph.getInstance().execute();
+				}
 			} while(!str.equals("stop"));
 			
 			main.shutdownServer();

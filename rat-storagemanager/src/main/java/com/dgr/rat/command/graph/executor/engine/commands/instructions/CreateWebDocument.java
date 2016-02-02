@@ -32,10 +32,10 @@ public class CreateWebDocument implements IInstruction{
 		UUID storedNodeUUID = nodeCaller.getStoredNodeUUID();
 		
 		Vertex vertex = null;
-		
-		if (!storage.vertexExists("webDocument", paramName, paramValue)){
+		String urlMD5 = Utils.getMD5(paramValue);
+		if (!storage.vertexExists("webDocument", paramName, urlMD5)){
 			vertex = storage.addVertex(storedNodeUUID);
-			storage.addToIndex("webDocument", vertex, paramName, paramValue);
+			storage.addToIndex("webDocument", vertex, paramName, urlMD5);
 			
 			Set<String> keys = nodeCaller.getPropertyKeys();
 			it = keys.iterator();
@@ -43,8 +43,10 @@ public class CreateWebDocument implements IInstruction{
 				String propertyName = it.next();
 				Object propertyValue = null;
 				
-				if(propertyName.equalsIgnoreCase(RATConstants.VertexContentField) ||
-						propertyName.equalsIgnoreCase(RATConstants.VertexLabelField)){
+				if(propertyName.equalsIgnoreCase(RATConstants.VertexContentField)){
+					propertyValue = urlMD5;
+				}
+				else if(propertyName.equalsIgnoreCase(RATConstants.VertexLabelField)){
 					propertyValue = paramValue;
 				}
 				else{
@@ -58,7 +60,7 @@ public class CreateWebDocument implements IInstruction{
 			}
 		}
 		else{
-			vertex = storage.getVertex("webDocument", paramName, paramValue);
+			vertex = storage.getVertex("webDocument", paramName, urlMD5);
 			String uuid = vertex.getProperty(RATConstants.VertexUUIDField);
 			if(Utils.isUUID(uuid)){
 				storedNodeUUID = UUID.fromString(uuid);

@@ -29,29 +29,39 @@ public class QueryProxyNodeFactory extends CommandProxyNodeFactory{
 	public ICommandGraphData buildGraph(CommandData commandData) throws Exception{
 		UUID commandUUID = commandData.getCommandUUID();
 		QueryTemplateGraph graph = null;
-		if(commandUUID != null){
-			IStorage storage = commandData.getStorage();
-			// COMMENT Prendo il nodo root del comando
-			Vertex vertex = storage.getVertex(commandUUID);
-			if(vertex == null){
+		IStorage storage = commandData.getStorage();
+		try{
+			if(commandUUID != null){
+				// COMMENT Prendo il nodo root del comando
+				storage.openConnection();
+				Vertex vertex = storage.getVertex(commandUUID);
+				if(vertex == null){
+					// TODO: exception e log
+				}
+					
+				String json = vertex.getProperty(RATConstants.VertexContentField);
+	//				json = RATJsonUtils.jsonPrettyPrinter(json);
+	//				System.out.println(json);
+				ObjectMapper mapper = new ObjectMapper();
+				RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
+				String output = mapper.writeValueAsString(jsonHeader.getSettings());
+				JsonNode actualObj = mapper.readTree(output);
+				graph = new QueryTemplateGraph();
+				InputStream inputStream = new ByteArrayInputStream(actualObj.toString().getBytes());
+				GraphSONReader.inputGraph(graph, inputStream);
+			}
+			else{
 				// TODO: exception e log
 			}
-				
-			String json = vertex.getProperty(RATConstants.VertexContentField);
-//				json = RATJsonUtils.jsonPrettyPrinter(json);
-//				System.out.println(json);
-			ObjectMapper mapper = new ObjectMapper();
-			RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
-			String output = mapper.writeValueAsString(jsonHeader.getSettings());
-			JsonNode actualObj = mapper.readTree(output);
-			graph = new QueryTemplateGraph();
-			InputStream inputStream = new ByteArrayInputStream(actualObj.toString().getBytes());
-			GraphSONReader.inputGraph(graph, inputStream);
 		}
-		else{
-			// TODO: exception e log
+		catch(Exception e){
+			throw new Exception(e);
 		}
-
+		
+		finally{
+			storage.shutDown();
+		}
+		
 		return graph;
 	}
 }

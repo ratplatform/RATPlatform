@@ -21,6 +21,7 @@ import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.main.SystemCommandsInitializer;
 import com.dgr.rat.storage.provider.StorageBridge;
+import com.dgr.rat.storage.provider.StorageType;
 import com.dgr.rat.storage.provider.TinkerGraphStorage;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
@@ -55,6 +56,17 @@ public class TestHelpers {
 //			systemCommandsInitializer.initStorage();
 			systemCommandsInitializer = new SystemCommandsInitializer();
 			String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
+			if(storageType.equals(StorageType.OrientDB.toString())){
+				String orientDBDataDir = AppProperties.getInstance().getStringProperty("orientdb.dir");
+				if(!FileUtils.fileExists(orientDBDataDir)){
+					FileUtils.createDir(orientDBDataDir);
+				}
+				else{
+					FileUtils.deleteDirectory(orientDBDataDir);
+					FileUtils.createDir(orientDBDataDir);
+				}
+				
+			}
 			systemCommandsInitializer.set_storageType(storageType);
 			systemCommandsInitializer.initStorage();
 		} 
@@ -66,11 +78,8 @@ public class TestHelpers {
 		return systemCommandsInitializer;
 	}
 	
-	
-	
 	public static String writeGraphToHTML(String resultFilename, String destinationFolder) throws Exception{
 		String appPath = AppProperties.getInstance().getStringProperty("sigma.path");
-		//String dataFolder = AppProperties.getInstance().getStringProperty("sigma.data.folder");
 		String pageTitlePlaceholder = AppProperties.getInstance().getStringProperty("page.title.placeholder");
 		String sep = FileSystems.getDefault().getSeparator();
 				
@@ -93,10 +102,13 @@ public class TestHelpers {
 	}
 	
 	public static void dumpJson(String path) throws Exception{
-		TinkerGraphStorage storage = (TinkerGraphStorage) StorageBridge.getInstance().getStorage();
-		// ATTENZIONE: il graph ottenuto in questo modo vale solo per il TinkerGraphStorage!
-		Graph graph = storage.getGraph();
+//		TinkerGraphStorage storage = (TinkerGraphStorage) StorageBridge.getInstance().getStorage();
+//		
+//		// ATTENZIONE: il graph ottenuto in questo modo vale solo per il TinkerGraphStorage!
+//		Graph graph = storage.getGraph();
 		
+		StorageBridge.getInstance().getStorage().openConnection();
+		Graph graph = StorageBridge.getInstance().getStorage().getGraph();
 		String json = RATJsonUtils.serializeGraph(graph);
 		String result = MakeSigmaJSON.fromRatJsonToAlchemy2(json);
 //		System.out.println(result);
@@ -108,6 +120,8 @@ public class TestHelpers {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		StorageBridge.getInstance().getStorage().shutDown();
 	}
 	
 	public static void writeGraphToJson(String json, String path) throws IOException{

@@ -8,6 +8,7 @@ package com.dgr.rat.graphgenerator.test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.util.PipesFunction;
 
 public class CreateJsonRemoteCommandRequest {
-	private Map<String, RemoteParameter> _parameters = new HashMap<String, RemoteParameter>();
+	private Map<String, RemoteParameter> _parameters = new LinkedHashMap<String, RemoteParameter>();
 //	private List<Map<String, RemoteParameter>> _parameters = new ArrayList<Map<String, RemoteParameter>>();
 	private List<IRATFrame>_alreadyExplored = new ArrayList<IRATFrame>();
 	
