@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" href="comment.css"/>
+	<script type="text/javascript" src="../lib/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="comment.js"></script>
+	<script type="text/javascript" src="../helpers.js"></script>
+	
+	<title>Login</title>
+
+	</head>
+
+	<body>
+		<div><textarea id="url"></textarea></div>
+		<div><textarea id="userEmail"></textarea></div>
+		<div><textarea id="userPassword"></textarea></div>
+		<div><span><button id="login">Login</button></span><span><button id="close">Close</button></span></div>
+	</body>
+</html>

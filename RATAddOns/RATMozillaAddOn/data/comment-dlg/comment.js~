@@ -49,7 +49,6 @@ saveComment.addEventListener("click", function(){
 	console.log("comment.js: click.commandData.title: " + commandData.title);
 	console.log("comment.js: click.commandData.text: " + commandData.text);
 */
-	// Verso commentWnd.js -> panel.port.on("comment"
 	self.port.emit("comment", commandData);
 
 	textArea.value = '';

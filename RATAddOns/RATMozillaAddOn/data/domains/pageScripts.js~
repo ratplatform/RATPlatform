@@ -535,7 +535,6 @@ function sendSelectionNode(coordinates){
 	//addon.port.emit("message", "domainselected", node.name, currentDomainUUID);
 	//self.port.emit("onSelectionNode", "selectionNode", node);
 	console.log("sendSelectionNode coordinates: " + coordinates);
-	// Verso domainsSidePanel.js -> openSidePanel
 	addon.port.emit("message", "selectionNode", "", "", coordinates);
 }
 

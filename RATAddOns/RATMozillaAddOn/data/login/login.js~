@@ -18,7 +18,7 @@ function getStartDomains(response){
 		
 		loginResult.status = response.status;
 
-		if(loginResult.status == 200){
+		if(status == 200){
 			loginResult.sessionID = response.json.sessionID;
 			loginResult.userUUID = response.json.userUUID;
 			loginResult.responseText = response.text;

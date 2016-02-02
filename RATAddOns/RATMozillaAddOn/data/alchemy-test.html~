@@ -1,5 +1,10 @@
 <html>
 	<head>
+	<link href="styles/vendor.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="alchemy.min.css"/>
+	<script type="text/javascript" src="scripts/vendor.js"></script>
+	<script type="text/javascript" src="alchemy.js"></script>
+
 	<style type="text/css">
 	#tooltip {
 		padding: 3px;
@@ -19,7 +24,6 @@
 
 	<body>
 		<div class="alchemy" id="alchemy"></div>
- 		 <script src="alchemy.min.js"></script>
 
 		<script type="text/javascript">
 		var config = {

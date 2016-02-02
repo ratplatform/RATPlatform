@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Menu</title>
 	<link rel="stylesheet" href="menu.css"/>
+	<!--script type="text/javascript" src="./menuWnd.js"></script-->
 	</head>
 	<body>
 
@@ -13,6 +14,7 @@
 		</ul>
 		<ul id="sidePanel">
 		<li id="sidePanelDomains" class="liDisable"><span></span>Open user domains</li>
+		<!--li id="commentsSidePanel" class="liEnable"><span></span>Open user comments</li-->
 		</ul>
 
 		<script>

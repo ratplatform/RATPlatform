@@ -1,0 +1,29 @@
+document.getElementById('login').addEventListener('click',function(){
+var cssClass = document.getElementById("login").className;
+if(cssClass == 'liEnable'){
+	addon.port.emit('popupmessage','login');
+}
+},false);
+
+document.getElementById('logout').addEventListener('click',function(){
+var cssClass = document.getElementById("logout").className;
+if(cssClass == 'liEnable'){
+	addon.port.emit('popupmessage','logout');
+}
+},false);
+
+document.getElementById('sidePanelDomains').addEventListener('click',function(){
+var cssClass = document.getElementById("sidePanelDomains").className;
+if(cssClass == 'liEnable'){
+	addon.port.emit('popupmessage','sidePanelDomains');
+}
+},false);
+
+/*
+    document.getElementById('commentsSidePanel').addEventListener('click',function(){
+	var cssClass = document.getElementById("commentsSidePanel").className;
+	if(cssClass == 'liEnable'){
+        	addon.port.emit('popupmessage','commentsSidePanel');
+	}
+    },false);
+*/

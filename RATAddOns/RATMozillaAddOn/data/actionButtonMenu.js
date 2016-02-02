@@ -11,18 +11,18 @@ var xulApp = require('sdk/system/xul-app');
 var ui = require("sdk/ui");
 var ss = require("sdk/simple-storage");
 var storage = ss.storage;
-var mediator = Cc['@mozilla.org/appshell/window-mediator;1']
-	.getService(Ci.nsIWindowMediator);
+var mediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator);
 var AddonManager = Cu.import("resource://gre/modules/AddonManager.jsm").AddonManager;
 var PrivateBrowsingUtils = Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm").PrivateBrowsingUtils;
 
 // dgr
 var sidebar = require("sdk/ui/sidebar");
-var simplePrefs = require("sdk/simple-prefs");
+//var simplePrefs = require("sdk/simple-prefs");
 var domainsSidePanel = require('./domains/domainsSidePanel');
-var commentsSidePanel = require('./comments/commentsSidePanel');
+//var commentsSidePanel = require('./comments/commentsSidePanel');
 var login = require('./login/login');
 var ss = require("sdk/simple-storage");
+//var menu = require('./menu/menu');
 // end dgr
 
 var visibleKey,entireKey;
@@ -152,26 +152,32 @@ function addToolbarButtons(){
         width:300,
         height:100,
         contentURL:data.url('./menu/menu.html'),
+	//contentScriptFile: data.url("./menu/menuWnd.js"),
         onHide:popupHide
     });
 
     popupPanel.port.on('popupmessage',function(text){
         switch (text){
             case 'login':
-                //capture('visible');
 		console.log("login");
-		var url = simplePrefs.prefs.ratURL;
-		var userEmail = simplePrefs.prefs.userEmail;
-		var userPwd = simplePrefs.prefs.userPassword;
-		login.login(url, userEmail, userPwd);
+		login.openWindow();
                 break;
+
             case 'logout':
                 //capture('entire');
 		console.log("logout"); 
+		popupPanel.port.emit('setStatus', "loggedOut");
+
+		delete ss.storage.sessionID;
+		delete ss.storage.userUUID;
+		delete ss.storage.lastResponseText;
+
+		domainsSidePanel.resetSidePanel();
                 break;
+
             case 'sidePanelDomains':
 		if(ss.storage.sessionID){
-			domainsSidePanel.openSidePanel(ss.storage.sessionID, ss.storage.lastResponseText);
+			domainsSidePanel.openSidePanel();
 		}
 		else{
 			//alert("Please login");
@@ -179,22 +185,29 @@ function addToolbarButtons(){
 		}
                 break;
             case 'commentsSidePanel':
-		console.log("commentsSidePanel");
-		//commentWnd.openWindow(ss.storage.currentDomainName, ss.storage.currentDomainUUID);
-
-		if(ss.storage.sessionID && ss.storage.currentDomainUUID){
-			commentsSidePanel.openSidePanel(ss.storage.sessionID, ss.storage.userUUID, ss.storage.currentDomainUUID, ss.storage.currentDomainName);
-			
-		}
-		else{
-			//alert("Please login");
-			console.log("Please login");
-		}
-                break;
+		break;
 
         }
         popupPanel.hide();
     });
+}
+
+function loginResult(loginResult){
+	ss.storage.lastStatus = loginResult.status;
+
+	if(loginResult.status == 200){
+		ss.storage.sessionID = loginResult.sessionID;
+		ss.storage.userUUID = loginResult.userUUID;
+		ss.storage.lastResponseText = loginResult.responseText;
+
+		popupPanel.port.emit('setStatus', "loggedIn");
+	}
+	else{
+		delete ss.storage.sessionID;
+		delete ss.storage.userUUID;
+		delete ss.storage.lastResponseText;
+		//popupPanel.port.emit('setStatus', "loggedOut");
+	}
 }
 
 function init() {
@@ -203,4 +216,5 @@ function init() {
 }
 
 exports.init = init;
+exports.loginResult = loginResult;
 

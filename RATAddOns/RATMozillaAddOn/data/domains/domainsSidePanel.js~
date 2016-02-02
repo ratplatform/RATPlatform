@@ -142,6 +142,32 @@ ContextMenu.Item({
 		}
 
 		if(selectionData){
+/*
+			console.log("domainSidePanel.js: onMessage.selectionData: " + selectionData);
+			console.log("domainSidePanel.js: onMessage.selectionData.buttonCode: " + selectionData.buttonCode);
+			console.log("domainSidePanel.js: onMessage.selectionData.startPageX: " + selectionData.startPageX);
+			console.log("domainSidePanel.js: onMessage.selectionData.startPageY: " + selectionData.startPageY);
+			console.log("domainSidePanel.js: onMessage.selectionData.pageX: " + selectionData.endPageX);
+			console.log("domainSidePanel.js: onMessage.selectionData.pageY: " + selectionData.endPageY);
+			console.log("domainSidePanel.js: onMessage.selectionData.title: " + selectionData.title);
+			console.log("domainSidePanel.js: onMessage.selectionData.text: " + selectionData.text);
+*/
+/*
+			var commandData = {
+				sessionID : currentSessionID,
+				currentDomainUUID: currentDomainUUID, 
+				currentDomainName: currentDomainName,
+				ownerUUID: currentDomainUUID,
+				userUUID: currentUserUUID, 
+				startpagex: selectionData.startPageX, 
+				endpagex: selectionData.endPageX,
+				startpagey: selectionData.startPageY, 
+				endpagey: selectionData.endPageY,
+				currentURL: currentURL, 
+				text: selectionData.text, 
+				title: selectionData.title
+			};
+*/
 			var commandData = {
 				sessionID : currentSessionID,
 				currentDomainUUID: currentDomainUUID, 

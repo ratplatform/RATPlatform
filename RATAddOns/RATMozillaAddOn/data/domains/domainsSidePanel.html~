@@ -58,7 +58,7 @@
 	</div>
 
 	<div class="box border">
-		<select id="breadcrumb" class="breadcrumb" size='5'></select>
+		<select id="breadcrumb" class="breadcrumb" size='2'></select>
 	</div>
 
 	<div class="box border">

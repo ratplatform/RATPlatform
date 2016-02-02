@@ -1,0 +1,71 @@
+        *{
+            padding: 0;
+            margin: 0;
+            outline: 0;
+        }
+
+        body{
+            color: #000;
+            font: 12px/20px Helvetica,arial,sans-serif;
+            padding: 3px 0;
+            margin: 0;
+        }
+
+        ul{
+
+        }
+
+        .liEnable{
+            height: 20px;
+            line-height: 20px;
+            cursor: pointer;
+            padding: 3px;
+            color: #303030;
+        }
+
+        .liDisable{
+            height: 20px;
+            line-height: 20px;
+            cursor: default;
+            padding: 3px;
+            color: #7e7e7e;
+        }
+
+        li span{
+            float: left;
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+
+        li cite{
+            float: right;
+            font-size: 11px;
+            color:rgba(0,0,0,.6);
+            font-style: normal;
+
+        }
+
+        .liEnable:hover{
+            background: #eceff5;
+            color: #000;
+        }
+
+        #visible span{
+            background: url(./img/visible.png) no-repeat center ;
+        }
+
+        #fullpage span{
+            background: url(./img/entire.png) center no-repeat;
+        }
+
+        #opitons span{
+            background: url(./img/icons.png) no-repeat -280px -40px ;
+        }
+
+        #moreLinks{
+            margin-top: 8px;
+            border-top: 1px solid #aaa;
+            padding-top: 2px;
+        }

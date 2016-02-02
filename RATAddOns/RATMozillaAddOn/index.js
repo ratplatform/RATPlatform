@@ -21,6 +21,7 @@ delete ss.storage.lastResponseText;
 delete ss.storage.lastStatus;
 delete ss.storage.currentDomainUUID;
 delete ss.storage.currentDomainName;
+delete ss.storage.contextMenu;
 
 /*
 var currentURL;

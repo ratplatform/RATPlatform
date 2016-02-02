@@ -1,0 +1,77 @@
+var status;
+var pageX;
+var pageY;
+
+(function() {
+
+	//document.onmousemove = handleMouseMove;
+	document.onmousedown = mouseDown;
+	document.onmouseup = mouseUp;
+
+	function mouseDown(event) {
+		status = 'mouseDown';
+		handleMouseMove(event);
+	}
+
+	function mouseUp(event) {
+		status = 'mouseUp';
+		handleMouseMove(event);
+	}
+
+	function handleMouseMove(event) {
+		//console.log("handleMouseMove: " + event.which); 
+
+		var dot, eventDoc, doc, body;//, pageX, pageY;
+
+		event = event || window.event;
+
+		if (event.pageX == null && event.clientX != null) {
+			eventDoc = (event.target && event.target.ownerDocument) || document;
+			doc = eventDoc.documentElement;
+			body = eventDoc.body;
+
+			event.pageX = event.clientX +
+				(doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+				(doc && doc.clientLeft || body && body.clientLeft || 0);
+			event.pageY = event.clientY +
+				(doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+				(doc && doc.clientTop  || body && body.clientTop  || 0 );
+		}
+
+		if(status == 'mouseUp'){
+			//console.log("pageX: " + pageX); 
+			var mouseDownEvent = {
+				pageX: pageX,
+				pageY: pageY
+			};
+
+			var mouseUpEvent = {
+				pageX: event.pageX,
+				pageY: event.pageY
+			};
+		
+			var text = getSelectionText();
+
+			//self.port.emit("message", mouseDownEvent, mouseUpEvent, text, event.which);
+			//status = null;
+			//pageX = -1;
+			//pageY = -1;
+		}
+		else if(status == 'mouseDown'){
+			//console.log("status: " + status); 
+			pageX = event.pageX;
+			pageY = event.pageY;
+			//console.log("pageX: " + pageX); 
+		}
+	}
+
+	function getSelectionText() {
+	    var text = "";
+	    if (window.getSelection) {
+		text = window.getSelection().toString();
+	    } else if (document.selection && document.selection.type != "Control") {
+		text = document.selection.createRange().text;
+	    }
+	    return text;
+	}
+})();

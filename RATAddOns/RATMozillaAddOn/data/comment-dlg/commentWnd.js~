@@ -78,7 +78,7 @@ panel.port.on("comment", function (commandData) {
 	console.log("commentWnd.js: comment.commandData.title: " + commandData.title);
 	console.log("commentWnd.js: comment.commandData.text: " + commandData.text);
 */
-	// Verso domainSidePanel.js -> setComment
+	// Verso -> domainSidePanel.js
 	domainsSidePanel.setComment(commandData);
 });
 

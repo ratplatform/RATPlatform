@@ -11,17 +11,18 @@ var xulApp = require('sdk/system/xul-app');
 var ui = require("sdk/ui");
 var ss = require("sdk/simple-storage");
 var storage = ss.storage;
-var mediator = Cc['@mozilla.org/appshell/window-mediator;1']
-	.getService(Ci.nsIWindowMediator);
+var mediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator);
 var AddonManager = Cu.import("resource://gre/modules/AddonManager.jsm").AddonManager;
 var PrivateBrowsingUtils = Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm").PrivateBrowsingUtils;
 
 // dgr
 var sidebar = require("sdk/ui/sidebar");
-var simplePrefs = require("sdk/simple-prefs");
-var domainsSidePanel = require('./domainsSidePanel');
-var login = require('./login');
+//var simplePrefs = require("sdk/simple-prefs");
+var domainsSidePanel = require('./domains/domainsSidePanel');
+//var commentsSidePanel = require('./comments/commentsSidePanel');
+var login = require('./login/login');
 var ss = require("sdk/simple-storage");
+//var menu = require('./menu/menu');
 // end dgr
 
 var visibleKey,entireKey;
@@ -133,15 +134,16 @@ function toolbarChange(state){
 function popupHide(){
     toolbarButton.state('window',{checked:false});
 }
+//var commentWnd = require('./comment-dlg/commentWnd');
 
 function addToolbarButtons(){
 	toolbarButton = ToggleButton({
         id:'rat-toolbarbutton',
         label:'RAT Addon',
         icon:{
-            "16":'./img/icon-16.png',
-            "32":'./img/icon-32.png',
-            "64":'./img/icon-64.png'
+            "16":'./lib/images/icon-16.png',
+            "32":'./lib/images/icon-32.png',
+            "64":'./lib/images/icon-64.png'
         },
         onChange:toolbarChange
     });
@@ -149,46 +151,74 @@ function addToolbarButtons(){
     popupPanel = panel.Panel({
         width:300,
         height:100,
-        contentURL:data.url('./popup.html'),
+        contentURL:data.url('./menu/menu.html'),
+	//contentScriptFile: data.url("./menu/menuWnd.js"),
         onHide:popupHide
     });
 
     popupPanel.port.on('popupmessage',function(text){
         switch (text){
             case 'login':
-                //capture('visible');
 		console.log("login");
-		var url = simplePrefs.prefs.ratURL;
-		var userEmail = simplePrefs.prefs.userEmail;
-		var userPwd = simplePrefs.prefs.userPassword;
-		login.login(url, userEmail, userPwd);
+		login.openWindow();
                 break;
+
             case 'logout':
                 //capture('entire');
 		console.log("logout"); 
+		popupPanel.port.emit('setStatus', "loggedOut");
+
+		delete ss.storage.sessionID;
+		delete ss.storage.userUUID;
+		delete ss.storage.lastResponseText;
+
+		domainsSidePanel.resetSidePanel();
                 break;
+
             case 'sidePanelDomains':
-		//console.log("login.getResponseText : " + login.getResponseText);
-		//console.log("login.getUserUUID : " + login.getUserUUID);
-		// TODO: controllare login.getStatus
-		domainsSidePanel.openSidePanel(ss.storage.lastResponseText);
+		if(ss.storage.sessionID){
+			domainsSidePanel.openSidePanel();
+		}
+		else{
+			//alert("Please login");
+			console.log("Please login");
+		}
                 break;
             case 'commentsSidePanel':
-		console.log("commentsSidePanel");
-		//console.log("login.getUserUUID : " + login.getUserUUID);
-		// TODO: controllare login.getStatus
-		//domainsSidePanel.openSidePanel(ss.storage.lastResponseText);
-                break;
+		break;
 
         }
         popupPanel.hide();
     });
 }
 
-function init(capture) {
+function loginResult(loginResult){
+	ss.storage.lastStatus = loginResult.status;
+
+	if(loginResult.status == 200){
+		loginResult.sessionID = response.json.sessionID;
+		loginResult.userUUID = response.json.userUUID;
+		loginResult.responseText = response.text;
+
+		ss.storage.sessionID = loginResult.sessionID;
+		ss.storage.userUUID = loginResult.userUUID;
+		ss.storage.lastResponseText = loginResult.responseText;
+
+		popupPanel.port.emit('setStatus', "loggedIn");
+	}
+	else{
+		delete ss.storage.sessionID;
+		delete ss.storage.userUUID;
+		delete ss.storage.lastResponseText;
+		//popupPanel.port.emit('setStatus', "loggedOut");
+	}
+}
+
+function init() {
     	removeAll();
 	addToolbarButtons();
 }
 
 exports.init = init;
+exports.loginResult = loginResult;
 

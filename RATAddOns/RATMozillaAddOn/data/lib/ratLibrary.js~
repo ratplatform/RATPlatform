@@ -1,0 +1,17 @@
+/*
+function reply(command){
+	var wsUrl = ratUrl + "/v0.1/executeconfigurationcommand?sessionid=" + command.sessionID;
+	AddCommentSet(command.currentDomainUUID, command.currentDomainUUID, command.userUUID, command.start, command.end, command.currentURL, command.text, command.title);
+	console.log("AddComment: " + JSON.stringify(AddComment));
+	var request = new Request();
+	request.sendRequest(wsUrl, "POST", JSON.stringify(AddComment), addCommentResponse, addCommentError);
+}
+*/
+function executeMenuCommand(command, commandData){
+	switch(command){
+		case 'reply':
+		addon.port.emit("message", "opencomment-dlg", commandData.currentDomainName, commandData.currentDomainUUID, commandData);
+		break;
+	}
+}
+

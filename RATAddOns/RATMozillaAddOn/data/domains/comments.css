@@ -1,0 +1,43 @@
+.window { 
+	background-color: #EEEEEF;
+	border: 1px solid #346789;
+	border-radius: 0.5em;
+	box-shadow: 2px 2px 5px #AAAAAA;
+	color: black;
+	height: 160px;
+	position :relative;
+	width: 160px;
+}
+.comments{
+	position :relative;
+	height: 500px;
+	overflow:auto;
+	margin:25px 24px 100; 
+	padding-right:2px;
+}
+
+.textContainer { 
+	overflow:auto;
+	height: 79%;
+	width: 89%;
+	margin:0px 15px 5px 5px;
+	background-color: #FFD800;
+	cursor:default;
+}
+
+
+.resizableH3 { text-align: center; margin: 0; }
+
+.window:hover { 
+	box-shadow: 2px 2px 19px #AAAAAA;
+	cursor: pointer;
+}
+
+.hasSubComments{
+    color: red;
+    margin: 5px;
+    cursor: pointer;
+  }
+.hasSubComments:hover {
+    background: yellow;
+  }
