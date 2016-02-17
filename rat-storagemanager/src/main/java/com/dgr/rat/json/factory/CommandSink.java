@@ -13,7 +13,7 @@ import com.dgr.rat.command.graph.executor.engine.ICommandTemplateInvoker;
 import com.dgr.rat.command.graph.executor.engine.IInstructionInvoker;
 import com.dgr.rat.command.graph.executor.engine.InstructionBuilder;
 import com.dgr.rat.command.graph.executor.engine.InstructionInvoker;
-import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
+import com.dgr.rat.command.graph.executor.engine.RemoteCommandContainer;
 import com.dgr.rat.command.graph.executor.engine.commands.CommandProxyNodeFactory;
 import com.dgr.rat.command.graph.executor.engine.queries.QueryProxyNodeFactory;
 import com.dgr.rat.command.graph.executor.engine.result.CommandResponse;
@@ -163,10 +163,10 @@ public class CommandSink {
 		
 		ICommandTemplateInvoker commandTemplateInvoker = null;
 		ICommandGraphVisitableFactory visitableFactory = null;
-		RemoteCommandsContainer instructionsContainer = null;
+		RemoteCommandContainer instructionsContainer = null;
 		String instructionPackageName = null;
 		
-		instructionsContainer = new RemoteCommandsContainer();
+		instructionsContainer = new RemoteCommandContainer();
 		ObjectMapper mapper = new ObjectMapper();
 		String output = mapper.writeValueAsString(ratJsonObject.getSettings());
 		instructionsContainer.deserialize(output);

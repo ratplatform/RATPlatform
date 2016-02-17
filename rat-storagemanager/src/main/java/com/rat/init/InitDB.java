@@ -1,4 +1,4 @@
-package com.dgr.rat.tests;
+package com.rat.init;
 
 import java.nio.file.FileSystems;
 import java.sql.DriverManager;
@@ -20,21 +20,21 @@ import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.commons.mqmessages.RATJSONMessage;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.queries.QueryHelpers;
+import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.rat.storage.provider.StorageType;
+import com.dgr.rat.tests.DBManager;
+import com.dgr.rat.tests.RATSessionManager;
+import com.dgr.rat.tests.TestHelpers;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
 import com.dgr.utils.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rat.init.Comment;
-import com.rat.init.Comments;
-import com.rat.init.SystemInitializerTestHelpers;
-import com.rat.init.User;
 import com.tinkerpop.blueprints.Vertex;
 
 public class InitDB {
@@ -176,7 +176,7 @@ public class InitDB {
 //		String commandJSON = SystemInitializerTestHelpers.addUserComment("AddComment.conf", 
 //				userUUID, domainUUID, -1, -1, -1, -1, comment.url, comment.VertexContentField, comment.VertexLabelField);
 		String commandJSON = SystemInitializerTestHelpers.addUserComment("AddComment.conf", 
-				domainUUID, userUUID, -1, -1, -1, -1, comment.url, comment.VertexContentField, comment.VertexLabelField);
+				domainUUID, userUUID, "{json coordinates}", comment.url, comment.VertexContentField, comment.VertexLabelField);
 		
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));

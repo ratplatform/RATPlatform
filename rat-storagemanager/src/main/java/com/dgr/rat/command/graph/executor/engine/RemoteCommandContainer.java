@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import com.dgr.rat.graphgenerator.test.RemoteParameter;
+import com.dgr.rat.json.command.parameters.RemoteParameter;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.utils.Utils;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -21,10 +21,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class RemoteCommandsContainer{
+public class RemoteCommandContainer{
 	private Map<String, RemoteParameter> _parameters = new HashMap<String, RemoteParameter>();
 	
-	public RemoteCommandsContainer() {
+	public RemoteCommandContainer() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -109,37 +109,4 @@ public class RemoteCommandsContainer{
 		
 		return remoteParamValue;
 	}
-	
-//	public String getParameter(final IInstructionParam instructionParameter) throws Exception{
-//		String paramUUID = instructionParameter.getParamUUID();
-//		if(!Utils.isUUID(paramUUID)){
-//			throw new Exception();
-//			// TODO log
-//		}
-//		
-//		if(!_parameters.containsKey(paramUUID)){
-//			throw new Exception();
-//			// TODO log
-//		}
-//		
-//		RemoteParameter remoteParameter = _parameters.get(paramUUID);
-//		
-//		ReturnType remoteParameterReturnType = remoteParameter.getReturnType();
-//		ReturnType type = instructionParameter.getInstructionsParameterReturnTypeField();
-//		if(!type.toString().equalsIgnoreCase(remoteParameterReturnType.toString())){
-//			throw new Exception();
-//			// TODO log
-//		}
-//		
-//		String paramName = instructionParameter.getInstructionsParameterNameField();
-//		String remoteParameterName = remoteParameter.getParameterName();
-//		if(!paramName.toString().equalsIgnoreCase(remoteParameterName)){
-//			throw new Exception();
-//			// TODO log
-//		}
-//		
-//		String remoteParamValue = remoteParameter.getParameterValue();
-//		
-//		return remoteParamValue;
-//	}
 }

@@ -29,7 +29,7 @@ import com.dgr.utils.Utils;
 // prende i parametri in IInvokable, verifica che non siano anche in RemoteCommandsContainer; se ci sono, allora 
 // valorizza i parametri di IInvokable con quelli corrispondenti in RemoteCommandsContainer
 public class InstructionInvoker implements IInstructionInvoker{
-	private RemoteCommandsContainer _remoteCommandsContainer = null;
+	private RemoteCommandContainer _remoteCommandsContainer = null;
 	private IStorage _storage = null;
 	private Map<String, String> _parameters = new HashMap<String, String>();
 	private Map<String, InstructionResultContainer> _instructionResults = new HashMap<String, InstructionResultContainer>();
@@ -46,7 +46,7 @@ public class InstructionInvoker implements IInstructionInvoker{
 	// il valore nello stack è a disposizione di tutti i suoi child
 //	private Stack<InstructionResult>_resultStack = new Stack<InstructionResult>();
 	
-	public InstructionInvoker(IStorage storage, RemoteCommandsContainer instructionsContainer, IInstructionBuilder instructionBuilder) {
+	public InstructionInvoker(IStorage storage, RemoteCommandContainer instructionsContainer, IInstructionBuilder instructionBuilder) {
 		_storage = storage;
 		_remoteCommandsContainer = instructionsContainer;
 		_instructionBuilder = instructionBuilder;

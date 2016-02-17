@@ -10,10 +10,10 @@ import java.nio.file.FileSystems;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
-
-import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
+import com.dgr.rat.command.graph.executor.engine.RemoteCommandContainer;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
@@ -52,7 +52,7 @@ public class SystemCommandsInitializer {
 	public void addCommandTemplates() throws Exception{
 		_storage.openConnection();
 		
-		String templatesPath = RATHelpers.getCommandsPath(RATConstants.CommandTemplatesFolder);
+		String templatesPath = RATUtils.getCommandsPath(RATConstants.CommandTemplatesFolder);
 		String json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadCommandsTemplate.conf");
 		// COMMENT: modo corretto per ottenere  il commandsTemplateUUID
 		//String commandsTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
@@ -73,7 +73,7 @@ public class SystemCommandsInitializer {
 			throw new Exception();
 			// TODO: log
 		}
-		templatesPath = RATHelpers.getCommandsPath(RATConstants.QueryTemplatesFolder);
+		templatesPath = RATUtils.getCommandsPath(RATConstants.QueryTemplatesFolder);
 		this.addCommandTemplates(templatesPath, json, queriesTemplateUUID);
 		_storage.shutDown();
 
@@ -83,11 +83,11 @@ public class SystemCommandsInitializer {
 	}
 	
 	private String createRootDomain(String fileName, String commandsNodeUUID, String queriesNodeUUID) throws Exception{
-		String json = RATHelpers.readCommandJSONFile(fileName);
+		String json = RATUtils.readCommandJSONFile(fileName, RATConstants.CommandsFolder);
 		
 		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
-		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		int changed = remoteCommandsContainer.setValue("commandsNodeUUID", commandsNodeUUID, ReturnType.uuid);
 		System.out.println("Changed in " + fileName + ": " + changed);

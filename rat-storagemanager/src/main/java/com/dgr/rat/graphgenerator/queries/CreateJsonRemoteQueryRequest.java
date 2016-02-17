@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.graphgenerator.test.RemoteParameter;
+import com.dgr.rat.json.command.parameters.RemoteParameter;
 import com.dgr.rat.json.utils.ReturnType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinkerpop.blueprints.Direction;

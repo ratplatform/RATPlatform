@@ -18,6 +18,7 @@ import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeEdgeFrame;
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.json.command.parameters.RemoteParameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.java.GremlinPipeline;

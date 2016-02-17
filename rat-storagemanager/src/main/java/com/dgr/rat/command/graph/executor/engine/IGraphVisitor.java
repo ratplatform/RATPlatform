@@ -12,6 +12,6 @@ public interface IGraphVisitor {
 	public boolean nodeAlreadyExplored(UUID uuid);
 	public void addExploredNode(ICommandNodeVisitable node) throws Exception;
 	public void visit(ICommandNodeVisitable visitable, ICommandNodeVisitable parent) throws Exception;
-	public RemoteCommandsContainer getParameters();
+	public RemoteCommandContainer getParameters();
 	public void invoke(IInstructionNodeWrapper instruction) throws Exception;
 }

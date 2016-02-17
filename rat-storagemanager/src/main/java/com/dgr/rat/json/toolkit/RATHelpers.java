@@ -21,6 +21,7 @@ import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeEdgeFra
 import com.dgr.rat.command.graph.executor.engine.ratvertexframes.IRATNodeFrame;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
@@ -136,16 +137,16 @@ public class RATHelpers {
 	    return farmeVertex;
 	}
 	
-	public static String getCommandsPath(String folderName){
-		StringBuffer pathBuffer = new StringBuffer();
-		pathBuffer.append(RATConstants.ConfigurationFolder);
-		pathBuffer.append(FileSystems.getDefault().getSeparator());
-		String systemCommandsFolder = AppProperties.getInstance().getStringProperty(folderName);
-		pathBuffer.append(systemCommandsFolder);
-		pathBuffer.append(FileSystems.getDefault().getSeparator());
-		
-		return pathBuffer.toString();
-	}
+//	public static String getCommandsPath(String folderName){
+//		StringBuffer pathBuffer = new StringBuffer();
+//		pathBuffer.append(RATConstants.ConfigurationFolder);
+//		pathBuffer.append(FileSystems.getDefault().getSeparator());
+//		String systemCommandsFolder = AppProperties.getInstance().getStringProperty(folderName);
+//		pathBuffer.append(systemCommandsFolder);
+//		pathBuffer.append(FileSystems.getDefault().getSeparator());
+//		
+//		return pathBuffer.toString();
+//	}
 	
 	public static void duplicateVertex(final Vertex vertex, final boolean createNewUUID, Vertex newVertexOut){
 		Set<String> keys = vertex.getPropertyKeys();
@@ -164,27 +165,27 @@ public class RATHelpers {
 		}
 	}
 	
-	public static String readQueryJSONFile(String fileName) throws Exception{
-		String commandsPath = RATHelpers.getCommandsPath(RATConstants.QueriesFolder);
-		StringBuffer pathBuffer = new StringBuffer();
-		pathBuffer.append(commandsPath);
-		pathBuffer.append(fileName);
-		
-		String templatePath = pathBuffer.toString();
-		String input = FileUtils.fileRead(templatePath);
-		
-		return input;
-	}
+//	public static String readQueryJSONFile(String fileName) throws Exception{
+//		String commandsPath = RATHelpers.getCommandsPath(RATConstants.QueriesFolder);
+//		StringBuffer pathBuffer = new StringBuffer();
+//		pathBuffer.append(commandsPath);
+//		pathBuffer.append(fileName);
+//		
+//		String templatePath = pathBuffer.toString();
+//		String input = FileUtils.fileRead(templatePath);
+//		
+//		return input;
+//	}
 	
-	public static String readCommandJSONFile(String fileName) throws Exception{
-		String commandsPath = RATHelpers.getCommandsPath(RATConstants.CommandsFolder);
-		StringBuffer pathBuffer = new StringBuffer();
-		pathBuffer.append(commandsPath);
-		pathBuffer.append(fileName);
-		
-		String templatePath = pathBuffer.toString();
-		String input = FileUtils.fileRead(templatePath);
-		
-		return input;
-	}
+//	public static String readCommandJSONFile(String fileName) throws Exception{
+//		String commandsPath = RATUtils.getCommandsPath(RATConstants.CommandsFolder);
+//		StringBuffer pathBuffer = new StringBuffer();
+//		pathBuffer.append(commandsPath);
+//		pathBuffer.append(fileName);
+//		
+//		String templatePath = pathBuffer.toString();
+//		String input = FileUtils.fileRead(templatePath);
+//		
+//		return input;
+//	}
 }

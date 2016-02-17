@@ -12,16 +12,16 @@ import com.dgr.rat.storage.provider.IStorage;
 
 public class CommandData {
 	private IRATJsonObject _header = null;
-	private RemoteCommandsContainer _parameters = null;
+	private RemoteCommandContainer _parameters = null;
 	private IStorage _storage = null;
 	
-	public CommandData(IRATJsonObject header, RemoteCommandsContainer instructionsContainer, IStorage storage) {
+	public CommandData(IRATJsonObject header, RemoteCommandContainer instructionsContainer, IStorage storage) {
 		_header = header;
 		_parameters = instructionsContainer;
 		_storage = storage;
 	}
 	
-	public RemoteCommandsContainer getParameters() {
+	public RemoteCommandContainer getParameters() {
 		return _parameters;
 	}
 	

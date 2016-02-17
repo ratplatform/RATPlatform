@@ -123,7 +123,7 @@ public class CommandTemplateInvoker implements ICommandTemplateInvoker, IGraphVi
 	 * @see com.dgr.rat.queries.IGraphVisitor#getParameters()
 	 */
 	@Override
-	public RemoteCommandsContainer getParameters() {
+	public RemoteCommandContainer getParameters() {
 		// TODO Auto-generated method stub
 		return _dataWrapper.getParameters();
 	}

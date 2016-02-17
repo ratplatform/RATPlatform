@@ -43,14 +43,14 @@ public class BindSubComment implements IInstruction{
 				throw new Exception();
 			}
 			//System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
-			// TODO: aggiungere comments nelle proprietà del vertexframe
-			Object comments = inVertex.getProperty("comments");
+			// TODO: aggiungere subComments nelle proprietà del vertexframe
+			Object comments = inVertex.getProperty("subComments");
 			if(comments == null){
-				inVertex.setProperty("comments", 1);
+				inVertex.setProperty("subComments", 1);
 			}
 			else{
 				int num = Integer.parseInt(comments.toString());
-				inVertex.setProperty("comments", ++num);
+				inVertex.setProperty("subComments", ++num);
 			}
 			
 			edgeUUID = UUID.randomUUID();

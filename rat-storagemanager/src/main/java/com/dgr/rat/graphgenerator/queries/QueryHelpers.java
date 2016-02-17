@@ -7,13 +7,13 @@ package com.dgr.rat.graphgenerator.queries;
 
 import org.junit.Assert;
 
-import com.dgr.rat.command.graph.executor.engine.RemoteCommandsContainer;
+import com.dgr.rat.command.graph.executor.engine.RemoteCommandContainer;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
-import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.utils.AppProperties;
@@ -25,7 +25,7 @@ public class QueryHelpers {
 		String json = QueryHelpers.readRemoteQueryJSONFile(fileName);
 		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
 		
-		RemoteCommandsContainer remoteCommandsContainer = new RemoteCommandsContainer();
+		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		
 		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootNodeUUID, ReturnType.uuid);
@@ -61,7 +61,7 @@ public class QueryHelpers {
 	}
 	
 	private static String readRemoteQueryJSONFile(String fileName) throws Exception{
-		String commandsPath = RATHelpers.getCommandsPath(RATConstants.QueriesFolder);
+		String commandsPath = RATUtils.getCommandsPath(RATConstants.QueriesFolder);
 		StringBuffer pathBuffer = new StringBuffer();
 		pathBuffer.append(commandsPath);
 		pathBuffer.append(fileName);
