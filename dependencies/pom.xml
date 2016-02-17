@@ -42,6 +42,7 @@
 	</dependencies>
 
 	<build>
+		<plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-deploy-plugin</artifactId>
@@ -69,6 +70,7 @@
 			<skipStaging>true</skipStaging>
 			</configuration>
 		</plugin>
+		</plugins>
 	</build>
 
 </project>
