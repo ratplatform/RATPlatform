@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.rat.platform</groupId>
+	<artifactId>ratplatform-dependencies-project</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
+	<name>RATPlatform 2.0 Project</name>
+	<packaging>pom</packaging>
+
+	<properties>
+		<rat.version>2.0.0</rat.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<root.dir>.</root.dir>
+		<build.dir>build</build.dir>
+		<jvm.source>1.7</jvm.source>
+		<jvm.target>1.7</jvm.target>
+	</properties>
+
+	<developers>
+		<developer>
+		<name>Daniele Grignani</name>
+		<email>grignani.d@gmail.com</email>
+		</developer>
+
+		<developer>
+		<name>Angela Locoro</name>
+		<email>angela.locoro@gmail.com</email>
+		</developer>
+	</developers>
+
+	<modules>
+		<module>json.pom</module>
+		<module>org.glassfish.pom</module>
+		<module>orientdb.pom</module>
+		<module>spring.pom</module>
+		<module>tinkerpop.pom</module>
+	</modules>
+
+	<dependencies>
+
+	</dependencies>
+
+</project>
