@@ -114,4 +114,16 @@
 		</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<repository>
+		<id>ratplatform2.0-releases</id>
+		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/ratplatform2.0-releases</url>
+		</repository>
+
+		<snapshotRepository>
+		<id>ratplatform2.0-snapshot</id>
+		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/ratplatform2.0-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
