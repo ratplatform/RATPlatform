@@ -5,6 +5,9 @@
 
 package com.dgr.rat.json.utils;
 
+
+// TODO: devo eliminare i type nei nodi e creare dei nodi che indicano il tipo, quindi linkare i singoli nodi al nodo che indica il tipo. In questo 
+// modo anche i tipi diventano configurabili
 public enum VertexType {
 	Unknown("Unknown"),
 	QueryPivot("QueryPivot"),
