@@ -32,6 +32,73 @@ public class RATMessageSender implements IMessageSender{
 	public RATMessageSender() {
 		System.out.println("RATMessageSender Send");
 	}
+	
+	// TODO da rivedere l'ho messa solo per la login
+	public String sendMessage(final ServletContext servletContext, final String sessionID, final String data) {
+		StatusCode responseStatus = StatusCode.Ok;
+		String result = null;
+		
+		try {
+	   		if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+				responseStatus = StatusCode.Unauthorized;
+				throw new Exception("sessionID is empty");
+			}
+			
+			boolean sessionIDExists = RATSessionManager.getInstance().sessionIDExists(sessionID);
+			if(!sessionIDExists){
+				responseStatus = StatusCode.Unauthorized;
+				throw new Exception("sessionID does not exist");
+			}
+			
+			Subject requestSubject = new Subject.Builder().sessionId(sessionID).buildSubject();
+			System.out.println("Is Authenticated = " + requestSubject.isAuthenticated());
+			
+			// TODO: attenzione, gestisco la sessione shiro in modo separato e quando la mia
+			// piattaforma cancella la sessione conrrente,, dovrebbe anche eseguire il 
+			// logout da shiro ASSOLUTAMENTE. Per ora non lo faccio, ma andrà fatto (se shiro verrà mantenuto).
+	//	    			boolean isPermitted = requestSubject.isPermitted(action);
+	//	    			responseStatus = isPermitted ? StatusCode.Ok : StatusCode.Unauthorized;
+	//	    			System.out.println("createCollaborationDomain responseStatus " + responseStatus);
+			
+	    	FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) servletContext.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
+	    	
+			MessageSender messageSender = (MessageSender)context.getBean("messageSender");
+			messageSender.setMessage(data);
+			messageSender.setSessionID(sessionID);
+	    	_pool.submit(messageSender);
+		
+			Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
+			if(task != null){
+				result = task.get();
+				// TODO: sistema di saltare la trasformazione di json davvero brutale: da rivedere
+				if(result.contains("vertices")){
+					result = MakeSigmaJSON.fromRatJsonToAlchemy(result);
+				}
+				System.out.println("result = " + result);
+			}
+			else{
+				responseStatus = StatusCode.RequestTimeout;
+				throw new Exception("Future<String>task is null!");
+			}
+		}
+		catch(Exception e){
+			if(responseStatus.compareTo(StatusCode.Ok) == 0){
+				e.printStackTrace();
+				responseStatus = StatusCode.InternalServerError;
+			}
+			
+			JsonHeader jsonHeader = RATJsonUtils.getJsonHeader(responseStatus, MessageType.Response);
+			result = KeepAliveHelpers.serializeKeepAliveJson(jsonHeader);
+			
+			e.printStackTrace();
+			// TODO log
+		}
+		
+		//int response = responseStatus.getValue();
+		//asyncResponse.resume(Response.status(response).entity(result).build());
+		
+		return result;
+	}
 
 	public void sendMessage(final AsyncResponse asyncResponse, final ServletContext servletContext, final String sessionID, final String data) {
 		

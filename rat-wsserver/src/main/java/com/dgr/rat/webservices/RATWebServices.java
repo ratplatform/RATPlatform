@@ -5,6 +5,8 @@
 
 package com.dgr.rat.webservices;
 
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +35,16 @@ import org.apache.shiro.subject.Subject;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.auth.LoginData;
 import com.dgr.rat.auth.db.IdentityManager;
+import com.dgr.rat.commons.constants.JSONType;
+import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.constants.StatusCode;
+import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.commons.utils.DateUtils;
+import com.dgr.rat.commons.utils.RATUtils;
+import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
+import com.dgr.rat.json.utils.RATJsonUtils;
+import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.login.json.ChooseDomainData;
 import com.dgr.rat.messages.IMessageSender;
 import com.dgr.rat.messages.RATMessageSender;
@@ -79,7 +89,8 @@ public class RATWebServices {
         Response response = null;
         Map<String, Object> result = null;
         ObjectMapper mapper = null;
-
+        String sessionID = null;
+        
         try {
     		mapper = new ObjectMapper();
     	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -93,7 +104,7 @@ public class RATWebServices {
             token.setRememberMe(true);
             currentUser.login(token); 
 
-            String sessionID = currentUser.getSession().getId().toString();
+            sessionID = currentUser.getSession().getId().toString();
             System.out.println(sessionID);
             
             SessionData sessionData = new SessionData(sessionID);
@@ -132,9 +143,30 @@ public class RATWebServices {
         }
         
 		try {
-			// TODO: per inviare il menu dei cmmmenti in modo dinamico: da sistemare meglio
-			List <Object> menu = this.readMenu();
-			result.put("plugInContextMenu", menu);
+			// TODO: per inviare il menu dei cmmmenti in modo dinamico: da vedere o sistemare meglio
+			//List <Object> menu = this.readMenu();
+			//result.put("plugInContextMenu", menu);
+			
+			RATMessageSender ratMessageSender = new RATMessageSender(); 
+			//TODO: chiaramente ora faccio così e prendo GetRootDomain da filesystem, ma devo introdurre 
+			// le categorie dei systemCommands e querycommands, separata dagli usercommands, che prendono i comandi direttamente dal dominio e contenuti nel db
+			// I syemCOmmand e le querycommands non sono a disposizione degli utenti. Il WSServer potrebbe chiedere i comandi allo StorageServer alla prima connessione. Lo StorageServer 
+			// li serializza, quindi li invia al WSServer che li deserializza
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
+			String commandJSON = SystemInitializerTestHelpers.createGetRootDomain("GetRootDomain.conf", "nodeType", VertexType.RootDomain.toString());
+			
+//			JsonHeader header = RATJsonUtils.getJsonHeader(StatusCode.Unknown, MessageType.Request);
+//			header.setCommandType(JSONType.SystemQuery);
+//			header.setCommandName("GetRootDomain");
+//			header.setCommandVersion("0.1");
+//			Map<String, Object>command = new HashMap<String, Object>();
+//			command.put("header", header.getHeaderProperties());
+//			String output = mapper.writeValueAsString(command);
+//			System.out.println(RATJsonUtils.jsonPrettyPrinter(output));
+			
+			String rootJson = ratMessageSender.sendMessage(_context, sessionID, commandJSON);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(rootJson));
 			
 			json = mapper.writeValueAsString(result);
 			System.out.println(json);
@@ -150,6 +182,7 @@ public class RATWebServices {
         return response;
 	}
 	
+	// TODO: per inviare il menu dei cmmmenti in modo dinamico: da sistemare meglio
 	private List <Object> readMenu() throws Exception{
 		String file = _context.getInitParameter("plugInContextMenu");
 		String json = FileUtils.fileRead(file);
