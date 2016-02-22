@@ -119,8 +119,27 @@ public class QueryGenerator {
 	
 	private void createQueryPivotRootNode(Vertex vertex){
 		List<IInstructionParameterNodeFrame>instructionParameters = new LinkedList<IInstructionParameterNodeFrame>();
-		IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
-		instructionParameters.add(instructionParameter);
+		
+		GremlinPipeline<Vertex, Vertex> p = new GremlinPipeline<Vertex, Vertex>(vertex);
+		@SuppressWarnings("unchecked")
+		List<Vertex> list = (List<Vertex>) p.outE(RATConstants.QueryPivotEdgeLabel).inV().has(RATConstants.VertexTypeField, VertexType.InstructionParameter.toString()).toList();
+		IInstructionParameterNodeFrame instructionParameter = null;
+		if(list.size() > 0){
+			for(Vertex param : list){
+				instructionParameter = this.addInstructionParameter(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString(), 
+						param.getProperty(RATConstants.VertexInstructionParameterValueField).toString(), 
+						ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));
+				instructionParameters.add(instructionParameter);
+			}
+			//instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+		}
+		else{
+			instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+			instructionParameters.add(instructionParameter);
+		}
+		
+//		IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+//		instructionParameters.add(instructionParameter);
 		
 		String queryName = vertex.getProperty(RATConstants.QueryName);
 
@@ -146,6 +165,36 @@ public class QueryGenerator {
 		
         _rootNodeUUID = uuid;
 	}
+	
+//	private void createQueryPivotRootNode(Vertex vertex){
+//		List<IInstructionParameterNodeFrame>instructionParameters = new LinkedList<IInstructionParameterNodeFrame>();
+//		IInstructionParameterNodeFrame instructionParameter = this.addInstructionParameter("rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+//		instructionParameters.add(instructionParameter);
+//		
+//		String queryName = vertex.getProperty(RATConstants.QueryName);
+//
+//		UUID uuid = UUID.randomUUID();
+//		
+//		IInstructionNodeFrame instruction = this.addInstruction(instructionParameters, queryName);
+//		
+//		_rootNode = _queryGraph.addVertex(null, IQueryFrame.class);
+//		_rootNode.setVertexCommandOwnerField(queryName);
+//		_rootNode.setVertexContentField(VertexType.QueryPivot.toString());
+//		_rootNode.setVertexLabelField(VertexType.QueryPivot.toString());
+//		_rootNode.setIsRootVertexField(true);
+//		_rootNode.setVertexTypeField(VertexType.QueryPivot);
+//		_rootNode.setCommandGraphUUID(_commandUUID.toString());
+//		_rootNode.setVertexUUIDField(uuid.toString());
+//
+//		Edge edge = _rootNode.asVertex().addEdge(RATConstants.EdgeInstruction, instruction.asVertex());
+//		IInstructionParameterEdgeFrame framedEdge = _queryGraph.frame(edge, IInstructionParameterEdgeFrame.class);
+//		framedEdge.setWeight(0);
+//
+//		//System.out.println("Push: " + _rootNode.getVertexLabelField());
+//		_owners.push(_rootNode);
+//		
+//        _rootNodeUUID = uuid;
+//	}
 	
 	private void createQueryPivotNode(Vertex currentQueryPivotVertex, Vertex previousQueryPivotVertex) throws Exception{
 		String queryName = currentQueryPivotVertex.getProperty(RATConstants.QueryName);

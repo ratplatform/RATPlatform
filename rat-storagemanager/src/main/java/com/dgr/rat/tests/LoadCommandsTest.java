@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.main.SystemCommandsInitializer;
 import com.dgr.rat.storage.provider.IStorage;
@@ -33,8 +34,8 @@ public class LoadCommandsTest {
 	@Before
 	public void init(){
 		try {
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
 			
 //			StorageType storageType = StorageType.TinkerGraph;
 //			StorageBridge.getInstance().init(storageType);

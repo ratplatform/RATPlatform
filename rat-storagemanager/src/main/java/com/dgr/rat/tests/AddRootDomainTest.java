@@ -111,6 +111,21 @@ public class AddRootDomainTest {
 //		json = SystemInitializerTestHelpers.addUserComment("AddComment.conf", comment1UUID, user1UUID, "{json coordinates}", "http://www.repubblica.it/", "il mio commento a la repubblica", "larepubblica.it 1");
 //		response = this.executeRemoteCommand(json);
 //		String comment2UUID = this.getNewRootNodeUUID(response);
+		
+		/*Queries*/
+		RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
+		RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
+		
+		String dir = "";//".." + FileSystems.getDefault().getSeparator();
+		
+		String commandJSON = SystemInitializerTestHelpers.createGetRootDomain("GetRootDomain.conf", "nodeType", VertexType.RootDomain.toString());
+		response = this.executeRemoteCommand(commandJSON);
+		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+		String alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		String resultFilename = dir + "GetRootDomain.conf" + "QueryResult";
+		String path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+		TestHelpers.writeGraphToJson(alchemyJson, path);
 	}
 	
 	public void testAll(String rootDomainUUID) throws Exception {
@@ -201,8 +216,8 @@ public class AddRootDomainTest {
 //				e.printStackTrace();
 //			}
 		
-		RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
-		RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
+		RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
+		RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 		
 		String dir = "";//".." + FileSystems.getDefault().getSeparator();
 		
@@ -483,8 +498,8 @@ public class AddRootDomainTest {
 	public void verify(){
 		// Anche in caso di exception voglio che scriva lo stesso i risultati per vederli
 		try {
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			
 			String resultFilename = this.getClass().getSimpleName() + "Result";
 			String path = TestHelpers.writeGraphToHTML(resultFilename, "commandResults");

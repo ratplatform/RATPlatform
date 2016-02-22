@@ -25,6 +25,7 @@ import com.dgr.rat.commons.constants.JSONType;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.graphgenerator.commands.AbstractCommand;
@@ -182,7 +183,7 @@ public class CommandGraphGeneratorTest {
 		GraphGeneratorHelpers.storeUUID(RATConstants.Queries, UUID.fromString(LoadQueriesUUID));
 		GraphGeneratorHelpers.storeUUID(VertexType.RootDomain.toString(), UUID.fromString(RootDomainUUID));
 		
-		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
+		RATUtils.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
 		String placeHolder = AppProperties.getInstance().getStringProperty(RATConstants.DomainPlaceholder);
 		String applicationName = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationName);
 		String applicationVersion = AppProperties.getInstance().getStringProperty(RATConstants.ApplicationVersionField);

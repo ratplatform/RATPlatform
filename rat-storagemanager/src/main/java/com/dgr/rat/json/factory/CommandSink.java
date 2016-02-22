@@ -202,6 +202,17 @@ public class CommandSink {
 			}
 			break;
 			
+		case SystemQuery:{
+			// TODO: passo il package dei comandi come stringa, ma è pericoloso nel caso in cui 
+			// lo modificassi. Valutare l'ipotesi di metterlo nel file delle proprietà o trovare soluzione alternativa
+			instructionPackageName = "com.dgr.rat.command.graph.executor.engine.queries.instructions";
+			invoker = new InstructionInvoker(storage, instructionsContainer, new InstructionBuilder(instructionPackageName));
+			visitableFactory = new QueryProxyNodeFactory();
+			QueryResultDriller driller = new QueryResultDriller();
+			commandTemplateInvoker = new CommandTemplateInvoker(data, driller);
+		}
+		break;
+			
 		case ConfigurationCommands:{
 			}
 			break;

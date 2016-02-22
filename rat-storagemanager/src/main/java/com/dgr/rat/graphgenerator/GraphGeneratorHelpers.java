@@ -19,6 +19,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.tools.ant.util.DateUtils;
 
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
@@ -65,7 +66,7 @@ public class GraphGeneratorHelpers {
     }
 	
 	public static void writeAlchemyJson(String commandName, String commandVersion, String alchemyJSON, String destinationFolder) throws Exception{
-		RATHelpers.initProperties(UnitTestPropertyFile);
+		RATUtils.initProperties(UnitTestPropertyFile);
 		String sep = FileSystems.getDefault().getSeparator();
 		
 		String appPath = AppProperties.getInstance().getStringProperty("sigma.path");
@@ -93,7 +94,7 @@ public class GraphGeneratorHelpers {
 	}
 	
 	public static void writeJavaScript(String name, String javaScript) throws Exception{
-		RATHelpers.initProperties(UnitTestPropertyFile);
+		RATUtils.initProperties(UnitTestPropertyFile);
 		String sep = FileSystems.getDefault().getSeparator();
 		String destinationFolder = AppProperties.getInstance().getStringProperty("javascript.destination.folder");
 		FileUtils.write(".." + sep + destinationFolder + sep + name + ".js", javaScript, false);

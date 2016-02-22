@@ -105,8 +105,8 @@ public class BuildQueryJavaScript {
 //	}
 	private String makeFunctions(String commandName, Map<String, String> functions, RATJsonObject ratJsonObject){
 		String result = "";
-		//result += commandName + "Set" + " = function(";// + key + "){\n";
 		String params = "currentDomainUUID, ";
+		//String params = "";
 		String calls = "";
 		Iterator<String>it = functions.keySet().iterator();
 		while(it.hasNext()){

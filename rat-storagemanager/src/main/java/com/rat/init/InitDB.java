@@ -18,12 +18,14 @@ import org.junit.Test;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.MQMessage;
 import com.dgr.rat.commons.mqmessages.RATJSONMessage;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.queries.QueryHelpers;
 import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
+import com.dgr.rat.main.SystemCommandsInitializer;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.rat.storage.provider.StorageType;
 import com.dgr.rat.tests.DBManager;
@@ -85,26 +87,59 @@ public class InitDB {
 	}
 	
 //	private void initDB() throws Exception{
+//		SystemCommandsInitializer systemCommandsInitializer = new SystemCommandsInitializer();
 //		String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
-//		if(storageType.equals(StorageType.OrientDB.toString())){
-//			String orientDBDataDir = AppProperties.getInstance().getStringProperty("orientdb.dir");
-//			if(!FileUtils.fileExists(orientDBDataDir)){
-//				FileUtils.createDir(orientDBDataDir);
-//			}
-//			else{
-//				FileUtils.deleteDirectory(orientDBDataDir);
-//				FileUtils.createDir(orientDBDataDir);
-//			}
-//			
-//		}
+//		systemCommandsInitializer.set_storageType(storageType);
+//		// COMMENT: Inizializzo il database (se non esiste il DB allora lo creo)
+//		systemCommandsInitializer.initStorage();
+//		systemCommandsInitializer.addCommandTemplates();
 //	}
+	
+	@SuppressWarnings("deprecation")
+	private void addAdmin() throws Exception{
+		Assert.assertNotNull(_context);
+		
+		String userName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
+		String userPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
+		String userEmail = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminEmail);
+		String adminUUID = null;
+		
+		List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
+		
+		if(result.size() == 0){
+			String commandJSON = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", _rootDomainUUID, userName, userPwd, userEmail);
+			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+			
+			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
+			adminUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
+		}
+		else if(result.size() == 1){
+			Vertex vertex = result.get(0);
+			adminUUID = vertex.getProperty(RATConstants.VertexUUIDField);
+		}
+		else{
+			throw new Exception();
+		}
+		
+		if(!Utils.isUUID(adminUUID)){
+			throw new Exception();
+			// TODO log
+		}
+		
+		result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
+		Assert.assertTrue(result.size() == 1);
+		
+		_dbManager.addAdmin(userEmail, userName, userPwd, _rootDomainName, adminUUID);
+		_dbManager.addAdminPermissions(adminUUID, _rootDomainUUID, _rootDomainName);
+	}
 	
 	@After
 	public void verify(){
 		// Anche in caso di exception voglio che scriva lo stesso i risultati per vederli
 		try {
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
-			RATHelpers.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
+			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			
 			String resultFilename = this.getClass().getSimpleName() + "Result";
 			String path = TestHelpers.writeGraphToHTML(resultFilename, "commandResults");
@@ -263,45 +298,6 @@ public class InitDB {
 		return userUUID;
 	}
 	
-	@SuppressWarnings("deprecation")
-	private void addAdmin() throws Exception{
-		Assert.assertNotNull(_context);
-		
-		String userName = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminName);
-		String userPwd = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminPwd);
-		String userEmail = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminEmail);
-		String adminUUID = null;
-		
-		List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
-		
-		if(result.size() == 0){
-			String commandJSON = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", _rootDomainUUID, userName, userPwd, userEmail);
-			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
-			System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
-			
-			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
-			adminUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
-		}
-		else if(result.size() == 1){
-			Vertex vertex = result.get(0);
-			adminUUID = vertex.getProperty(RATConstants.VertexUUIDField);
-		}
-		else{
-			throw new Exception();
-		}
-		
-		if(!Utils.isUUID(adminUUID)){
-			throw new Exception();
-			// TODO log
-		}
-		
-		result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
-		Assert.assertTrue(result.size() == 1);
-		
-		_dbManager.addAdmin(userEmail, userName, userPwd, _rootDomainName, adminUUID);
-		_dbManager.addAdminPermissions(adminUUID, _rootDomainUUID, _rootDomainName);
-	}
-	
 	private List<Vertex> getUser(VertexType userType, String domainUUID, String userEmail, String fileName) throws Exception{
 		String commandJSON = SystemInitializerTestHelpers.createGetUserByEmail(fileName, domainUUID, "userEmail", userEmail);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
@@ -319,7 +315,7 @@ public class InitDB {
 	
 	public void init() throws Exception{
 		try {
-			RATHelpers.initProperties(RATConstants.PropertyFile);
+			RATUtils.initProperties(RATConstants.PropertyFile);
 			_context = new FileSystemXmlApplicationContext(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-producer-unitTest.xml");
 			RATSessionManager.init();
 			

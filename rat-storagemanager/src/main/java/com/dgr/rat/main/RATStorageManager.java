@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.messages.RATMessagingService;
 import com.dgr.utils.AppProperties;
@@ -23,9 +24,9 @@ public class RATStorageManager {
 	}
 	
 	private void init() throws Exception{
-		RATHelpers.initProperties(RATConstants.PropertyFile);
+		RATUtils.initProperties(RATConstants.PropertyFile);
 		// TODO questo deve essere letto solo se imposto il DB OrientDB
-		RATHelpers.initProperties(RATConstants.OrientDBPropertyFile);
+		RATUtils.initProperties(RATConstants.OrientDBPropertyFile);
 		
 		String path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-consumer.xml";
 		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(path);
@@ -34,10 +35,8 @@ public class RATStorageManager {
 		SystemCommandsInitializer systemCommandsInitializer = new SystemCommandsInitializer();
 		String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
 		systemCommandsInitializer.set_storageType(storageType);
-		
 		// COMMENT: Inizializzo il database (se non esiste il DB allora lo creo)
 		systemCommandsInitializer.initStorage();
-		
 		systemCommandsInitializer.addCommandTemplates();
 		
 		System.out.println("Ready!");

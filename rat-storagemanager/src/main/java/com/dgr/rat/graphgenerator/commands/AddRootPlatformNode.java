@@ -37,5 +37,10 @@ public class AddRootPlatformNode extends AbstractCommand{
 		rootDomainNode.addChild(isSystemNode);
 		isSystemNode.addChild(isPutByNode);
 		isPutByNode.addChild(rootDomainNode);
+		
+		this.setQueryPivot(isSystemNode, "GetRootDomain", "GetRootDomain", true, "nodeType");
+//		this.setQueryPivot(isSystemNode, "GetRootDomain", "SetQueryPipe", true);
+//		this.setQueryPivot(rootDomainNode, "GetRootDomain", "GetRootDomain", false);
+//		this.setQueryPivot(rootDomainNode, "GetRootDomain", "GetUserByEmail", false, "domainType");
 	}
 }

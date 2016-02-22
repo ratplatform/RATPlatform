@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.json.RATJsonObject;
@@ -183,7 +184,7 @@ public class QueryGraphGeneratorTest {
 //	};
 	
 	private void addQueries() throws Exception{
-		RATHelpers.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
+		RATUtils.initProperties(GraphGeneratorHelpers.StorageManagerPropertyFile);
 		String queryVersion = "0.1";
 		
 		this.addQuery("AddRootDomainAdminUserTemplate.conf", queryVersion);
@@ -191,6 +192,7 @@ public class QueryGraphGeneratorTest {
 		this.addQuery("AddNewDomainTemplate.conf", queryVersion);
 		this.addQuery("BindFromUserToDomainTemplate.conf", queryVersion);
 		this.addQuery("AddCommentTemplate.conf", queryVersion);
+		this.addQuery("AddRootDomainTemplate.conf", queryVersion);
 		
 		String javaScript = _buildQueryJavaScript.getJavaScript();
 //		System.out.println(javaScript);

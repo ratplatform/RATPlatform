@@ -67,18 +67,6 @@ public class RATHelpers {
 		return list.size();
 	}
 	
-	public static void initProperties(String propertiesFile) throws Exception{
-		Path path = FileSystems.getDefault().getPath(propertiesFile);
-		boolean fileExists = Files.exists(path);
-		if(fileExists){
-			AppProperties.getInstance().init(propertiesFile);
-		}
-		else{
-			// TODO: da gestire i messaggi con ResourceBundle
-			throw new Exception("File " + propertiesFile + " not found");
-		}
-	}
-	
 	public static String fromGraphToJson(Graph graph) throws IOException{
 	    OutputStream output = new OutputStream(){
 	        private StringBuilder string = new StringBuilder();

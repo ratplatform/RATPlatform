@@ -16,6 +16,7 @@ import java.nio.file.FileSystems;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.RATConstants;
+import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.MakeSigmaJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
@@ -44,8 +45,8 @@ public class TestHelpers {
 	public static SystemCommandsInitializer getSystemCommandsInitializer() {
 		SystemCommandsInitializer systemCommandsInitializer = null;
 		try {
-			RATHelpers.initProperties(RATConstants.PropertyFile);
-			RATHelpers.initProperties(RATConstants.OrientDBPropertyFile);
+			RATUtils.initProperties(RATConstants.PropertyFile);
+			RATUtils.initProperties(RATConstants.OrientDBPropertyFile);
 			
 			String path = RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-consumer.xml";
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(path);
