@@ -13,6 +13,7 @@ public enum JSONType {
 	LoadCommands("LoadCommands"),
 	KeepAlive("KeepAlive"),
 	Query("Query"),
+	SystemQuery("SystemQuery"),
 	Unknown ("Unknown");
 	
 	private final String _stringValue;

@@ -67,6 +67,24 @@ public class SystemInitializerTestHelpers {
 		return commandJSON;
 	}
 	
+	public static String createGetRootDomain(String fileName, String paramName, String paramValue) throws Exception{
+//		String json = RATUtils.readQueryJSONFile(fileName);
+		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+		
+		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+		
+		int changed = remoteCommandsContainer.setValue(paramName, paramValue, ReturnType.string);
+		System.out.println("userEmail changed in " + fileName + ": " + changed);
+		//Assert.assertEquals(1, changed);
+		
+		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+		
+		return commandJSON;
+	}
+	
 	public static String createGetUserByEmail(String fileName, String rootDomainUUID, String paramName, String paramValue) throws Exception{
 //		String json = RATUtils.readQueryJSONFile(fileName);
 		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
