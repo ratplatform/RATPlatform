@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
 import com.dgr.rat.json.command.parameters.RemoteParameter;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.utils.Utils;
