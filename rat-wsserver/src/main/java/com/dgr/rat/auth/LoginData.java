@@ -8,10 +8,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 public class LoginData {
 	private String _email = null;
 	private String _password = null;
-
-	public LoginData() {
-		// TODO Auto-generated constructor stub
-	}
+	private String _query = null;		// TODO Auto-generated constructor stub
+	
 	
     public String get_email() {
 		return _email;
@@ -29,6 +27,15 @@ public class LoginData {
     @JsonProperty("password")
     public void setPassword(String password) {
 		this._password = password;
+	}
+    
+    @JsonProperty("query")
+    public void setQuery(String query) {
+		this._query = query;
+	}
+    
+    public String getQuery() {
+		return this._query;
 	}
 
 }

@@ -6,15 +6,14 @@
 package com.dgr.rat.webservices;
 
 import java.nio.file.FileSystems;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.UUID;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,7 +22,6 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,20 +30,14 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.auth.LoginData;
 import com.dgr.rat.auth.db.IdentityManager;
-import com.dgr.rat.commons.constants.JSONType;
-import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.commons.constants.StatusCode;
-import com.dgr.rat.commons.mqmessages.JsonHeader;
-import com.dgr.rat.commons.utils.DateUtils;
 import com.dgr.rat.commons.utils.RATUtils;
+import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
-import com.dgr.rat.login.json.ChooseDomainData;
 import com.dgr.rat.messages.IMessageSender;
 import com.dgr.rat.messages.RATMessageSender;
 import com.dgr.rat.session.manager.RATSessionManager;
@@ -90,11 +82,11 @@ public class RATWebServices {
         Map<String, Object> result = null;
         ObjectMapper mapper = null;
         String sessionID = null;
-        
+        LoginData authenticationData = null;
         try {
     		mapper = new ObjectMapper();
     	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    	    LoginData authenticationData = mapper.readValue(data, LoginData.class);
+    	    authenticationData = mapper.readValue(data, LoginData.class);
     	    
     		String login = authenticationData.get_email();
     		String password = authenticationData.getPassword();
@@ -147,6 +139,9 @@ public class RATWebServices {
 			//List <Object> menu = this.readMenu();
 			//result.put("plugInContextMenu", menu);
 			
+			/*
+			RATJsonObject query = RATJsonUtils.getRATJsonObject(authenticationData.getQuery());
+			query.getSettings();
 			RATMessageSender ratMessageSender = new RATMessageSender(); 
 			//TODO: chiaramente ora faccio così e prendo GetRootDomain da filesystem, ma devo introdurre 
 			// le categorie dei systemCommands e querycommands, separata dagli usercommands, che prendono i comandi direttamente dal dominio e contenuti nel db
@@ -156,6 +151,9 @@ public class RATWebServices {
 			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
 			String commandJSON = SystemInitializerTestHelpers.createGetRootDomain("GetRootDomain.conf", "nodeType", VertexType.RootDomain.toString());
 			
+			String userUUID = result.get("userUUID").toString();
+			commandJSON = SystemInitializerTestHelpers.createGetUsersAndDomains("GetAllUserDomains.conf", userUUID, VertexType.Domain);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 //			JsonHeader header = RATJsonUtils.getJsonHeader(StatusCode.Unknown, MessageType.Request);
 //			header.setCommandType(JSONType.SystemQuery);
 //			header.setCommandName("GetRootDomain");
@@ -167,7 +165,7 @@ public class RATWebServices {
 			
 			String rootJson = ratMessageSender.sendMessage(_context, sessionID, commandJSON);
 			System.out.println(RATJsonUtils.jsonPrettyPrinter(rootJson));
-			
+			*/
 			json = mapper.writeValueAsString(result);
 			System.out.println(json);
 		} 
