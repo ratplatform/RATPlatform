@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<style type="text/css">
+	#tooltip {
+		padding: 3px;
+		background: #f9f9f9;
+		border: 1px solid #eee;
+		text-align: left;
+		font-size: smaller;
+	}
+	span.tip {
+		border-bottom: 1px solid #eee;
+	}
+
+	</style>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+	<!--RAT Scripts-->
+	<script type="text/javascript" src="lib/ratCommands.js"></script>
+	<script type="text/javascript" src="lib/queries.js"></script>
+	<!--End RAT Scripts-->
+
+	<link rel="stylesheet" href="domains.css"/>
+	<link rel="stylesheet" href="container.css"/>
+	<link rel="stylesheet" href="login.css"/>
+
+	<script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
+	
+	<script type="text/javascript" src="index.js"></script>
+	<script type="text/javascript" src="ws.js"></script>
+	<script type="text/javascript" src="login.js"></script>
+	<script type="text/javascript" src="domains.js"></script>
+	<script type="text/javascript" src="helpers.js"></script>
+
+	<!--Alchemy-->
+	<link rel="stylesheet" href="lib/Alchemy-0.4.1/vendor.css"/>
+	<link rel="stylesheet" href="lib/Alchemy-0.4.1/alchemy.css"/>
+	<script type="text/javascript" src="lib/Alchemy-0.4.1/vendor.js"></script>
+	<script type="text/javascript" src="lib/Alchemy-0.4.1/alchemy.js"></script>
+	<script type="text/javascript" src="alchemy.js"></script>
+	<script type="text/javascript" src="alchemy-config.js"></script>
+
+	<!--Tree-->
+	<script type="text/javascript" src="lib/tree.jquery.js"></script>
+	<link href="lib/jqtree.css" type="text/css" rel="stylesheet">
+	<!--End Tree-->
+
+	<script type="text/javascript" src="comments.js"></script>
+	<!--CommentWnd-->
+	<link rel="stylesheet" href="commentWnd/commentWnd.css"/>
+	<script type="text/javascript" src="commentWnd/commentWnd.js"></script>
+	<!--End CommentWnd-->
+
+	<script type="text/javascript" src="lib/jquery.cookie.js"></script>
+	<script type="text/javascript" src="cookie.js"></script>
+
+
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
+    	<script src="lib/jquery.ui-contextmenu.min.js" type="text/javascript"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jsPlumb/1.4.1/jquery.jsPlumb-1.4.1-all.js"></script>
+	<script src="lib/jquery.mousewheel-3.1.3.js"></script>
+	<script src="commentMenu.js"></script>
+	<script src="subComments.js"></script>
+
+	<title>Domains</title>
+
+	</head>
+	<body>
+
+	<!--questo è da linkare da remoto-->
+	<script src="lib/ratLibrary.js"></script>
+	
+	<div id="container"><!--<div id="row"-->
+
+	<div id="left">
+		<div id="wrap">
+			<div class="box border">
+				<button id="login">Login</button>
+				<button id="logout">Logout</button>
+			</div>
+
+			<div class="box border">
+				Domains
+			</div>
+
+			<div class="box border">
+				<div id='currentDomain'>Please select a domain</div>
+			</div>
+			
+			<div class="box border">
+				<div class="domains">
+					<div id="userDomainsTree"></div>
+				</div>
+			</div>
+
+			<div class="box border">
+				<div id='currentTime'>Time</div>
+			</div>
+
+			<div class="box border">
+				<div id='newDomain'>
+				New domain name: <input type="text" name="domainName" id='domainName' /><br>
+				<button name="addNewDomain" id='addNewDomain'>Add new domain</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+  	<div id="middle">
+		<div>
+		Select current url: <select name="comboUrl" id="comboUrl"></select>
+		<!--Filter by url: <input type="submit" id="doFilter" value="Filter" />-->
+		<!--Show comments graph: <input type="submit" id="showGraph" value="Show">-->
+		Select graph type: <select name="comboGraph" id="comboGraph"></select>
+		</div>
+		<div class="alchemy" id="alchemy">ee</div>
+	</div>
+	<div id="right">
+			<div class="box border">
+				Comments
+			</div>
+			<div class="box border">
+				<select id="breadcrumb" class="breadcrumb" size='5'></select>
+			</div>
+			<div class="box border">
+				<button id="addComment">Add comment</button>
+				<button id="delComment">Delete comment</button>
+			</div>
+
+			<div class="box border">
+				<div id="commentsContainer" class="comments"></div>
+			</div>
+	</div>
+	</div>
+	<!--Login-->
+	<center>
+		<div id="loginform">
+			<input type="text" id="url" placeholder="URL" name="url">
+		        <input type="text" id="userID" placeholder="Email Id" name="uid">
+		        <input type="text" id="password" name="upass" placeholder="***">
+
+		        <input type="submit" id="dologin" value="Login">
+		</div>
+
+		<div id="commentWnd">
+		<!--select name="comboWndUrl" id="comboWndUrl"></select-->
+		<input type="text" id="commenturl" placeholder="URL" name="url" readonly />
+		<input type="text" id="commenttitle" placeholder="Title" name="title" />
+		<textarea id="commentedit-box"></textarea>
+		<input type="submit" id="saveComment" value="Save">
+		<input type="submit" id="closeComment" value="Close">
+		</div>
+	</center>
+	</body>
+</html>

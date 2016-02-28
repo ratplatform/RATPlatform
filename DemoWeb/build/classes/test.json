@@ -1,0 +1,44 @@
+{
+  "header" : {
+    "StatusCode" : "200",
+    "commandType" : "Query",
+    "applicationVersion" : "2.0",
+    "application" : "RATPlatform",
+    "time" : "2016-02-21 22:43:56.873",
+    "commandVersion" : "0.1",
+    "CommandGraphUUID" : "538dbf8a-1172-4b77-b469-ab138e470dd9",
+    "RootVertexUUID" : "b5876c07-5714-4f22-ab46-00f072d503cb",
+    "commandName" : "GetAdminUserByEmail",
+    "domainName" : "@domainPlaceholder@",
+    "MessageType" : "Response"
+  },
+  "nodes" : [ {
+    "VertexUUIDField" : "2cd70e58-e89e-4e7c-a6c3-708c9da285da",
+    "VertexTypeField" : "RootAdminUser",
+    "VertexIsRootField" : false,
+    "GraphCommandOwner" : "AddRootDomainAdminUser",
+    "userPwd" : "admin",
+    "CommandGraphUUID" : "f0adba0f-c04a-4649-a773-bf34f359389f",
+    "userName" : "admin",
+    "userEmail" : "admin@admin.com",
+    "VertexLabelField" : "RootAdminUser",
+    "VertexContentField" : "RootAdminUser",
+    "id" : "1",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "b5876c07-5714-4f22-ab46-00f072d503cb",
+    "VertexTypeField" : "RootDomain",
+    "VertexIsRootField" : true,
+    "GraphCommandOwner" : "AddRootDomain",
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "VertexLabelField" : "RAT",
+    "VertexContentField" : "RAT",
+    "id" : "0",
+    "_type" : "vertex"
+  } ],
+  "edges" : [ {
+    "source" : "0",
+    "target" : "1",
+    "caption" : ""
+  } ]
+}
