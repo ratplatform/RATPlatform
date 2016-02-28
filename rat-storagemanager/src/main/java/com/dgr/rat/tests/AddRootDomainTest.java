@@ -72,8 +72,8 @@ public class AddRootDomainTest {
 			json = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID, userAdminName, userAdminPwd, userAdminEmail);
 			response = this.executeRemoteCommand(json);
 			
-			//this.testAll(rootDomainUUID);
-			this.test1(rootDomainUUID);
+			this.testAll(rootDomainUUID);
+			//this.test1(rootDomainUUID);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -318,6 +318,15 @@ public class AddRootDomainTest {
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetAllUserComments-dgr2UUID.conf" + "QueryResult";
+		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+		TestHelpers.writeGraphToJson(alchemyJson, path);
+		
+		commandJSON = SystemInitializerTestHelpers.createGetAllUserComments("GetAllUserComments.conf", dgr1UUID);
+		response = this.executeRemoteCommand(commandJSON);
+		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		resultFilename = dir + "GetAllUserComments-dgr1UUID.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
 		

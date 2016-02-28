@@ -60,7 +60,7 @@ public class GetAllUserComments implements IInstruction{
 			// TODO: log
 		}
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		//pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
+		pipe.in(edgeLabel).has(RATConstants.VertexTypeField, vertexType.toString());
 
 		List<Vertex> result = pipe.toList();
 //		System.out.println(result.toString());

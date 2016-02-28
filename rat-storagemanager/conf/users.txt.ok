@@ -1,0 +1,29 @@
+{
+	"dgr": {
+		"name": "dgr",
+		"password": "dgr",
+		"email": "dgr@gmail.com",
+		"domains": [
+			"domain dgr"
+		],
+		"comments": [{
+			"domain": "domain dgr",
+			"VertexLabelField": "a",
+			"VertexContentField": "aaaaa aaaaaa aaaa",
+			"url": "http://www.ilfattoquotidiano.it/2016/01/17/acqua-pubblica-la-resistenza-del-paese-piu-povero-contro-la-regione-toscana-e-nostra-non-la-daremo-alla-spa/2363179/"
+		}, {
+			"domain": "domain dgr",
+			"VertexLabelField": "b",
+			"VertexContentField": "bbbbb bbbb bbbb bbbb bbbb bbb",
+			"url": "http://www.ilfattoquotidiano.it/2016/01/17/acqua-pubblica-la-resistenza-del-paese-piu-povero-contro-la-regione-toscana-e-nostra-non-la-daremo-alla-spa/2363179/"
+		}]
+	},
+	"dgr1": {
+		"name": "dgr1",
+		"password": "dgr1",
+		"email": "dgr1@gmail.com",
+		"domains": [
+			"domain dgr1"
+		]
+	}
+}
