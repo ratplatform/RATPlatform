@@ -217,20 +217,10 @@
 
 		<plugins>
 			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-scr-plugin</artifactId>
-				<!--<version>1.10.0</version>-->
-				<version>1.15.0</version>
-				<!--<configuration>
-				<generateAccessors>false</generateAccessors>
-				</configuration>-->
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<inherited>true</inherited>
-				<version>2.3.2</version>
+				<version>3.1</version>
 				<configuration>
 				<compilerArgument>-Xlint:all</compilerArgument>
 				<showWarnings>true</showWarnings>
@@ -243,27 +233,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.4.2</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-				<archive>
-				<manifest>
-				<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-				<addClasspath>true</addClasspath>
-				<classpathLayoutType>custom</classpathLayoutType>
-				<customClasspathLayout>$${artifact.artifactId}.$${artifact.extension}</customClasspathLayout>
-				</manifest>
-				<manifestEntries>
-				<url>${project.url}</url>
-				<Author>Daniele Grignani</Author>
-				<Product>RATPlatform 2.0</Product>
-				</manifestEntries>
-				</archive>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
