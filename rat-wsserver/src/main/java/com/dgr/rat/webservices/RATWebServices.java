@@ -181,6 +181,7 @@ public class RATWebServices {
 	}
 	
 	// TODO: per inviare il menu dei cmmmenti in modo dinamico: da sistemare meglio
+	/*
 	private List <Object> readMenu() throws Exception{
 		String file = _context.getInitParameter("plugInContextMenu");
 		String json = FileUtils.fileRead(file);
@@ -190,6 +191,7 @@ public class RATWebServices {
 		
 		return objs;
 	}
+	*/
 	
 	@POST @Path("/v0.1/runcommand")
 	@Asynchronous
