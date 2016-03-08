@@ -9,8 +9,7 @@ public enum CommandEdgeType {
 	Instruction("Instruction"),
 	InstructionParameter("InstructionParameter"),
 	UserName("UserName"),
-	Password("Password"),
-	;
+	Password("Password");
 	
 	private final String _stringValue;
 	
