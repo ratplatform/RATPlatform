@@ -1,13 +1,18 @@
 package com.rat.init;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import junit.framework.Assert;
 
@@ -25,6 +30,8 @@ import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
+import com.dgr.rat.main.DumpGraph;
+import com.dgr.rat.main.RATStorageManager;
 import com.dgr.rat.main.SystemCommandsInitializer;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.rat.storage.provider.StorageType;
@@ -50,6 +57,8 @@ public class InitDB {
 	private String _rootDomainName = null;
 	private String _rootDomainUUID = null;
 	
+	private static CommandEnum _status = CommandEnum.UserName;
+	
 	public InitDB() {
 		// TODO Auto-generated constructor stub
 	}
@@ -73,27 +82,305 @@ public class InitDB {
 		}
 	}
 	
-	@Test
-	public void test() {
+	public static void main(String args[])throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String str = null;
+		
 		try {
-//			this.initDB();
-			this.addAdmin();
-			this.bulkCreation();
+			InitDB initDB = new InitDB();
+			initDB.init();
+			initDB.addAdmin();
+			
+			String userName = null;
+			String email = null;
+			String pwd = null;
+			List<String> domains = new ArrayList<String>();
+			boolean hasSpecialChar = false;
+			
+			String type = null;
+			boolean exit = false;
+			
+			do {
+				System.out.println("Enter 'stop' to quit.");
+				System.out.println("Enter 'bulk' to start bulk creation or 'addUser' for start single user creation");
+				
+				str = br.readLine().trim();
+				if(str == null || str.length() < 1){
+					System.out.println("ERROR: string is empty");
+					continue;
+				}
+				
+				if(str.equals("bulk") || str.equals("addUser")){
+					type = str;
+					exit = true;
+				}
+				else if(str.equals("stop")){
+					exit = true;
+				}
+				else{
+					System.out.println("ERROR");
+				}
+			} while(!exit);
+			
+			do {
+				if(type.equals("bulk")){
+					System.out.println("Please add the file path with the users data");
+					str = br.readLine().trim();
+					if(str.equals("stop")){
+						continue;
+					}
+					
+					if(str.equals("addUser")){
+						type = str;
+					}
+					
+					if(FileUtils.fileExists(str)){
+						String json = FileUtils.fileRead(str);
+						initDB.bulkCreation(json);
+					}
+					else{
+						System.out.println("ERROR: the file '" + str + "' does not exist");
+					}
+				}
+				else if(type.equals("addUser")){
+					switch(_status){
+					case UserName:
+						System.out.println("Please add user name and press enter");
+						str = br.readLine().trim();
+						if(str.equals("stop")){
+							continue;
+						}
+						
+						if(str == null || str.length() < 1){
+							System.out.println("ERROR: string is empty");
+							continue;
+						}
+						
+						Pattern p = Pattern.compile("[^a-zA-Z0-9]");
+						hasSpecialChar = p.matcher(str).find();
+						if(hasSpecialChar){
+							System.out.println("ERROR: please use only alphanumeric characters");
+							continue;
+						}
+						userName = str;
+						_status = CommandEnum.Password;
+						break;
+						
+					case Password:
+						System.out.println("Please add password and press enter");
+						str = br.readLine().trim();
+						if(str.equals("stop")){
+							continue;
+						}
+						
+						if(str == null || str.length() < 1){
+							System.out.println("ERROR: string is empty");
+							continue;
+						}
+						pwd = str;
+						_status = CommandEnum.TestPassword;
+						break;
+						
+					case TestPassword:
+						System.out.println("Please re-type user password and press enter");
+						str = br.readLine().trim();
+						if(str.equals("stop")){
+							continue;
+						}
+						
+						if(str == null || str.length() < 1){
+							System.out.println("ERROR: string is empty");
+							continue;
+						}
+						if(!pwd.equals(str)){
+							//pwd = null;
+							System.out.println("ERROR: password does not match");
+							_status = CommandEnum.TestPassword;
+						}
+						else{
+							pwd = str;
+							_status = CommandEnum.UserEmail;
+						}
+						break;
+						
+					case UserEmail:
+						System.out.println("Please add user email and press enter");
+						str = br.readLine().trim();
+						if(str.equals("stop")){
+							continue;
+						}
+						
+						if(str == null || str.length() < 1){
+							System.out.println("ERROR: string is empty");
+							continue;
+						}
+						Pattern mailP = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+						boolean isEmail = mailP.matcher(str).find();
+						if(!isEmail){
+							System.out.println("ERROR: please type a valid email");
+							continue;
+						}
+						
+						email = str;
+						_status = CommandEnum.Domain;
+						break;
+						
+					case Domain:
+						if(domains.size() == 0){
+							System.out.println("Please add user domain and press enter");
+						}
+						else{
+							System.out.println("Please add a new user domain and press enter");
+							System.out.println("or press 'q' for save and create user" );
+						}
+						
+						str = br.readLine().trim();
+						if(str.equals("stop")){
+							continue;
+						}
+						
+						if(domains.size() > 0){
+							if(str.equals("q")){
+								_status = CommandEnum.Create;
+								continue;
+							}
+						}
+						if(str == null || str.length() < 1){
+							System.out.println("ERROR: string is empty");
+							continue;
+						}
+						
+						Pattern domainP = Pattern.compile("[^a-zA-Z0-9]");
+						hasSpecialChar = domainP.matcher(str).find();
+						
+						if(hasSpecialChar){
+							System.out.println("ERROR: please use only alphanumeric characters");
+							continue;
+						}
+						
+						if(domains.contains(str)){
+							System.out.println("ERROR: the domain " + str + " was already added");
+							continue;
+						}
+						
+						domains.add(str);
+						_status = CommandEnum.Domain;
+						break;
+						
+					case Create:
+						System.out.println("Creating user and domain(s)...");
+						initDB.addUserAndDomain(userName, email, pwd, domains);
+						_status = CommandEnum.UserName;
+						break;
+					}
+				}
+			} while(!str.equals("stop"));
+			
+			System.out.println("Bye!");
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	public void addUserAndDomain(String userName, String email, String pwd, List<String> domains) throws Exception{
+		String userUUID = this.addUser(userName, email, pwd);
+		
+		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, email, "GetUserByEmail.conf");
+		System.out.println(result.size());
+		String domainUUID = null;
+		
+		Map<String, String>domainMap = new HashMap<String, String>();
+		for(String domain : domains){
+			if(!this.domainExists(userUUID, domain)){
+				domainUUID = this.createNewDomain(_rootDomainUUID, domain);
+				this.setBind(domainUUID, userUUID);
+				this.domainExists(userUUID, domain);
+			}
+			else{
+				result = this.getDomain(userUUID, domain);
+	    		System.out.println(result.size());
+	    		domainUUID = result.get(0).getProperty(RATConstants.VertexUUIDField);
+			}
+			domainMap.put(domain, domainUUID);
+			
+			_dbManager.addDomain(domainUUID, domain);
+			_dbManager.setDomainRoles(domainUUID, userUUID, "domainadmin");
+			_dbManager.setUserDomain(userUUID, domainUUID, domain);
+		}
+	}
 	
-//	private void initDB() throws Exception{
-//		SystemCommandsInitializer systemCommandsInitializer = new SystemCommandsInitializer();
-//		String storageType = AppProperties.getInstance().getStringProperty(RATConstants.StorageType);
-//		systemCommandsInitializer.set_storageType(storageType);
-//		// COMMENT: Inizializzo il database (se non esiste il DB allora lo creo)
-//		systemCommandsInitializer.initStorage();
-//		systemCommandsInitializer.addCommandTemplates();
-//	}
+	@SuppressWarnings("deprecation")
+	public void bulkCreation(String json) throws Exception{
+		//if(FileUtils.fileExists("conf" + FileSystems.getDefault().getSeparator() + "users.txt")){
+			//String json = FileUtils.fileRead("conf" + FileSystems.getDefault().getSeparator() + "users.txt");
+			
+			ObjectMapper mapper = new ObjectMapper();
+	    	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	    	JsonNode jsonNode = mapper.readTree(json);
+	    	Iterator <JsonNode> it = jsonNode.iterator();
+	    	while(it.hasNext()){
+	    		JsonNode node = it.next();
+	    		User user = mapper.readValue(node.toString(), User.class);
+	    		
+	    		String userUUID = this.addUser(user.name, user.email, user.password);
+	    		
+	    		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, user.email, "GetUserByEmail.conf");
+	    		System.out.println(result.size());
+	    		Assert.assertTrue(result.size() == 1);
+	    		String domainUUID = null;
+	    		
+	    		Map<String, String>domainMap = new HashMap<String, String>();
+	    		List<String>domains = user.domains;
+	    		for(String domain : domains){
+	    			if(!this.domainExists(userUUID, domain)){
+	    				domainUUID = this.createNewDomain(_rootDomainUUID, domain);
+	    				this.setBind(domainUUID, userUUID);
+	    				this.domainExists(userUUID, domain);
+	    			}
+	    			else{
+	    				result = this.getDomain(userUUID, domain);
+	    	    		System.out.println(result.size());
+	    	    		Assert.assertTrue(result.size() == 1);
+	    	    		domainUUID = result.get(0).getProperty(RATConstants.VertexUUIDField);
+	    			}
+	    			domainMap.put(domain, domainUUID);
+	    			
+    				_dbManager.addDomain(domainUUID, domain);
+    				_dbManager.setDomainRoles(domainUUID, userUUID, "domainadmin");
+    				_dbManager.setUserDomain(userUUID, domainUUID, domain);
+	    		}
+	    		
+	    		Comments comments = mapper.readValue(node.toString(), Comments.class);
+	    		List<Comment>commentList = comments.comments;
+	    		if(commentList != null){
+		    		for(Comment comment : commentList){
+		    			domainUUID = domainMap.get(comment.domain);
+		    			System.out.println(domainUUID);
+		    			this.addComment(comment, domainUUID, userUUID);
+		    		}
+	    		}
+	    		
+	    		System.out.println(node.toString());
+	    	}
+		//}
+	}
+	
+	@Test
+	public void test() {
+		try {
+//			InitDB initDB = new InitDB();
+//			initDB.init();
+			
+			this.addAdmin();
+			//this.bulkCreation();
+		} 
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	private void addAdmin() throws Exception{
@@ -150,60 +437,6 @@ public class InitDB {
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void bulkCreation() throws Exception{
-		if(FileUtils.fileExists("conf" + FileSystems.getDefault().getSeparator() + "users.txt")){
-			String json = FileUtils.fileRead("conf" + FileSystems.getDefault().getSeparator() + "users.txt");
-			ObjectMapper mapper = new ObjectMapper();
-	    	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-	    	JsonNode jsonNode = mapper.readTree(json);
-	    	Iterator <JsonNode> it = jsonNode.iterator();
-	    	while(it.hasNext()){
-	    		JsonNode node = it.next();
-	    		User user = mapper.readValue(node.toString(), User.class);
-	    		String userUUID = this.addUser(user.name, user.email, user.password);
-	    		
-	    		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, user.email, "GetUserByEmail.conf");
-	    		System.out.println(result.size());
-	    		Assert.assertTrue(result.size() == 1);
-	    		String domainUUID = null;
-	    		
-	    		Map<String, String>domainMap = new HashMap<String, String>();
-	    		List<String>domains = user.domains;
-	    		for(String domain : domains){
-	    			if(!this.domainExists(userUUID, domain)){
-	    				domainUUID = this.createNewDomain(_rootDomainUUID, domain);
-	    				this.setBind(domainUUID, userUUID);
-	    				this.domainExists(userUUID, domain);
-	    			}
-	    			else{
-	    				result = this.getDomain(userUUID, domain);
-	    	    		System.out.println(result.size());
-	    	    		Assert.assertTrue(result.size() == 1);
-	    	    		domainUUID = result.get(0).getProperty(RATConstants.VertexUUIDField);
-	    			}
-	    			domainMap.put(domain, domainUUID);
-	    			
-    				_dbManager.addDomain(domainUUID, domain);
-    				_dbManager.setDomainRoles(domainUUID, userUUID, "domainadmin");
-    				_dbManager.setUserDomain(userUUID, domainUUID, domain);
-	    		}
-	    		
-	    		Comments comments = mapper.readValue(node.toString(), Comments.class);
-	    		List<Comment>commentList = comments.comments;
-	    		if(commentList != null){
-		    		for(Comment comment : commentList){
-		    			domainUUID = domainMap.get(comment.domain);
-		    			System.out.println(domainUUID);
-		    			this.addComment(comment, domainUUID, userUUID);
-		    		}
-	    		}
-	    		
-	    		System.out.println(node.toString());
-	    	}
 		}
 	}
 	
@@ -332,5 +565,27 @@ public class InitDB {
 			throw new Exception(e);
 		}
 	}
+	
+	/*
+	public void init() throws Exception{
+		try {
+			RATUtils.initProperties(RATConstants.PropertyFile);
+			_context = new FileSystemXmlApplicationContext(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-producer-unitTest.xml");
+			RATSessionManager.init();
+			
+			_queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
+			_commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
+			_rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
+			_rootDomainUUID = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainUUID);
+			
+			_dbManager = new DBManager(_context);
+			_dbManager.openDB();
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+	}
+	*/
 
 }

@@ -1,4 +1,6 @@
 /target
 /pom.xml~
 /.settings
+/graphDump
+/data
 .gitignore~

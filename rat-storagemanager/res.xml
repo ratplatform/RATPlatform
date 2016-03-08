@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="RATPlatform" basedir=".">
+	<target name="copy">
+		<mkdir dir="${dest.dir}/${data.dir}"/>
+		<mkdir dir="${dest.dir}/${src.dir}"/>
+
+		<copy todir="${dest.dir}/${src.dir}">
+			<fileset dir="${src.dir}" includes="**"/>  
+		</copy>
+	</target>
+</project>

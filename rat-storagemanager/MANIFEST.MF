@@ -1,0 +1,40 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: dgr
+Build-Jdk: 1.8.0_60
+Implementation-Title: RATStorageManager
+Implementation-Version: 0.9.0-SNAPSHOT
+Implementation-Vendor-Id: org.rat.platform
+Main-Class: com.dgr.rat.main.RATStorageManager
+Author: Daniele Grignani
+Product: RATPlatform 2.0
+url: 
+Class-Path: lib/orientdb-client.jar lib/orientdb-core.jar lib/snappy-j
+ ava.jar lib/concurrentlinkedhashmap-lru.jar lib/jna.jar lib/jna-platf
+ orm.jar lib/orientdb-distributed.jar lib/hazelcast-all.jar lib/annota
+ tions.jar lib/minimal-json.jar lib/orientdb-enterprise.jar lib/orient
+ db-graphdb.jar lib/gremlin-groovy.jar lib/ivy.jar lib/groovy.jar lib/
+ antlr.jar lib/asm.jar lib/asm-commons.jar lib/asm-util.jar lib/asm-an
+ alysis.jar lib/asm-tree.jar lib/ant.jar lib/ant-launcher.jar lib/jans
+ i.jar lib/jline.jar lib/orientdb-jdbc.jar lib/orientdb-object.jar lib
+ /hibernate-jpa-2.0-api.jar lib/javassist.jar lib/orientdb-server.jar 
+ lib/mail.jar lib/activation.jar lib/orientdb-tools.jar lib/orientdb-l
+ ucene.jar lib/lucene-misc.jar lib/lucene-spatial.jar lib/spatial4j.ja
+ r lib/lucene-memory.jar lib/lucene-facet.jar lib/blueprints-core.jar 
+ lib/jettison.jar lib/stax-api.jar lib/jackson-databind.jar lib/hppc.j
+ ar lib/commons-configuration.jar lib/commons-lang.jar lib/commons-bea
+ nutils-core.jar lib/gremlin-java.jar lib/pipes.jar lib/frames.jar lib
+ /guava.jar lib/rat-commons.jar lib/jackson-core.jar lib/jackson-annot
+ ations.jar lib/jackson-mapper-asl.jar lib/jackson-core-asl.jar lib/ja
+ ckson-module-afterburner.jar lib/activemq-all.jar lib/lucene-analyzer
+ s-common.jar lib/lucene-core.jar lib/lucene-queryparser.jar lib/lucen
+ e-queries.jar lib/lucene-sandbox.jar lib/jakarta-regexp.jar lib/xbean
+ -spring.jar lib/spring-aop.jar lib/aopalliance.jar lib/spring-asm.jar
+  lib/spring-beans.jar lib/spring-context.jar lib/spring-core.jar lib/
+ spring-expression.jar lib/spring-jms.jar lib/spring-tx.jar lib/spring
+ -web.jar lib/commons-validator.jar lib/commons-digester.jar lib/commo
+ ns-collections.jar lib/mysql-connector-java.jar lib/junit.jar lib/ham
+ crest-core.jar lib/commons-beanutils.jar lib/commons-logging.jar lib/
+ commons-pool.jar
+
