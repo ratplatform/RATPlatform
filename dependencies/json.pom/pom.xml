@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.rat.platform</groupId>
-  <artifactId>json-dependencies</artifactId>
-<version>1.0.0</version>
-  <description>Dependencies for JSON</description>
-  <packaging>pom</packaging>
+
+	<parent>
+		<artifactId>ratplatform-dependencies-project</artifactId>
+		<groupId>org.rat.platform</groupId>
+		<version>1.0.0</version>
+	</parent>
+
+	<groupId>org.rat.platform</groupId>
+	<artifactId>json-dependencies</artifactId>
+	<version>1.0.0</version>
+	<description>Dependencies for JSON</description>
+	<packaging>pom</packaging>
 
   <dependencies>
 	<dependency>
@@ -35,49 +42,17 @@
 	</dependency>
   </dependencies>
 
-	<!--ATTENZIONE: in questo modo vengono caricati nel repository nexus in thething.disco.unimib.it-->
 	<build>
 		<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-deploy-plugin</artifactId>
-			<configuration>
-			<skip>true</skip>
-			</configuration>
-		</plugin>
-
-		<plugin>
-			<groupId>org.sonatype.plugins</groupId>
-			<artifactId>nexus-staging-maven-plugin</artifactId>
-			<version>1.5.1</version>
-			<executions>
-			<execution>
-			<id>default-deploy</id>
-			<phase>deploy</phase>
-			<goals>
-			<goal>deploy</goal>
-			</goals>
-			</execution>
-			</executions>
-			<configuration>
-			<serverId>nexus</serverId>
-			<nexusUrl>http://thething.disco.unimib.it:17080/nexus/</nexusUrl>
-			<skipStaging>true</skipStaging>
-			</configuration>
-		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+				<skip>false</skip>
+				<updateReleaseInfo>true</updateReleaseInfo>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-		<id>ratplatform2.0-releases</id>
-		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/ratplatform2.0-releases</url>
-		</repository>
-
-		<snapshotRepository>
-		<id>ratplatform2.0-snapshot</id>
-		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/ratplatform2.0-snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 </project>
