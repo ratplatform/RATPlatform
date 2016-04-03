@@ -66,6 +66,7 @@ public class CreateRootVertex implements IInstruction{
 					vertex.setProperty(propertyName, propertyValue);	
 				}
 			}
+			storage.addToIndex("rootvertices", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 		}
 		else{
 			vertex = storage.getVertex(storedNodeUUID);

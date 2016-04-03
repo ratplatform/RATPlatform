@@ -99,8 +99,16 @@ public class InitDB {
 			
 			String type = null;
 			boolean exit = false;
-			
+			String file = null;
 			do {
+				if(args.length == 1){
+					type = "bulk";
+					if(FileUtils.fileExists(args[0])){
+						file = args[0];
+						exit = true;
+						continue;
+					}
+				}
 				System.out.println("Enter 'stop' to quit.");
 				System.out.println("Enter 'bulk' to start bulk creation or 'addUser' for start single user creation");
 				
@@ -124,8 +132,14 @@ public class InitDB {
 			
 			do {
 				if(type.equals("bulk")){
-					System.out.println("Please add the file path with the users data");
-					str = br.readLine().trim();
+					if(file == null){
+						System.out.println("Please add the file path with the users data");
+						str = br.readLine().trim();
+					}
+					else{
+						str = file;
+					}
+					
 					if(str.equals("stop")){
 						continue;
 					}
@@ -141,6 +155,9 @@ public class InitDB {
 					else{
 						System.out.println("ERROR: the file '" + str + "' does not exist");
 					}
+					
+					System.out.println("Bye!");
+					System.exit(0);
 				}
 				else if(type.equals("addUser")){
 					switch(_status){
@@ -277,10 +294,12 @@ public class InitDB {
 			} while(!str.equals("stop"));
 			
 			System.out.println("Bye!");
+			System.exit(0);
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

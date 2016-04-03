@@ -72,10 +72,10 @@ public class QueryNodeWrapper implements ICommandNodeVisitable{
 //			System.out.println(edgeUUID.toString());
 			IQueryFrame neighbor = edge.getInRatQuery();
 			String uuid = neighbor.getVertexUUIDField();
-			if(neighbor.getVertexTypeField().equals(VertexType.QueryPivot)){
-				throw new Exception();
-				// TODO log
-			}
+//			if(neighbor.getVertexTypeField().equals(VertexType.QueryPivot)){
+//				throw new Exception();
+//				// TODO log
+//			}
 			
 			if(!Utils.isUUID(uuid)){
 				throw new Exception();

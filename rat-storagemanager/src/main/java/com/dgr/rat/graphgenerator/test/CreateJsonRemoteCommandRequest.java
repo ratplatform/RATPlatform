@@ -124,12 +124,17 @@ public class CreateJsonRemoteCommandRequest {
 		parameter.setParameterName(param.getVertexUserCommandsInstructionsParameterNameField());
 		parameter.setParameterValue(param.getVertexUserCommandsInstructionsParameterValueField());
 		parameter.setReturnType(param.getVertexUserCommandsInstructionsParameterReturnTypeField());
-		parameter.setVertexUUIDField(param.getVertexUUIDField());
-//		_parameters.put(param.getVertexUUIDField(), parameter);
-		if(_parameters.containsKey(param.getVertexUserCommandsInstructionsParameterNameField())){
-			throw new Exception();
+//		parameter.setVertexUUIDField(param.getVertexUUIDField());
+
+		// COMMENT: in alcune circostanze voglio che venga letto lo stesso parametro da più di un'istruzione
+		if(!_parameters.containsKey(param.getVertexUserCommandsInstructionsParameterNameField())){
+			_parameters.put(param.getVertexUserCommandsInstructionsParameterNameField(), parameter);
 		}
-		_parameters.put(param.getVertexUserCommandsInstructionsParameterNameField(), parameter);
+		
+//		if(_parameters.containsKey(param.getVertexUserCommandsInstructionsParameterNameField())){
+//			throw new Exception();
+//		}
+//		_parameters.put(param.getVertexUserCommandsInstructionsParameterNameField(), parameter);
 	}
 	
 	private static final PipeFunction<Vertex, Boolean> isParam = new PipesFunction<Vertex, Boolean>(){

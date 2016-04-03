@@ -5,6 +5,7 @@
 
 package com.dgr.rat.storage.provider;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.dgr.rat.storage.orientdb.StorageInternalError;
@@ -34,7 +35,7 @@ public interface IStorage {
 	public void openConnection() throws StorageInternalError, Exception;
 	
 	public void addToIndex(String indexName, Vertex vertex, String key, Object value);
-	public Vertex getVertex(String indexName, String key, Object value);
+	public List<Vertex> getVertices(String indexName, String key, Object value);
 	public boolean vertexExists(String indexName, String key, Object value);
 	public Index<Vertex> getIndex(String indexName);
 }

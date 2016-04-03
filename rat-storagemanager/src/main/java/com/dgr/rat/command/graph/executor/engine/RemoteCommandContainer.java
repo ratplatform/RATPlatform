@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.command.parameters.RemoteParameter;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.utils.Utils;
@@ -87,9 +89,10 @@ public class RemoteCommandContainer{
 		}
 		
 		RemoteParameter remoteParameter = _parameters.get(paramName);
-		if(!paramUUID.equalsIgnoreCase(remoteParameter.getVertexUUIDField())){
-			throw new Exception();
-		}
+//		if(!paramUUID.equalsIgnoreCase(remoteParameter.getVertexUUIDField())){
+//			//throw new Exception();
+//			System.out.println("paramUUID of this command is not equal to paramUUID of the remotecommand");
+//		}
 		
 		ReturnType remoteParameterReturnType = remoteParameter.getReturnType();
 		ReturnType type = instructionParameter.getInstructionsParameterReturnTypeField();

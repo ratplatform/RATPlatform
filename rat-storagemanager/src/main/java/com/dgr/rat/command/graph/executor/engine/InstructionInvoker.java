@@ -7,6 +7,7 @@ package com.dgr.rat.command.graph.executor.engine;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -31,7 +32,7 @@ import com.dgr.utils.Utils;
 public class InstructionInvoker implements IInstructionInvoker{
 	private RemoteCommandContainer _remoteCommandsContainer = null;
 	private IStorage _storage = null;
-	private Map<String, String> _parameters = new HashMap<String, String>();
+	private Map<String, String> _parameters = new LinkedHashMap<String, String>();
 	private Map<String, InstructionResultContainer> _instructionResults = new HashMap<String, InstructionResultContainer>();
 	private IInstructionBuilder _instructionBuilder = null;
 	private CommandResponse _commandResult = null;
@@ -58,6 +59,20 @@ public class InstructionInvoker implements IInstructionInvoker{
 	
 	public Iterator<String>getParameterNameIterator(){
 		return _parameters.keySet().iterator();
+	}
+	
+	public int getNumOfParameters(){
+		return _parameters.size();
+	}
+	
+	public String getValueByIndex(int index) throws Exception{
+		if(index >= this.getNumOfParameters()){
+			throw new Exception();
+		}
+		
+		String[] values = _parameters.values().toArray(new String[this.getNumOfParameters()]);
+		
+		return values[index];
 	}
 	
 	public String getNodeParamValue(String paramName){
@@ -140,6 +155,8 @@ public class InstructionInvoker implements IInstructionInvoker{
 			String paramValue = instructionParameter.getInstructionsParameterValueField();
 			ReturnType returnType = instructionParameter.getInstructionsParameterReturnTypeField();
 			
+			// COMMENT Because the value of paramenter is VertexContentUndefined, I try to search it in _remoteCommandsContainer
+			// that contains all parameters set by command invoker (e.g. the JavaScript client)
 			if(paramValue.equalsIgnoreCase(RATConstants.VertexContentUndefined)){
 				paramValue = _remoteCommandsContainer.getParameter(instructionParameter);
 			}
@@ -180,66 +197,6 @@ public class InstructionInvoker implements IInstructionInvoker{
 			_storage.shutDown();
 		}
 	}
-//	public void invoke(IInstructionNodeWrapper invokable) throws Exception {
-//		_currentInstruction = invokable.getInstructionName();
-//		
-//		int maxNum = invokable.getMaxNumParameters();
-//		IInstruction executable = this.getInstruction(_currentInstruction);
-//		_parameters.clear();
-//		
-//		int num = invokable.getNumberOfInstructionParameters();
-//		if(num != maxNum){
-//			throw new Exception();
-//			// TODO log
-//		}
-//		
-//		// COMMENT: creo la mappa coi parametri previsti dal grafo
-//		for(int i = 0; i < num; i++){
-//			IInstructionParam instructionParameter = invokable.getInstructionParameter(i);
-//			String paramValue = instructionParameter.getInstructionsParameterValueField();
-//			String paramName = instructionParameter.getInstructionsParameterNameField();
-//			ReturnType returnType = instructionParameter.getInstructionsParameterReturnTypeField();
-//			
-//			if(paramValue.equalsIgnoreCase(RATConstants.VertexContentUndefined)){
-//				paramValue = _remoteCommandsContainer.getParameter(instructionParameter);
-//			}
-//			
-//			if(_parameters.containsKey(paramName)){
-//				throw new Exception();
-//				// TODO log
-//			}
-//			// TODO: creare un wrapper per i parametri che sia una template, cossì posso gestire 
-//			// tutti i parametri che voglio, anche oggetti; la classe deve essere creata in this.verifyParam
-//			if(!this.verifyParam(returnType, paramValue)){
-//				throw ResourceException.getException(ErrorType.BAD_REQUEST);
-//				// TODO log; inoltre da capire se è meglio lanciare l'eccezione oppure continuare con quello successivo
-//			}
-//			_parameters.put(paramName, paramValue);
-//		}
-//		
-//		// COMMENT: verifico che ci sia coerenza tra i parametri previsti dal grafo e quelli trovati 
-//		if(_parameters.isEmpty() || _parameters.size() != maxNum){
-//			throw new Exception();
-//			// TODO log
-//		}
-//		
-//		// COMMENT: non sono convinto di openConnection,  commit e shutdown qui.
-//		_storage.openConnection();
-//		try{
-//			IInstructionResult instructionResult = executable.execute(this, invokable.getCallerNode());
-//			_storage.commit();
-//			
-//			if(instructionResult != null){
-//				this.addInstructionResult(invokable.getCallerNode(), instructionResult, _currentInstruction);
-//			}
-//		}
-//		catch(Exception e){
-//			throw new Exception(e);
-//		}
-//		finally{
-//			_storage.shutDown();
-//		}
-//	}
 	
 	public void addCommandResponse(ICommandNodeVisitable visited, IInstructionResult instructionResult) throws Exception{
 		if(_commandResult != null){

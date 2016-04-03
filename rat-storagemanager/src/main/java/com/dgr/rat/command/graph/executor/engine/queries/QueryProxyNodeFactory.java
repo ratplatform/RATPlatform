@@ -13,6 +13,7 @@ import com.dgr.rat.command.graph.executor.engine.ICommandGraphData;
 import com.dgr.rat.command.graph.executor.engine.commands.CommandProxyNodeFactory;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.RATJsonObject;
+import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.storage.provider.IStorage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,8 +41,7 @@ public class QueryProxyNodeFactory extends CommandProxyNodeFactory{
 				}
 					
 				String json = vertex.getProperty(RATConstants.VertexContentField);
-	//				json = RATJsonUtils.jsonPrettyPrinter(json);
-	//				System.out.println(json);
+				//System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 				ObjectMapper mapper = new ObjectMapper();
 				RATJsonObject jsonHeader = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
 				String output = mapper.writeValueAsString(jsonHeader.getSettings());

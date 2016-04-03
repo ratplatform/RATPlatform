@@ -70,7 +70,12 @@ public class AddComment extends AbstractCommand{
 		
 		SystemKeyNode webDoc = this.buildNode(SystemKeyNode.class, "webDocument");
 		webDoc.addInstruction("CreateWebDocument", "url", RATConstants.VertexContentUndefined, ReturnType.url);
-		//webDoc.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.url);
+		//webDoc.addBindInstruction("userNodeUUID", RATConstants.VertexContentUndefined);
+		
+		SystemKeyNode isLinkedTo = this.buildNode(SystemKeyNode.class, "is-linked-to");
+		isLinkedTo.addCreateVertexInstruction("nodeName", "is-linked-to", ReturnType.string);
+		isLinkedTo.addBindInstruction("userNodeUUID", RATConstants.VertexContentUndefined);
+		webDoc.addChild(isLinkedTo);
 		
 		rootNode.addChild(isPutByNode);
 		rootNode.addChild(belongsTo);
@@ -81,6 +86,10 @@ public class AddComment extends AbstractCommand{
 		//content.addChild(start);
 		//content.addChild(end);
 		//content.addChild(urlDoc);
+		
+		this.setQueryPivot(webDoc, "GetUserURLs", "StartQueryPipe", true);
+		this.setQueryPivot(webDoc, "GetUserURLs", "SetQueryPipe", false);
+		this.setQueryPivot(webDoc, "GetUserURLs", "GetAllNodesByType", false);
 		
 		this.setQueryPivot(isPutByNode, "GetAllUserComments", "StartQueryPipe", true);
 		this.setQueryPivot(isPutByNode, "GetAllUserComments", "SetQueryPipe", false);

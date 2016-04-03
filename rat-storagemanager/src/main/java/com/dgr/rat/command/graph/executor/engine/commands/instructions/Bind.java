@@ -24,6 +24,7 @@ public class Bind implements IInstruction{
 
 	}
 
+	// TODO verificare che il bind non esista già
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		IStorage storage = invoker.getStorage();
 		UUID vertexCallerUUID = nodeCaller.getStoredNodeUUID();

@@ -5,6 +5,8 @@
 
 package com.dgr.rat.storage.provider;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import com.dgr.rat.commons.constants.RATConstants;
@@ -206,11 +208,15 @@ public class OrientDBStorage implements IStorage{
 	}
 
 	@Override
-	public Vertex getVertex(String indexName, String key, Object value){
-		Vertex result = null;
-		if(this.vertexExists(indexName, key, value)){
-			Index<Vertex> index = this.getIndex(indexName);
-			result = index.get(key, value).iterator().next();
+	public List<Vertex> getVertices(String indexName, String key, Object value){
+		List<Vertex> result = new ArrayList<Vertex>();
+		Index<Vertex> index = this.getIndex(indexName);
+		if(index != null){
+			Iterator<Vertex> it = index.get(key, value).iterator();
+			while(it.hasNext()){
+				Vertex v = it.next();
+				result.add(v);
+			}
 		}
 		
 		return result;

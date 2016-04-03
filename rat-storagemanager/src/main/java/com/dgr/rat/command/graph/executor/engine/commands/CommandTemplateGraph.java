@@ -19,6 +19,7 @@ import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.frames.FramedGraph;
 import com.tinkerpop.frames.FramedGraphFactory;
 import com.tinkerpop.frames.modules.javahandler.JavaHandlerModule;
+import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 // Rappresenta il grafo degli elementi JSON dentro "settings"
 public class CommandTemplateGraph extends TinkerGraph implements ICommandGraphData{
@@ -49,7 +50,10 @@ public class CommandTemplateGraph extends TinkerGraph implements ICommandGraphDa
 	
 	protected Vertex getVertex(String label, Object value) {
 		Iterable<Vertex> it = this.getVertices(label, value);
+		System.out.println("label " + label + "; value" + value.toString());
 		return it.iterator().next();
+//		GremlinPipeline<Vertex, Vertex> queryPipe = new GremlinPipeline<Vertex, Vertex>(this.getVertices());
+//		return (Vertex) queryPipe.has(RATConstants.VertexIsRootField, true).next();
 	}
 
 	// TODO: da gestire l'errore se root node != 1

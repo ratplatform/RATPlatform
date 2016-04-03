@@ -1,6 +1,7 @@
 package com.dgr.rat.command.graph.executor.engine.commands.instructions;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ public class CreateWebDocument implements IInstruction{
 		if (!storage.vertexExists("webDocument", paramName, urlMD5)){
 			vertex = storage.addVertex(storedNodeUUID);
 			storage.addToIndex("webDocument", vertex, paramName, urlMD5);
+			storage.addToIndex("rootvertices", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 			
 			Set<String> keys = nodeCaller.getPropertyKeys();
 			it = keys.iterator();
@@ -60,7 +62,10 @@ public class CreateWebDocument implements IInstruction{
 			}
 		}
 		else{
-			vertex = storage.getVertex("webDocument", paramName, urlMD5);
+			//vertex = storage.getVertex("webDocument", paramName, urlMD5);
+			List<Vertex>list = storage.getVertices("webDocument", paramName, urlMD5);
+			// COMMENT: poco sicuro, ma per ora fa lo stesso (do per scontato che la lista non sia vuota e che abbia un solo elemento)...
+			vertex = list.get(0);
 			String uuid = vertex.getProperty(RATConstants.VertexUUIDField);
 			if(Utils.isUUID(uuid)){
 				storedNodeUUID = UUID.fromString(uuid);

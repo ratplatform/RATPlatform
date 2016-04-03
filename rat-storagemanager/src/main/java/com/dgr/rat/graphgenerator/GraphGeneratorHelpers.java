@@ -121,6 +121,7 @@ public class GraphGeneratorHelpers {
 	
 	// TODO: da rivedere result = UUID.randomUUID().toString(); in exception, non mi piace
 	public static String getUUID(String query){
+		System.out.println("UUID " + query);
 		GraphGeneratorUUIDIndex index = new GraphGeneratorUUIDIndex();
 		String result = null;
 		try {

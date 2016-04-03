@@ -99,7 +99,7 @@ public class CreateJsonRemoteQueryRequest {
 				for(Vertex param : list){
 					RemoteParameter parameter = new RemoteParameter();
 					parameter.setInstructionOrder(Integer.parseInt(param.getProperty(RATConstants.InstructionOrderField).toString()));
-					parameter.setVertexUUIDField(param.getProperty(RATConstants.VertexUUIDField).toString());
+//					parameter.setVertexUUIDField(param.getProperty(RATConstants.VertexUUIDField).toString());
 					parameter.setParameterName(param.getProperty(RATConstants.VertexInstructionParameterNameField).toString());
 					parameter.setParameterValue(param.getProperty(RATConstants.VertexInstructionParameterValueField).toString());
 					parameter.setReturnType(ReturnType.fromString(param.getProperty(RATConstants.VertexInstructionParameterReturnTypeField).toString()));

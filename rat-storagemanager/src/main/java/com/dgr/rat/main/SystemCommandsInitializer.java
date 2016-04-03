@@ -8,6 +8,7 @@ package com.dgr.rat.main;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.RemoteCommandContainer;
@@ -29,6 +30,7 @@ import com.dgr.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.gremlin.java.GremlinPipeline;
 
 public class SystemCommandsInitializer {
 	private IStorage _storage = null;
@@ -53,51 +55,85 @@ public class SystemCommandsInitializer {
 		_storage.openConnection();
 		
 		String templatesPath = RATUtils.getCommandsPath(RATConstants.CommandTemplatesFolder);
-		String json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadCommandsTemplate.conf");
+		String json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadCommands.conf");
 		// COMMENT: modo corretto per ottenere  il commandsTemplateUUID
 		//String commandsTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
 		// COMMENT: tuttavia in questa fase lo inserisco nel file properties in modo da poterlo usare anche in InitDB (classe temporanea)
-		String commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
-		if(!Utils.isUUID(commandsTemplateUUID.toString())){
-			throw new Exception();
-			// TODO: log
-		}
-		this.addCommandTemplates(templatesPath, json, commandsTemplateUUID);
+//		String commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
+//		if(!Utils.isUUID(commandsTemplateUUID.toString())){
+//			throw new Exception();
+//			// TODO: log
+//		}
+		String commandsTemplateUUID = this.addCommandTemplates(templatesPath, json);
 		
-		json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadQueriesTemplate.conf");
+		json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadQueries.conf");
 		// COMMENT: modo corretto per ottenere  il queriesTemplateUUID
 //		String queriesTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
 		// COMMENT: tuttavia in questa fase lo inserisco nel file properties in modo da poterlo usare anche in InitDB (classe temporanea)
-		String queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
-		if(!Utils.isUUID(queriesTemplateUUID.toString())){
-			throw new Exception();
-			// TODO: log
-		}
+//		String queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
+//		if(!Utils.isUUID(queriesTemplateUUID.toString())){
+//			throw new Exception();
+//			// TODO: log
+//		}
 		templatesPath = RATUtils.getCommandsPath(RATConstants.QueryTemplatesFolder);
-		this.addCommandTemplates(templatesPath, json, queriesTemplateUUID);
+		String queriesTemplateUUID = this.addCommandTemplates(templatesPath, json);
 		_storage.shutDown();
 
 		// COMMENT: qui aprirò e chiuderò una nuova connection
 		String commandJson = this.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+		//System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJson));
 		this.addRootPlatformDomainNode(commandJson);
 	}
+//	public void addCommandTemplates() throws Exception{
+//		_storage.openConnection();
+//		
+//		String templatesPath = RATUtils.getCommandsPath(RATConstants.CommandTemplatesFolder);
+//		String json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadCommandsTemplate.conf");
+//		// COMMENT: modo corretto per ottenere  il commandsTemplateUUID
+//		//String commandsTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
+//		// COMMENT: tuttavia in questa fase lo inserisco nel file properties in modo da poterlo usare anche in InitDB (classe temporanea)
+//		String commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
+//		if(!Utils.isUUID(commandsTemplateUUID.toString())){
+//			throw new Exception();
+//			// TODO: log
+//		}
+//		this.addCommandTemplates(templatesPath, json, commandsTemplateUUID);
+//		
+//		json = FileUtils.fileRead(templatesPath + FileSystems.getDefault().getSeparator() + "LoadQueriesTemplate.conf");
+//		// COMMENT: modo corretto per ottenere  il queriesTemplateUUID
+////		String queriesTemplateUUID = RATHelpers.getRATJsonHeaderProperty(json, RATConstants.RootVertexUUID);
+//		// COMMENT: tuttavia in questa fase lo inserisco nel file properties in modo da poterlo usare anche in InitDB (classe temporanea)
+//		String queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
+//		if(!Utils.isUUID(queriesTemplateUUID.toString())){
+//			throw new Exception();
+//			// TODO: log
+//		}
+//		templatesPath = RATUtils.getCommandsPath(RATConstants.QueryTemplatesFolder);
+//		this.addCommandTemplates(templatesPath, json, queriesTemplateUUID);
+//		_storage.shutDown();
+//
+//		// COMMENT: qui aprirò e chiuderò una nuova connection
+//		String commandJson = this.createRootDomain("AddRootDomain.conf", commandsTemplateUUID, queriesTemplateUUID);
+//		this.addRootPlatformDomainNode(commandJson);
+//	}
 	
 	private String createRootDomain(String fileName, String commandsNodeUUID, String queriesNodeUUID) throws Exception{
 		String json = RATUtils.readCommandJSONFile(fileName, RATConstants.CommandsFolder);
+		//System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 		
 		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
+		//System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
 		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
 		int changed = remoteCommandsContainer.setValue("commandsNodeUUID", commandsNodeUUID, ReturnType.uuid);
-		System.out.println("Changed in " + fileName + ": " + changed);
+		//System.out.println("Changed in " + fileName + ": " + changed);
 		
 		changed = remoteCommandsContainer.setValue("queriesNodeUUID", queriesNodeUUID, ReturnType.uuid);
-		System.out.println("Changed in " + fileName + ": " + changed);
+		//System.out.println("Changed in " + fileName + ": " + changed);
 		
 		jsonHeader.setSettings(remoteCommandsContainer.serialize());
 		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-//		System.out.println(RATJsonUtils.jsonPrettyPrinter(newJson));
+		//System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 		
 		return commandJSON;
 	}
@@ -117,32 +153,40 @@ public class SystemCommandsInitializer {
 		return response;
 	}
 	
-	private void addCommandTemplates(String commandTemplatesPath, String json, String commandUUID) throws Exception{
+	private String addCommandTemplates(String commandTemplatesPath, String json/*, String commandUUID*/) throws Exception{
 		// COMMENT: Leggo il file contenente i comandi
+		String commandUUID = null;
 		try{
 			Graph graph = RATHelpers.fromRatJsonToGraph(json); 
-					
-			Iterable<Vertex> iterable = graph.getVertices(RATConstants.VertexUUIDField, commandUUID);
-			if(iterable == null){
-				throw new Exception();
-				// TODO: log
-			}
-			
-			Iterator<Vertex> it = iterable.iterator();
-			if(!it.hasNext()){
-				throw new Exception();
-				// TODO: log
-			}
+			//System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+			// COMMENT: this code was used because the root nodes of LoadCommands and LoadQueries were written in the properties file; now
+			// with GremlinPipeline query is useless (and it does not not function)
+//			Iterable<Vertex> iterable = graph.getVertices(RATConstants.VertexUUIDField, commandUUID);
+//			if(iterable == null){
+//				throw new Exception();
+//				// TODO: log
+//			}
+//			Iterator<Vertex> it = iterable.iterator();
+//			if(!it.hasNext()){
+//				throw new Exception();
+//				// TODO: log
+//			}
+//			Vertex commandsVertex = null;
+//			Vertex inMemoryVertex = it.next();
 			
 			Vertex commandsVertex = null;
-			Vertex inMemoryVertex = it.next();
-			String uuid = inMemoryVertex.getProperty(RATConstants.VertexUUIDField);
+			Vertex inMemoryVertex = null;
+			
+			GremlinPipeline<Vertex, Vertex> queryPipe = new GremlinPipeline<Vertex, Vertex>(graph.getVertices());
+			inMemoryVertex = (Vertex) queryPipe.has(RATConstants.VertexIsRootField, true).next();
+			
+			commandUUID = inMemoryVertex.getProperty(RATConstants.VertexUUIDField);
 			// TODO: attenzione: io do per scontato che sia una UUID: prima andrebbe fatto un controllo....
-			if (!_storage.vertexExists(UUID.fromString(uuid))){
-				commandsVertex = _storage.addVertex(UUID.fromString(uuid));
+			if (!_storage.vertexExists(UUID.fromString(commandUUID))){
+				commandsVertex = _storage.addVertex(UUID.fromString(commandUUID));
 			}
 			else{
-				commandsVertex = _storage.getVertex(UUID.fromString(uuid));
+				commandsVertex = _storage.getVertex(UUID.fromString(commandUUID));
 			}
 			
 			// COMMENT: Per ora prendo direttamente gli attributi, poi vediamo
@@ -170,10 +214,10 @@ public class SystemCommandsInitializer {
 				json = FileUtils.fileRead(pathFileName);
 				RATJsonObject jsonObject = (RATJsonObject) mapper.readValue(json, RATJsonObject.class);
 				String commandName = jsonObject.getHeaderProperty(RATConstants.CommandName);
-				uuid = jsonObject.getHeaderProperty(RATConstants.CommandGraphUUID);
+				String commandGraphUUID = jsonObject.getHeaderProperty(RATConstants.CommandGraphUUID);
 				
-				if(!_storage.vertexExists(UUID.fromString(uuid))){
-					Vertex command = _storage.addVertex(UUID.fromString(uuid));
+				if(!_storage.vertexExists(UUID.fromString(commandGraphUUID))){
+					Vertex command = _storage.addVertex(UUID.fromString(commandGraphUUID));
 					command.setProperty(RATConstants.CommandName, commandName);
 					command.setProperty(RATConstants.VertexContentField, json);
 					command.setProperty(RATConstants.VertexLabelField, commandName);
@@ -192,5 +236,7 @@ public class SystemCommandsInitializer {
 			e.printStackTrace();
 			_storage.rollBack();
 		}
+		
+		return commandUUID;
 	}
 }

@@ -57,8 +57,12 @@ public class CreateRootPlatformVertex implements IInstruction{
 					vertex.setProperty(propertyName, propertyValue);	
 				}
 			}
+			
+			storage.addToIndex("rootvertices", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 		}
 		else{
+			// TODO: non deve essere chiamato due volte; se lo fosse, le istruzioni successive non devono essere eseguite
+			// ed il grafo deve interrompere l'esecuzione di sé stesso (cosa che ora non avviene)
 			vertex = storage.getVertex(inMemoryNodeUUID);
 			// TODO log
 		}
