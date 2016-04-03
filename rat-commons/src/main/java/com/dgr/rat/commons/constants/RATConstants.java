@@ -71,6 +71,7 @@ public class RATConstants {
 	public static final String VertexInstructionParameterReturnTypeField = "VertexInstructionParameterReturnTypeField";
 	public static final String InstructionOrderField = "InstructionOrderField";
 	public static final String MaxNumParameters = "MaxNumParameters";
+	public static final String VertexInstructionOwnerNameField = "VertexInstructionOwnerNameField";
 	
 	// Vertex di tipo Parameters
 	public static final String VertexContentField = "VertexContentField"; // Contiene il contenuto del vertice, che può essere di qualunque tipo, ad es. il valore di un vertex di tipo parametro

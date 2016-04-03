@@ -15,18 +15,19 @@ public class RemoteParameter {
 	private ReturnType _returnType = ReturnType.unknown;
 	private String _parameterName = null;
 	private String _parameterValue = null;
+	private String _instructionOwner = null;
 	
 	public RemoteParameter() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@JsonProperty(RATConstants.VertexUUIDField)
-    public void setVertexUUIDField(final String uuid){
-		_uuid = uuid;
-	}
-    public String getVertexUUIDField(){
-    	return _uuid;
-    }
+//	@JsonProperty(RATConstants.VertexUUIDField)
+//    public void setVertexUUIDField(final String uuid){
+//		_uuid = uuid;
+//	}
+//    public String getVertexUUIDField(){
+//    	return _uuid;
+//    }
     
 	@JsonProperty(RATConstants.InstructionOrderField)
 	public void setInstructionOrder(final Integer instructionOrder){
@@ -69,9 +70,24 @@ public class RemoteParameter {
 	/**
 	 * @return the _returnType
 	 */
-	@JsonProperty("ReturnType")
+//	@JsonProperty("ReturnType")
+//	public ReturnType getReturnType() {
+//		return _returnType;
+//	}
+	
+	@JsonProperty(RATConstants.VertexInstructionParameterReturnTypeField)
 	public ReturnType getReturnType() {
 		return _returnType;
+	}
+	
+	//@JsonProperty(RATConstants.VertexInstructionOwnerNameField)
+	public String getInstructionOwner() {
+		return _instructionOwner;
+	}
+	
+	@JsonProperty(RATConstants.VertexInstructionOwnerNameField)
+	public void setInstructionOwner(String instructionOwner) {
+		_instructionOwner = instructionOwner;
 	}
 
 	/**

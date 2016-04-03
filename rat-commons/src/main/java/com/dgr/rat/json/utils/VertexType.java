@@ -20,9 +20,10 @@ public enum VertexType {
 	RootAdminUser("RootAdminUser"),
 	User("User"),
 	Properties("Properties"),
-//	UserName("UserName"),
+	URI("URI"),
 //	UserPwd("UserPwd"),
 	Domain("Domain"),
+	Empty("Empty"),
 	UserContent("UserContent");
 	
 	private final String _stringValue;
