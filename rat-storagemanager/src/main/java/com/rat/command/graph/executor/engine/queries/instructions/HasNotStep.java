@@ -49,7 +49,7 @@ public class HasNotStep implements IInstruction{
 			
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
 			pipe.hasNot(paramName, paramValue);
-			//System.out.println("HasPipe: " + pipe.toString());
+			System.out.println("HasNotStep: " + pipe.toString());
 			
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);

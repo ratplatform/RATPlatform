@@ -5,6 +5,7 @@
 
 package com.rat.command.graph.executor.engine.queries.instructions;
 
+import java.util.List;
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
 import com.dgr.rat.command.graph.executor.engine.IInstruction;
@@ -49,7 +50,8 @@ public class EdgeInStep implements IInstruction{
 			
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
 			pipe.in(edgeLabel);
-			//System.out.println("EdgeIn: " + pipe.toString());
+			//List<Vertex> results = (List<Vertex>) pipe.toList();
+			System.out.println("EdgeInStep: " + pipe.toString());
 	
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);

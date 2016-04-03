@@ -41,7 +41,7 @@ public class EndStep implements IInstruction{
 		}
 		
 		GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-		System.out.println("GerResultOfPipe: " + pipe.toString());
+		System.out.println("EndStep: " + pipe.toString());
 		List<Vertex> results = (List<Vertex>) pipe.toList();
 		
 		UUID rootUUID = queryResult.getRootUUID();
