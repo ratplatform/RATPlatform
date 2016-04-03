@@ -1,0 +1,7 @@
+/target
+/pom.xml~
+/.settings
+/conf/Alchemy-0.4.1/commands
+/conf/Alchemy-0.4.1/queries
+/conf/UUIDIndex
+.gitignore~
