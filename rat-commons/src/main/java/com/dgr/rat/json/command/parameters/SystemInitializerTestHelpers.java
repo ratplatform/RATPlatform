@@ -85,25 +85,6 @@ public class SystemInitializerTestHelpers {
 		return commandJSON;
 	}
 	
-	
-//	public static String createGetRootDomain(String fileName, String paramName, String paramValue) throws Exception{
-////		String json = RATUtils.readQueryJSONFile(fileName);
-//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-//		
-//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-//		
-//		int changed = remoteCommandsContainer.setValue(paramName, paramValue, ReturnType.string);
-//		System.out.println("userEmail changed in " + fileName + ": " + changed);
-//		//Assert.assertEquals(1, changed);
-//		
-//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-//		
-//		return commandJSON;
-//	}
-	
 	public static String getUserByEmail(String fileName, String paramName, String paramValue, ReturnType returnType) throws Exception{
 //		String json = RATUtils.readQueryJSONFile(fileName);
 		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
@@ -121,94 +102,94 @@ public class SystemInitializerTestHelpers {
 		
 		return commandJSON;
 	}
-	
-	public static String createGetUserByEmail(String fileName, String rootDomainUUID, String paramName, String paramValue) throws Exception{
-//		String json = RATUtils.readQueryJSONFile(fileName);
-		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		changed = remoteCommandsContainer.setValue(paramName, paramValue, ReturnType.string);
-		System.out.println("userEmail changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-		
-		return commandJSON;
-	}
-	
-	public static String createGetUsersAndDomains(String fileName, String rootDomainUUID, VertexType paramValue) throws Exception{
-//		String json = RATUtils.readQueryJSONFile(fileName);
-		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
+//	
+//	public static String createGetUserByEmail(String fileName, String rootDomainUUID, String paramName, String paramValue) throws Exception{
+////		String json = RATUtils.readQueryJSONFile(fileName);
+//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
+//		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		changed = remoteCommandsContainer.setValue(paramName, paramValue, ReturnType.string);
+//		System.out.println("userEmail changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
+//	
+//	public static String createGetUsersAndDomains(String fileName, String rootDomainUUID, VertexType paramValue) throws Exception{
+////		String json = RATUtils.readQueryJSONFile(fileName);
+//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
+//		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+////		changed = remoteCommandsContainer.setValue(RATConstants.VertexTypeField, paramValue.toString(), ReturnType.string);
+////		System.out.println(RATConstants.VertexTypeField + " changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
+//	
+//	public static String createGetUserDomainByName(String fileName, String rootDomainUUID, String domainName, VertexType paramValue) throws Exception{
+////		String json = RATUtils.readQueryJSONFile(fileName);
+//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
+//		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
 //		changed = remoteCommandsContainer.setValue(RATConstants.VertexTypeField, paramValue.toString(), ReturnType.string);
 //		System.out.println(RATConstants.VertexTypeField + " changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-		
-		return commandJSON;
-	}
-	
-	public static String createGetUserDomainByName(String fileName, String rootDomainUUID, String domainName, VertexType paramValue) throws Exception{
-//		String json = RATUtils.readQueryJSONFile(fileName);
-		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		changed = remoteCommandsContainer.setValue(RATConstants.VertexTypeField, paramValue.toString(), ReturnType.string);
-		System.out.println(RATConstants.VertexTypeField + " changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		changed = remoteCommandsContainer.setValue("domainName", domainName, ReturnType.string);
-		System.out.println("domainName changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-		
-		return commandJSON;
-	}
-	
-	public static String createGetAllNodesByType(String fileName, String rootDomainUUID) throws Exception{
-//		String json = RATUtils.readQueryJSONFile(fileName);
-		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-		
-		return commandJSON;
-	}
+//		//Assert.assertEquals(1, changed);
+//		
+//		changed = remoteCommandsContainer.setValue("domainName", domainName, ReturnType.string);
+//		System.out.println("domainName changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
+//	
+//	public static String createGetAllNodesByType(String fileName, String rootDomainUUID) throws Exception{
+////		String json = RATUtils.readQueryJSONFile(fileName);
+//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
+//		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
 	
 	public static String createNewUser(String fileName, String rootDomainUUID, String userName, String pwd, String email) throws Exception{
 //		String json = RATUtils.readCommandJSONFile(fileName);
@@ -335,49 +316,49 @@ public class SystemInitializerTestHelpers {
 		
 		return commandJSON;
 	}
-	
-	public static String createGetAllDomainComments(String fileName, String rootDomainUUID, String userUUID, String url) throws Exception{
-//		String json = RATUtils.readQueryJSONFile(fileName);
-		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		// TODO ho messo string come tipo perché AbstractCommand.setQueryPivot accetta parametri ma non i tipi dei parametri: è da correggere
-		changed = remoteCommandsContainer.setValue("userUUID", userUUID, ReturnType.string);
-		System.out.println("userUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		changed = remoteCommandsContainer.setValue("url", url, ReturnType.string);
-		System.out.println("url changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-		
-		return commandJSON;
-	}
-	
-	public static String createGetAllUserComments(String fileName, String userUUID) throws Exception{
-//		String json = RATUtils.readQueryJSONFile(fileName);
-		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
-		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
-		
-		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
-		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
-		
-		int changed = remoteCommandsContainer.setValue("rootNodeUUID", userUUID, ReturnType.uuid);
-		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
-		//Assert.assertEquals(1, changed);
-		
-		jsonHeader.setSettings(remoteCommandsContainer.serialize());
-		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
-		
-		return commandJSON;
-	}
+//	
+//	public static String createGetAllDomainComments(String fileName, String rootDomainUUID, String userUUID, String url) throws Exception{
+////		String json = RATUtils.readQueryJSONFile(fileName);
+//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("rootNodeUUID", rootDomainUUID, ReturnType.uuid);
+//		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		// TODO ho messo string come tipo perché AbstractCommand.setQueryPivot accetta parametri ma non i tipi dei parametri: è da correggere
+//		changed = remoteCommandsContainer.setValue("userUUID", userUUID, ReturnType.string);
+//		System.out.println("userUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		changed = remoteCommandsContainer.setValue("url", url, ReturnType.string);
+//		System.out.println("url changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
+//	
+//	public static String createGetAllUserComments(String fileName, String userUUID) throws Exception{
+////		String json = RATUtils.readQueryJSONFile(fileName);
+//		String json = SystemInitializerTestHelpers.getJson(fileName, RATConstants.QueriesFolder);
+//		RATJsonObject jsonHeader = RATJsonUtils.getRATJsonObject(json);
+//		
+//		RemoteCommandContainer remoteCommandsContainer = new RemoteCommandContainer();
+//		remoteCommandsContainer.deserialize(RATJsonUtils.getSettings(jsonHeader));
+//		
+//		int changed = remoteCommandsContainer.setValue("rootNodeUUID", userUUID, ReturnType.uuid);
+//		System.out.println("nodeUUID changed in " + fileName + ": " + changed);
+//		//Assert.assertEquals(1, changed);
+//		
+//		jsonHeader.setSettings(remoteCommandsContainer.serialize());
+//		String commandJSON = RATJsonUtils.getRATJson(jsonHeader);
+//		
+//		return commandJSON;
+//	}
 }
