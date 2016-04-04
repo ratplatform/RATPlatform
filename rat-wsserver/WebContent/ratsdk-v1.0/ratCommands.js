@@ -265,7 +265,7 @@ var AddComment = {
 			VertexInstructionParameterNameField:"ownerNodeUUID",
 			VertexInstructionParameterValueField:"VertexContentUndefined",
 			VertexInstructionParameterReturnTypeField:"uuid",
-			VertexInstructionOwnerNameField:"BindSubComment",
+			VertexInstructionOwnerNameField:"BindSubNode",
 			InstructionOrderField:"0"
 		},
 		url : {

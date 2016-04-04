@@ -163,12 +163,37 @@ var GetCommentComments = {
 		MessageType:"Template"
 	},
 	settings : {
-		paramValue : {
-			VertexInstructionParameterNameField:"paramValue",
+		rootNodeUUID : {
+			VertexInstructionParameterNameField:"rootNodeUUID",
 			VertexInstructionParameterValueField:"VertexContentUndefined",
 			VertexInstructionParameterReturnTypeField:"uuid",
-			VertexInstructionOwnerNameField:"GetSingleNode",
-			InstructionOrderField:"1"
+			VertexInstructionOwnerNameField:"StartStep",
+			InstructionOrderField:"0"
+		}
+	}
+};
+
+var GetDomainDomains = {
+	header : {
+		commandType:"Query",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"c4a773ff-f286-4906-8346-85a27323b47e",
+		RootVertexUUID:"8270bbca-3980-40cd-ae5e-780690792adc",
+		commandName:"GetDomainDomains",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		rootNodeUUID : {
+			VertexInstructionParameterNameField:"rootNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"StartStep",
+			InstructionOrderField:"0"
 		}
 	}
 };
@@ -242,11 +267,18 @@ getUserURLsFunc = function(currentDomainUUID, rootNodeUUID){
 	return JSON.stringify(GetUserURLs);
 };
 
-getCommentCommentsFunc = function(currentDomainUUID, paramValue){
-	GetCommentComments.settings.paramValue.VertexInstructionParameterValueField = paramValue;
+getCommentCommentsFunc = function(currentDomainUUID, rootNodeUUID){
+	GetCommentComments.settings.rootNodeUUID.VertexInstructionParameterValueField = rootNodeUUID;
 	GetCommentComments.header.DomainUUID = currentDomainUUID;
 
 	return JSON.stringify(GetCommentComments);
+};
+
+getDomainDomainsFunc = function(currentDomainUUID, rootNodeUUID){
+	GetDomainDomains.settings.rootNodeUUID.VertexInstructionParameterValueField = rootNodeUUID;
+	GetDomainDomains.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(GetDomainDomains);
 };
 
 getNodeByTypeFunc = function(currentDomainUUID, paramValue){
