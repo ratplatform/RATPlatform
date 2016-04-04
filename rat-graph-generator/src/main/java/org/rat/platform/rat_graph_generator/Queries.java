@@ -165,6 +165,63 @@ public class Queries {
 		return graph;
     }
     
+    public CommandGraph getUserDomainByName(String commandName, String commandVersion) throws Exception{
+    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
+    	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	
+		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
+		
+		QueryPivot isPutBy = new QueryPivot("is-put-by");
+		isPutBy.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		isPutBy.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+		
+		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
+		
+		QueryPivot hasStep = new QueryPivot("is-user-of");
+		hasStep.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		hasStep.addInstruction("HasStep", "paramValue", "is-user-of", ReturnType.string);
+		//hasStep.addInstruction("DebugDumpValue");
+		
+		QueryPivot edgeInStep3 = new QueryPivot("EdgeInStep");
+		edgeInStep3.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
+		
+		QueryPivot isDomain = new QueryPivot("isDomain");
+		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+		
+		QueryPivot isDomain2 = new QueryPivot("isDomain");
+		isDomain2.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		isDomain2.addInstruction("HasStep", "paramValue", RATConstants.VertexContentUndefined, ReturnType.string);
+		
+		QueryPivot isRootDomain = new QueryPivot("isRootDomain");
+		isRootDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isRootDomain.addInstruction("HasStep", "paramValue", VertexType.RootDomain.toString(), ReturnType.string);
+		
+		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
+		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+		
+		rootNode.addChild(edgeInStep);
+		edgeInStep.addChild(isPutBy);
+		isPutBy.addChild(edgeInStep2);
+		edgeInStep2.addChild(hasStep);
+		hasStep.addChild(edgeInStep3);
+		edgeInStep3.addChild(isDomain);
+		isDomain.addChild(edgeOutStep);
+		edgeOutStep.addChild(isPutBy2);
+		isPutBy2.addChild(edgeOutStep2);
+		edgeOutStep2.addChild(isRootDomain);
+		isRootDomain.addChild(backStep);
+		backStep.addChild(endStep);
+		
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+    }
+    
     public CommandGraph getAllUserDomains(String commandName, String commandVersion) throws Exception{
     	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
     	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
@@ -233,89 +290,32 @@ public class Queries {
 		return graph;
     }
     
-//    public CommandGraph getAllDomainUsers(String commandName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.Domain.toString(), VertexType.QueryPivot.toString());
-//    	
-//		rootNode.addInstruction("GetSingleNode", "paramName", RATConstants.VertexUUIDField, ReturnType.string);
-//		rootNode.addInstruction("GetSingleNode", "paramValue", RATConstants.VertexContentUndefined, ReturnType.uuid);
-//		rootNode.addInstruction("GetSingleNode", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
-//		
-//		QueryPivot queryPivot = new QueryPivot("is-user-of");
-//		queryPivot.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-user-of", ReturnType.string);
-//		queryPivot.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		rootNode.addChild(queryPivot);
-//		
-//		QueryPivot getNodeByContent = new QueryPivot("is-put-by");
-//		getNodeByContent.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-put-by", ReturnType.string);
-//		getNodeByContent.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		queryPivot.addChild(getNodeByContent);
-//		
-//		QueryPivot getNode = new QueryPivot(VertexType.User.toString());
-//		getNode.addInstruction("GetNode", RATConstants.VertexTypeField, VertexType.User.toString(), ReturnType.string);
-//		getNodeByContent.addChild(getNode);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-//    public CommandGraph getUserURLs(String commandName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
-//		rootNode.addInstruction("StartQueryPipe", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.string);
-//		rootNode.addProperty("edgeDirection", Direction.IN);
-//		rootNode.addProperty("edgeLabel", "AddComment");
-////    	rootNode.addInstruction("AddNewUser/User", "StartQueryPipe", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.string);
-//		
-//		QueryPivot isLinkedTo = new QueryPivot("is-linked-to");
-//		isLinkedTo.addInstruction("HasPipe", RATConstants.VertexContentField, "is-linked-to", ReturnType.string);
-//		//isLinkedTo.addInstruction("HasPipe", "param1", "RATConstants.VertexContentField:is-linked-to", ReturnType.string);
-//		isLinkedTo.addProperty("edgeDirection", Direction.IN);
-//		isLinkedTo.addProperty("edgeLabel", "AddComment");
-//		
-//		QueryPivot isLinkedTo2 = new QueryPivot("is-linked-to");
-////		isLinkedTo.addInstruction("HasNotPipe", RATConstants.VertexContentField, "is-linked-to", ReturnType.string);
-////		isLinkedTo.addProperty("edgeDirection", Direction.IN);
-////		isLinkedTo.addProperty("edgeLabel", "AddComment");
-//		isLinkedTo2.addInstruction("HasPipe", RATConstants.VertexContentField, "is-linked-to", ReturnType.string);
-//		//isLinkedTo.addInstruction("HasPipe", "param1", "RATConstants.VertexContentField:is-linked-to", ReturnType.string);
-//		isLinkedTo2.addProperty("edgeDirection", Direction.IN);
-//		isLinkedTo2.addProperty("edgeLabel", "AddComment");
-//		
-//		QueryPivot URL = new QueryPivot(VertexType.URI.toString());
-//		URL.addInstruction("GerResultOfPipe", RATConstants.VertexTypeField, VertexType.URI.toString(), ReturnType.string);
-//		URL.addProperty("edgeDirection", Direction.IN);
-//		URL.addProperty("edgeLabel", "AddComment");
-////		URL.addInstruction("AddComment/Comment/webDocument", "GerResultOfPipe", RATConstants.VertexTypeField, VertexType.URI.toString(), ReturnType.string);
-//		
-//		rootNode.addChild(isLinkedTo);
-//		isLinkedTo.addChild(URL);
-////		isLinkedTo2.addChild(URL);
-////		URL.addChild(isLinkedTo);
-////		isLinkedTo.addChild(rootNode);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-    
     public CommandGraph getCommentComments(String commandName, String commandVersion) throws Exception{
     	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
-		rootNode.addInstruction("GetSingleNode", "paramName", RATConstants.VertexUUIDField, ReturnType.string);
-		rootNode.addInstruction("GetSingleNode", "paramValue", RATConstants.VertexContentUndefined, ReturnType.uuid);
-		rootNode.addInstruction("GetSingleNode", RATConstants.VertexTypeField, VertexType.User.toString(), ReturnType.string);
+    	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	
+		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
+    	
+		QueryPivot hasStep = new QueryPivot("belongs-to");
+		hasStep.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		hasStep.addInstruction("HasStep", "paramValue", "belongs-to", ReturnType.string);
 		
-		QueryPivot isLinkedTo = new QueryPivot("is-linked-to");
-		isLinkedTo.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-put-by", ReturnType.string);
-		isLinkedTo.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
+		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
 		
-		QueryPivot URL = new QueryPivot(VertexType.URI.toString());
-		URL.addInstruction("GetNode", RATConstants.VertexTypeField, VertexType.URI.toString(), ReturnType.string);
+		QueryPivot isDomain = new QueryPivot("isDomain");
+		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
 		
-		rootNode.addChild(isLinkedTo);
-		isLinkedTo.addChild(URL);
+		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
+		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+		
+		rootNode.addChild(edgeInStep);
+		edgeInStep.addChild(hasStep);
+		hasStep.addChild(edgeInStep2);
+		edgeInStep2.addChild(isDomain);
+		isDomain.addChild(endStep);
 		
 		CommandGraph graph = new CommandGraph(rootNode, commandName);
 		graph.set_commandVersion(commandVersion);
@@ -324,110 +324,39 @@ public class Queries {
 		return graph;
     }
     
-//    public CommandGraph getAllUserDomains(String commandName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
-//    	rootNode.addInstruction("StartQueryPipe", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.string);
-//		rootNode.addCommandNodeProperty("edgeDirection", Direction.IN);
-//		rootNode.addCommandNodeProperty("edgeLabel", "AddComment");
-//		
-//		QueryPivot getNodeByContent = new QueryPivot("is-put-by");
-//		getNodeByContent.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-put-by", ReturnType.string);
-//		getNodeByContent.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		rootNode.addChild(getNodeByContent);
-//		
-//		QueryPivot getNodeByContent2 = new QueryPivot("is-user-of");
-//		getNodeByContent2.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-user-of", ReturnType.string);
-//		getNodeByContent2.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		getNodeByContent.addChild(getNodeByContent2);
-//		
-//		QueryPivot getNode = new QueryPivot(VertexType.Domain.toString());
-//		getNode.addInstruction("GetNode", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
-//		getNodeByContent2.addChild(getNode);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-    
-//    public CommandGraph getAllUserComments(String commandName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
-//		rootNode.addInstruction("GetSingleNode", "paramName", RATConstants.VertexUUIDField, ReturnType.string);
-//		rootNode.addInstruction("GetSingleNode", "paramValue", RATConstants.VertexContentUndefined, ReturnType.uuid);
-//		rootNode.addInstruction("GetSingleNode", RATConstants.VertexTypeField, VertexType.User.toString(), ReturnType.string);
-//		
-//		QueryPivot isPutBy = new QueryPivot("is-put-by");
-//		isPutBy.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-put-by", ReturnType.string);
-//		isPutBy.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		
-//		QueryPivot comment = new QueryPivot(VertexType.Comment.toString());
-//		comment.addInstruction("GetNode", RATConstants.VertexTypeField, VertexType.Comment.toString(), ReturnType.string);
-//		
-//		rootNode.addChild(isPutBy);
-//		isPutBy.addChild(comment);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-    
-//    public CommandGraph getAllUserDomains(String commandName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
-//    	
-//		rootNode.addInstruction("GetSingleNode", "paramName", RATConstants.VertexUUIDField, ReturnType.string);
-//		rootNode.addInstruction("GetSingleNode", "paramValue", RATConstants.VertexContentUndefined, ReturnType.uuid);
-//		rootNode.addInstruction("GetSingleNode", RATConstants.VertexTypeField, VertexType.User.toString(), ReturnType.string);
-//		
-//		QueryPivot getNodeByContent = new QueryPivot("is-put-by");
-//		getNodeByContent.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-put-by", ReturnType.string);
-//		getNodeByContent.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		rootNode.addChild(getNodeByContent);
-//		
-//		QueryPivot getNodeByContent2 = new QueryPivot("is-user-of");
-//		getNodeByContent2.addInstruction("GetNodeByContent", RATConstants.VertexContentField, "is-user-of", ReturnType.string);
-//		getNodeByContent2.addInstruction("GetNodeByContent", RATConstants.VertexTypeField, VertexType.SystemKey.toString(), ReturnType.string);
-//		getNodeByContent.addChild(getNodeByContent2);
-//		
-//		QueryPivot getNode = new QueryPivot(VertexType.Domain.toString());
-//		getNode.addInstruction("GetNode", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
-//		getNodeByContent2.addChild(getNode);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-    
-//    public static CommandGraph getAllDomains(String commandName, String instructionName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(commandName, VertexType.QueryPivot.toString());
-//		rootNode.addInstruction(instructionName, "paramName", "domainName", ReturnType.string);
-//		rootNode.addInstruction(instructionName, "paramValue", RATConstants.VertexContentUndefined, ReturnType.string);
-//		
-//		rootNode.addInstruction(instructionName, RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-    
-//    public CommandGraph getNodeSingleNode(String commandName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(commandName, VertexType.QueryPivot.toString());
-//		rootNode.addInstruction("GetNodeSingleNode", "paramName", RATConstants.VertexContentUndefined, ReturnType.string);
-//		rootNode.addInstruction("GetNodeSingleNode", "paramValue", RATConstants.VertexContentUndefined, ReturnType.string);
-//		//rootNode.addInstruction("GetSingleNode", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
+    public CommandGraph getDomainDomains(String commandName, String commandVersion) throws Exception{
+    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
+    	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	
+		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+    	
+		QueryPivot isPutBy = new QueryPivot("is-put-by");
+		isPutBy.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		isPutBy.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+		
+		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+		
+		QueryPivot isComment = new QueryPivot("isComment");
+		isComment.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isComment.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+		
+		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
+		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+		
+		rootNode.addChild(edgeInStep);
+		edgeInStep.addChild(isPutBy);
+		isPutBy.addChild(edgeInStep2);
+		edgeInStep2.addChild(isComment);
+		isComment.addChild(endStep);
+		
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+    }
     
     public CommandGraph getNodesByType(String commandName, String commandVersion) throws Exception{
     	RootQueryPivot rootNode = new RootQueryPivot(commandName, VertexType.QueryPivot.toString());
@@ -469,18 +398,6 @@ public class Queries {
 		
 		return graph;
     }
-    
-//    public static CommandGraph getAllNodesOfType(String commandName, String instructionName, String commandVersion) throws Exception{
-//    	RootQueryPivot rootNode = new RootQueryPivot(commandName, VertexType.QueryPivot.toString());
-//		
-//		rootNode.addInstruction(instructionName, RATConstants.VertexTypeField, RATConstants.VertexContentUndefined, ReturnType.string);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
     
 	public void writeQuery(CommandGraph command, String placeHolder, String applicationName, String applicationVersion) throws Exception{
 		JsonHeader header = new JsonHeader();

@@ -88,6 +88,10 @@ public class App {
 			graph.set_commandType(JSONType.Query);
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
+			graph = queries.getDomainDomains("GetDomainDomains", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			
 			graph = queries.getNodesByType("GetNodeByType", "0.1");
 			graph.set_commandType(JSONType.Query);
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);

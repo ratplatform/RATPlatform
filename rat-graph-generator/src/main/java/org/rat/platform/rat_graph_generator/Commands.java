@@ -51,6 +51,7 @@ public class Commands {
 		rootNode.addPropertyVertexInstruction("jsonCoordinates", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
 		
 		SystemKey isPutByNode = new SystemKey("is-put-by", "is-put-by");
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
@@ -60,7 +61,7 @@ public class Commands {
 		SystemKey belongsTo = new SystemKey("belongs-to", "belongs-to");
 		belongsTo.addCreateVertexInstruction("nodeName", "belongs-to", ReturnType.string);
 		// COMMENT: bind verso il nodo dell'owner (dominio)
-		belongsTo.addInstruction("BindSubComment", "ownerNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+		belongsTo.addInstruction("BindSubNode", "ownerNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
 		
 		SystemKey isPublic = new SystemKey("is-public", "is-public");
 		isPublic.addCreateVertexInstruction("nodeName", "is-public", ReturnType.string);
@@ -94,7 +95,8 @@ public class Commands {
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
 		rootNode.addInstruction("InitDomain", RATConstants.VertexContentField, "#", ReturnType.string);
 		rootNode.addPropertyVertexInstruction("domainName", RATConstants.VertexContentUndefined, ReturnType.string);
-		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
+		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
 		
 		SystemKey isDomain = new SystemKey("is-domain",  "is-domain");
 		isDomain.addCreateVertexInstruction("nodeName", "is-domain", ReturnType.string);
@@ -124,7 +126,8 @@ public class Commands {
 		rootNode.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
-
+		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
+		
     	SystemKey isUserOf = new SystemKey("is-user-of", "is-user-of");
     	isUserOf.addCreateVertexInstruction("nodeName", isUserOf.getContent(), ReturnType.string);
     	isUserOf.addBindInstruction("isUserOfNodeUUID", RATConstants.VertexContentUndefined);
@@ -151,6 +154,7 @@ public class Commands {
     	RootNode rootNode = new RootNode(RATConstants.Commands, RATConstants.Commands, VertexType.SystemKey);
     	rootNode.addCreateCommandRootVertexInstruction("name", RATConstants.Commands, ReturnType.string);
     	rootNode.addInstruction("LoadCommandsAction", "folder", RATConstants.VertexContentUndefined, ReturnType.string);
+    	//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
     	
 		CommandGraph graph = new CommandGraph(rootNode, "LoadCommands");
 		graph.set_commandVersion(commandVersion);
@@ -163,6 +167,7 @@ public class Commands {
     	RootNode rootNode = new RootNode(RATConstants.Queries, RATConstants.Queries, VertexType.SystemKey);
     	rootNode.addCreateCommandRootVertexInstruction("name", RATConstants.Queries, ReturnType.string);
     	rootNode.addInstruction("LoadCommandsAction", "folder", RATConstants.VertexContentUndefined, ReturnType.string);
+    	//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
     	
 		CommandGraph graph = new CommandGraph(rootNode, "LoadQueries");
 		graph.set_commandVersion(commandVersion);
@@ -177,6 +182,7 @@ public class Commands {
     	rootNode.addCreateRootPlatformVertexInstruction("rootDomainName", platformName, ReturnType.string);
     	rootNode.addBindInstruction("commandsNodeUUID", RATConstants.VertexContentUndefined);
     	rootNode.addBindInstruction("queriesNodeUUID", RATConstants.VertexContentUndefined);
+    	//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
     	
     	SystemKey isSystem = new SystemKey("is-system", "is-system");
     	isSystem.addCreateVertexInstruction("nodeName", isSystem.getContent(), ReturnType.string);
@@ -201,6 +207,7 @@ public class Commands {
 		rootNode.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string, true);
 		rootNode.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
+		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
 		
     	SystemKey isUserOf = new SystemKey("is-user-of", "is-user-of");
     	isUserOf.addCreateVertexInstruction("nodeName", isUserOf.getContent(), ReturnType.string);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.rat.platform.graph.CommandGraph;
 
+import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 
@@ -16,6 +17,7 @@ public class RootNode extends CommandNode{
 		super.setType(type);
 		super.setLabel(label);
 		super.setContent(content);
+		super.addCommandNodeProperty("subNodes", 0);
 	}
 	
 	public void addSystemKey(SystemKey systemKey){
