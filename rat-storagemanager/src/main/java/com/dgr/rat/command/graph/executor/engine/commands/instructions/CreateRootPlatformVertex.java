@@ -58,7 +58,7 @@ public class CreateRootPlatformVertex implements IInstruction{
 				}
 			}
 			
-			storage.addToIndex("rootvertices", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
+			storage.addToIndex("rootverticesindex", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 		}
 		else{
 			// TODO: non deve essere chiamato due volte; se lo fosse, le istruzioni successive non devono essere eseguite

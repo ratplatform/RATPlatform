@@ -37,7 +37,7 @@ public class CreateWebDocument implements IInstruction{
 		if (!storage.vertexExists("webDocument", paramName, urlMD5)){
 			vertex = storage.addVertex(storedNodeUUID);
 			storage.addToIndex("webDocument", vertex, paramName, urlMD5);
-			storage.addToIndex("rootvertices", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
+			storage.addToIndex("rootverticesindex", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 			
 			Set<String> keys = nodeCaller.getPropertyKeys();
 			it = keys.iterator();

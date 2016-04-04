@@ -18,9 +18,9 @@ import com.dgr.utils.Utils;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
-public class BindSubComment implements IInstruction{
+public class BindSubNode implements IInstruction{
 	
-	public BindSubComment() {
+	public BindSubNode() {
 
 	}
 
@@ -44,13 +44,13 @@ public class BindSubComment implements IInstruction{
 			}
 			//System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
 			// TODO: aggiungere subComments nelle proprietà del vertexframe
-			Object comments = inVertex.getProperty("subComments");
+			Object comments = inVertex.getProperty("subNodes");
 			if(comments == null){
-				inVertex.setProperty("subComments", 1);
+				inVertex.setProperty("subNodes", 1);
 			}
 			else{
 				int num = Integer.parseInt(comments.toString());
-				inVertex.setProperty("subComments", ++num);
+				inVertex.setProperty("subNodes", ++num);
 			}
 			
 			edgeUUID = UUID.randomUUID();

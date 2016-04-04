@@ -32,7 +32,7 @@ public class AddToIndex implements IInstruction{
 		String[] fields = fieldsToIndex.split(",");
 		for(String field : fields){
 			Object value = vertex.getProperty(field);
-			storage.addToIndex("rootvertices", vertex, field, value);
+			storage.addToIndex("rootverticesindex", vertex, field, value);
 		}
 		
 //		InstructionResult commandResult = new InstructionResult(inMemoryNodeUUID);

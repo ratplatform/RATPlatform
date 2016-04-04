@@ -34,7 +34,7 @@ public class GetSingleNode implements IInstruction{
 			// TODO: log
 		}
 		
-		List<Vertex>list = invoker.getStorage().getVertices("rootvertices", paramName, paramValue);
+		List<Vertex>list = invoker.getStorage().getVertices("rootverticesindex", paramName, paramValue);
 		
 		// TODO: orribile, ma per ora me la risolvo così: gli indici Tinkerpop non supportano query
 		Vertex rootVertex = null;

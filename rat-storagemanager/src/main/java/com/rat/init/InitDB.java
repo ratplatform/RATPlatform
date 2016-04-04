@@ -29,6 +29,7 @@ import com.dgr.rat.graphgenerator.queries.QueryHelpers;
 import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
+import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.main.DumpGraph;
 import com.dgr.rat.main.RATStorageManager;
@@ -551,7 +552,7 @@ public class InitDB {
 	}
 	
 	private List<Vertex> getUser(VertexType userType, String domainUUID, String userEmail, String fileName) throws Exception{
-		String commandJSON = SystemInitializerTestHelpers.createGetUserByEmail(fileName, domainUUID, "userEmail", userEmail);
+		String commandJSON = SystemInitializerTestHelpers.getUserByEmail(fileName, "userEmail", userEmail, ReturnType.string);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
