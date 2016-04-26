@@ -12,9 +12,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.tinkerpop.blueprints.Graph;
 //import com.tinkerpop.blueprints.util.io.graphson.GraphSONWriter;
 
-public class MakeSigmaJSON {
+public class MakeAlchemyJSON {
 
-	public MakeSigmaJSON() {
+	public MakeAlchemyJSON() {
 	}
 	
 //	public static String fromRatJsonToAlchemy(Graph graph) throws Exception{
@@ -64,10 +64,10 @@ public class MakeSigmaJSON {
 		int pos = ratJson.indexOf("\"edges\"");
 		String edges = ratJson.substring(pos);
 //		System.out.println(edges);
-		edges = MakeSigmaJSON.makeAlchemyJSONEdges(edges);
+		edges = MakeAlchemyJSON.makeAlchemyJSONEdges(edges);
 		String vertices = ratJson.substring(0, pos);
 		vertices = vertices.replace("\"vertices\"", "\"nodes\"");
-		vertices = MakeSigmaJSON.makeAlchemyJSONVertices(vertices);
+		vertices = MakeAlchemyJSON.makeAlchemyJSONVertices(vertices);
 //		System.out.println(vertices);
 		String result = vertices + edges;
 //		System.out.println(json);
@@ -104,15 +104,15 @@ public class MakeSigmaJSON {
 		String settings = mapper.writeValueAsString(jsonHeader.getSettings());
 		Edges edgesObj = (Edges) mapper.readValue(settings, Edges.class);
 		String edgesString = mapper.writeValueAsString(edgesObj.getEdges());
-		edgesString = MakeSigmaJSON.makeAlchemyJSONEdges(edgesString);
+		edgesString = MakeAlchemyJSON.makeAlchemyJSONEdges(edgesString);
 //		System.out.println(edgesString);
 		
 		String nodesString = mapper.writeValueAsString(edgesObj.getNodes());
-		nodesString = MakeSigmaJSON.makeAlchemyJSONVertices(nodesString);
+		nodesString = MakeAlchemyJSON.makeAlchemyJSONVertices(nodesString);
 //		System.out.println(nodesString);
 
 		String header = mapper.writeValueAsString(jsonHeader.getHeader());
-		String json = MakeSigmaJSON.makeAlchemyJSON(header, nodesString, edgesString);
+		String json = MakeAlchemyJSON.makeAlchemyJSON(header, nodesString, edgesString);
 
 		return json;
 	}

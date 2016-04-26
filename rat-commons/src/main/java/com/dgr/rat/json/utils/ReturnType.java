@@ -7,6 +7,7 @@ package com.dgr.rat.json.utils;
 
 public enum ReturnType {
 	unknown("unknown"),
+	none("none"),
 	string("string"),
 	integer("integer"),
 	uuid("uuid"),

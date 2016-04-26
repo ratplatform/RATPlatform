@@ -12,6 +12,14 @@ public class RATConstants {
 	public static final String Commands = "Commands";
 	public static final String Queries = "Queries";
 	
+	// Vertex Properties
+	public static final String VertexContentField = "VertexContentField";
+	public static final String VertexUUIDField = "VertexUUIDField";
+	public static final String VertexLabelField = "VertexLabelField"; // Contiene il nome del vertice, es. "is-type-of"
+	public static final String GraphCommandOwner = "GraphCommandOwner";
+	public static final String IsDeleted = "isDeleted";
+	public static final String GraphUUID = "GraphUUID";
+	
 	// Files & folders
 	public static final String ConfigurationFolder = "conf";
 	public static final String PropertyFileName = "application.properties";
@@ -60,9 +68,9 @@ public class RATConstants {
 	public static final String RootPlatformDomainUUID = "root.domain.uuid";
 			
 	// VertexValue
-	public static final String VertexUUIDField = "VertexUUIDField";
-	public static final String VertexLabelField = "VertexLabelField"; // Contiene il nome del vertice, es. "is-type-of"
-	public static final String GraphCommandOwner = "GraphCommandOwner";
+//	public static final String VertexUUIDField = "VertexUUIDField";
+//	public static final String VertexLabelField = "VertexLabelField"; // Contiene il nome del vertice, es. "is-type-of"
+//	public static final String GraphCommandOwner = "GraphCommandOwner";
 	public static final String VertexContentUndefined = "VertexContentUndefined";
 	
 	//Instructions
@@ -74,7 +82,7 @@ public class RATConstants {
 	public static final String VertexInstructionOwnerNameField = "VertexInstructionOwnerNameField";
 	
 	// Vertex di tipo Parameters
-	public static final String VertexContentField = "VertexContentField"; // Contiene il contenuto del vertice, che può essere di qualunque tipo, ad es. il valore di un vertex di tipo parametro
+//	public static final String VertexContentField = "VertexContentField"; // Contiene il contenuto del vertice, che può essere di qualunque tipo, ad es. il valore di un vertex di tipo parametro
 	public static final String VertexContentTypeField = "VertexContentTypeField"; // Tipo contenuto da VertexContentField: VertexContentTypeIntValue, VertexContentTypeStringValue, etc.
 	public static final String VertexContentTypeStringValue = "string";
 	public static final String VertexContentTypeIntValue = "integer";
