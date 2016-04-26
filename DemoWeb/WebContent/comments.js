@@ -18,17 +18,26 @@ function removeAllComments(){
 
 function addNewCommentCallBack(data, textStatus, jqXHR) {
 	removeAllComments();
-
 	//console.log("addNewCommentCallBack: " + data);
 
+
 	getAllComments(currentURL);
+
+	setTimeout(openURLs, 1000);
+}
+
+function openURLs(){
+	var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
+	var getAllUserURLs = getUserURLsFunc("null", loginResult.userUUID);
+	callWs(wsUrl, 'POST', getAllUserURLs, getAllUserURLsCallBack, errorCallBack);
 }
 
 function getAllComments(url){
 	var wsURL = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
-	GetAllDomainCommentsSet(currentDomainUUID, currentDomainUUID, loginResult.userUUID, url);
-	//console.log("GetAllDomainComments: " + JSON.stringify(GetAllDomainComments));
-	callWs(wsURL, 'POST', JSON.stringify(GetAllDomainComments), allUserCommentsCallBack, errorCallBack);
+	var json  = getAllUserDomainCommentsFunc(currentDomainUUID, loginResult.userUUID, currentDomainUUID, url);
+	console.log("getAllComments json: " + json);
+
+	callWs(wsURL, 'POST', json, allUserCommentsCallBack, errorCallBack);
 }
 
 function allUserCommentsCallBack(data, textStatus, jqXHR) {

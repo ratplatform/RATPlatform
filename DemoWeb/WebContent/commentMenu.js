@@ -22,7 +22,7 @@ function selectCommentMenuItem(event, ui) {
 	switch(ui.cmd){
 		case 'reply':
 			if(uuid){
-				showCommentWnd('Re: ' + title, '>>' + text + '<<\n', getComboUrl(), uuid);
+				showCommentWnd('Re: ' + title, '>>' + text + '<<\n', getComboValue("comboUrl"), uuid);
 			}
 		break;
 

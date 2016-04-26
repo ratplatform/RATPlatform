@@ -26,9 +26,12 @@ function onAddNewDomainClick() {
 
 	var wsUrl = ratURL + "/runcommand?sessionid=" + loginResult.sessionID;
 	//console.log("url: " + wsUrl);
-	AddNewDomainSet(currentDomainUUID, domain, domain, currentDomainUUID);
+	//AddNewDomainSet(currentDomainUUID, domain, domain, currentDomainUUID);
 	//console.log("onAddNewDomainClick AddNewDomain: " + JSON.stringify(AddNewDomain));
-	callWs(wsUrl, 'POST', JSON.stringify(AddNewDomain), addNewDomainCallBack, errorCallBack);
+	//callWs(wsUrl, 'POST', JSON.stringify(AddNewDomain), addNewDomainCallBack, errorCallBack);
+	var json = addNewDomainFunc(currentDomainUUID, currentDomainUUID, domain, domain);
+	console.log("onAddNewDomainClick json: " + json);
+	callWs(wsUrl, 'POST', json, addNewDomainCallBack, errorCallBack);
 }
 
 function addNewDomainCallBack(data, textStatus, jqXHR) {
@@ -37,10 +40,12 @@ function addNewDomainCallBack(data, textStatus, jqXHR) {
 	var newUUID = json.settings.VertexUUIDField;
 	//console.log("addNewDomainCallBack newUUID: " + newUUID);
 
-	GetAllDomainsSet(newUUID, newUUID);
+	//GetAllDomainsSet(newUUID, newUUID);
 	var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
 	//console.log("url: " + wsUrl);
-	callWs(wsUrl, "POST", JSON.stringify(GetAllDomains), getUserDomainsCallBack, errorCallBack);
+	//callWs(wsUrl, "POST", JSON.stringify(GetAllDomains), getUserDomainsCallBack, errorCallBack);
+	var json = getDomainDomainsFunc(newUUID, newUUID);
+	callWs(wsUrl, "POST", json, getUserDomainsCallBack, errorCallBack);
 }
 
 function getUserDomainsCallBack(data, textStatus, jqXHR) {

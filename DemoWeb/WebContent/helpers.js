@@ -19,3 +19,17 @@ function addCombo(selectID, text, value) {
         combo.add(option); // IE only
     }
 }
+
+function getComboValue(selectID){
+	var combo = document.getElementById(selectID);
+	var str = combo.options[combo.selectedIndex].text;
+	return str;
+}
+
+function clearAllOptionsFromCombo(selectID){
+	var select = document.getElementById(selectID);
+	var length = select.options.length;
+	for (i = 0; i < length; i++) {
+		select.options[i] = null;
+	}
+}

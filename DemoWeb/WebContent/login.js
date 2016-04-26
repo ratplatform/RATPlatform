@@ -8,51 +8,68 @@ function hidePopup(){
    $("#loginform").css({"visibility":"hidden","display":"none"});
 }
 
-function ratLogin(ratURL, login, password, loginResultCallBack, errorCallBack){
+function ratLogin(ratURL, login, password, errorCallBack){
 	var json = {email:login, password:password};
 	console.log("login: " + JSON.stringify(json));
-	callWs(ratURL + "/login", 'POST', JSON.stringify(json), loginResultCallBack, errorCallBack);
+	callWs(ratURL + "/login", 'POST', JSON.stringify(json), loginCallBack, errorCallBack);
 }
 
-function loginResultCallBack(data, textStatus, jqXHR){
+function loginCallBack(data, textStatus, jqXHR){
 	try {
 		loginResult.status = jqXHR.status;
 
 		if(loginResult.status == 200){
 			var json = JSON.parse(data);
+			console.log("loginCallBack: " + data);
 			loginResult.sessionID = json.sessionID;
 			loginResult.userUUID = json.userUUID;
 			loginResult.email = json.email;
 
-			GetAllUserDomainsSet(null, "Domain", loginResult.userUUID);
-			var getAllUserDomains = JSON.stringify(GetAllUserDomains);
-			console.log("loginResultCallBack: " + JSON.stringify(getAllUserDomains));
 			var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
-			callWs(wsUrl, 'POST', getAllUserDomains, getAllUserDomainsResultCallBack, errorCallBack);
-
-			//loginResult.userDomains = json.userDomains;
-			//$("#login").prop("disabled", true);
-			//$("#logout").prop('disabled', false);
-			//console.log("loginResultCallBack: " + data);
-			//populateDomainTree(loginResult.userDomains);
+			var getAllUserDomains = getAllUserDomainsFunc("null", loginResult.userUUID);
+			callWs(wsUrl, 'POST', getAllUserDomains, getAllUserDomainsCallBack, errorCallBack);
 		}
 		else{
-			console.log("loginResultCallBack status Error: " + loginResult.status);
+			console.log("loginCallBack status Error: " + loginResult.status);
 		}
 	}
 	catch (e) {
 		loginResult.status = 500;
-		console.log("loginResultCallBack Error: " + e);
+		console.log("loginCallBack Error: " + e);
 	}
 }
 
-function getAllUserDomainsResultCallBack(data, textStatus, jqXHR){
-	console.log("getAllUserDomainsResultCallBack: " + data);
-	var json = JSON.parse(data);
-	alchemyConfig.dataSource = json;//'test.json';
-	var alchemy = new Alchemy(alchemyConfig);
-	$("#login").prop("disabled", true);
-	$("#logout").prop('disabled', false);
-
-	populateDomainTree(json);
+function getAllUserURLsCallBack(data, textStatus, jqXHR){
+	if(jqXHR.status == 200){
+		var json = JSON.parse(data);
+		//console.log("getAllUserURLsCallBack: " + data);
+		populateComboURLs(json);
+	}
+	else{
+		console.log("getAllUserURLsCallBack status Error: " + jqXHR.status);
+	}
 }
+
+function getAllUserDomainsCallBack(data, textStatus, jqXHR){
+	if(jqXHR.status == 200){
+		var json = JSON.parse(data);
+		//console.log("getAllUserDomainsCallBack: " + data);
+
+		var json = JSON.parse(data);
+		alchemyConfig.dataSource = json;
+		var alchemy = new Alchemy(alchemyConfig);
+		$("#login").prop("disabled", true);
+		$("#logout").prop('disabled', false);
+
+		populateDomainTree(json);
+
+		var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
+		var getAllUserURLs = getUserURLsFunc("null", loginResult.userUUID);
+		//console.log("getAllUserDomainsCallBack getAllUserURLs: " + getAllUserURLs);
+		callWs(wsUrl, 'POST', getAllUserURLs, getAllUserURLsCallBack, errorCallBack);
+	}
+	else{
+		console.log("getAllUserDomainsCallBack status Error: " + jqXHR.status);
+	}
+}
+

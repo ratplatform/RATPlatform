@@ -85,10 +85,15 @@ function onCloseComment(){
 
 function addNewComment(titleText, text, url){
 	var wsUrl = ratURL + "/runcommand?sessionid=" + loginResult.sessionID;
+//addCommentFunc = function(currentDomainUUID, userNodeUUID, jsonCoordinates, ownerNodeUUID, url, vertexContentField, vertexLabelField){
+	var json = addCommentFunc(currentDomainUUID, loginResult.userUUID, "{JSON selectionData}", ownerUUID, url, text, titleText);
+	callWs(wsUrl, 'POST', json, addNewCommentCallBack, errorCallBack);
+/*
 	AddCommentSet(currentDomainUUID, "{JSON selectionData}", titleText, text, url, loginResult.userUUID, ownerUUID);
 
 	console.log("AddComment: " + JSON.stringify(AddComment));
 	callWs(wsUrl, 'POST', JSON.stringify(AddComment), addNewCommentCallBack, errorCallBack);
+*/
 }
 
 function onComboWndUrlChange() {

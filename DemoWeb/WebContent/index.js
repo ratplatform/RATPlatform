@@ -11,7 +11,7 @@ var loginResult = {
 };
 
 var currentDomainUUID;
-var currentURL = '*';
+var currentURL = null;
 var userUUID;
 var currentCommentJsonForGraph;
 var currentDomainJsonForGraph;
@@ -40,7 +40,7 @@ $(document).ready(function() {
 	});
 
 	$("#addComment").click(function(){
-		showCommentWnd('', '', getComboUrl(), currentDomainUUID);
+		showCommentWnd('', '', getComboValue("comboUrl"), currentDomainUUID);
 	});
 
 	$("#saveComment").bind('click', onSaveComment);
@@ -57,41 +57,36 @@ $(document).ready(function() {
 		var login = $('#userID').val();
 		var password = $('#password').val();
 
-		ratLogin(url, login, password, loginResultCallBack, errorCallBack)
+		ratLogin(url, login, password, errorCallBack)
 
 		hidePopup();
 	});
 
 	$("#breadcrumb").bind("change", onChange);
 
-	/*
-	var urls = getUrlCookieValues();
-	addCombo("comboUrl", "", "");
-	if(urls && urls.length > 0 || urls != 'undefined'){
-		for (var i = 0; i < urls.length; i++) {
-			var text = urls[i];
-			var value = urls[i];
-			addCombo("comboUrl", text, value);
-		}
-	}
-	else{
-	*/
-		addCombo("comboUrl", "https://www.google.com", "https://www.google.com");
-		addCombo("comboUrl", "http://www.ft.com", "http://www.ft.com");
-		addCombo("comboUrl", "http://edition.cnn.com/", "http://edition.cnn.com/");
-		addCombo("comboUrl", "https://en.wikipedia.org/", "https://en.wikipedia.org/");
-		addCombo("comboUrl", "https://github.com/", "https://github.com/");
-		addCombo("comboUrl", "http://www.pmi.org/", "http://www.pmi.org/");
-		addCombo("comboUrl", "https://hadoop.apache.org/", "https://hadoop.apache.org/");
-		addCombo("comboUrl", "http://www.cloudera.com/", "http://www.cloudera.com/");
-		addCombo("comboUrl", "http://www.repubblica.it/", "http://www.repubblica.it/");
-	//}
-
 	addCombo("comboGraph", "Domains", "domains");
 	addCombo("comboGraph", "Comments", "comments");
 	$('#comboGraph').bind('change', onComboGraphChange);
 
 });
+
+function populateComboURLs(json){
+	var data = json.nodes;
+	console.log("populateComboURLs json: " + json);
+
+	clearAllOptionsFromCombo("comboUrl");
+
+	for(var i in data){
+		var vertexTypeField = data[i].VertexTypeField;
+		//console.log("populateComboURLs vertexTypeField: " + vertexTypeField);
+
+		if(vertexTypeField == 'URI'){
+			var vertexUUIDField = data[i].VertexUUIDField;
+			var url = data[i].VertexLabelField;
+			addCombo("comboUrl", url);
+		}
+	}
+}
 
 function onComboGraphChange(event) {
 	var json;
@@ -156,29 +151,35 @@ function onUserDomainsTreeClick(event){
 	var node = event.node;
 	document.getElementById("currentDomain").innerHTML = node.name;
 	currentDomainUUID = node.id;
-	console.log("currentDomainUUID: " + currentDomainUUID);
+	//console.log("currentDomainUUID: " + currentDomainUUID);
+	currentURL = getComboValue("comboUrl");//getComboUrl();
+
 	if(currentDomainUUID || currentDomainUUID.length > 0){
 		$("#addNewDomain").prop('disabled', false);
 		enableAddComment();
 
-		GetAllDomainsSet(currentDomainUUID, currentDomainUUID);
+		//GetAllDomainsSet(currentDomainUUID, currentDomainUUID);
 		var wsURL = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
-		var getAllDomainsQuery = JSON.stringify(GetAllDomains);
+		//var getAllDomainsQuery = JSON.stringify(GetAllDomains);
+		var getAllDomainsQuery = getDomainDomainsFunc(currentDomainUUID, currentDomainUUID);
 		//console.log("onUserDomainsTreeClick: " + getAllDomainsQuery);
 
 		callWs(wsURL, 'POST', getAllDomainsQuery, getUserDomainsCallBack, errorCallBack);
 	}
 }
 
+/*
 function getComboUrl() {
 	var value = $("#comboUrl option:selected").val();
 	return value;
 }
-
+*/
 function onComboUrlChange() {
-	var optionSelected = $("option:selected", this);
-	currentURL = this.value;
-	console.log("onComboUrlChange currentURL: " + currentURL);
+	//var optionSelected = $("option:selected", this);
+	//currentURL = this.value;
+	//console.log("onComboUrlChange currentURL: " + currentURL);
+	currentURL = getComboValue("comboUrl");
+
 	removeAllComments();
 	getAllComments(currentURL);
 }
