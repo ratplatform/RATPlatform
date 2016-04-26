@@ -42,14 +42,15 @@ public class BindSubNode implements IInstruction{
 			if(inVertex == null){
 				throw new Exception();
 			}
-			//System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
-			// TODO: aggiungere subComments nelle proprietà del vertexframe
-			Object comments = inVertex.getProperty("subNodes");
-			if(comments == null){
-				inVertex.setProperty("subNodes", 1);
-			}
-			else{
-				int num = Integer.parseInt(comments.toString());
+			
+			Object subNodes = inVertex.getProperty("subNodes");
+			if(subNodes != null){
+//				inVertex.getProperty(RATConstants.VertexTypeField)
+//				System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
+//				System.out.println(inVertex.getProperty(RATConstants.VertexContentField));
+//				System.out.println(inVertex.getProperty(RATConstants.VertexUUIDField));
+				
+				int num = Integer.parseInt(subNodes.toString());
 				inVertex.setProperty("subNodes", ++num);
 			}
 			

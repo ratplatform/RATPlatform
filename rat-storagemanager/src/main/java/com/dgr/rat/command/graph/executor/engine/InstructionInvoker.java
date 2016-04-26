@@ -37,6 +37,7 @@ public class InstructionInvoker implements IInstructionInvoker{
 	private IInstructionBuilder _instructionBuilder = null;
 	private CommandResponse _commandResult = null;
 	private String _currentInstruction = null;
+	private UUID _graphUUID = null;
 	
 	// COMMENT: il _resultStack serve per passare valori tra una instruction e l'altra.
 	// TODO: per ora _resultStack è manuale, ossia devo chiamare pop, tuttavia
@@ -51,6 +52,10 @@ public class InstructionInvoker implements IInstructionInvoker{
 		_storage = storage;
 		_remoteCommandsContainer = instructionsContainer;
 		_instructionBuilder = instructionBuilder;
+	}
+	
+	public UUID getGraphUUID(){
+		return _graphUUID;
 	}
 	
 	public IStorage getStorage(){
@@ -121,6 +126,10 @@ public class InstructionInvoker implements IInstructionInvoker{
 			case systemKey:
 			case StringArray:
 				result = true; //?
+				break;
+				
+			case none:
+				result = true;
 				break;
 				
 			default:
@@ -252,5 +261,17 @@ public class InstructionInvoker implements IInstructionInvoker{
 	@Override
 	public CommandResponse getCommandResponse() {
 		return _commandResult;
+	}
+
+	@Override
+	public String getCurrentInstruction() {
+		// TODO Auto-generated method stub
+		return _currentInstruction;
+	}
+
+	@Override
+	public void setGraphUUID(UUID uuid) {
+		_graphUUID = uuid;
+		
 	}
 }

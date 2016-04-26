@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import org.apache.tools.ant.util.DateUtils;
 
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.rat.tests.TestHelpers;
@@ -46,7 +46,7 @@ public class DumpGraphHelpers {
 		StorageBridge.getInstance().getStorage().openConnection();
 		Graph graph = StorageBridge.getInstance().getStorage().getGraph();
 		String json = RATJsonUtils.serializeGraph(graph);
-		String result = MakeSigmaJSON.fromRatJsonToAlchemy2(json);
+		String result = MakeAlchemyJSON.fromRatJsonToAlchemy2(json);
 //		System.out.println(result);
 		
 		try {

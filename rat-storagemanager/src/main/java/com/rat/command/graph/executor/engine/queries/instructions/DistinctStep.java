@@ -19,7 +19,8 @@ import com.tinkerpop.gremlin.java.GremlinPipeline;
 import com.tinkerpop.pipes.util.PipesFunction;
 
 public class DistinctStep implements IInstruction{
-
+	static private List<Vertex>_list = new ArrayList<Vertex>();
+	
 	public DistinctStep() {
 
 	}
@@ -48,8 +49,9 @@ public class DistinctStep implements IInstruction{
 			}
 			
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
+			_list.clear();
 			pipe.filter(aggregateFunction);
-			System.out.println("DistinctStep: " + pipe.toString());
+			//System.out.println("DistinctStep: " + pipe.toString());
 	
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);
@@ -66,17 +68,15 @@ public class DistinctStep implements IInstruction{
 			throw new Exception(e);
 		}
 	}
-	
-	static private List<Vertex>list = new ArrayList<Vertex>();
+
 	private static final PipesFunction<Vertex, Boolean> aggregateFunction = new PipesFunction<Vertex, Boolean>(){
-		
 		@Override
 		public Boolean compute(Vertex argument) {
-			if(list.contains(argument)){
+			if(_list.contains(argument)){
 				return false;
 			}
 			else{
-				list.add(argument);
+				_list.add(argument);
 				
 				return true;
 			}

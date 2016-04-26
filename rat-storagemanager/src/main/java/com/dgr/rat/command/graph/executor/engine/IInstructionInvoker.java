@@ -24,4 +24,7 @@ public interface IInstructionInvoker {
 	public void addCommandResponse(ICommandNodeVisitable visited, IInstructionResult instructionResult) throws Exception;
 	public String getValueByIndex(int index) throws Exception;
 	public int getNumOfParameters();
+	public String getCurrentInstruction();
+	public UUID getGraphUUID();
+	public void setGraphUUID(UUID uuid);
 }

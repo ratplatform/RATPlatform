@@ -27,7 +27,6 @@ import com.dgr.rat.commons.errors.ErrorType;
 import com.dgr.rat.commons.errors.ResourceException;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
 import com.dgr.rat.json.RATJsonObject;
-import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.rat.storage.provider.StorageBridge;
@@ -195,6 +194,13 @@ public class CommandSink {
 				// TODO: passo il package dei comandi come stringa, ma è pericoloso nel caso in cui 
 				// lo modificassi. Valutare l'ipotesi di metterlo nel file delle proprietà o trovare soluzione alternativa
 				//instructionPackageName = "com.dgr.rat.command.graph.executor.engine.queries.instructions";
+//				if(commandName.equalsIgnoreCase("GetUserURLs")){
+//					instructionPackageName = "com.rat.command.graph.executor.engine.queries.instructions2";
+//				}
+//				else{
+//					instructionPackageName = "com.rat.command.graph.executor.engine.queries.instructions";
+//				}
+			
 				instructionPackageName = "com.rat.command.graph.executor.engine.queries.instructions";
 				invoker = new InstructionInvoker(storage, instructionsContainer, new InstructionBuilder(instructionPackageName));
 				visitableFactory = new QueryProxyNodeFactory();

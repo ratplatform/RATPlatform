@@ -24,7 +24,7 @@ import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
 import com.dgr.rat.json.factory.CommandSink;
 import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
@@ -64,7 +64,7 @@ public class AddRootDomainTest {
 ////			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 //			Response response = this.executeRemoteCommand(json);
 //			String rootDomainUUID = this.getNewRootNodeUUID(response);
-			String json = SystemInitializerTestHelpers.getAllNodesOfType("GetNodeByType.conf", "paramValue", VertexType.RootDomain.toString());
+			String json = SystemInitializerTestHelpers.getUserByEmail("GetNodeByType.conf", "paramValue", VertexType.RootDomain.toString(), ReturnType.string);
 			Response response = this.executeRemoteCommand(json);
 //			json = JSONObjectBuilder.serializeCommandResponse(response);
 			//System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
@@ -78,6 +78,7 @@ public class AddRootDomainTest {
 			String userAdminEmail = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminEmail);
 			
 			json = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", rootDomainUUID.toString(), userAdminName, userAdminPwd, userAdminEmail);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
 			response = this.executeRemoteCommand(json);
 //			json = JSONObjectBuilder.serializeCommandResponse(response);
 //			System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
@@ -144,6 +145,10 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(json);
 		String comment3UUID = this.getNewRootNodeUUID(response);
 		
+		json = SystemInitializerTestHelpers.deleteGraph("DeleteGraph.conf", dgrDomain1_2UUID);
+		response = this.executeRemoteCommand(json);
+		String dgrDomain1_2UUIDDDeleted = this.getNewRootNodeUUID(response);
+		
 		/*Queries*/
 		RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
 		RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
@@ -153,12 +158,53 @@ public class AddRootDomainTest {
 		String alchemyJson = null;
 		String resultFilename = null;
 		String path = null;
+		
+		commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetGraph.conf", "paramValue", dgrDomain1UUID, ReturnType.uuid);
+		response = this.executeRemoteCommand(commandJSON);
+		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
+		resultFilename = dir + "GetGraph.conf" + "QueryResult";
+		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+		TestHelpers.writeGraphToJson(alchemyJson, path);
+		
+		String urlMD5 = "http://www.repubblica.it/";
+		commandJSON = SystemInitializerTestHelpers.getAllUserDomainComments("GetAllUserDomainComments.conf", user1UUID, "urlValue", urlMD5, "domainUUIDValue", dgrDomain1UUID,ReturnType.string);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
+		response = this.executeRemoteCommand(commandJSON);
+		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
+		resultFilename = dir + "GetAllUserDomainComments.conf" + "QueryResult";
+		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+		TestHelpers.writeGraphToJson(alchemyJson, path);
+		
+//		String urlMD5 = Utils.getMD5("http://www.repubblica.it/");
+//		System.out.println("urlMD5: " + urlMD5);
+//		commandJSON = SystemInitializerTestHelpers.getAllUserDomainComments("GetAllUserDomainComments.conf", user1UUID, "paramValue", urlMD5, ReturnType.string);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
+//		response = this.executeRemoteCommand(commandJSON);
+//		json = JSONObjectBuilder.serializeCommandResponse(response);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+//		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+//		resultFilename = dir + "GetUserByEmail.conf" + "QueryResult";
+//		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+//		TestHelpers.writeGraphToJson(alchemyJson, path);
+		
+		commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetRootUserByEmail.conf", "paramValue", "admin@admin.com", ReturnType.string);
+		response = this.executeRemoteCommand(commandJSON);
+		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
+		resultFilename = dir + "GetRootUserByEmail.conf" + "QueryResult";
+		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+		TestHelpers.writeGraphToJson(alchemyJson, path);
 
 		commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetUserByEmail.conf", "paramValue", "dgr1@gmail.com", ReturnType.string);
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetUserByEmail.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
@@ -167,7 +213,7 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetUserURLs.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
@@ -176,7 +222,7 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetAllDomainUsers.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
@@ -185,7 +231,7 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetAllUserComments.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
@@ -194,7 +240,7 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetAllUserDomains.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
@@ -203,7 +249,7 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetCommentComments.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);
@@ -212,7 +258,7 @@ public class AddRootDomainTest {
 		response = this.executeRemoteCommand(commandJSON);
 		json = JSONObjectBuilder.serializeCommandResponse(response);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
-		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		alchemyJson = MakeAlchemyJSON.fromRatJsonToAlchemy(json);
 		resultFilename = dir + "GetDomainDomains.conf" + "QueryResult";
 		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
 		TestHelpers.writeGraphToJson(alchemyJson, path);

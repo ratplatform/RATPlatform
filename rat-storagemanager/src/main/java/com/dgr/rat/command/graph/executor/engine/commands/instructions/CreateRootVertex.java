@@ -38,6 +38,9 @@ public class CreateRootVertex implements IInstruction{
 
 		UUID inMemoryNodeUUID = nodeCaller.getInMemoryNodeUUID();
 		UUID storedNodeUUID = nodeCaller.getStoredNodeUUID();
+		
+		// TODO: così non mi piace: il _graphUUID dovrebbe essere impostato a monte(e comunque per semplificare la query deve essere sempre l'UUID del nodo root del grafo)
+		invoker.setGraphUUID(storedNodeUUID);
 		Vertex vertex = null;
 		
 		// TODO: in realtà è un errore: lo storedNodeUUID viene creato 
@@ -66,7 +69,11 @@ public class CreateRootVertex implements IInstruction{
 					vertex.setProperty(propertyName, propertyValue);	
 				}
 			}
+			
+			vertex.setProperty(RATConstants.GraphUUID, invoker.getGraphUUID());
+			
 			storage.addToIndex("rootverticesindex", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
+			storage.addToIndex("rootverticesindex", vertex, RATConstants.GraphUUID, invoker.getGraphUUID().toString());
 		}
 		else{
 			vertex = storage.getVertex(storedNodeUUID);

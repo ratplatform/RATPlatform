@@ -5,7 +5,7 @@
 
 package com.rat.command.graph.executor.engine.queries.instructions;
 
-import java.util.List;
+import java.util.Iterator;
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
 import com.dgr.rat.command.graph.executor.engine.IInstruction;
@@ -25,8 +25,25 @@ public class HasStep implements IInstruction{
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		try{
-			String paramName = invoker.getNodeParamValue("paramName");
-			String paramValue = invoker.getNodeParamValue("paramValue");
+			//System.out.println(invoker.getCurrentInstruction());
+			//System.out.println(invoker.getNumOfParameters());
+			if(invoker.getNumOfParameters() != 2){
+				throw new Exception();
+			}
+			
+			String paramName = invoker.getValueByIndex(0);
+			String paramValue = invoker.getValueByIndex(1);
+//			System.out.println("paramName " + paramName);
+//			System.out.println("paramValue " + paramValue);
+//			
+//			Iterator<String> it = invoker.getParameterNameIterator();
+//			while(it.hasNext()){
+//				String name = it.next();
+//				System.out.println(name);
+//			}
+//			
+//			String paramName = invoker.getNodeParamValue("paramName");
+//			String paramValue = invoker.getNodeParamValue("paramValue");
 	
 			// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
 			// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.
@@ -51,7 +68,7 @@ public class HasStep implements IInstruction{
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
 			pipe.has(paramName, paramValue);
 			//List<Vertex> results = (List<Vertex>) pipe.toList();
-			System.out.println("HasStep: " + pipe.toString());
+			//System.out.println("HasStep: " + pipe.toString());
 
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);

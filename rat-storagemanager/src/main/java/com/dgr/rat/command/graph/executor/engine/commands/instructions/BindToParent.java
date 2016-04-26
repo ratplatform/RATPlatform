@@ -42,13 +42,27 @@ public class BindToParent implements IInstruction{
 		IStorage storage = invoker.getStorage();
 		
 		UUID vertexUUID = nodeCaller.getStoredNodeUUID();
-		Vertex inVertex = storage.getVertex(UUID.fromString(paramValue));
-		Vertex outVertex = storage.getVertex(vertexUUID);
+		Vertex outVertex = storage.getVertex(UUID.fromString(paramValue));
+		Vertex inVertex = storage.getVertex(vertexUUID);
 		
 		UUID edgeUUID = UUID.randomUUID();
-		Edge edge = inVertex.addEdge(nodeCaller.getCommandName(), outVertex);
+		Edge edge = outVertex.addEdge(nodeCaller.getCommandName(), inVertex);
 		edge.setProperty(RATConstants.EdgeUUIDField, edgeUUID.toString());
 		edge.setProperty(RATConstants.CommandGraphUUID, nodeCaller.getCommandGraphUUID());
+		Object graphUUID = outVertex.getProperty(RATConstants.GraphUUID);
+		edge.setProperty(RATConstants.GraphUUID, graphUUID.toString());
+		System.out.println(graphUUID.toString());
+		
+		/*
+		Object comments = inVertex.getProperty("subNodes");
+		if(comments == null){
+			inVertex.setProperty("subNodes", 1);
+		}
+		else{
+			int num = Integer.parseInt(comments.toString());
+			inVertex.setProperty("subNodes", ++num);
+		}
+		*/
 		
 //		storage.commit();
 		

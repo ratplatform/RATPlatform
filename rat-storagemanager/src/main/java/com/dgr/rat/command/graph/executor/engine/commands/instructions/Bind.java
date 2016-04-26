@@ -46,6 +46,16 @@ public class Bind implements IInstruction{
 			edgeUUID = UUID.randomUUID();
 			Edge edge = outVertex.addEdge(nodeCaller.getCommandName(), inVertex);
 			edge.setProperty(RATConstants.EdgeUUIDField, edgeUUID.toString());
+			
+			Object subNodes = inVertex.getProperty("subNodes");
+			if(subNodes != null){
+				System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
+				System.out.println(inVertex.getProperty(RATConstants.VertexContentField));
+				System.out.println(inVertex.getProperty(RATConstants.VertexUUIDField));
+				
+				int num = Integer.parseInt(subNodes.toString());
+				inVertex.setProperty("subNodes", ++num);
+			}
 		}
 		
 //		storage.commit();

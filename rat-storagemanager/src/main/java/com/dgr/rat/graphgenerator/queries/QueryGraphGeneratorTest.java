@@ -17,7 +17,7 @@ import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.GraphGeneratorHelpers;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 
 import com.dgr.utils.AppProperties;
@@ -95,7 +95,7 @@ public class QueryGraphGeneratorTest {
 		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(commandTemplate), path);
 
 		//Alchemy command template JSON
-		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);
+		String alchemyJSON = MakeAlchemyJSON.fromRatJsonToAlchemy(commandTemplate);
 		GraphGeneratorHelpers.writeAlchemyJson(query.getCommandName() + "Template", queryVersion, alchemyJSON, "queries");
 	}
 	

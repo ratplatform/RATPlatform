@@ -19,6 +19,7 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.utils.Utils;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 import com.tinkerpop.pipes.util.PipesFunction;
@@ -112,16 +113,24 @@ public class InitDomain implements IInstruction{
 			// TODO log
 		}
 		
+		Object graphUUID = newDomainVertex.getProperty(RATConstants.GraphUUID);
+		
 		Vertex newCommandsVertex = storage.addVertex();
 		RATHelpers.duplicateVertex(commandsVertex, true, newCommandsVertex);
+		newCommandsVertex.setProperty(RATConstants.GraphUUID, graphUUID.toString());
 		
+		Edge edge = null;
 		for(Vertex command : commandVertices){
 			Vertex newVertex = storage.addVertex();
 			RATHelpers.duplicateVertex(command, true, newVertex);
-			newCommandsVertex.addEdge(filter, newVertex);
+			
+			newVertex.setProperty(RATConstants.GraphUUID, graphUUID.toString());
+			edge = newCommandsVertex.addEdge(filter, newVertex);
+			edge.setProperty(RATConstants.GraphUUID, graphUUID.toString());
 		}
 		
-		newDomainVertex.addEdge(commandName, newCommandsVertex);
+		edge = newDomainVertex.addEdge(commandName, newCommandsVertex);
+		edge.setProperty(RATConstants.GraphUUID, graphUUID.toString());
 		
 //		storage.commit();
 		

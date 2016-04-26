@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import junit.framework.Assert;
@@ -27,7 +28,9 @@ import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.graphgenerator.JSONObjectBuilder;
 import com.dgr.rat.graphgenerator.queries.QueryHelpers;
 import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
+import com.dgr.rat.json.factory.Response;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.json.utils.VertexType;
@@ -53,8 +56,8 @@ public class InitDB {
 	
 	// COMMENT: QueriesTemplateUUID, CommandsTemplateUUID, RootPlatformDomainName e RootPlatformDomainUUID sono definiti
 	// all'interno del file application.properties
-	private String _queriesTemplateUUID = null;
-	private String _commandsTemplateUUID = null;
+//	private String _queriesTemplateUUID = null;
+//	private String _commandsTemplateUUID = null;
 	private String _rootDomainName = null;
 	private String _rootDomainUUID = null;
 	
@@ -72,8 +75,8 @@ public class InitDB {
 			
 			Assert.assertNotNull(_dbManager);
 			Assert.assertNotNull(_context);
-			Assert.assertNotNull(_queriesTemplateUUID);
-			Assert.assertNotNull(_commandsTemplateUUID);
+//			Assert.assertNotNull(_queriesTemplateUUID);
+//			Assert.assertNotNull(_commandsTemplateUUID);
 			Assert.assertNotNull(_rootDomainName);
 			Assert.assertNotNull(_rootDomainUUID);
 		} 
@@ -307,7 +310,7 @@ public class InitDB {
 	public void addUserAndDomain(String userName, String email, String pwd, List<String> domains) throws Exception{
 		String userUUID = this.addUser(userName, email, pwd);
 		
-		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, email, "GetUserByEmail.conf");
+		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, "userEmail", email, "GetUserByEmail.conf");
 		System.out.println(result.size());
 		String domainUUID = null;
 		
@@ -346,7 +349,7 @@ public class InitDB {
 	    		
 	    		String userUUID = this.addUser(user.name, user.email, user.password);
 	    		
-	    		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, user.email, "GetUserByEmail.conf");
+	    		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, "userEmail", user.email, "GetUserByEmail.conf");
 	    		System.out.println(result.size());
 	    		Assert.assertTrue(result.size() == 1);
 	    		String domainUUID = null;
@@ -381,7 +384,9 @@ public class InitDB {
 		    			this.addComment(comment, domainUUID, userUUID);
 		    		}
 	    		}
-	    		
+				// Tests
+				//getUserURLs("GetUserURLs.conf", userUUID);
+				
 	    		System.out.println(node.toString());
 	    	}
 		//}
@@ -411,15 +416,20 @@ public class InitDB {
 		String userEmail = AppProperties.getInstance().getStringProperty(RATConstants.DBDefaultAdminEmail);
 		String adminUUID = null;
 		
-		List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
+		//List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
+		List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, "userEmail", userEmail, "GetRootUserByEmail.conf");
 		
 		if(result.size() == 0){
 			String commandJSON = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", _rootDomainUUID, userName, userPwd, userEmail);
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 			System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
 			
 			MQMessage message = JSONObjectBuilder.deserializeCommandResponse(jsonResponse);
 			adminUUID = message.getHeaderProperty(RATConstants.VertexUUIDField).toString();
+			
+			result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, "userEmail", userEmail, "GetRootUserByEmail.conf");
+			Assert.assertTrue(result.size() == 1);
 		}
 		else if(result.size() == 1){
 			Vertex vertex = result.get(0);
@@ -433,9 +443,6 @@ public class InitDB {
 			throw new Exception();
 			// TODO log
 		}
-		
-		result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
-		Assert.assertTrue(result.size() == 1);
 		
 		_dbManager.addAdmin(userEmail, userName, userPwd, _rootDomainName, adminUUID);
 		_dbManager.addAdminPermissions(adminUUID, _rootDomainUUID, _rootDomainName);
@@ -508,7 +515,7 @@ public class InitDB {
 	}
 	
 	private List<Vertex> getDomain(String userUUID, String domainName) throws Exception{
-		String commandJSON  = SystemInitializerTestHelpers.createGetUserDomainByName("GetUserDomainByName.conf", userUUID, domainName, VertexType.Domain);
+		String commandJSON  = SystemInitializerTestHelpers.getUserDomainByName("GetUserDomainByName.conf", userUUID, domainName, VertexType.Domain);
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
 		
@@ -523,7 +530,7 @@ public class InitDB {
 	
 	private String addUser(String userName, String userEmail, String userPWD) throws Exception{
 		String userUUID = null;
-		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, userEmail, "GetUserByEmail.conf");
+		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, "userEmail", userEmail, "GetUserByEmail.conf");
 		
 		if(result.size() == 0){
 			String commandJSON = SystemInitializerTestHelpers.createNewUser("AddNewUser.conf", _rootDomainUUID, userName, userPWD, userEmail);
@@ -551,8 +558,9 @@ public class InitDB {
 		return userUUID;
 	}
 	
-	private List<Vertex> getUser(VertexType userType, String domainUUID, String userEmail, String fileName) throws Exception{
-		String commandJSON = SystemInitializerTestHelpers.getUserByEmail(fileName, "userEmail", userEmail, ReturnType.string);
+	private List<Vertex> getUser(VertexType userType, String domainUUID, String paramName, String paramValue, String fileName) throws Exception{
+		//commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetUserByEmail.conf", "paramValue", "dgr1@gmail.com", ReturnType.string);
+		String commandJSON = SystemInitializerTestHelpers.getUserByEmail(fileName, "paramValue", paramValue, ReturnType.string);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
@@ -561,9 +569,66 @@ public class InitDB {
 		System.out.println("countAllNodes: " + ratJSONMessage.countAllNodes());
 		System.out.println("countNodes: " + ratJSONMessage.countNodes());
 		
-		List<Vertex> result = ratJSONMessage.getNode(userType, "userEmail", userEmail);
+		List<Vertex> result = ratJSONMessage.getNode(userType, paramName, paramValue);
 		
 		return result;
+	}
+	
+	private void getUserURLs(String fileName, String userUUID) throws Exception{
+		/*
+		commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetUserURLs.conf", "rootNodeUUID", user1UUID, ReturnType.uuid);
+		response = this.executeRemoteCommand(commandJSON);
+		json = JSONObjectBuilder.serializeCommandResponse(response);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(json));
+		alchemyJson = MakeSigmaJSON.fromRatJsonToAlchemy(json);
+		resultFilename = dir + "GetUserURLs.conf" + "QueryResult";
+		path = TestHelpers.writeGraphToHTML(resultFilename, "queryResults");
+		TestHelpers.writeGraphToJson(alchemyJson, path);
+		 */
+		//commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetUserByEmail.conf", "paramValue", "dgr1@gmail.com", ReturnType.string);
+		String commandJSON = SystemInitializerTestHelpers.getUserByEmail(fileName, "rootNodeUUID", userUUID, ReturnType.uuid);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
+		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+		
+		RATJSONMessage ratJSONMessage = RATJSONMessage.deserialize(jsonResponse);
+		System.out.println("countAllNodes: " + ratJSONMessage.countAllNodes());
+		System.out.println("countNodes: " + ratJSONMessage.countNodes());
+		
+		//List<Vertex> result = ratJSONMessage.getNode(userType, paramName, paramValue);
+		
+		//return result;
+	}
+	
+	private String getDomainByName(String fileName, String domainName) throws Exception{
+//		String commandJSON = SystemInitializerTestHelpers.getUserByEmail(fileName, RATConstants.VertexContentField, domainName, ReturnType.string);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
+//		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
+//		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+//		
+//		RATJSONMessage ratJSONMessage = RATJSONMessage.deserialize(jsonResponse);
+//		System.out.println("countAllNodes: " + ratJSONMessage.countAllNodes());
+//		System.out.println("countNodes: " + ratJSONMessage.countNodes());
+//		
+//		List<Vertex> result = ratJSONMessage.getNode(VertexType.RootDomain, RATConstants.VertexContentField, domainName);
+//		
+//		return result;
+		
+		String json = SystemInitializerTestHelpers.getUserByEmail("GetNodeByType.conf", "paramValue", VertexType.RootDomain.toString(), ReturnType.string);
+		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, json);
+		RATJSONMessage ratJSONMessage = RATJSONMessage.deserialize(jsonResponse);
+		List<Vertex> result = ratJSONMessage.getNode(VertexType.RootDomain, RATConstants.VertexContentField, domainName);
+		if(result.size() != 1){
+			throw new Exception();
+		}
+		
+		Vertex v = result.get(0);
+		String strUUID = v.getProperty(RATConstants.VertexUUIDField);
+		if(!Utils.isUUID(strUUID)){
+			throw new Exception();
+		}
+		
+		return strUUID;
 	}
 	
 	public void init() throws Exception{
@@ -572,10 +637,11 @@ public class InitDB {
 			_context = new FileSystemXmlApplicationContext(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "spring-producer-unitTest.xml");
 			RATSessionManager.init();
 			
-			_queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
-			_commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
+//			_queriesTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.QueriesTemplateUUID);
+//			_commandsTemplateUUID = AppProperties.getInstance().getStringProperty(RATConstants.CommandsTemplateUUID);
 			_rootDomainName = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainName);
-			_rootDomainUUID = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainUUID);
+//			_rootDomainUUID = AppProperties.getInstance().getStringProperty(RATConstants.RootPlatformDomainUUID);
+			_rootDomainUUID = this.getDomainByName("GetDomainByName.conf", _rootDomainName);
 			
 			_dbManager = new DBManager(_context);
 			_dbManager.openDB();

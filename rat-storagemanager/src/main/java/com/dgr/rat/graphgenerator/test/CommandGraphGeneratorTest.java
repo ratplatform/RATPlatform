@@ -43,7 +43,7 @@ import com.dgr.rat.graphgenerator.queries.BuildQueryJavaScript;
 import com.dgr.rat.graphgenerator.queries.QueryGenerator;
 import com.dgr.rat.json.RATJsonObject;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.utils.AppProperties;
@@ -266,7 +266,7 @@ public class CommandGraphGeneratorTest {
 		GraphGeneratorHelpers.writeText(RATJsonUtils.jsonPrettyPrinter(commandTemplate), path);
 
 		//Alchemy command template JSON
-		String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(commandTemplate);
+		String alchemyJSON = MakeAlchemyJSON.fromRatJsonToAlchemy(commandTemplate);
 		GraphGeneratorHelpers.writeAlchemyJson(command.get_commandName() + "Template", command.get_commandVersion(), alchemyJSON, destinationFolder);
 
 		this.saveForTest(commandTemplate, remoteRequestJson);

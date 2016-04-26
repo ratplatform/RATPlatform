@@ -23,7 +23,7 @@ import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.util.PipesFunction;
 
 public class QueryHelpers {
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	public static Graph getResultGraph(Vertex rootVertex, final List<Vertex> results) throws Exception{
 		Graph graph = new TinkerGraph();
 		// COMMENT: recupero la rootUUID passata tra i comandi; essa rappresenta il nodo al quale sonop collegati tutti i nodi 

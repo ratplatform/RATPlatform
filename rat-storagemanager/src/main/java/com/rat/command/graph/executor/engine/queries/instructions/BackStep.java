@@ -5,7 +5,6 @@
 
 package com.rat.command.graph.executor.engine.queries.instructions;
 
-import java.util.List;
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
 import com.dgr.rat.command.graph.executor.engine.IInstruction;
@@ -55,7 +54,7 @@ public class BackStep implements IInstruction{
 			// TODO: da convertire in una label (GremlinPIpeline.back(integer) è deprecato)
 //			List<Vertex> results = (List<Vertex>) pipe.toList();
 			pipe.back(Integer.parseInt(backSteps));
-			System.out.println("BackStep: " + pipe.toString());
+			//System.out.println("BackStep: " + pipe.toString());
 	
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);

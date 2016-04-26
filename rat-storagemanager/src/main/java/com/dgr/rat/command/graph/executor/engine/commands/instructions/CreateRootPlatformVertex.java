@@ -34,6 +34,7 @@ public class CreateRootPlatformVertex implements IInstruction{
 		UUID inMemoryNodeUUID = nodeCaller.getInMemoryNodeUUID();
 		nodeCaller.setStoredNodeUUID(inMemoryNodeUUID);
 		Vertex vertex = null;
+		invoker.setGraphUUID(inMemoryNodeUUID);
 		
 		// COMMENT: qui è l'unico posto dove vertexExists ha senso: l'UUID del nodo root della piattaforma è sempre uguale  
 		if (!storage.vertexExists(inMemoryNodeUUID)){
@@ -58,6 +59,7 @@ public class CreateRootPlatformVertex implements IInstruction{
 				}
 			}
 			
+			vertex.setProperty(RATConstants.GraphUUID, invoker.getGraphUUID());
 			storage.addToIndex("rootverticesindex", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 		}
 		else{

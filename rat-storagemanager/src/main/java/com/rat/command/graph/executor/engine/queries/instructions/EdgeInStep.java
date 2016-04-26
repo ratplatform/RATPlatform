@@ -51,7 +51,7 @@ public class EdgeInStep implements IInstruction{
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
 			pipe.in(edgeLabel);
 			//List<Vertex> results = (List<Vertex>) pipe.toList();
-			System.out.println("EdgeInStep: " + pipe.toString());
+			//System.out.println("EdgeInStep: " + pipe.toString());
 	
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);

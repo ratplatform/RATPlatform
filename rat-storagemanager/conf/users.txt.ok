@@ -8,18 +8,18 @@
 		],
 		"comments": [{
 			"domain": "domain dgr",
-			"VertexLabelField": "a",
-			"VertexContentField": "aaaaa aaaaaa aaaa",
-			"url": "http://www.ilfattoquotidiano.it/2016/01/17/acqua-pubblica-la-resistenza-del-paese-piu-povero-contro-la-regione-toscana-e-nostra-non-la-daremo-alla-spa/2363179/"
+			"VertexLabelField": "commento 1",
+			"VertexContentField": "questo è il commento 1 fatto da dgr al fatto quotidiano",
+			"url": "http://www.ilfattoquotidiano.it/"
 		}, {
 			"domain": "domain dgr",
-			"VertexLabelField": "b",
-			"VertexContentField": "bbbbb bbbb bbbb bbbb bbbb bbb",
-			"url": "http://www.ilfattoquotidiano.it/2016/01/17/acqua-pubblica-la-resistenza-del-paese-piu-povero-contro-la-regione-toscana-e-nostra-non-la-daremo-alla-spa/2363179/"
+			"VertexLabelField": "commento 2",
+			"VertexContentField": "questo è il commento 2 fatto da dgr al fatto quotidiano",
+			"url": "http://www.ilfattoquotidiano.it/"
 		},{
 			"domain": "domain dgr",
-			"VertexLabelField": "commento a repubblica da dgr",
-			"VertexContentField": "commento a repubblica da dgr xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+			"VertexLabelField": "commento 1 a repubblica",
+			"VertexContentField": "questo è il commento 1  fatto da dgr a repubblica",
 			"url": "http://www.repubblica.it.it/"
 		}]
 	},
@@ -32,13 +32,13 @@
 		],
 		"comments": [{
 			"domain": "domain dgr1",
-			"VertexLabelField": "commento al ilfattoquotidiano da dgr1",
-			"VertexContentField": "commento al ilfattoquotidiano da dgr1 sasasasasasas",
+			"VertexLabelField": "commento 1 da dgr1",
+			"VertexContentField": "commento al ilfattoquotidiano da dgr1 al fatto quotidiano",
 			"url": "http://www.ilfattoquotidiano.it/"
 		},{
 			"domain": "domain dgr1",
-			"VertexLabelField": "commento a repubblica da dgr",
-			"VertexContentField": "commento a repubblica da dgr1 sasasasasasas",
+			"VertexLabelField": "commento 1 a repubblica da dgr1",
+			"VertexContentField": "commento 1 fatto da dgr1 a la repubblica",
 			"url": "http://www.repubblica.it.it/"
 		}]
 	}

@@ -33,7 +33,8 @@ public class CreateWebDocument implements IInstruction{
 		UUID storedNodeUUID = nodeCaller.getStoredNodeUUID();
 		
 		Vertex vertex = null;
-		String urlMD5 = Utils.getMD5(paramValue);
+//		String urlMD5 = Utils.getMD5(paramValue);
+		String urlMD5 = paramValue;
 		if (!storage.vertexExists("webDocument", paramName, urlMD5)){
 			vertex = storage.addVertex(storedNodeUUID);
 			storage.addToIndex("webDocument", vertex, paramName, urlMD5);

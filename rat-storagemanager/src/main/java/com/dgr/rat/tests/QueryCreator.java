@@ -15,12 +15,10 @@ import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.storage.provider.IStorage;
-import com.dgr.rat.storage.provider.StorageBridge;
 import com.dgr.utils.Utils;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
-import com.tinkerpop.pipes.PipeFunction;
 import com.tinkerpop.pipes.util.PipesFunction;
 
 public class QueryCreator {
@@ -99,22 +97,22 @@ public class QueryCreator {
 		System.out.println(list.size());
 	}
 	
-	private String getGraphCommandUUIDFromEdge(IRATNodeFrame from, IRATNodeFrame to) throws Exception{
-		GremlinPipeline<Vertex, Edge> pipe = new GremlinPipeline<Vertex, Edge>(from.asVertex());
-		FilterFunction f = new FilterFunction(to.asVertex());
-		Edge edge = pipe.inE().outV().filter(f).outE().next();
-		String edgeUUID = edge.getProperty(RATConstants.EdgeUUIDField);
-		if(!Utils.isUUID(edgeUUID)){
-			throw new Exception();
-			// TODO log
-		}
-		
-		System.out.println(edge);
-		Set<String> properties = edge.getPropertyKeys();
-		for(String property : properties){
-			System.out.println(property + ": " + edge.getProperty(property));
-		}
-		
-		return edgeUUID;
-	}
+//	private String getGraphCommandUUIDFromEdge(IRATNodeFrame from, IRATNodeFrame to) throws Exception{
+//		GremlinPipeline<Vertex, Edge> pipe = new GremlinPipeline<Vertex, Edge>(from.asVertex());
+//		FilterFunction f = new FilterFunction(to.asVertex());
+//		Edge edge = pipe.inE().outV().filter(f).outE().next();
+//		String edgeUUID = edge.getProperty(RATConstants.EdgeUUIDField);
+//		if(!Utils.isUUID(edgeUUID)){
+//			throw new Exception();
+//			// TODO log
+//		}
+//		
+//		System.out.println(edge);
+//		Set<String> properties = edge.getPropertyKeys();
+//		for(String property : properties){
+//			System.out.println(property + ": " + edge.getProperty(property));
+//		}
+//		
+//		return edgeUUID;
+//	}
 }

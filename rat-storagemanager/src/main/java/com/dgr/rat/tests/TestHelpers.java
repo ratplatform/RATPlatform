@@ -18,7 +18,7 @@ import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.toolkit.RATHelpers;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.main.SystemCommandsInitializer;
 import com.dgr.rat.storage.provider.StorageBridge;
@@ -111,7 +111,7 @@ public class TestHelpers {
 		StorageBridge.getInstance().getStorage().openConnection();
 		Graph graph = StorageBridge.getInstance().getStorage().getGraph();
 		String json = RATJsonUtils.serializeGraph(graph);
-		String result = MakeSigmaJSON.fromRatJsonToAlchemy2(json);
+		String result = MakeAlchemyJSON.fromRatJsonToAlchemy2(json);
 //		System.out.println(result);
 		
 		try {

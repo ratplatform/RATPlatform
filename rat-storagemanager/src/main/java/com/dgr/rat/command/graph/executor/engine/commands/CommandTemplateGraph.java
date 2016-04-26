@@ -50,7 +50,7 @@ public class CommandTemplateGraph extends TinkerGraph implements ICommandGraphDa
 	
 	protected Vertex getVertex(String label, Object value) {
 		Iterable<Vertex> it = this.getVertices(label, value);
-		System.out.println("label " + label + "; value" + value.toString());
+		//System.out.println("label " + label + "; value" + value.toString());
 		return it.iterator().next();
 //		GremlinPipeline<Vertex, Vertex> queryPipe = new GremlinPipeline<Vertex, Vertex>(this.getVertices());
 //		return (Vertex) queryPipe.has(RATConstants.VertexIsRootField, true).next();

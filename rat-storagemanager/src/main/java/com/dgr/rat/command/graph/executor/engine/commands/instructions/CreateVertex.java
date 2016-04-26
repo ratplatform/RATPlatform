@@ -29,6 +29,8 @@ public class CreateVertex implements IInstruction{
 	@Override
 	public IInstructionResult execute(final IInstructionInvoker invoker, final ICommandNodeVisitable nodeCaller) throws Exception{
 		// COMMENT: Siccome in questo caso il parametro è uno soltanto, non utilizzo la key della mappa 
+		// TODO: le operazioni di creazione del nuovo vertice non vanno fatte qui, ma a monte; qui devo compiere solo operazioni specifiche
+		// del tipo di vertice
 		Iterator<String>it = invoker.getParameterNameIterator();
 		String paramName = it.next();
 		String paramValue = invoker.getNodeParamValue(paramName);
@@ -59,6 +61,8 @@ public class CreateVertex implements IInstruction{
 					vertex.setProperty(propertyName, propertyValue);	
 				}
 			}
+			
+			vertex.setProperty(RATConstants.GraphUUID, invoker.getGraphUUID());
 		}
 		else{
 			vertex = storage.getVertex(storedNodeUUID);
