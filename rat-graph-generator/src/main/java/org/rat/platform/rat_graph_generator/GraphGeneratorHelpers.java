@@ -94,6 +94,9 @@ public class GraphGeneratorHelpers {
 	
 	public static void writeJavaScript(String name, String javaScript) throws Exception{
 		String destinationFolder = AppProperties.getInstance().getStringProperty("javascript.destination.folder");
+		if(!FileUtils.fileExists(destinationFolder)){
+			FileUtils.createDir(destinationFolder);
+		}
 		FileUtils.write(destinationFolder + Constants.PathSeparator + name + ".js", javaScript, false);
 	}
 	

@@ -34,9 +34,12 @@ public class BuildQueryJavaScript {
 		while(it.hasNext()){
 			Entry<String, JsonNode> entry = it.next();
 			String key = entry.getKey();
-			String value = entry.getValue().asText();
-			result += "\t\t\t" + key + ":" + "\"" + value + "\",\n";
-			if(value.equalsIgnoreCase(RATConstants.VertexContentUndefined)){
+			//String value = entry.getValue().asText();
+			//result += "\t\t\t" + key + ":" + "\"" + value + "\",\n";
+			Object value = entry.getValue();
+			result += "\t\t\t" + key + ":" + value + ",\n";
+			//System.out.println(entry.getValue().asText());
+			if(entry.getValue().asText().equalsIgnoreCase(RATConstants.VertexContentUndefined)){
 				functionsMap.put(field, key);
 			}
 		}

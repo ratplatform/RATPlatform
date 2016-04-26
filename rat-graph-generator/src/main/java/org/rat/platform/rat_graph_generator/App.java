@@ -56,17 +56,17 @@ public class App {
 			graph.set_commandType(JSONType.Query);
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
-//			graph = App.getAllNodesOfType("GetAllNodesOfType", "GetNodeByNodeField", "0.1");
-//			graph.set_commandType(JSONType.SystemCommands);
-//			App.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			graph = queries.getRootUserByEmail("GetRootUserByEmail", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
 			graph = queries.getDomainByName("GetDomainByName", "0.1");
 			graph.set_commandType(JSONType.Query);
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
-//			graph = App.getAllDomains("GetAllDomains", "GetNodeByNodeField", "0.1");
-//			graph.set_commandType(JSONType.SystemCommands);
-//			App.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			graph = queries.getAllUserDomainComments("GetAllUserDomainComments", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
 			graph = queries.getAllDomainUsers("GetAllDomainUsers", "0.1");
 			graph.set_commandType(JSONType.Query);
@@ -93,6 +93,14 @@ public class App {
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
 			graph = queries.getNodesByType("GetNodeByType", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = queries.getUserDomainByName("GetUserDomainByName", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = queries.getGraph("GetGraph", "0.1");
 			graph.set_commandType(JSONType.Query);
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
@@ -138,6 +146,10 @@ public class App {
 			_commands.put("AddComment", graph.getGraph());
 			
 			graph = command.bindFromUserToDomain("BindFromUserToDomain", "0.1");
+			graph.set_commandType(JSONType.SystemCommands);
+			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = command.deleteGraph("DeleteGraph", "0.1");
 			graph.set_commandType(JSONType.SystemCommands);
 			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
 			

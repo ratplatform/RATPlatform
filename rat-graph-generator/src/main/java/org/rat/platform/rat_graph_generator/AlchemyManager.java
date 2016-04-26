@@ -3,7 +3,7 @@ package org.rat.platform.rat_graph_generator;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.tools.ant.util.DateUtils;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.utils.AppProperties;
 import com.dgr.utils.FileUtils;
@@ -41,7 +41,7 @@ public class AlchemyManager {
 	public void createCommands() throws Exception{
 		String table = "<table>\n";
 		for(CommandTemplate template : _commandTemplates){
-			String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(template.commandTemplate);
+			String alchemyJSON = MakeAlchemyJSON.fromRatJsonToAlchemy(template.commandTemplate);
 			this.writeAlchemyJson(template.commandName, template.commandVersion, alchemyJSON, _alchemyCommandsFolder);
 			String date = DateUtils.getDateForHeader();
 			table += "<tr><td><a target='_blank' href='" + template.commandName + ".html'>" + template.commandName + "</a></td><td>" + date + "</td></tr>";
@@ -57,7 +57,7 @@ public class AlchemyManager {
 	public void createQueries() throws Exception{
 		String table = "<table>\n";
 		for(CommandTemplate template : _commandTemplates){
-			String alchemyJSON = MakeSigmaJSON.fromRatJsonToAlchemy(template.commandTemplate);
+			String alchemyJSON = MakeAlchemyJSON.fromRatJsonToAlchemy(template.commandTemplate);
 			this.writeAlchemyJson(template.commandName, template.commandVersion, alchemyJSON, _alchemyQueriesFolder);
 			String date = DateUtils.getDateForHeader();
 			table += "<tr><td><a target='_blank' href='" + template.commandName + ".html'>" + template.commandName + "</a></td><td>" + date + "</td></tr>";

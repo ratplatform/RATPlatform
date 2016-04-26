@@ -19,6 +19,7 @@ public abstract class CommandNode implements IAcceptor{
 	private CommandNode _parent = null;
 	
 	public CommandNode() {
+		this.addCommandNodeProperty(RATConstants.GraphUUID, false);
 		this.setIsRoot(false);
 	}
 	
@@ -134,6 +135,14 @@ public abstract class CommandNode implements IAcceptor{
 	
 	public void addInstruction(final String instructionName) throws Exception{
 		this.addInstruction(instructionName, "dummy", "dummy", ReturnType.string);
+	}
+	
+//	public void addInstruction(final String instructionName) throws Exception{
+//		this.addInstruction(instructionName, null, null, ReturnType.none);
+//	}
+	
+	public void addInstruction(final String instructionName, final String paramName) throws Exception{
+		this.addInstruction(instructionName, paramName, "dummy", ReturnType.none);
 	}
 	
 	public void addInstruction(final String instructionName, final String paramName, final String paramValue, final ReturnType returnType) throws Exception{
