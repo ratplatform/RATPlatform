@@ -5,16 +5,14 @@
 
 package com.dgr.rat.webservices;
 
-import java.nio.file.FileSystems;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -33,19 +31,12 @@ import org.apache.shiro.subject.Subject;
 import com.dgr.rat.auth.LoginData;
 import com.dgr.rat.auth.db.IdentityManager;
 import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.commons.utils.RATUtils;
-import com.dgr.rat.json.RATJsonObject;
-import com.dgr.rat.json.command.parameters.SystemInitializerTestHelpers;
-import com.dgr.rat.json.utils.RATJsonUtils;
-import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.messages.IMessageSender;
 import com.dgr.rat.messages.RATMessageSender;
 import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.rat.session.manager.SessionData;
-import com.dgr.utils.FileUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("/rat")
@@ -66,6 +57,38 @@ public class RATWebServices {
 	
 	public RATWebServices() {
 		System.out.println("RATWebServices");
+	}
+	
+	@POST @Path("/v0.1/logout")
+	@Asynchronous
+	public void logout(@QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse){
+		int responseStatus = 200;
+		Response response = null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
+				responseStatus = 401;
+				throw new Exception("sessionID is empty");
+			}
+			
+			if(!RATSessionManager.getInstance().sessionIDExists(sessionID)){
+				responseStatus = 401;
+				throw new Exception("sessionID does not exist");
+			}
+			
+			if(!RATSessionManager.getInstance().killSession(sessionID)){
+				responseStatus = 401;
+				throw new Exception("sessionID does not exist");
+			}
+			
+		}
+		catch (Exception e) {
+			
+		}
+		
+    	//response = Response.status(responseStatus).entity(json).build();
+    	asyncResponse.resume(result);
 	}
 	
 	// TODO: @Produces(MediaType.APPLICATION_JSON)
@@ -135,37 +158,6 @@ public class RATWebServices {
         }
         
 		try {
-			// TODO: per inviare il menu dei cmmmenti in modo dinamico: da vedere o sistemare meglio
-			//List <Object> menu = this.readMenu();
-			//result.put("plugInContextMenu", menu);
-			
-			/*
-			RATJsonObject query = RATJsonUtils.getRATJsonObject(authenticationData.getQuery());
-			query.getSettings();
-			RATMessageSender ratMessageSender = new RATMessageSender(); 
-			//TODO: chiaramente ora faccio così e prendo GetRootDomain da filesystem, ma devo introdurre 
-			// le categorie dei systemCommands e querycommands, separata dagli usercommands, che prendono i comandi direttamente dal dominio e contenuti nel db
-			// I syemCOmmand e le querycommands non sono a disposizione degli utenti. Il WSServer potrebbe chiedere i comandi allo StorageServer alla prima connessione. Lo StorageServer 
-			// li serializza, quindi li invia al WSServer che li deserializza
-			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + RATConstants.PropertyFileName);
-			RATUtils.initProperties(RATConstants.ConfigurationFolder + FileSystems.getDefault().getSeparator() + "unittest.properties");
-			String commandJSON = SystemInitializerTestHelpers.createGetRootDomain("GetRootDomain.conf", "nodeType", VertexType.RootDomain.toString());
-			
-			String userUUID = result.get("userUUID").toString();
-			commandJSON = SystemInitializerTestHelpers.createGetUsersAndDomains("GetAllUserDomains.conf", userUUID, VertexType.Domain);
-			System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
-//			JsonHeader header = RATJsonUtils.getJsonHeader(StatusCode.Unknown, MessageType.Request);
-//			header.setCommandType(JSONType.SystemQuery);
-//			header.setCommandName("GetRootDomain");
-//			header.setCommandVersion("0.1");
-//			Map<String, Object>command = new HashMap<String, Object>();
-//			command.put("header", header.getHeaderProperties());
-//			String output = mapper.writeValueAsString(command);
-//			System.out.println(RATJsonUtils.jsonPrettyPrinter(output));
-			
-			String rootJson = ratMessageSender.sendMessage(_context, sessionID, commandJSON);
-			System.out.println(RATJsonUtils.jsonPrettyPrinter(rootJson));
-			*/
 			json = mapper.writeValueAsString(result);
 			System.out.println(json);
 		} 

@@ -3,7 +3,7 @@ CREATE DATABASE ratwsserver;
 -- CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
 GRANT ALL PRIVILEGES ON ratwsserver.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;
--- mysql -u root ratwsserver < /home/dgr/dev/RATPlatform/RATWSServer/bin/ratwsserver.sql
+-- mysql -u root ratwsserver < /home/dgr/dev/RATPlatform/rat-wsserver/bin/ratwsserver.sql
 USE ratwsserver;
 -- ------------------------------------------
 SET FOREIGN_KEY_CHECKS = 0; 

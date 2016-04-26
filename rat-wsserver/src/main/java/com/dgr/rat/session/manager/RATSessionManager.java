@@ -178,11 +178,32 @@ public class RATSessionManager {
 	public synchronized boolean sessionIDExists(String sessionID){
 		boolean result = false;
 		//_sharedMap non viene controllata perché potrebbe non avere ancora l'oggetto
-		if(_sessionDataMap.containsKey(sessionID) && _sessionDataMap.containsKey(sessionID)){
+		if(_sessionDataMap.containsKey(sessionID)){
 			result = true;
 		}
 		else{
 			// Siccome è fallito il controllo di cui sopra
+			// ripulisco tutte le mappe (una di esse potrebbe contenere il sessionID)
+			if(_sessionDataMap.containsKey(sessionID)){
+				_sessionDataMap.remove(sessionID);
+			}
+			if(_queue.contains(sessionID)){
+				_queue.remove(sessionID);
+			}
+			if(_sharedMap.containsKey(sessionID)){
+				_sharedMap.remove(sessionID);
+			}
+		}
+		
+		return result;
+	}
+	
+	public synchronized boolean killSession(String sessionID){
+		boolean result = false;
+		//_sharedMap non viene controllata perché potrebbe non avere ancora l'oggetto
+		if(_sessionDataMap.containsKey(sessionID)){
+			result = true;
+			
 			// ripulisco tutte le mappe (una di esse potrebbe contenere il sessionID)
 			if(_sessionDataMap.containsKey(sessionID)){
 				_sessionDataMap.remove(sessionID);

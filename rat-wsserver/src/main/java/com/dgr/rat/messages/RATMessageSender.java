@@ -19,7 +19,7 @@ import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.StatusCode;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
-import com.dgr.rat.json.utils.MakeSigmaJSON;
+import com.dgr.rat.json.utils.MakeAlchemyJSON;
 import com.dgr.rat.json.KeepAliveHelpers;
 import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.session.manager.RATSessionManager;
@@ -72,7 +72,7 @@ public class RATMessageSender implements IMessageSender{
 				result = task.get();
 				// TODO: sistema di saltare la trasformazione di json davvero brutale: da rivedere
 				if(result.contains("vertices")){
-					result = MakeSigmaJSON.fromRatJsonToAlchemy(result);
+					result = MakeAlchemyJSON.fromRatJsonToAlchemy(result);
 				}
 				System.out.println("result = " + result);
 			}
@@ -142,7 +142,7 @@ public class RATMessageSender implements IMessageSender{
 	        			result = task.get();
 	        			// TODO: sistema di saltare la trasformazione di json davvero brutale: da rivedere
 	        			if(result.contains("vertices")){
-	        				result = MakeSigmaJSON.fromRatJsonToAlchemy(result);
+	        				result = MakeAlchemyJSON.fromRatJsonToAlchemy(result);
 	        			}
 	        			System.out.println("result = " + result);
 	        		}
