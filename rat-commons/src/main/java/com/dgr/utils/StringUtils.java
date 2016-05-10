@@ -18,7 +18,7 @@ public class StringUtils {
       Long.parseLong(i);
       return true;
     }
-    catch(NumberFormatException nfe)
+    catch(Exception nfe)
     {
       return false;
     }
@@ -38,7 +38,19 @@ public class StringUtils {
 			Integer.parseInt(i);
 			return true;
 		}
-		catch(NumberFormatException nfe)
+		catch(Exception nfe)
+		{
+			return false;
+		}
+	}
+	
+	public static boolean isParsableToBool(String i){
+		try
+		{
+			Boolean.parseBoolean(i);
+			return true;
+		}
+		catch(Exception nfe)
 		{
 			return false;
 		}

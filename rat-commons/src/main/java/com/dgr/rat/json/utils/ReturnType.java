@@ -11,6 +11,7 @@ public enum ReturnType {
 	string("string"),
 	integer("integer"),
 	uuid("uuid"),
+	bool("bool"),
 	systemKey("systemKey"),
 	url("url"),
 	StringArray("stringArray");

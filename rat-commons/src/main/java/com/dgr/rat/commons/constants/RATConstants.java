@@ -19,6 +19,7 @@ public class RATConstants {
 	public static final String GraphCommandOwner = "GraphCommandOwner";
 	public static final String IsDeleted = "isDeleted";
 	public static final String GraphUUID = "GraphUUID";
+	public static final String SubNodes = "subNodes";
 	
 	// Files & folders
 	public static final String ConfigurationFolder = "conf";
@@ -83,12 +84,12 @@ public class RATConstants {
 	
 	// Vertex di tipo Parameters
 //	public static final String VertexContentField = "VertexContentField"; // Contiene il contenuto del vertice, che può essere di qualunque tipo, ad es. il valore di un vertex di tipo parametro
-	public static final String VertexContentTypeField = "VertexContentTypeField"; // Tipo contenuto da VertexContentField: VertexContentTypeIntValue, VertexContentTypeStringValue, etc.
-	public static final String VertexContentTypeStringValue = "string";
-	public static final String VertexContentTypeIntValue = "integer";
+	//public static final String VertexContentTypeField = "VertexContentTypeField"; // Tipo contenuto da VertexContentField: VertexContentTypeIntValue, VertexContentTypeStringValue, etc.
+	//public static final String VertexContentTypeStringValue = "string";
+	//public static final String VertexContentTypeIntValue = "integer";
 	
 	// Vertex
-	public static final String ObjectID = "ObjectID";
+	//public static final String ObjectID = "ObjectID";
 	
 	// Edges
 	public static final String EdgeInstructionParameter = "EdgeInstructionsParameter";
@@ -111,13 +112,13 @@ public class RATConstants {
 	// VertexType
 	// Il primo è il field che deve assumere uno dei valori sottostanti
 	public static final String VertexTypeField = "VertexTypeField";
-	public static final String VertexTypeValueSystemKeys = "SystemKey";
-	public static final String VertexTypeValueFunction = "Function";
-	public static final String VertexTypeValueParameter = "Parameter";
-	public static final String VertexTypeValueAttribute = "Attribute";
-	public static final String VertexTypeValueUser = "User";
-	public static final String VertexTypeValuePwd = "Password";
-	public static final String VertexTypeValueDomain = "Domain";
+	//public static final String VertexTypeValueSystemKeys = "SystemKey";
+	//public static final String VertexTypeValueFunction = "Function";
+	//public static final String VertexTypeValueParameter = "Parameter";
+	//public static final String VertexTypeValueAttribute = "Attribute";
+	//public static final String VertexTypeValueUser = "User";
+	//public static final String VertexTypeValuePwd = "Password";
+	//public static final String VertexTypeValueDomain = "Domain";
 	public static final String VertexTypeValueRootDomain = "RootDomain";
 	
 	// QueryPivot Vertices
@@ -134,12 +135,12 @@ public class RATConstants {
 	
 	//VertexActions
 	// Il primo è il field che deve assumere uno dei valori sottostanti
-	public static final String VertexActionField = "VertexActionField";
-	public static final String VertexActionValueCreate = "CreateVertex";
-	public static final String VertexActionValueBind = "Bind";
-	public static final String VertexActionValueBindToRootDomain = "BindToRootDomain";
+	//public static final String VertexActionField = "VertexActionField";
+	//public static final String VertexActionValueCreate = "CreateVertex";
+	//public static final String VertexActionValueBind = "Bind";
+	//public static final String VertexActionValueBindToRootDomain = "BindToRootDomain";
 	
-	public static final String VertexActionValueExecuteStored = "ExecuteStored";
-	public static final String VertexActionValueSetAttribute = "SetAttribute";
+	//public static final String VertexActionValueExecuteStored = "ExecuteStored";
+	//public static final String VertexActionValueSetAttribute = "SetAttribute";
 	
 }
