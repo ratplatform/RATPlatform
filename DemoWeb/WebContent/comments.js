@@ -20,9 +20,7 @@ function addNewCommentCallBack(data, textStatus, jqXHR) {
 	removeAllComments();
 	//console.log("addNewCommentCallBack: " + data);
 
-
 	getAllComments(currentURL);
-
 	setTimeout(openURLs, 1000);
 }
 
@@ -44,16 +42,11 @@ function allUserCommentsCallBack(data, textStatus, jqXHR) {
 	console.log("allUserCommentsCallBack: " + data);
 	if(data.indexOf("nodes") > -1){
 		var json = JSON.parse(data);
-		//currentJsonForGraph = json;
 		renderGraph('comments', json);
 
 		var nodes = [];
 		var i = 0;
 		var jsonNodes = json.nodes;
-		//for(var node in jsonNodes){
-			//nodes[i] = ;
-			//i++;
-		//}
 		addNode(jsonNodes);
 	}
 }
@@ -74,7 +67,7 @@ function addNode(array){
 		}
 		var label = node.VertexLabelField;
 		var content = node.VertexContentField;
-		var subComments = node.subComments;
+		var subComments = node.subNodes;
 		if(!subComments){
 			subComments = 0;
 		}
@@ -86,8 +79,6 @@ function addNode(array){
 		}
 
 		var coordinates = node.jsonCoordinates;
-		
-		//sendSelectionNode(coordinates);
 
 		var id;
 		id = addWindow(prevWnd, i, label, content, uuid, subComments);
@@ -135,7 +126,7 @@ function addSubNodes(array, rootCommentUUID){
 
 		var label = node.VertexLabelField;
 		var content = node.VertexContentField;
-		var subComments = node.subComments;
+		var subComments = node.subNodes;
 		if(!subComments){
 			subComments = 0;
 		}

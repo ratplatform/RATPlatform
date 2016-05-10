@@ -1,3 +1,52 @@
+var deletedNodeUUID = null;
+
+function onDeleteDomainClick() {
+	if (!currentDomainUUID){
+		alert("Please select a domain");
+		return;
+	}
+
+	var wsUrl = ratURL + "/runcommand?sessionid=" + loginResult.sessionID;
+	//console.log("url: " + wsUrl);
+	var node = $("#userDomainsTree").tree('getNodeById', currentDomainUUID);
+	var parentNode = node.parent;
+	if(parentNode == null){
+		return;
+	}
+
+	var parentNodeUUID = parentNode.id;
+	console.log("parentNodeName: " + parentNode.name);
+	console.log("parentNodeName: " + node.name);
+	deletedNodeUUID = currentDomainUUID;
+	var json = deleteDomainFunc(currentDomainUUID, currentDomainUUID, parentNodeUUID);
+	console.log("deleteDomainFunc json: " + json);
+	callWsSimple(wsUrl, 'POST', json, deleteDomainCallBack, errorCallBack);
+}
+
+function deleteDomainCallBack(data, textStatus, jqXHR) {
+	var json = JSON.parse(data);
+	console.log("deleteDomainCallBack data: " + data);
+	if(jqXHR.status == 200){
+		removeAllComments();
+		resetSubCommentStack();
+		clearAllOptionsFromCombo("comboUrl");
+		document.getElementById("currentDomain").innerHTML = "";
+
+		if(deletedNodeUUID != null){
+			var node = $("#userDomainsTree").tree('getNodeById', deletedNodeUUID);
+			$("#userDomainsTree").tree('removeNode', node);
+			deletedNodeUUID = null;
+		}
+
+		var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
+		var getAllUserDomains = getAllUserDomainsFunc("null", loginResult.userUUID);
+		callWs(wsUrl, 'POST', getAllUserDomains, getAllUserDomainsCallBack, errorCallBack);
+	}
+	else{
+		console.log("deleteDomainCallBack status Error: " + jqXHR.status);
+	}
+}
+
 function onAddNewDomainClick() {
 	if (!currentDomainUUID){
 		alert("Please select a domain");
@@ -26,9 +75,6 @@ function onAddNewDomainClick() {
 
 	var wsUrl = ratURL + "/runcommand?sessionid=" + loginResult.sessionID;
 	//console.log("url: " + wsUrl);
-	//AddNewDomainSet(currentDomainUUID, domain, domain, currentDomainUUID);
-	//console.log("onAddNewDomainClick AddNewDomain: " + JSON.stringify(AddNewDomain));
-	//callWs(wsUrl, 'POST', JSON.stringify(AddNewDomain), addNewDomainCallBack, errorCallBack);
 	var json = addNewDomainFunc(currentDomainUUID, currentDomainUUID, domain, domain);
 	console.log("onAddNewDomainClick json: " + json);
 	callWs(wsUrl, 'POST', json, addNewDomainCallBack, errorCallBack);
@@ -40,10 +86,8 @@ function addNewDomainCallBack(data, textStatus, jqXHR) {
 	var newUUID = json.settings.VertexUUIDField;
 	//console.log("addNewDomainCallBack newUUID: " + newUUID);
 
-	//GetAllDomainsSet(newUUID, newUUID);
 	var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
 	//console.log("url: " + wsUrl);
-	//callWs(wsUrl, "POST", JSON.stringify(GetAllDomains), getUserDomainsCallBack, errorCallBack);
 	var json = getDomainDomainsFunc(newUUID, newUUID);
 	callWs(wsUrl, "POST", json, getUserDomainsCallBack, errorCallBack);
 }
@@ -67,7 +111,7 @@ function getUserDomainsCallBack(data, textStatus, jqXHR) {
 
 			if(vertexTypeField == 'Domain'){
 				var domainUUID = jsonNodes[i].VertexUUIDField;
-				var domainName = jsonNodes[i].domainName;
+				var domainName = jsonNodes[i].VertexLabelField;
 				//console.log("populateDomainTree vertexUUIDField: " + domainUUID);
 				//console.log("populateDomainTree domainName: " + domainName);
 				append(currentDomainUUID, domainName, domainUUID);

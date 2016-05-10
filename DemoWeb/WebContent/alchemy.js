@@ -1,5 +1,3 @@
-//var alchemy = new Alchemy(alchemyConfig);
-
 var offsetx = 12;
 var offsety =  8;
 

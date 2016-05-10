@@ -23,10 +23,8 @@ function getSubComments(uuid, title){
 	};
 	stack.push(stackData);
 
-	//GetCommentCommentsSet(currentDomainUUID, uuid);
 	//console.log("getSubComments: " + JSON.stringify(GetCommentComments));
 	var wsUrl = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
-	//callWs(wsUrl, 'POST', JSON.stringify(GetCommentComments), addSubCommentsCallBak, errorCallBack);
 	var json = getCommentCommentsFunc(currentDomainUUID, uuid);
 	callWs(wsUrl, 'POST', json, addSubCommentsCallBak, errorCallBack);
 }

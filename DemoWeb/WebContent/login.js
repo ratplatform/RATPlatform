@@ -8,10 +8,26 @@ function hidePopup(){
    $("#loginform").css({"visibility":"hidden","display":"none"});
 }
 
+function logout(){
+	var wsUrl = ratURL + "/logout?sessionid=" + loginResult.sessionID;
+	callWsLogout(wsUrl, logoutCallBack, errorCallBack);
+}
+function logoutCallBack(data, textStatus, jqXHR){
+	if(jqXHR.status == 200){
+		location.reload(); 
+
+		$("#login").prop("disabled", false);
+		$("#logout").prop('disabled', true);
+	}
+	else{
+		console.log("logoutCallBack status Error: " + jqXHR.status);
+	}
+}
+
 function ratLogin(ratURL, login, password, errorCallBack){
 	var json = {email:login, password:password};
 	console.log("login: " + JSON.stringify(json));
-	callWs(ratURL + "/login", 'POST', JSON.stringify(json), loginCallBack, errorCallBack);
+	callWsSimple(ratURL + "/login", 'POST', JSON.stringify(json), loginCallBack, errorCallBack);
 }
 
 function loginCallBack(data, textStatus, jqXHR){
@@ -54,8 +70,6 @@ function getAllUserDomainsCallBack(data, textStatus, jqXHR){
 	if(jqXHR.status == 200){
 		var json = JSON.parse(data);
 		//console.log("getAllUserDomainsCallBack: " + data);
-
-		var json = JSON.parse(data);
 		alchemyConfig.dataSource = json;
 		var alchemy = new Alchemy(alchemyConfig);
 		$("#login").prop("disabled", true);

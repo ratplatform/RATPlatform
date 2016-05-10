@@ -26,17 +26,23 @@ $(document).ready(function() {
 	$("#login").prop("disabled", false);
 	$("#logout").prop('disabled', true);
 	$("#addNewDomain").prop('disabled', true);
+	$("#deleteDomain").prop('disabled', true);
 	$("#addComment").prop("disabled", true);
 	$("#delComment").prop("disabled", true);
 
 	$("#userDomainsTree").bind('tree.click', onUserDomainsTreeClick);
 	$("#addNewDomain").bind('click', onAddNewDomainClick);
+	$("#deleteDomain").bind('click', onDeleteDomainClick);
 
 	$('#comboWndUrl').bind('change', onComboWndUrlChange);
 	$('#comboUrl').bind('change', onComboUrlChange);
 
 	$("#login").click(function(){
 		showPopup();
+	});
+
+	$("#logout").click(function(){
+		logout();
 	});
 
 	$("#addComment").click(function(){
@@ -152,15 +158,14 @@ function onUserDomainsTreeClick(event){
 	document.getElementById("currentDomain").innerHTML = node.name;
 	currentDomainUUID = node.id;
 	//console.log("currentDomainUUID: " + currentDomainUUID);
-	currentURL = getComboValue("comboUrl");//getComboUrl();
+	currentURL = getComboValue("comboUrl");
 
 	if(currentDomainUUID || currentDomainUUID.length > 0){
 		$("#addNewDomain").prop('disabled', false);
+		$("#deleteDomain").prop('disabled', false);
 		enableAddComment();
 
-		//GetAllDomainsSet(currentDomainUUID, currentDomainUUID);
 		var wsURL = ratURL + "/runquery?sessionid=" + loginResult.sessionID;
-		//var getAllDomainsQuery = JSON.stringify(GetAllDomains);
 		var getAllDomainsQuery = getDomainDomainsFunc(currentDomainUUID, currentDomainUUID);
 		//console.log("onUserDomainsTreeClick: " + getAllDomainsQuery);
 
@@ -168,15 +173,7 @@ function onUserDomainsTreeClick(event){
 	}
 }
 
-/*
-function getComboUrl() {
-	var value = $("#comboUrl option:selected").val();
-	return value;
-}
-*/
 function onComboUrlChange() {
-	//var optionSelected = $("option:selected", this);
-	//currentURL = this.value;
 	//console.log("onComboUrlChange currentURL: " + currentURL);
 	currentURL = getComboValue("comboUrl");
 
@@ -203,7 +200,7 @@ function populateDomainTree(userDomains){
 
 		if(vertexTypeField == 'Domain'){
 			var vertexUUIDField = data[i].VertexUUIDField;
-			var domainName = data[i].domainName;
+			var domainName = data[i].VertexLabelField;
 			treeData[ii] = {label: domainName, id: vertexUUIDField};
 			ii++;
 			//console.log("populateDomainTree vertexUUIDField: " + vertexUUIDField);
@@ -213,7 +210,7 @@ function populateDomainTree(userDomains){
 
 	$("#userDomainsTree").tree({
 		data: treeData,
-		autoOpen: 1
+		autoOpen: true
 	});
 }
 
