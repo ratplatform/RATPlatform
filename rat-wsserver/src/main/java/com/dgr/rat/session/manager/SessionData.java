@@ -41,5 +41,4 @@ public class SessionData {
 	private void setSessionID(String sessionID) {
 		this._sessionID = sessionID;
 	}
-
 }

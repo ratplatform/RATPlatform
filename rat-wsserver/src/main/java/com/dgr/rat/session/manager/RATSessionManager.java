@@ -80,30 +80,7 @@ public class RATSessionManager {
 		return result;
 	}
 	
-//	public synchronized String sendMessage(FileSystemXmlApplicationContext context, String sessionID, String data) throws Exception{
-//		MessageSender messageSender = (MessageSender)context.getBean("messageSender");
-//		messageSender.setMessage(data);
-//		messageSender.setSessionID(sessionID);
-//		messageSender.setSharedMap(_sharedMap);
-//		
-//		_pool.submit(messageSender);
-//		
-//		System.out.println("RATSessionManager enter in polling");
-//		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
-//		String result = null;
-//		if(task != null){
-//			result = task.get();
-//		}
-//		System.out.println("RATSessionManager exit from polling, result: " + result);
-//		
-//		return result;
-//	}
-	
-//	public synchronized Session getActiveMQSession() throws JMSException{
-//		return _messagingClient.getSession();
-//	}
-	
-	// TODO: non sono sicuro che debba essere synchronized, ma siccome l'oggetto RATSessionManager è statico, cioè un singleton, e
+	// TODO: non deve essere synchronized, ma siccome l'oggetto RATSessionManager è statico, cioè un singleton, e
 	// ogni connessione ad un client web è come se fosse un thread, per sicurezza.
 	// Inoltre uso una BlockingQueue che è treadsafe, quindi il synchronized potrebbe essere davvero inutile...
 	public synchronized void setSessionData(SessionData sessionData){
@@ -152,29 +129,7 @@ public class RATSessionManager {
 		return result;
 	}
 	
-//	public synchronized boolean sessionIDExists(String sessionID){
-//		boolean result = false;
-//		//_sharedMap non viene controllata perché potrebbe non avere ancora l'oggetto
-//		if(_queue.contains(sessionID) && _sessionDataMap.containsKey(sessionID)){
-//			result = true;
-//		}
-//		else{
-//			// Siccome è fallito il controllo di cui sopra
-//			// ripulisco tutte le mappe
-//			if(_sessionDataMap.containsKey(sessionID)){
-//				_sessionDataMap.remove(sessionID);
-//			}
-//			if(_queue.contains(sessionID)){
-//				_queue.remove(sessionID);
-//			}
-//			if(_sharedMap.containsKey(sessionID)){
-//				_sharedMap.remove(sessionID);
-//			}
-//		}
-//		
-//		return result;
-//	}
-	
+	// TODO _sessionDataMap è ConcurrentMap quindi non serve synchronized
 	public synchronized boolean sessionIDExists(String sessionID){
 		boolean result = false;
 		//_sharedMap non viene controllata perché potrebbe non avere ancora l'oggetto

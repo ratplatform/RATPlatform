@@ -25,6 +25,9 @@ import com.dgr.rat.json.utils.RATJsonUtils;
 import com.dgr.rat.session.manager.RATSessionManager;
 import com.dgr.rat.webservices.RATWebServicesContextListener;
 
+// TODO: classe lasciata a metà: da completare la gestione del multithreading; ora ogni chiamata al web service 
+// crea una nuova istanza di questa classe e con essa un nuovo _pool con un singolo thread. Se avessi 1000 chiamate avrei 1000 thread.
+// Da implementare un reactor
 public class RATMessageSender implements IMessageSender{
 	private ExecutorService _messageSenderExecutor = Executors.newSingleThreadExecutor();
 	private CompletionService<String> _pool = new ExecutorCompletionService<String>(_messageSenderExecutor);
@@ -71,9 +74,9 @@ public class RATMessageSender implements IMessageSender{
 			if(task != null){
 				result = task.get();
 				// TODO: sistema di saltare la trasformazione di json davvero brutale: da rivedere
-				if(result.contains("vertices")){
-					result = MakeAlchemyJSON.fromRatJsonToAlchemy(result);
-				}
+//				if(result.contains("vertices")){
+//					result = MakeAlchemyJSON.fromRatJsonToAlchemy(result);
+//				}
 				System.out.println("result = " + result);
 			}
 			else{
@@ -137,13 +140,13 @@ public class RATMessageSender implements IMessageSender{
 	        		messageSender.setSessionID(sessionID);
 	            	_pool.submit(messageSender);
             	
-            		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
+            		Future<String>task = _pool.poll(1000, TimeUnit.MILLISECONDS);
 	        		if(task != null){
 	        			result = task.get();
 	        			// TODO: sistema di saltare la trasformazione di json davvero brutale: da rivedere
-	        			if(result.contains("vertices")){
-	        				result = MakeAlchemyJSON.fromRatJsonToAlchemy(result);
-	        			}
+//	        			if(result.contains("vertices")){
+//	        				result = MakeAlchemyJSON.fromRatJsonToAlchemy(result);
+//	        			}
 	        			System.out.println("result = " + result);
 	        		}
 	        		else{

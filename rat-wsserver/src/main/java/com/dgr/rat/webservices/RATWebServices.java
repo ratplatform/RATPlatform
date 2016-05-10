@@ -10,9 +10,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -60,12 +58,14 @@ public class RATWebServices {
 	}
 	
 	@POST @Path("/v0.1/logout")
-	@Asynchronous
-	public void logout(@QueryParam("sessionid") String sessionID, @Suspended AsyncResponse asyncResponse){
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response logout(@QueryParam("sessionid") String sessionID){
 		int responseStatus = 200;
 		Response response = null;
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        
 		try {
 			if(sessionID == null || sessionID == "" || sessionID.length() < 1 || sessionID == "null"){
 				responseStatus = 401;
@@ -81,14 +81,30 @@ public class RATWebServices {
 				responseStatus = 401;
 				throw new Exception("sessionID does not exist");
 			}
-			
 		}
 		catch (Exception e) {
-			
+			// TODO log
+			e.printStackTrace();
+			if(responseStatus == 200){
+				responseStatus = 500;
+			}
 		}
 		
-    	//response = Response.status(responseStatus).entity(json).build();
-    	asyncResponse.resume(result);
+    	String json = null;
+        result.put(RATConstants.StatusCode, responseStatus);
+        
+		try {
+			json = mapper.writeValueAsString(result);
+			System.out.println(json);
+		} 
+		catch (Exception e) {
+			// TODO: gestire l'errore creando un JSON con errore e statuscode 
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    	response = Response.status(responseStatus).entity(json).build();
+    	return response;
 	}
 	
 	// TODO: @Produces(MediaType.APPLICATION_JSON)
@@ -171,19 +187,6 @@ public class RATWebServices {
         
         return response;
 	}
-	
-	// TODO: per inviare il menu dei cmmmenti in modo dinamico: da sistemare meglio
-	/*
-	private List <Object> readMenu() throws Exception{
-		String file = _context.getInitParameter("plugInContextMenu");
-		String json = FileUtils.fileRead(file);
-		ObjectMapper mapper = new ObjectMapper();
-		JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, Object.class);
-		List <Object> objs = mapper.readValue(json, type);
-		
-		return objs;
-	}
-	*/
 	
 	@POST @Path("/v0.1/runcommand")
 	@Asynchronous
