@@ -5,6 +5,8 @@ import org.rat.platform.command.nodes.RootNode;
 import org.rat.platform.command.nodes.SystemKey;
 import org.rat.platform.graph.CommandGraph;
 import org.rat.platform.graph.visitor.InstructionParamsDriller;
+import org.rat.platform.query.nodes.RootQueryPivot;
+
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.mqmessages.JsonHeader;
@@ -23,6 +25,45 @@ public class Commands {
 		_alchemyManager = alchemyManager;
 		_ratStorageManagerPath = ratStorageManagerPath;
 		_buildQueryJavaScript = buildQueryJavaScript;
+	}
+	
+	// TODO: modifico anche il contenuto di RATConstants.VertexContentField, ma lo posso fare via JavaScript usando un solo parametro per entrambi
+	// quando i JavaScript non verranno più creati automaticamente
+	public CommandGraph editDomain(String commandName, String commandVersion) throws Exception{
+    	RootNode rootNode = new RootNode(VertexType.Domain.toString(), VertexType.Domain.toString(), VertexType.Domain);
+    	rootNode.addInstruction("ChangeProperty", "domainNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	rootNode.addInstruction("ChangeProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
+    	rootNode.addInstruction("ChangeProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+    	
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+	}
+	
+	public CommandGraph editCommentTitle(String commandName, String commandVersion) throws Exception{
+    	RootNode rootNode = new RootNode(VertexType.Comment.toString(), VertexType.Comment.toString(), VertexType.Comment);
+    	rootNode.addInstruction("ChangeProperty", "commentNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	rootNode.addInstruction("ChangeProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
+    	
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+	}
+	
+	public CommandGraph editCommentText(String commandName, String commandVersion) throws Exception{
+    	RootNode rootNode = new RootNode(VertexType.Comment.toString(), VertexType.Comment.toString(), VertexType.Comment);
+    	rootNode.addInstruction("ChangeProperty", "commentNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	rootNode.addInstruction("ChangeProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+    	
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
 	}
 	
     public CommandGraph bindFromUserToDomain(String commandName, String commandVersion) throws Exception{
@@ -45,14 +86,29 @@ public class Commands {
 		return graph;
     }
     
+    public CommandGraph deleteDomain(String commandName, String commandVersion) throws Exception{
+    	RootNode rootNode = new RootNode(VertexType.Domain.toString(), VertexType.Domain.toString(), VertexType.Domain);
+    	// COMMENT: il primo è sempre l'UUID del nodo da cancellare 
+    	rootNode.addInstruction("DeleteNode", "nodeToDeleteUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	// COMMENT: il secondo è sempre l'UUID del nodo parentn del nodo da cancellare
+    	rootNode.addInstruction("DeleteNode", "parentNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	// COMMENT: il terzo definisce sempre lo stato del nodo (true/false)
+    	rootNode.addInstruction("DeleteNode", RATConstants.IsDeleted, "true", ReturnType.bool);
+    	
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+    }
+    
     public CommandGraph addComment(String commandName, String commandVersion) throws Exception{
     	RootNode rootNode = new RootNode(VertexType.Comment.toString(), VertexType.Comment.toString(), VertexType.Comment);
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
 		rootNode.addPropertyVertexInstruction("jsonCoordinates", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
-		rootNode.addCommandNodeProperty("subNodes", 0);
-		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
+		rootNode.addCommandNodeProperty(RATConstants.SubNodes, 0);
 		
 		SystemKey isPutByNode = new SystemKey("is-put-by", "is-put-by");
 		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
@@ -94,16 +150,10 @@ public class Commands {
     public CommandGraph addNewDomain(String commandName, String commandVersion) throws Exception{
 		RootNode rootNode = new RootNode(VertexType.Domain.toString(), VertexType.Domain.toString(), VertexType.Domain);
 		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
-		//rootNode.addInstruction("InitDomain", RATConstants.VertexContentField, "#", ReturnType.string);
-		rootNode.addInstruction("InitDomain"/*, RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string*/);
-		//rootNode.addPropertyVertexInstruction(RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
+		rootNode.addInstruction("InitDomain");
 		rootNode.addPropertyVertexInstruction(RATConstants.VertexLabelField, RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addPropertyVertexInstruction(RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
-		//rootNode.addPropertyVertexInstruction("domainName", RATConstants.VertexContentUndefined, ReturnType.string);
-		//rootNode.addPropertyVertexInstruction("domainName", RATConstants.VertexContentUndefined, ReturnType.string);
-		//rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
-		rootNode.addCommandNodeProperty("subNodes", 0);
-		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
+		rootNode.addCommandNodeProperty(RATConstants.SubNodes, 0);
 		
 		SystemKey isDomain = new SystemKey("is-domain",  "is-domain");
 		isDomain.addCreateVertexInstruction("nodeName", "is-domain", ReturnType.string);
@@ -127,44 +177,12 @@ public class Commands {
 		return graph;
     }
     
-//    public CommandGraph addNewDomain(String commandName, String commandVersion) throws Exception{
-//		RootNode rootNode = new RootNode(VertexType.Domain.toString(), VertexType.Domain.toString(), VertexType.Domain);
-//		rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
-//		rootNode.addInstruction("InitDomain", RATConstants.VertexContentField, "#", ReturnType.string);
-//		rootNode.addPropertyVertexInstruction("domainName", RATConstants.VertexContentUndefined, ReturnType.string);
-//		rootNode.addInstruction("SetVertexProperty", RATConstants.VertexContentField, RATConstants.VertexContentUndefined, ReturnType.string);
-//		rootNode.addCommandNodeProperty("subNodes", 0);
-//		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
-//		
-//		SystemKey isDomain = new SystemKey("is-domain",  "is-domain");
-//		isDomain.addCreateVertexInstruction("nodeName", "is-domain", ReturnType.string);
-//		
-//		SystemKey isPutByNode = new SystemKey("is-put-by",  "is-put-by");
-//		isPutByNode.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
-//		
-//		SystemKey isPutByNode2 = new SystemKey("is-put-by",  "is-put-by");
-//		isPutByNode2.addCreateVertexInstruction("nodeName", "is-put-by", ReturnType.string);
-//		// COMMENT: Bind to RootDomain RAT
-//		isPutByNode2.addBindInstruction("nodeUUID", RATConstants.VertexContentUndefined);
-//		
-//		rootNode.addChild(isDomain);
-//		rootNode.addChild(isPutByNode2);
-//		isDomain.addChild(isPutByNode);
-//		
-//		CommandGraph graph = new CommandGraph(rootNode, commandName);
-//		graph.set_commandVersion(commandVersion);
-//		graph.run();
-//		
-//		return graph;
-//    }
-    
     public CommandGraph addRootDomainAdminUser(String commandName, String commandVersion) throws Exception{
     	RootNode rootNode = new RootNode(VertexType.RootAdminUser.toString(), VertexType.RootAdminUser.toString(), VertexType.RootAdminUser);
     	rootNode.addCreateCommandRootVertexInstruction("nodeName", rootNode.getType().toString(), ReturnType.string);
 		rootNode.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string, true);
 		rootNode.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
-		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
 		
     	SystemKey isUserOf = new SystemKey("is-user-of", "is-user-of");
     	isUserOf.addCreateVertexInstruction("nodeName", isUserOf.getContent(), ReturnType.string);
@@ -192,7 +210,6 @@ public class Commands {
     	RootNode rootNode = new RootNode(RATConstants.Commands, RATConstants.Commands, VertexType.SystemKey);
     	rootNode.addCreateCommandRootVertexInstruction("name", RATConstants.Commands, ReturnType.string);
     	rootNode.addInstruction("LoadCommandsAction", "folder", RATConstants.VertexContentUndefined, ReturnType.string);
-    	//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
     	
 		CommandGraph graph = new CommandGraph(rootNode, "LoadCommands");
 		graph.set_commandVersion(commandVersion);
@@ -205,20 +222,8 @@ public class Commands {
     	RootNode rootNode = new RootNode(RATConstants.Queries, RATConstants.Queries, VertexType.SystemKey);
     	rootNode.addCreateCommandRootVertexInstruction("name", RATConstants.Queries, ReturnType.string);
     	rootNode.addInstruction("LoadCommandsAction", "folder", RATConstants.VertexContentUndefined, ReturnType.string);
-    	//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
     	
 		CommandGraph graph = new CommandGraph(rootNode, "LoadQueries");
-		graph.set_commandVersion(commandVersion);
-		graph.run();
-		
-		return graph;
-    }
-    
-    public CommandGraph deleteGraph(String commandName, String commandVersion) throws Exception{
-    	RootNode rootNode = new RootNode(commandName, commandName, VertexType.SystemKey);
-    	rootNode.addInstruction("DeleteGraph", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
-    	
-		CommandGraph graph = new CommandGraph(rootNode, commandName);
 		graph.set_commandVersion(commandVersion);
 		graph.run();
 		
@@ -231,7 +236,6 @@ public class Commands {
     	rootNode.addCreateRootPlatformVertexInstruction("rootDomainName", platformName, ReturnType.string);
     	rootNode.addBindInstruction("commandsNodeUUID", RATConstants.VertexContentUndefined);
     	rootNode.addBindInstruction("queriesNodeUUID", RATConstants.VertexContentUndefined);
-    	//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
     	
     	SystemKey isSystem = new SystemKey("is-system", "is-system");
     	isSystem.addCreateVertexInstruction("nodeName", isSystem.getContent(), ReturnType.string);
@@ -256,7 +260,6 @@ public class Commands {
 		rootNode.addPropertyVertexInstruction("userEmail", RATConstants.VertexContentUndefined, ReturnType.string, true);
 		rootNode.addPropertyVertexInstruction("userName", RATConstants.VertexContentUndefined, ReturnType.string);
 		rootNode.addPropertyVertexInstruction("userPwd", RATConstants.VertexContentUndefined, ReturnType.string);
-		//rootNode.addPropertyVertexInstruction("subNodes", "0", ReturnType.integer);
 		
     	SystemKey isUserOf = new SystemKey("is-user-of", "is-user-of");
     	isUserOf.addCreateVertexInstruction("nodeName", isUserOf.getContent(), ReturnType.string);

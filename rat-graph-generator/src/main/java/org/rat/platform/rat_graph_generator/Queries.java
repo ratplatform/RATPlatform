@@ -28,6 +28,126 @@ public class Queries {
 		_commands = commands;
 	}
 	
+	public CommandGraph countSubDomains(String commandName, String commandVersion) throws Exception{
+    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.Domain.toString(), VertexType.QueryPivot.toString());
+		rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+		
+		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+		
+		QueryPivot isPutBy = new QueryPivot("is-put-by");
+		isPutBy.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		isPutBy.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+		
+		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+		
+		QueryPivot isDomain = new QueryPivot("isDomain");
+		isDomain.addInstruction("HasStep", "type", RATConstants.VertexTypeField, ReturnType.string);
+		isDomain.addInstruction("HasStep", "typeValue", VertexType.Domain.toString(), ReturnType.string);
+		
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
+		
+		QueryPivot countStep = new QueryPivot(VertexType.Domain.toString());
+		countStep.addInstruction("CountStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+		
+		rootNode.addChild(edgeInStep);
+		edgeInStep.addChild(isPutBy);
+		isPutBy.addChild(edgeInStep2);
+		edgeInStep2.addChild(isDomain);
+		//isDomain.addChild(countStep);
+		isDomain.addChild(isNotDeleted);
+		isNotDeleted.addChild(countStep);
+		
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+	}
+	
+	public CommandGraph countComments(String commandName, String commandVersion) throws Exception{
+    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.Domain.toString(), VertexType.QueryPivot.toString());
+		rootNode.addInstruction("StartStep", "ownerNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+		
+		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
+		
+		QueryPivot belongsTo = new QueryPivot("belongs-to");
+		belongsTo.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		belongsTo.addInstruction("HasStep", "paramValue", "belongs-to", ReturnType.string);
+		
+		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
+		
+		QueryPivot isComment = new QueryPivot("isComment");
+		isComment.addInstruction("HasStep", "type", RATConstants.VertexTypeField, ReturnType.string);
+		isComment.addInstruction("HasStep", "typeValue", VertexType.Comment.toString(), ReturnType.string);
+		
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
+		
+		QueryPivot countStep = new QueryPivot(VertexType.Comment.toString());
+		countStep.addInstruction("CountStep", RATConstants.VertexTypeField, VertexType.Comment.toString(), ReturnType.string);
+		
+		rootNode.addChild(edgeInStep);
+		edgeInStep.addChild(belongsTo);
+		belongsTo.addChild(edgeInStep2);
+		edgeInStep2.addChild(isComment);
+//		isComment.addChild(countStep);
+		isComment.addChild(isNotDeleted);
+		isNotDeleted.addChild(countStep);
+		
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+	}
+	
+	public CommandGraph countAllUserComments(String commandName, String commandVersion) throws Exception{
+    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
+		rootNode.addInstruction("StartStep", "userNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+		
+		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
+		
+		QueryPivot isPutBy = new QueryPivot("is-put-by");
+		isPutBy.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+		isPutBy.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+		
+		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
+		
+		QueryPivot isComment = new QueryPivot("isComment");
+		isComment.addInstruction("HasStep", "type", RATConstants.VertexTypeField, ReturnType.string);
+		isComment.addInstruction("HasStep", "typeValue", VertexType.Comment.toString(), ReturnType.string);
+		
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
+		
+		QueryPivot countStep = new QueryPivot(VertexType.Comment.toString());
+		countStep.addInstruction("CountStep", RATConstants.VertexTypeField, VertexType.Comment.toString(), ReturnType.string);
+		
+		rootNode.addChild(edgeInStep);
+		edgeInStep.addChild(isPutBy);
+		isPutBy.addChild(edgeInStep2);
+		edgeInStep2.addChild(isComment);
+//		isComment.addChild(countStep);
+		isComment.addChild(isNotDeleted);
+		isNotDeleted.addChild(countStep);
+		
+		CommandGraph graph = new CommandGraph(rootNode, commandName);
+		graph.set_commandVersion(commandVersion);
+		graph.run();
+		
+		return graph;
+	}
+	
     public CommandGraph getUserURLs(String commandName, String commandVersion) throws Exception{
     	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
 		rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
@@ -67,6 +187,7 @@ public class Queries {
 		return graph;
     }
     
+    // TODO: attenzione, non fa il controllo degli utenti cancellati; da modificare!
     public CommandGraph getAllDomainUsers(String commandName, String commandVersion) throws Exception{
     	RootQueryPivot rootNode = new RootQueryPivot(VertexType.Domain.toString(), VertexType.QueryPivot.toString());
     	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
@@ -119,16 +240,20 @@ public class Queries {
 		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
 		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
 		
-		QueryPivot hasStep = new QueryPivot("HasStep");
-		hasStep.addInstruction("HasStep", "paramNameA", RATConstants.VertexTypeField, ReturnType.string);
-		hasStep.addInstruction("HasStep", "paramValueA", VertexType.Comment.toString(), ReturnType.string);
+		QueryPivot isComment = new QueryPivot("isComment");
+		isComment.addInstruction("HasStep", "paramNameA", RATConstants.VertexTypeField, ReturnType.string);
+		isComment.addInstruction("HasStep", "paramValueA", VertexType.Comment.toString(), ReturnType.string);
+		
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
 		
 		QueryPivot edgeOutStep2 = new QueryPivot("EdgeOutStep");
 		edgeOutStep2.addInstruction("EdgeOutStep", "edgeLabel", "AddComment", ReturnType.string);
 		
-		QueryPivot isDomain = new QueryPivot("isDomain");
-		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
-		isDomain.addInstruction("HasStep", "paramValue", VertexType.URI.toString(), ReturnType.string);
+		QueryPivot isURI = new QueryPivot("isURI");
+		isURI.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isURI.addInstruction("HasStep", "paramValue", VertexType.URI.toString(), ReturnType.string);
 		
 		QueryPivot domainHasName = new QueryPivot("domainHasName");
 		domainHasName.addInstruction("HasStep", "url", RATConstants.VertexContentField, ReturnType.string);
@@ -170,10 +295,12 @@ public class Queries {
 		rootNode.addChild(edgeInStep);
 		edgeInStep.addChild(isPutBy);
 		isPutBy.addChild(edgeInStep2);
-		edgeInStep2.addChild(hasStep);
-		hasStep.addChild(edgeOutStep2);
-		edgeOutStep2.addChild(isDomain);
-		isDomain.addChild(domainHasName);
+		edgeInStep2.addChild(isComment);
+//		isComment.addChild(edgeOutStep2);
+		isComment.addChild(isNotDeleted);
+		isNotDeleted.addChild(edgeOutStep2);
+		edgeOutStep2.addChild(isURI);
+		isURI.addChild(domainHasName);
 		domainHasName.addChild(backStep);
 		backStep.addChild(edgeOutStep3);
 		edgeOutStep3.addChild(belongsTo);
@@ -204,9 +331,13 @@ public class Queries {
 		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
 		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
 		
-		QueryPivot hasStep = new QueryPivot("HasStep");
-		hasStep.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
-		hasStep.addInstruction("HasStep", "paramValue", VertexType.Comment.toString(), ReturnType.string);
+		QueryPivot isComment = new QueryPivot("isComment");
+		isComment.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isComment.addInstruction("HasStep", "paramValue", VertexType.Comment.toString(), ReturnType.string);
+		
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
 		
 		QueryPivot edgeOutStep2 = new QueryPivot("EdgeOutStep");
 		edgeOutStep2.addInstruction("EdgeOutStep", "edgeLabel", "AddComment", ReturnType.string);
@@ -218,9 +349,9 @@ public class Queries {
 		QueryPivot edgeOutStep3 = new QueryPivot("EdgeOutStep");
 		edgeOutStep3.addInstruction("EdgeOutStep", "edgeLabel", "AddComment", ReturnType.string);
 		
-		QueryPivot hasStep2 = new QueryPivot("HasStep");
-		hasStep2.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
-		hasStep2.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+		QueryPivot isDomain = new QueryPivot("isDomain");
+		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
 		
 		QueryPivot backStep = new QueryPivot("BackStep");
 		//backStep.addInstruction("BackStep", "backLabel", VertexType.Comment.toString(), ReturnType.string);
@@ -233,12 +364,14 @@ public class Queries {
 		rootNode.addChild(edgeInStep);
 		edgeInStep.addChild(isPutBy);
 		isPutBy.addChild(edgeInStep2);
-		edgeInStep2.addChild(hasStep);
-		hasStep.addChild(edgeOutStep2);
+		edgeInStep2.addChild(isComment);
+//		isComment.addChild(edgeOutStep2);
+		isComment.addChild(isNotDeleted);
+		isNotDeleted.addChild(edgeOutStep2);
 		edgeOutStep2.addChild(belongsTo);
 		belongsTo.addChild(edgeOutStep3);
-		edgeOutStep3.addChild(hasStep2);
-		hasStep2.addChild(backStep);
+		edgeOutStep3.addChild(isDomain);
+		isDomain.addChild(backStep);
 		backStep.addChild(endStep);
 		
 		CommandGraph graph = new CommandGraph(rootNode, commandName);
@@ -278,10 +411,6 @@ public class Queries {
 		isDomainName.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
 		isDomainName.addInstruction("HasStep", "paramValue", RATConstants.VertexContentUndefined, ReturnType.string);
 		
-//		QueryPivot isRootDomain = new QueryPivot("isRootDomain");
-//		isRootDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
-//		isRootDomain.addInstruction("HasStep", "paramValue", VertexType.RootDomain.toString(), ReturnType.string);
-		
 		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
 		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
 		
@@ -318,7 +447,6 @@ public class Queries {
 		QueryPivot hasStep = new QueryPivot("is-user-of");
 		hasStep.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
 		hasStep.addInstruction("HasStep", "paramValue", "is-user-of", ReturnType.string);
-		//hasStep.addInstruction("DebugDumpValue");
 		
 		QueryPivot edgeInStep3 = new QueryPivot("EdgeInStep");
 		edgeInStep3.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
@@ -326,6 +454,10 @@ public class Queries {
 		QueryPivot isDomain = new QueryPivot("isDomain");
 		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
 		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+		
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
 		
 		QueryPivot edgeOutStep = new QueryPivot("EdgeOutStep");
 		edgeOutStep.addInstruction("EdgeOutStep", "edgeLabel", "AddNewDomain", ReturnType.string);
@@ -346,7 +478,7 @@ public class Queries {
 		// TODO: da convertire in una label (GremlinPIpeline.back(integer) è deprecato)
 		backStep.addInstruction("BackStep", "backSteps", "5", ReturnType.integer);
 		
-		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
+		QueryPivot endStep = new QueryPivot(VertexType.Domain.toString());
 		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
 		
 		rootNode.addChild(edgeInStep);
@@ -355,7 +487,9 @@ public class Queries {
 		edgeInStep2.addChild(hasStep);
 		hasStep.addChild(edgeInStep3);
 		edgeInStep3.addChild(isDomain);
-		isDomain.addChild(edgeOutStep);
+		//isDomain.addChild(edgeOutStep);
+		isDomain.addChild(isNotDeleted);
+		isNotDeleted.addChild(edgeOutStep);
 		edgeOutStep.addChild(isPutBy2);
 		isPutBy2.addChild(edgeOutStep2);
 		edgeOutStep2.addChild(isRootDomain);
@@ -369,9 +503,77 @@ public class Queries {
 		return graph;
     }
     
+//    public CommandGraph getAllUserDomains(String commandName, String commandVersion) throws Exception{
+//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
+//    	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+//    	
+//		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+//		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
+//		
+//		QueryPivot isPutBy = new QueryPivot("is-put-by");
+//		isPutBy.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+//		isPutBy.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+//		
+//		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+//		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
+//		
+//		QueryPivot hasStep = new QueryPivot("is-user-of");
+//		hasStep.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+//		hasStep.addInstruction("HasStep", "paramValue", "is-user-of", ReturnType.string);
+//		//hasStep.addInstruction("DebugDumpValue");
+//		
+//		QueryPivot edgeInStep3 = new QueryPivot("EdgeInStep");
+//		edgeInStep3.addInstruction("EdgeInStep", "edgeLabel", "BindFromUserToDomain", ReturnType.string);
+//		
+//		QueryPivot isDomain = new QueryPivot("isDomain");
+//		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+//		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+//		
+//		QueryPivot edgeOutStep = new QueryPivot("EdgeOutStep");
+//		edgeOutStep.addInstruction("EdgeOutStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+//		
+//		QueryPivot isPutBy2 = new QueryPivot("is-put-by");
+//		isPutBy2.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+//		isPutBy2.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+//		
+//		QueryPivot edgeOutStep2 = new QueryPivot("EdgeOutStep");
+//		edgeOutStep2.addInstruction("EdgeOutStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+//		
+//		QueryPivot isRootDomain = new QueryPivot("isRootDomain");
+//		isRootDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+//		isRootDomain.addInstruction("HasStep", "paramValue", VertexType.RootDomain.toString(), ReturnType.string);
+//		
+//		QueryPivot backStep = new QueryPivot("BackStep");
+//		//backStep.addInstruction("BackStep", "backLabel", VertexType.Comment.toString(), ReturnType.string);
+//		// TODO: da convertire in una label (GremlinPIpeline.back(integer) è deprecato)
+//		backStep.addInstruction("BackStep", "backSteps", "5", ReturnType.integer);
+//		
+//		QueryPivot endStep = new QueryPivot(VertexType.Domain.toString());
+//		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+//		
+//		rootNode.addChild(edgeInStep);
+//		edgeInStep.addChild(isPutBy);
+//		isPutBy.addChild(edgeInStep2);
+//		edgeInStep2.addChild(hasStep);
+//		hasStep.addChild(edgeInStep3);
+//		edgeInStep3.addChild(isDomain);
+//		isDomain.addChild(edgeOutStep);
+//		edgeOutStep.addChild(isPutBy2);
+//		isPutBy2.addChild(edgeOutStep2);
+//		edgeOutStep2.addChild(isRootDomain);
+//		isRootDomain.addChild(backStep);
+//		backStep.addChild(endStep);
+//		
+//		CommandGraph graph = new CommandGraph(rootNode, commandName);
+//		graph.set_commandVersion(commandVersion);
+//		graph.run();
+//		
+//		return graph;
+//    }
+    
     public CommandGraph getCommentComments(String commandName, String commandVersion) throws Exception{
-    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
-    	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.Comment.toString(), VertexType.QueryPivot.toString());
+    	rootNode.addInstruction("StartStep", "commentNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
     	
 		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
 		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
@@ -382,19 +584,25 @@ public class Queries {
 		
 		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
 		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddComment", ReturnType.string);
+
+		QueryPivot isComment = new QueryPivot("isComment");
+		isComment.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isComment.addInstruction("HasStep", "paramValue", VertexType.Comment.toString(), ReturnType.string);
 		
-		QueryPivot isDomain = new QueryPivot("isDomain");
-		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
-		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
 		
 		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
-		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Comment.toString(), ReturnType.string);
 		
 		rootNode.addChild(edgeInStep);
 		edgeInStep.addChild(hasStep);
 		hasStep.addChild(edgeInStep2);
-		edgeInStep2.addChild(isDomain);
-		isDomain.addChild(endStep);
+		edgeInStep2.addChild(isComment);
+		//isComment.addChild(endStep);
+		isComment.addChild(isNotDeleted);
+		isNotDeleted.addChild(endStep);
 		
 		CommandGraph graph = new CommandGraph(rootNode, commandName);
 		graph.set_commandVersion(commandVersion);
@@ -402,6 +610,40 @@ public class Queries {
 		
 		return graph;
     }
+    
+//    public CommandGraph getDomainDomains(String commandName, String commandVersion) throws Exception{
+//    	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
+//    	rootNode.addInstruction("StartStep", "rootNodeUUID", RATConstants.VertexContentUndefined, ReturnType.uuid);
+//    	
+//		QueryPivot edgeInStep = new QueryPivot("EdgeInStep");
+//		edgeInStep.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+//    	
+//		QueryPivot isPutBy = new QueryPivot("is-put-by");
+//		isPutBy.addInstruction("HasStep", "paramName", RATConstants.VertexContentField, ReturnType.string);
+//		isPutBy.addInstruction("HasStep", "paramValue", "is-put-by", ReturnType.string);
+//		
+//		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
+//		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
+//		
+//		QueryPivot isDomain = new QueryPivot("isDomain");
+//		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+//		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+//		
+//		QueryPivot endStep = new QueryPivot(VertexType.Domain.toString());
+//		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
+//		
+//		rootNode.addChild(edgeInStep);
+//		edgeInStep.addChild(isPutBy);
+//		isPutBy.addChild(edgeInStep2);
+//		edgeInStep2.addChild(isDomain);
+//		isDomain.addChild(endStep);
+//
+//		CommandGraph graph = new CommandGraph(rootNode, commandName);
+//		graph.set_commandVersion(commandVersion);
+//		graph.run();
+//		
+//		return graph;
+//    }
     
     public CommandGraph getDomainDomains(String commandName, String commandVersion) throws Exception{
     	RootQueryPivot rootNode = new RootQueryPivot(VertexType.User.toString(), VertexType.QueryPivot.toString());
@@ -417,18 +659,24 @@ public class Queries {
 		QueryPivot edgeInStep2 = new QueryPivot("EdgeInStep");
 		edgeInStep2.addInstruction("EdgeInStep", "edgeLabel", "AddNewDomain", ReturnType.string);
 		
-		QueryPivot isComment = new QueryPivot("isComment");
-		isComment.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
-		isComment.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
+		QueryPivot isDomain = new QueryPivot("isDomain");
+		isDomain.addInstruction("HasStep", "paramName", RATConstants.VertexTypeField, ReturnType.string);
+		isDomain.addInstruction("HasStep", "paramValue", VertexType.Domain.toString(), ReturnType.string);
 		
-		QueryPivot endStep = new QueryPivot(VertexType.User.toString());
+		QueryPivot isNotDeleted = new QueryPivot("isNotDeleted");
+		isNotDeleted.addInstruction("HasNotStep", "paramName", RATConstants.IsDeleted, ReturnType.string);
+		isNotDeleted.addInstruction("HasNotStep", "paramValue", "true", ReturnType.bool);
+		
+		QueryPivot endStep = new QueryPivot(VertexType.Domain.toString());
 		endStep.addInstruction("EndStep", RATConstants.VertexTypeField, VertexType.Domain.toString(), ReturnType.string);
 		
 		rootNode.addChild(edgeInStep);
 		edgeInStep.addChild(isPutBy);
 		isPutBy.addChild(edgeInStep2);
-		edgeInStep2.addChild(isComment);
-		isComment.addChild(endStep);
+		edgeInStep2.addChild(isDomain);
+//		isDomain.addChild(endStep);
+		isDomain.addChild(isNotDeleted);
+		isNotDeleted.addChild(endStep);
 		
 		CommandGraph graph = new CommandGraph(rootNode, commandName);
 		graph.set_commandVersion(commandVersion);

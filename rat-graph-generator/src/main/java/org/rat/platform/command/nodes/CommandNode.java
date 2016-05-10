@@ -20,6 +20,7 @@ public abstract class CommandNode implements IAcceptor{
 	
 	public CommandNode() {
 		this.addCommandNodeProperty(RATConstants.GraphUUID, false);
+		//this.addCommandNodeProperty(RATConstants.IsDeleted, false);
 		this.setIsRoot(false);
 	}
 	

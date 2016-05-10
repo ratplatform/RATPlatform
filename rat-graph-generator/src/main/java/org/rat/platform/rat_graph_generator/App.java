@@ -1,10 +1,7 @@
 package org.rat.platform.rat_graph_generator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import org.rat.platform.graph.CommandGraph;
 import com.dgr.rat.commons.constants.JSONType;
 import com.dgr.rat.commons.constants.RATConstants;
@@ -104,6 +101,18 @@ public class App {
 			graph.set_commandType(JSONType.Query);
 			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
 			
+			graph = queries.countSubDomains("CountSubDomains", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = queries.countComments("CountComments", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = queries.countAllUserComments("CountAllUserComments", "0.1");
+			graph.set_commandType(JSONType.Query);
+			queries.writeQuery(graph, placeHolder, applicationName, applicationVersion);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,7 +158,19 @@ public class App {
 			graph.set_commandType(JSONType.SystemCommands);
 			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
 			
-			graph = command.deleteGraph("DeleteGraph", "0.1");
+			graph = command.deleteDomain("DeleteDomain", "0.1");
+			graph.set_commandType(JSONType.SystemCommands);
+			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = command.editDomain("EditDomain", "0.1");
+			graph.set_commandType(JSONType.SystemCommands);
+			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = command.editCommentTitle("EditCommentTitle", "0.1");
+			graph.set_commandType(JSONType.SystemCommands);
+			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
+			
+			graph = command.editCommentText("EditCommentText", "0.1");
 			graph.set_commandType(JSONType.SystemCommands);
 			command.writeCommands(graph, placeHolder, applicationName, applicationVersion);
 			
