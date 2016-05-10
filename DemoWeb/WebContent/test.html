@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="ws.js"></script>
+
+	</head>
+	<body>
+	<input type="file" id="file-input" />
+<h3>Contents of the file:</h3>
+<pre id="file-content"></pre>
+<script>
+document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+
+function test(contents){
+	var json = JSON.parse(contents);
+
+	var jsonEdges = json.settings.edges;
+	var edges = getEdges(jsonEdges);
+
+	var jsonVertices = json.settings.vertices;
+	var vertices = getVertices(jsonVertices);
+
+	var jsonHeader = json.header;
+	var header = JSON.stringify(jsonHeader);
+
+	var alchemy = "{" + "\"header\":" + header + ",\"nodes\":" + vertices + ",\"edges\":" + edges +"}";
+
+  var element = document.getElementById('file-content');
+  element.innerHTML = alchemy;
+}
+
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    displayContents(contents);
+  };
+  reader.readAsText(file);
+}
+
+function displayContents(contents) {
+	test(contents);
+
+}
+</script>
+	</body>
+</html>
