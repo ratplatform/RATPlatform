@@ -72,6 +72,9 @@ public class CreateRootVertex implements IInstruction{
 			
 			vertex.setProperty(RATConstants.GraphUUID, invoker.getGraphUUID());
 			
+			//TODO: in realtà è un errore; questa operazione la faccio solo per avere nell'indice il tipo VertexType.RootDomain, infatti tutti gli altri nodi 
+			// non VertexType.RootDomain, ma dello stesso tipo tra loro, si sovrascrivono tra loro, così avrò sempre un nodo per tipo: inutile se non per RootDomain,
+			// di cui ne esiste uno solo
 			storage.addToIndex("rootverticesindex", vertex, RATConstants.VertexTypeField, vertex.getProperty(RATConstants.VertexTypeField));
 			storage.addToIndex("rootverticesindex", vertex, RATConstants.GraphUUID, invoker.getGraphUUID().toString());
 		}

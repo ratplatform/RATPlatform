@@ -10,10 +10,9 @@ import com.dgr.rat.command.graph.executor.engine.queries.QueryHelpers;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
 import com.dgr.rat.command.graph.executor.engine.result.queries.QueryResult;
 import com.dgr.rat.commons.constants.RATConstants;
-import com.dgr.rat.json.utils.VertexType;
+import com.dgr.rat.commons.errors.VertexDoesNotExistsException;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 
 public class GetSingleNode implements IInstruction{
 
@@ -40,20 +39,26 @@ public class GetSingleNode implements IInstruction{
 		Vertex rootVertex = null;
 		List<Vertex> results = new ArrayList<Vertex>();
 		if(list.isEmpty()){
-			Graph graph = new TinkerGraph();
-			rootVertex = graph.addVertex(null);
-			rootVertex.setProperty(RATConstants.VertexTypeField, VertexType.Empty);
-			rootVertex.setProperty(RATConstants.VertexContentField, VertexType.Empty.toString());
-			rootVertex.setProperty(RATConstants.VertexLabelField, VertexType.Empty.toString());
-			rootVertex.setProperty(RATConstants.VertexUUIDField, UUID.randomUUID().toString());
+			throw new VertexDoesNotExistsException();
+//			Graph graph = new TinkerGraph();
+//			rootVertex = graph.addVertex(null);
+//			rootVertex.setProperty(RATConstants.VertexTypeField, VertexType.Empty);
+//			rootVertex.setProperty(RATConstants.VertexContentField, VertexType.Empty.toString());
+//			rootVertex.setProperty(RATConstants.VertexLabelField, VertexType.Empty.toString());
+//			rootVertex.setProperty(RATConstants.VertexUUIDField, UUID.randomUUID().toString());
 		}
 		else{
 			rootVertex = list.get(0);
+			
+			Object param = rootVertex.getProperty(RATConstants.IsDeleted);
+			if(param != null && param.toString().equalsIgnoreCase("true")){
+				// TODO log
+				throw new VertexDoesNotExistsException();
+			}
 		}
 		
 		String strUUID = rootVertex.getProperty(RATConstants.VertexUUIDField);
 		UUID rootUUID = UUID.fromString(strUUID);
-		
 		
 		Graph graph = QueryHelpers.getResultGraph(rootVertex, results);
 		

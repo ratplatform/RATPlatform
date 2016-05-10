@@ -53,17 +53,6 @@ public class BindToParent implements IInstruction{
 		edge.setProperty(RATConstants.GraphUUID, graphUUID.toString());
 		System.out.println(graphUUID.toString());
 		
-		/*
-		Object comments = inVertex.getProperty("subNodes");
-		if(comments == null){
-			inVertex.setProperty("subNodes", 1);
-		}
-		else{
-			int num = Integer.parseInt(comments.toString());
-			inVertex.setProperty("subNodes", ++num);
-		}
-		*/
-		
 //		storage.commit();
 		
 		InstructionResult commandResult = new InstructionResult(nodeCaller.getInMemoryNodeUUID());

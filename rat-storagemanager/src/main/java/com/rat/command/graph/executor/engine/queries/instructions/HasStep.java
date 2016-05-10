@@ -13,6 +13,7 @@ import com.dgr.rat.command.graph.executor.engine.IInstructionInvoker;
 import com.dgr.rat.command.graph.executor.engine.result.InstructionResultContainer;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
 import com.dgr.rat.command.graph.executor.engine.result.queries.PipeResult;
+import com.dgr.rat.commons.constants.RATConstants;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
@@ -31,19 +32,10 @@ public class HasStep implements IInstruction{
 				throw new Exception();
 			}
 			
-			String paramName = invoker.getValueByIndex(0);
-			String paramValue = invoker.getValueByIndex(1);
+			String paramName = invoker.getParamValueByIndex(0);
+			String paramValue = invoker.getParamValueByIndex(1);
 //			System.out.println("paramName " + paramName);
 //			System.out.println("paramValue " + paramValue);
-//			
-//			Iterator<String> it = invoker.getParameterNameIterator();
-//			while(it.hasNext()){
-//				String name = it.next();
-//				System.out.println(name);
-//			}
-//			
-//			String paramName = invoker.getNodeParamValue("paramName");
-//			String paramValue = invoker.getNodeParamValue("paramValue");
 	
 			// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
 			// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.
@@ -67,8 +59,6 @@ public class HasStep implements IInstruction{
 			
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
 			pipe.has(paramName, paramValue);
-			//List<Vertex> results = (List<Vertex>) pipe.toList();
-			//System.out.println("HasStep: " + pipe.toString());
 
 			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
 			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);

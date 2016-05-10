@@ -26,7 +26,14 @@ public class StartStep implements IInstruction{
 	 */
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
-		String rootNodeUUID = invoker.getNodeParamValue("rootNodeUUID");
+		if(invoker.getNumOfParameters() != 1){
+			// TODO log
+			throw new Exception();
+		}
+		
+		//String rootNodeUUID = invoker.getNodeParamValue("rootNodeUUID");
+		String rootNodeUUID = invoker.getParamValueByIndex(0);
+		//String paramValue = invoker.getNodeParamValue(paramName);
 		
 		UUID rootUUID = UUID.fromString(rootNodeUUID);
 		

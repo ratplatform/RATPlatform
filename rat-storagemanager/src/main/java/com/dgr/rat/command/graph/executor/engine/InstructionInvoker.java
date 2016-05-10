@@ -70,7 +70,18 @@ public class InstructionInvoker implements IInstructionInvoker{
 		return _parameters.size();
 	}
 	
-	public String getValueByIndex(int index) throws Exception{
+	@Override
+	public String getParamNameByIndex(int index) throws Exception {
+		if(index >= this.getNumOfParameters()){
+			throw new Exception();
+		}
+		
+		String[] names = _parameters.keySet().toArray(new String[this.getNumOfParameters()]);
+		
+		return names[index];
+	}
+	
+	public String getParamValueByIndex(int index) throws Exception{
 		if(index >= this.getNumOfParameters()){
 			throw new Exception();
 		}
@@ -130,6 +141,10 @@ public class InstructionInvoker implements IInstructionInvoker{
 				
 			case none:
 				result = true;
+				break;
+				
+			case bool:
+				result = StringUtils.isParsableToBool(paramValue) ? true : false;
 				break;
 				
 			default:

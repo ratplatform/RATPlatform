@@ -47,14 +47,14 @@ public class Bind implements IInstruction{
 			Edge edge = outVertex.addEdge(nodeCaller.getCommandName(), inVertex);
 			edge.setProperty(RATConstants.EdgeUUIDField, edgeUUID.toString());
 			
-			Object subNodes = inVertex.getProperty("subNodes");
+			Object subNodes = inVertex.getProperty(RATConstants.SubNodes);
 			if(subNodes != null){
 				System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
 				System.out.println(inVertex.getProperty(RATConstants.VertexContentField));
 				System.out.println(inVertex.getProperty(RATConstants.VertexUUIDField));
 				
 				int num = Integer.parseInt(subNodes.toString());
-				inVertex.setProperty("subNodes", ++num);
+				inVertex.setProperty(RATConstants.SubNodes, ++num);
 			}
 		}
 		

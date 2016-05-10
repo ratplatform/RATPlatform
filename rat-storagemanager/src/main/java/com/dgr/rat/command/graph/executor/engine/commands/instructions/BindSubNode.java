@@ -43,7 +43,7 @@ public class BindSubNode implements IInstruction{
 				throw new Exception();
 			}
 			
-			Object subNodes = inVertex.getProperty("subNodes");
+			Object subNodes = inVertex.getProperty(RATConstants.SubNodes);
 			if(subNodes != null){
 //				inVertex.getProperty(RATConstants.VertexTypeField)
 //				System.out.println(inVertex.getProperty(RATConstants.VertexTypeField));
@@ -51,7 +51,7 @@ public class BindSubNode implements IInstruction{
 //				System.out.println(inVertex.getProperty(RATConstants.VertexUUIDField));
 				
 				int num = Integer.parseInt(subNodes.toString());
-				inVertex.setProperty("subNodes", ++num);
+				inVertex.setProperty(RATConstants.SubNodes, ++num);
 			}
 			
 			edgeUUID = UUID.randomUUID();

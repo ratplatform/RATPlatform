@@ -51,13 +51,13 @@ public class DeleteGraph implements IInstruction{
 	private void removeSubNodes(final Vertex vertex){
 		GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(vertex);
 		EmitFunctionClass emitFunctionClass = new EmitFunctionClass(RATConstants.VertexIsRootField, "true");
-		List<Vertex> list = (List<Vertex>) pipe.out().loop(1, DeleteGraph.whileFunction, emitFunctionClass).has("subNodes").toList();
+		List<Vertex> list = (List<Vertex>) pipe.out().loop(1, DeleteGraph.whileFunction, emitFunctionClass).has(RATConstants.SubNodes).toList();
 		for(Vertex v : list){
-			Object subNodes = v.getProperty("subNodes");
+			Object subNodes = v.getProperty(RATConstants.SubNodes);
 			if(subNodes != null){
 				int num = Integer.parseInt(subNodes.toString());
 				if(num > 0){
-					v.setProperty("subNodes", --num);
+					v.setProperty(RATConstants.SubNodes, --num);
 				}
 			}
 		}

@@ -1,35 +1,28 @@
-/**
- * @author Daniele Grignani (dgr)
- * @date Oct 18, 2015
- */
-
-package com.rat.command.graph.executor.engine.queries.instructions2;
+package com.rat.command.graph.executor.engine.queries.instructions;
 
 import java.util.UUID;
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
 import com.dgr.rat.command.graph.executor.engine.IInstruction;
 import com.dgr.rat.command.graph.executor.engine.IInstructionInvoker;
-import com.dgr.rat.command.graph.executor.engine.result.InstructionResultContainer;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
+import com.dgr.rat.command.graph.executor.engine.result.InstructionResultContainer;
 import com.dgr.rat.command.graph.executor.engine.result.queries.PipeResult;
-import com.dgr.utils.StringUtils;
+import com.dgr.rat.command.graph.executor.engine.result.queries.QueryResult;
+import com.dgr.rat.commons.constants.RATConstants;
+import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
 
-public class BackStep implements IInstruction{
+public class CountStep implements IInstruction{
 
-	public BackStep() {
-
+	public CountStep() {
+		// TODO Auto-generated constructor stub
 	}
- 
+
 	@Override
 	public IInstructionResult execute(IInstructionInvoker invoker, ICommandNodeVisitable nodeCaller) throws Exception {
 		try{
-			String backSteps = invoker.getNodeParamValue("backSteps");
-			if(!StringUtils.isParsableToInt(backSteps)){
-				throw new Exception();
-			}
-			
 			// COMMENT il nodeCaller non è il nodo che ha generato il valore che mi interessa, ma è il parent di caller
 			// ad averlo fatto... Infatti nodeCaller è quello corrente, ossia il nodo al quale è collecata questa instruction.
 			UUID nodeUUID = nodeCaller.getParent().getInMemoryNodeUUID();
@@ -51,24 +44,26 @@ public class BackStep implements IInstruction{
 			}
 			
 			GremlinPipeline<Vertex, Vertex> pipe = queryResult.getContent();
-			// TODO: da convertire in una label (GremlinPIpeline.back(integer) è deprecato)
-//			List<Vertex> results = (List<Vertex>) pipe.toList();
-			pipe.back(Integer.parseInt(backSteps));
-			System.out.println("BackStep: " + pipe.toString());
-	
-			UUID nodeCallerInMemoryUUID = nodeCaller.getInMemoryNodeUUID();
-			PipeResult newQueryResult = new PipeResult(nodeCallerInMemoryUUID);
-			newQueryResult.setContent(pipe);
-			newQueryResult.setRootUUID(queryResult.getRootUUID());
+			long result = pipe.count();
+					
+			UUID rootUUID = queryResult.getRootUUID();
 			
-	//		System.out.println("nodeUUID: " + nodeUUID);
-	//		System.out.println("nodeCallerInMemoryUUID: " + nodeCallerInMemoryUUID);
-	//		System.out.println("queryResult.getRootUUID(): " + queryResult.getRootUUID());
+			Graph graph = new TinkerGraph();
+			Vertex newVertex = graph.addVertex(null);
+			newVertex.setProperty(RATConstants.VertexIsRootField, true);
+			newVertex.setProperty(RATConstants.SubNodes, result);
 			
-			return newQueryResult;
+			QueryResult resultGraph = new QueryResult(queryResult.getInMemoryOwnerNodeUUID());
+			resultGraph.setRootUUID(rootUUID);
+			resultGraph.setGraph(graph);
+			
+			invoker.addCommandResponse(nodeCaller, resultGraph);
+			
+			return resultGraph;
 		}
 		catch(Exception e){
 			throw new Exception(e);
 		}
 	}
+
 }

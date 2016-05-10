@@ -22,7 +22,8 @@ public interface IInstructionInvoker {
 	public InstructionResultContainer getInstructionResult(UUID nodeUUID);
 	public CommandResponse getCommandResponse();
 	public void addCommandResponse(ICommandNodeVisitable visited, IInstructionResult instructionResult) throws Exception;
-	public String getValueByIndex(int index) throws Exception;
+	public String getParamValueByIndex(int index) throws Exception;
+	public String getParamNameByIndex(int index) throws Exception;
 	public int getNumOfParameters();
 	public String getCurrentInstruction();
 	public UUID getGraphUUID();

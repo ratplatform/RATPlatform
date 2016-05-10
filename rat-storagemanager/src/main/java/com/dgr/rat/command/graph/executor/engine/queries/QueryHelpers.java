@@ -1,9 +1,7 @@
 package com.dgr.rat.command.graph.executor.engine.queries;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
 import com.dgr.rat.command.graph.executor.engine.ICommandNodeVisitable;
 import com.dgr.rat.command.graph.executor.engine.IInstructionInvoker;
 import com.dgr.rat.command.graph.executor.engine.result.IInstructionResult;
@@ -13,14 +11,10 @@ import com.dgr.rat.command.graph.executor.engine.result.queries.QueryResult;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.json.toolkit.RATHelpers;
 import com.dgr.rat.json.utils.VertexType;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.gremlin.java.GremlinPipeline;
-import com.tinkerpop.pipes.PipeFunction;
-import com.tinkerpop.pipes.util.PipesFunction;
 
 public class QueryHelpers {
 	//@SuppressWarnings("unchecked")
@@ -31,30 +25,9 @@ public class QueryHelpers {
 		Vertex newRootVertex = graph.addVertex(null);
 		RATHelpers.duplicateVertex(rootVertex, false, newRootVertex);
 		
-//		GremlinPipeline<Vertex, Vertex> userPipe = new GremlinPipeline<Vertex, Vertex>(rootVertex);
-//		Vertex userNameVertex = userPipe.outE().inV().filter(filterFunction).next();
-//		String userName = userNameVertex.getProperty(RATConstants.VertexContentField);
-//		newRootVertex.setProperty(RATConstants.VertexContentField, userName);
-//		newRootVertex.setProperty(RATConstants.VertexLabelField, userName);
-		
 		for(Vertex vertex : results){
 			Vertex newVertex = graph.addVertex(null);
 			RATHelpers.duplicateVertex(vertex, false, newVertex);
-			
-			// COMMENT prenso il nodo di tipo Properties, se c'è.
-//			GremlinPipeline<Vertex, Vertex> pipe = new GremlinPipeline<Vertex, Vertex>(vertex);
-//			List<Vertex> properties = (List<Vertex>) pipe.both().has(RATConstants.VertexTypeField, VertexType.Properties.toString()).toList();
-//			if(results.size() > 1){
-//				throw new Exception();
-//				// TODO log
-//			}
-//			if(!properties.isEmpty()){
-//				Vertex property = properties.get(0);
-//				Vertex newProperty = graph.addVertex(null);
-//				RATHelpers.duplicateVertex(property, false, newProperty);
-//				newVertex.addEdge("", newProperty);
-//			}
-//			System.out.println(properties.toString());
 			
 			newVertex.setProperty(RATConstants.VertexIsRootField, false);
 			newRootVertex.addEdge("", newVertex);
