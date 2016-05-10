@@ -227,8 +227,8 @@ var GetCommentComments = {
 		MessageType:"Template"
 	},
 	settings : {
-		rootNodeUUID : {
-			VertexInstructionParameterNameField:"rootNodeUUID",
+		commentNodeUUID : {
+			VertexInstructionParameterNameField:"commentNodeUUID",
 			VertexInstructionParameterValueField:"VertexContentUndefined",
 			VertexInstructionParameterReturnTypeField:"uuid",
 			VertexInstructionOwnerNameField:"StartStep",
@@ -344,6 +344,81 @@ var GetGraph = {
 	}
 };
 
+var CountSubDomains = {
+	header : {
+		commandType:"Query",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"fee1318d-7922-46d7-9c17-b795059b9516",
+		RootVertexUUID:"c73bd859-6fb6-4eaa-b35d-68cb0887ca68",
+		commandName:"CountSubDomains",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		rootNodeUUID : {
+			VertexInstructionParameterNameField:"rootNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"StartStep",
+			InstructionOrderField:0
+		}
+	}
+};
+
+var CountComments = {
+	header : {
+		commandType:"Query",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"6e1f6ba0-dfdc-4604-b0da-737b37fc70af",
+		RootVertexUUID:"761975bf-8c1d-4657-93de-534993e56929",
+		commandName:"CountComments",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		ownerNodeUUID : {
+			VertexInstructionParameterNameField:"ownerNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"StartStep",
+			InstructionOrderField:0
+		}
+	}
+};
+
+var CountAllUserComments = {
+	header : {
+		commandType:"Query",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"837d0c69-8dbb-476b-8065-72c40a4ffd34",
+		RootVertexUUID:"c2c057f6-e06f-4dbe-b678-814acc3ea87d",
+		commandName:"CountAllUserComments",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		userNodeUUID : {
+			VertexInstructionParameterNameField:"userNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"StartStep",
+			InstructionOrderField:0
+		}
+	}
+};
+
 
 /*Public functions*/
 getUserByEmailFunc = function(currentDomainUUID, paramValue){
@@ -404,8 +479,8 @@ getUserURLsFunc = function(currentDomainUUID, rootNodeUUID){
 	return JSON.stringify(GetUserURLs);
 };
 
-getCommentCommentsFunc = function(currentDomainUUID, rootNodeUUID){
-	GetCommentComments.settings.rootNodeUUID.VertexInstructionParameterValueField = rootNodeUUID;
+getCommentCommentsFunc = function(currentDomainUUID, commentNodeUUID){
+	GetCommentComments.settings.commentNodeUUID.VertexInstructionParameterValueField = commentNodeUUID;
 	GetCommentComments.header.DomainUUID = currentDomainUUID;
 
 	return JSON.stringify(GetCommentComments);
@@ -438,6 +513,27 @@ getGraphFunc = function(currentDomainUUID, paramValue){
 	GetGraph.header.DomainUUID = currentDomainUUID;
 
 	return JSON.stringify(GetGraph);
+};
+
+countSubDomainsFunc = function(currentDomainUUID, rootNodeUUID){
+	CountSubDomains.settings.rootNodeUUID.VertexInstructionParameterValueField = rootNodeUUID;
+	CountSubDomains.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(CountSubDomains);
+};
+
+countCommentsFunc = function(currentDomainUUID, ownerNodeUUID){
+	CountComments.settings.ownerNodeUUID.VertexInstructionParameterValueField = ownerNodeUUID;
+	CountComments.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(CountComments);
+};
+
+countAllUserCommentsFunc = function(currentDomainUUID, userNodeUUID){
+	CountAllUserComments.settings.userNodeUUID.VertexInstructionParameterValueField = userNodeUUID;
+	CountAllUserComments.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(CountAllUserComments);
 };
 
 

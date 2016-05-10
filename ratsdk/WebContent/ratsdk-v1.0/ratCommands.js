@@ -324,7 +324,7 @@ var BindFromUserToDomain = {
 	}
 };
 
-var DeleteGraph = {
+var DeleteDomain = {
 	header : {
 		commandType:"SystemCommands",
 		DomainUUID:"null",
@@ -332,19 +332,129 @@ var DeleteGraph = {
 		application:"RATPlatform",
 		time:new Date().toUTCString(),
 		commandVersion:"0.1",
-		CommandGraphUUID:"c79a262c-61de-45e4-8292-7ce910d3c728",
-		RootVertexUUID:"03390233-8fb9-4c4e-b874-2b190ade7e92",
-		commandName:"DeleteGraph",
+		CommandGraphUUID:"10dc32cd-5b21-49dc-8ccc-fee6f439c8f7",
+		RootVertexUUID:"83a968be-a9e6-4d05-bb3f-a788c714510c",
+		commandName:"DeleteDomain",
 		domainName:"@domainPlaceholder@",
 		MessageType:"Template"
 	},
 	settings : {
-		rootNodeUUID : {
-			VertexInstructionParameterNameField:"rootNodeUUID",
+		parentNodeUUID : {
+			VertexInstructionParameterNameField:"parentNodeUUID",
 			VertexInstructionParameterValueField:"VertexContentUndefined",
 			VertexInstructionParameterReturnTypeField:"uuid",
-			VertexInstructionOwnerNameField:"DeleteGraph",
+			VertexInstructionOwnerNameField:"DeleteNode",
+			InstructionOrderField:1
+		},
+		nodeToDeleteUUID : {
+			VertexInstructionParameterNameField:"nodeToDeleteUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"DeleteNode",
 			InstructionOrderField:0
+		}
+	}
+};
+
+var EditDomain = {
+	header : {
+		commandType:"SystemCommands",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"14d9ebfa-2ecc-48f1-9e74-cfd4ff8e4d3e",
+		RootVertexUUID:"c938208b-17f7-49ed-b92b-d5852be92ed1",
+		commandName:"EditDomain",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		domainNodeUUID : {
+			VertexInstructionParameterNameField:"domainNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:0
+		},
+		VertexContentField : {
+			VertexInstructionParameterNameField:"VertexContentField",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"string",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:2
+		},
+		VertexLabelField : {
+			VertexInstructionParameterNameField:"VertexLabelField",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"string",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:1
+		}
+	}
+};
+
+var EditCommentTitle = {
+	header : {
+		commandType:"SystemCommands",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"03bd15a5-319a-4f96-a789-57ff5a985843",
+		RootVertexUUID:"6a8a6c40-a8e1-4fde-bedc-db8eeafb332f",
+		commandName:"EditCommentTitle",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		commentNodeUUID : {
+			VertexInstructionParameterNameField:"commentNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:0
+		},
+		VertexLabelField : {
+			VertexInstructionParameterNameField:"VertexLabelField",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"string",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:1
+		}
+	}
+};
+
+var EditCommentText = {
+	header : {
+		commandType:"SystemCommands",
+		DomainUUID:"null",
+		applicationVersion:"2.0",
+		application:"RATPlatform",
+		time:new Date().toUTCString(),
+		commandVersion:"0.1",
+		CommandGraphUUID:"01b49cda-304c-4e08-9f62-ba822ed58959",
+		RootVertexUUID:"9d4d3fd6-3485-4d55-bbca-cad99a251cd3",
+		commandName:"EditCommentText",
+		domainName:"@domainPlaceholder@",
+		MessageType:"Template"
+	},
+	settings : {
+		commentNodeUUID : {
+			VertexInstructionParameterNameField:"commentNodeUUID",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"uuid",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:0
+		},
+		VertexContentField : {
+			VertexInstructionParameterNameField:"VertexContentField",
+			VertexInstructionParameterValueField:"VertexContentUndefined",
+			VertexInstructionParameterReturnTypeField:"string",
+			VertexInstructionOwnerNameField:"ChangeProperty",
+			InstructionOrderField:1
 		}
 	}
 };
@@ -425,11 +535,37 @@ bindFromUserToDomainFunc = function(currentDomainUUID, domainNodeUUID, userUUID)
 	return JSON.stringify(BindFromUserToDomain);
 };
 
-deleteGraphFunc = function(currentDomainUUID, rootNodeUUID){
-	DeleteGraph.settings.rootNodeUUID.VertexInstructionParameterValueField = rootNodeUUID;
-	DeleteGraph.header.DomainUUID = currentDomainUUID;
+deleteDomainFunc = function(currentDomainUUID, parentNodeUUID, nodeToDeleteUUID){
+	DeleteDomain.settings.parentNodeUUID.VertexInstructionParameterValueField = parentNodeUUID;
+	DeleteDomain.settings.nodeToDeleteUUID.VertexInstructionParameterValueField = nodeToDeleteUUID;
+	DeleteDomain.header.DomainUUID = currentDomainUUID;
 
-	return JSON.stringify(DeleteGraph);
+	return JSON.stringify(DeleteDomain);
+};
+
+editDomainFunc = function(currentDomainUUID, domainNodeUUID, vertexContentField, vertexLabelField){
+	EditDomain.settings.domainNodeUUID.VertexInstructionParameterValueField = domainNodeUUID;
+	EditDomain.settings.VertexContentField.VertexInstructionParameterValueField = vertexContentField;
+	EditDomain.settings.VertexLabelField.VertexInstructionParameterValueField = vertexLabelField;
+	EditDomain.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(EditDomain);
+};
+
+editCommentTitleFunc = function(currentDomainUUID, commentNodeUUID, vertexLabelField){
+	EditCommentTitle.settings.commentNodeUUID.VertexInstructionParameterValueField = commentNodeUUID;
+	EditCommentTitle.settings.VertexLabelField.VertexInstructionParameterValueField = vertexLabelField;
+	EditCommentTitle.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(EditCommentTitle);
+};
+
+editCommentTextFunc = function(currentDomainUUID, commentNodeUUID, vertexContentField){
+	EditCommentText.settings.commentNodeUUID.VertexInstructionParameterValueField = commentNodeUUID;
+	EditCommentText.settings.VertexContentField.VertexInstructionParameterValueField = vertexContentField;
+	EditCommentText.header.DomainUUID = currentDomainUUID;
+
+	return JSON.stringify(EditCommentText);
 };
 
 
