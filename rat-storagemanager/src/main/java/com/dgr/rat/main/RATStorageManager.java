@@ -67,6 +67,7 @@ public class RATStorageManager {
 			} while(!str.equals("stop"));
 			
 			main.shutdownServer();
+			System.exit(0);
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
