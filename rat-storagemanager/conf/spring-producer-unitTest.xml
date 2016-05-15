@@ -24,7 +24,7 @@ xmlns:p="http://www.springframework.org/schema/p"
 	<!-- Creo il brooker: il brooker lo deve creare uno dei due: sender o receiver -->
  <amq:broker useJmx="false" persistent="false">
     <amq:transportConnectors>
-      <amq:transportConnector uri="tcp://localhost:61616" />
+      <amq:transportConnector uri="tcp://localhost:61617" />
     </amq:transportConnectors>
   </amq:broker>
   
