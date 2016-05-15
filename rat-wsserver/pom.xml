@@ -233,6 +233,31 @@
 			<wtpContextName>${context.root}</wtpContextName>
 			</configuration>
 			</plugin>
+			
+			<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>sql-maven-plugin</artifactId>
+			<!-- JDBC Driver -->
+			<dependencies>
+			<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.0.5</version>
+			</dependency>
+			</dependencies>
+
+			<configuration>
+			<driver>com.mysql.jdbc.Driver</driver>
+			<url>jdbc:mysql://localhost:3306/ratwsserver</url>
+			<username>admin</username>
+			<password>admin</password>
+			<autocommit>true</autocommit>
+			<onError>continue</onError>
+			<srcFiles>
+			<srcFile>ratwsserver.sql</srcFile>
+			</srcFiles>
+			</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
