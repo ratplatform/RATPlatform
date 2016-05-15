@@ -234,10 +234,10 @@
 			</configuration>
 			</plugin>
 			
+			<!-- 
 			<plugin>
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>sql-maven-plugin</artifactId>
-			<!-- JDBC Driver -->
 			<dependencies>
 			<dependency>
 			<groupId>mysql</groupId>
@@ -258,6 +258,7 @@
 			</srcFiles>
 			</configuration>
 			</plugin>
+			 -->
 		</plugins>
 	</build>
 </project>
