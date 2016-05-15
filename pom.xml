@@ -111,12 +111,8 @@
 		<module>rat-wsserver</module>
 		<module>rat-wsserver-webclient</module>
 		<module>rat-graph-generator</module>
-	<!--
-		<module>RATClient6</module>
-		<module>rat-graph-editor</module>
-	-->
-    <module>ratsdk</module>
-  </modules>
+		<!--module>ratsdk</module-->
+  	</modules>
 
 	<dependencies>
 		<dependency>
