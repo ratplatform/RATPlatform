@@ -39,6 +39,7 @@ public class GetSingleNode implements IInstruction{
 		Vertex rootVertex = null;
 		List<Vertex> results = new ArrayList<Vertex>();
 		if(list.isEmpty()){
+			// TODO: c'è un bug: quando lancia questa exception, il messaggio di errore non viene passato ad activemq e quindi non viene inviato al chiamante (es.: InitDB)
 			throw new VertexDoesNotExistsException();
 //			Graph graph = new TinkerGraph();
 //			rootVertex = graph.addVertex(null);

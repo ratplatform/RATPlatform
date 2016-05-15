@@ -419,7 +419,7 @@ public class InitDB {
 		//List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, userEmail, "GetAdminUserByEmail.conf");
 		List<Vertex> result = this.getUser(VertexType.RootAdminUser, _rootDomainUUID, "userEmail", userEmail, "GetRootUserByEmail.conf");
 		
-		if(result.size() == 0){
+		if(result == null || result.size() == 0){
 			String commandJSON = SystemInitializerTestHelpers.createAddRootDomainAdminUser("AddRootDomainAdminUser.conf", _rootDomainUUID, userName, userPwd, userEmail);
 			System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
@@ -532,7 +532,7 @@ public class InitDB {
 		String userUUID = null;
 		List<Vertex> result = this.getUser(VertexType.User, _rootDomainUUID, "userEmail", userEmail, "GetUserByEmail.conf");
 		
-		if(result.size() == 0){
+		if(result == null || result.size() == 0){
 			String commandJSON = SystemInitializerTestHelpers.createNewUser("AddNewUser.conf", _rootDomainUUID, userName, userPWD, userEmail);
 			String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
 			System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
@@ -560,16 +560,20 @@ public class InitDB {
 	
 	private List<Vertex> getUser(VertexType userType, String domainUUID, String paramName, String paramValue, String fileName) throws Exception{
 		//commandJSON = SystemInitializerTestHelpers.getUserByEmail("GetUserByEmail.conf", "paramValue", "dgr1@gmail.com", ReturnType.string);
+		List<Vertex> result = null;
+		
 		String commandJSON = SystemInitializerTestHelpers.getUserByEmail(fileName, "paramValue", paramValue, ReturnType.string);
 		System.out.println(RATJsonUtils.jsonPrettyPrinter(commandJSON));
 		String jsonResponse = RATSessionManager.getInstance().sendMessage(_context, commandJSON);
-		System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
-		
-		RATJSONMessage ratJSONMessage = RATJSONMessage.deserialize(jsonResponse);
-		System.out.println("countAllNodes: " + ratJSONMessage.countAllNodes());
-		System.out.println("countNodes: " + ratJSONMessage.countNodes());
-		
-		List<Vertex> result = ratJSONMessage.getNode(userType, paramName, paramValue);
+		if(jsonResponse != null){
+			System.out.println(RATJsonUtils.jsonPrettyPrinter(jsonResponse));
+			
+			RATJSONMessage ratJSONMessage = RATJSONMessage.deserialize(jsonResponse);
+			System.out.println("countAllNodes: " + ratJSONMessage.countAllNodes());
+			System.out.println("countNodes: " + ratJSONMessage.countNodes());
+			
+			result = ratJSONMessage.getNode(userType, paramName, paramValue);
+		}
 		
 		return result;
 	}

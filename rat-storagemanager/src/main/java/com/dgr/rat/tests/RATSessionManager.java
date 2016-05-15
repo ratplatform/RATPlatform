@@ -56,8 +56,8 @@ public class RATSessionManager {
 		_pool.submit(messageSender);
 		
 		System.out.println("RATSessionManager enter in polling");
-//		Future<String>task = _pool.poll(500, TimeUnit.MILLISECONDS);
-		Future<String>task = _pool.take();
+		Future<String>task = _pool.poll(3000, TimeUnit.MILLISECONDS);
+//		Future<String>task = _pool.take();
 		String result = null;
 		if(task != null){
 			result = task.get();
