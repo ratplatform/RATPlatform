@@ -254,7 +254,7 @@
 			<autocommit>true</autocommit>
 			<onError>continue</onError>
 			<srcFiles>
-			<srcFile>ratwsserver.sql</srcFile>
+			<srcFile>bin/ratwsserver.sql</srcFile>
 			</srcFiles>
 			</configuration>
 			</plugin>
