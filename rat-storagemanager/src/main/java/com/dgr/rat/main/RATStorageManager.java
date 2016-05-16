@@ -9,12 +9,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import junit.framework.Assert;
+
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.utils.RATUtils;
 import com.dgr.rat.json.toolkit.RATHelpers;
+import com.dgr.rat.json.utils.VertexType;
 import com.dgr.rat.messages.RATMessagingService;
 import com.dgr.utils.AppProperties;
+import com.dgr.utils.FileUtils;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rat.init.Comment;
+import com.rat.init.Comments;
+import com.rat.init.InitDB;
+import com.rat.init.User;
+import com.tinkerpop.blueprints.Vertex;
 
 public class RATStorageManager {
 	private RATMessagingService _messagingServer = null;
@@ -57,6 +74,15 @@ public class RATStorageManager {
 		try {
 			RATStorageManager main = new RATStorageManager();
 			
+			if(args.length == 1){
+				if(FileUtils.fileExists(args[0])){
+					String json = FileUtils.fileRead(args[0]);
+					InitDB initDB = new InitDB();
+					initDB.init();
+					initDB.bulkCreation(json);
+				}
+			}
+			
 			do {
 				str = br.readLine();
 				//System.out.println(str);
@@ -73,6 +99,5 @@ public class RATStorageManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	} 
-
+	}
 }

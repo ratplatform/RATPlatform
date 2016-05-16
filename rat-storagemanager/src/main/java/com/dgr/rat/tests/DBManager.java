@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 
 public class DBManager {
 	private Connection _connect = null;
-	private FileSystemXmlApplicationContext _context = null;
+//	private FileSystemXmlApplicationContext _context = null;
 	
-	public DBManager(FileSystemXmlApplicationContext context) {
-		_context = context;
+	public DBManager() {
+//		_context = context;
 	}
 	
 	public void addDomain(String domainUUID, String domainName) throws Exception{
@@ -61,7 +60,7 @@ public class DBManager {
 			_connect.close();
 		}
 		
-		_context.close();
+//		_context.close();
 	}
 	
 	public void addAdmin(String userEmail, String userAdminName, String userAdminPwd, String rootDomainName, String adminUUID) throws Exception{
