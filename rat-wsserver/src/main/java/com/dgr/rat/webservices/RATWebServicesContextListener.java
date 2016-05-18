@@ -73,6 +73,7 @@ public class RATWebServicesContextListener implements ServletContextListener{
 			AppProperties.getInstance().init(applicationProperties);
 			
 			String springProducer = servletContext.getInitParameter("spring-producer");
+			System.out.println("springProducer " + springProducer);
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(springProducer);
 			servletContext.setAttribute(MessageSenderContextKey, context);
 			
