@@ -40,11 +40,17 @@ public class RATWebServicesContextListener implements ServletContextListener{
     }
 
 	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
+	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		System.out.println("RATWebServicesListener.contextDestroyed");
 		try {
 			_entityManagerFactory.close();
 			_keepAlive.shutdown();
+			
+			ServletContext servletContext = servletContextEvent.getServletContext();
+			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) servletContext.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
+			context.close();
+			context.destroy();
+			
 			RATSessionManager.getInstance().shutdown();
 		} 
 		catch (Exception e) {
@@ -76,7 +82,7 @@ public class RATWebServicesContextListener implements ServletContextListener{
 			System.out.println("springProducer " + springProducer);
 			FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(springProducer);
 			servletContext.setAttribute(MessageSenderContextKey, context);
-			
+
 			_entityManagerFactory = Persistence.createEntityManagerFactory("ratwsserver");
 			_keepAlive = new KeepAlive(servletContext);
 			_keepAlive.start();
