@@ -45,13 +45,13 @@ public class RATWebServicesContextListener implements ServletContextListener{
 		try {
 			_entityManagerFactory.close();
 			_keepAlive.shutdown();
+			RATSessionManager.getInstance().shutdown();
 			
 			ServletContext servletContext = servletContextEvent.getServletContext();
 			FileSystemXmlApplicationContext context = (FileSystemXmlApplicationContext) servletContext.getAttribute(RATWebServicesContextListener.MessageSenderContextKey);
 			context.close();
 			context.destroy();
 			
-			RATSessionManager.getInstance().shutdown();
 		} 
 		catch (Exception e) {
 			//TODO log e gestione
