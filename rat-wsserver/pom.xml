@@ -190,6 +190,7 @@
 			<Product>RATPlatform 2.0 - ${artifact.name}-${artifact.version}</Product>
 			</manifestEntries>
 			</archive>
+			
 			<webResources>
 			<resource>
 			<directory>WebContent</directory>
@@ -197,16 +198,13 @@
 			<include>**/*.*</include>
 			</includes>
 			</resource>
-			</webResources>
-			<!--
-			<webResources>
+
 			<resource>
-			<directory>${basedir}/WebContent/WEB-INF</directory>
-			<filtering>true</filtering>
-			<targetPath>WEB-INF</targetPath>
+			<directory>src/main/java/META-INF</directory>
+			<targetPath>WEB-INF/classes/META-INF</targetPath>
 			</resource>
 			</webResources>
-			-->
+			
 			</configuration>
 			</plugin>
 			
