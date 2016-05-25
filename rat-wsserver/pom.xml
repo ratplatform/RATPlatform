@@ -134,6 +134,8 @@
 		</dependency>
 		<!--End Shiro-->
 
+<!-- ActiveMQ installato in tomcat -->
+<!-- 
 		<dependency>
 		<groupId>org.apache.activemq</groupId>
 		<artifactId>activemq-all</artifactId>
@@ -145,7 +147,7 @@
 		<artifactId>activemq-spring</artifactId>
 		<version>5.10.2</version>
 		</dependency>
-		
+ -->
 		
 
 		<dependency>
