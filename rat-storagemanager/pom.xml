@@ -34,6 +34,11 @@
 	</developers>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.xbean</groupId>
+			<artifactId>xbean-spring</artifactId>
+			<version>3.13</version>
+		</dependency>
 		<!--OrientDB-->
 
 		<dependency>
