@@ -4,50 +4,46 @@
     "commandType" : "Query",
     "applicationVersion" : "2.0",
     "application" : "RATPlatform",
+    "time" : "2016-05-08 16:47:27.362",
     "commandVersion" : "0.1",
-    "CommandGraphUUID" : "3eb417c3-fa08-444a-b75a-1e9b0327eff1",
+    "CommandGraphUUID" : "a02a52cc-4b71-4b69-be2e-17fd35dd94df",
+    "RootVertexUUID" : "bdc81828-620f-4bd2-9fe0-533f32f2b704",
     "commandName" : "GetAllDomainUsers",
     "domainName" : "@domainPlaceholder@",
     "MessageType" : "Response"
   },
   "nodes" : [ {
-    "VertexUUIDField" : "3a9e29eb-3f2e-4712-bee0-add26a43cb1d",
+    "VertexUUIDField" : "d2e307ad-bfc7-48d6-9079-762ccdb9b927",
     "VertexTypeField" : "User",
     "VertexIsRootField" : false,
-    "CommandGraphUUID" : "10a7be79-d9fa-405a-8cca-fe04352b36a8",
-    "VertexCommandOwnerField" : "AddNewUser",
-    "VertexLabelField" : "dgr3",
-    "VertexContentField" : "dgr3",
-    "id" : "3",
-    "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "520b3d23-c7d3-442f-9567-c01aff8d44e4",
-    "VertexTypeField" : "User",
-    "VertexIsRootField" : false,
-    "CommandGraphUUID" : "10a7be79-d9fa-405a-8cca-fe04352b36a8",
-    "VertexCommandOwnerField" : "AddNewUser",
-    "VertexLabelField" : "dgr1",
-    "VertexContentField" : "dgr1",
+    "GraphCommandOwner" : "AddNewUser",
+    "CommandGraphUUID" : "96569a3f-fadb-468d-8e46-8a0c24a5ca20",
+    "userPwd" : "dgr1",
+    "userName" : "dgr1",
+    "GraphUUID" : "d2e307ad-bfc7-48d6-9079-762ccdb9b927",
+    "userEmail" : "dgr1@gmail.com",
+    "isDeleted" : false,
+    "VertexLabelField" : "User",
+    "VertexContentField" : "User",
     "id" : "1",
     "_type" : "vertex"
   }, {
-    "VertexUUIDField" : "f700cb34-758f-4723-8b97-e4fb2f2fadfa",
+    "VertexUUIDField" : "bdc81828-620f-4bd2-9fe0-533f32f2b704",
     "VertexTypeField" : "Domain",
+    "subNodes" : 5,
     "VertexIsRootField" : true,
-    "CommandGraphUUID" : "5e939553-cb24-423f-b968-b6f0ee32f652",
-    "VertexCommandOwnerField" : "AddNewDomain",
-    "VertexLabelField" : "DGR Domain 1",
-    "VertexContentField" : "DGR Domain 1",
+    "GraphCommandOwner" : "AddNewDomain",
+    "CommandGraphUUID" : "11133d39-8864-4cc3-9170-087a5a33617a",
+    "GraphUUID" : "bdc81828-620f-4bd2-9fe0-533f32f2b704",
+    "isDeleted" : false,
+    "VertexLabelField" : "Domain dgr 1",
+    "VertexContentField" : "Domain dgr 1",
     "id" : "0",
     "_type" : "vertex"
   } ],
   "edges" : [ {
     "source" : "0",
     "target" : "1",
-    "caption" : ""
-  }, {
-    "source" : "0",
-    "target" : "3",
     "caption" : ""
   } ]
 }

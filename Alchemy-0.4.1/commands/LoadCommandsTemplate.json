@@ -1,17 +1,19 @@
 {
   "header" : {
     "commandType" : "SystemCommands",
+    "DomainUUID" : "null",
     "applicationVersion" : "2.0",
     "application" : "RATPlatform",
+    "time" : "2016-03-23 23:15:46.062",
     "commandVersion" : "0.1",
-    "CommandGraphUUID" : "4b4130e2-36d9-496a-8197-8859291755b7",
+    "CommandGraphUUID" : "a805196f-b633-4de5-be42-cade7c2d7707",
     "RootVertexUUID" : "42fc1097-b340-41a1-8ab2-e4d718ad48b9",
     "commandName" : "LoadCommands",
     "domainName" : "@domainPlaceholder@",
     "MessageType" : "Template"
   },
   "nodes" : [ {
-    "VertexUUIDField" : "fbc5ce1a-c7a4-4cdf-afe9-b863ce138ca0",
+    "VertexUUIDField" : "0139a6b9-d582-494e-83e1-41f4d6bd70c2",
     "VertexInstructionParameterNameField" : "name",
     "VertexTypeField" : "InstructionParameter",
     "VertexIsRootField" : false,
@@ -24,7 +26,7 @@
     "_type" : "vertex"
   }, {
     "MaxNumParameters" : 1,
-    "VertexUUIDField" : "1fec07d8-a0e9-44a6-abeb-66141ed0acb8",
+    "VertexUUIDField" : "36875b10-745d-44dd-b62b-45750ca8961a",
     "VertexTypeField" : "Instruction",
     "VertexIsRootField" : false,
     "InstructionOrderField" : 0,
@@ -36,14 +38,14 @@
     "VertexUUIDField" : "42fc1097-b340-41a1-8ab2-e4d718ad48b9",
     "VertexTypeField" : "SystemKey",
     "VertexIsRootField" : true,
-    "CommandGraphUUID" : "4b4130e2-36d9-496a-8197-8859291755b7",
-    "VertexCommandOwnerField" : "LoadCommands",
+    "GraphCommandOwner" : "LoadCommands",
+    "CommandGraphUUID" : "a805196f-b633-4de5-be42-cade7c2d7707",
     "VertexLabelField" : "Commands",
     "VertexContentField" : "Commands",
     "id" : "0",
     "_type" : "vertex"
   }, {
-    "VertexUUIDField" : "02f014d2-89c1-4d72-99e7-4cf902f0fcff",
+    "VertexUUIDField" : "4ca9705d-64e2-490d-a973-4896fdf6e069",
     "VertexInstructionParameterNameField" : "folder",
     "VertexTypeField" : "InstructionParameter",
     "VertexIsRootField" : false,
@@ -56,7 +58,7 @@
     "_type" : "vertex"
   }, {
     "MaxNumParameters" : 1,
-    "VertexUUIDField" : "4344670a-8a3e-4ede-a3a1-21f671bbb792",
+    "VertexUUIDField" : "637663ae-649c-40eb-a469-739d4307311a",
     "VertexTypeField" : "Instruction",
     "VertexIsRootField" : false,
     "InstructionOrderField" : 1,

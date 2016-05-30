@@ -112,7 +112,8 @@
 		<module>rat-wsserver-webclient</module>
 		<module>rat-graph-generator</module>
 		<!--module>ratsdk</module-->
-  	</modules>
+    <module>rat-initializer</module>
+  </modules>
 
 	<dependencies>
 		<dependency>

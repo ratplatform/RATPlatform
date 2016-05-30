@@ -1,17 +1,106 @@
 {
   "header" : {
     "commandType" : "SystemCommands",
+    "DomainUUID" : "null",
     "applicationVersion" : "2.0",
     "application" : "RATPlatform",
+    "time" : "2016-03-23 23:15:45.583",
     "commandVersion" : "0.1",
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "RootVertexUUID" : "c074e5c1-cd81-44d2-b9df-34cbe33c852e",
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "RootVertexUUID" : "b5876c07-5714-4f22-ab46-00f072d503cb",
     "commandName" : "AddRootDomain",
     "domainName" : "@domainPlaceholder@",
     "MessageType" : "Template"
   },
   "nodes" : [ {
-    "VertexUUIDField" : "2d0dc529-2483-4378-9c8b-6d1a61b50a03",
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "acd754f9-d35c-4dfd-9cf1-2a636947d8d7",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "CreateVertex",
+    "VertexContentField" : "CreateVertex",
+    "id" : "17",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "d66e4365-fbac-4a60-9999-c1c6ff7cfe1e",
+    "VertexInstructionParameterNameField" : "nodeName",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "is-put-by",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "18",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "938c2fc8-b199-4217-8d12-ac9637c9da13",
+    "QueryName" : "GetRootDomain",
+    "VertexTypeField" : "QueryPivot",
+    "IsRootQueryPivot" : true,
+    "GraphCommandOwner" : "AddRootDomain",
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "InstructionOrderField" : 0,
+    "CorrelationKey" : "GetRootDomain",
+    "VertexLabelField" : "QueryPivot",
+    "id" : "24",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "c97a11af-1d62-4f93-994c-38e2f9a62491",
+    "VertexInstructionParameterNameField" : "nodeType",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "VertexInstructionParameterValueField" : "VertexContentUndefined",
+    "VertexContentField" : "InstructionParameter",
+    "VertexLabelField" : "InstructionParameter",
+    "id" : "25",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "82647401-ff1f-4cd5-9f3a-9c76f5460794",
+    "VertexTypeField" : "SystemKey",
+    "VertexIsRootField" : false,
+    "GraphCommandOwner" : "AddRootDomain",
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "VertexLabelField" : "is-put-by",
+    "VertexContentField" : "is-put-by",
+    "id" : "16",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "b3b8225e-cdce-46f3-9884-9fc22ed424dd",
+    "VertexInstructionParameterNameField" : "nodeName",
+    "VertexTypeField" : "InstructionParameter",
+    "VertexIsRootField" : false,
+    "VertexInstructionParameterValueField" : "is-system",
+    "VertexInstructionParameterReturnTypeField" : "string",
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "InstructionParameter",
+    "VertexContentField" : "InstructionParameter",
+    "id" : "13",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "7d601cf8-3df3-45de-ab69-bd9ac2b84540",
+    "VertexTypeField" : "SystemKey",
+    "VertexIsRootField" : false,
+    "GraphCommandOwner" : "AddRootDomain",
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "VertexLabelField" : "is-system",
+    "VertexContentField" : "is-system",
+    "id" : "11",
+    "_type" : "vertex"
+  }, {
+    "MaxNumParameters" : 1,
+    "VertexUUIDField" : "df8e553f-0f77-4c52-911d-64a1cb8a996b",
+    "VertexTypeField" : "Instruction",
+    "VertexIsRootField" : false,
+    "InstructionOrderField" : 0,
+    "VertexLabelField" : "CreateVertex",
+    "VertexContentField" : "CreateVertex",
+    "id" : "12",
+    "_type" : "vertex"
+  }, {
+    "VertexUUIDField" : "faca4c4f-778a-4c3d-ab53-c3d6c78e8515",
     "VertexInstructionParameterNameField" : "rootDomainName",
     "VertexTypeField" : "InstructionParameter",
     "VertexIsRootField" : false,
@@ -24,26 +113,26 @@
     "_type" : "vertex"
   }, {
     "MaxNumParameters" : 1,
-    "VertexUUIDField" : "9ae6ceb9-7b81-474f-8c59-729482eaa6ae",
+    "VertexUUIDField" : "5413b6d9-3dae-4ecf-9406-fd0d70522440",
     "VertexTypeField" : "Instruction",
     "VertexIsRootField" : false,
     "InstructionOrderField" : 0,
-    "VertexLabelField" : "CreateRootVertex",
-    "VertexContentField" : "CreateRootVertex",
+    "VertexLabelField" : "CreateRootPlatformVertex",
+    "VertexContentField" : "CreateRootPlatformVertex",
     "id" : "1",
     "_type" : "vertex"
   }, {
-    "VertexUUIDField" : "c074e5c1-cd81-44d2-b9df-34cbe33c852e",
+    "VertexUUIDField" : "b5876c07-5714-4f22-ab46-00f072d503cb",
     "VertexTypeField" : "RootDomain",
     "VertexIsRootField" : true,
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "VertexCommandOwnerField" : "AddRootDomain",
+    "GraphCommandOwner" : "AddRootDomain",
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
     "VertexLabelField" : "RootDomain",
     "VertexContentField" : "RootDomain",
     "id" : "0",
     "_type" : "vertex"
   }, {
-    "VertexUUIDField" : "6b320ea0-30ed-4d19-b8b7-7272148151ec",
+    "VertexUUIDField" : "ac7fb85b-5477-420b-bbe9-06fed4fb54d8",
     "VertexInstructionParameterNameField" : "commandsNodeUUID",
     "VertexTypeField" : "InstructionParameter",
     "VertexIsRootField" : false,
@@ -56,7 +145,7 @@
     "_type" : "vertex"
   }, {
     "MaxNumParameters" : 2,
-    "VertexUUIDField" : "b651233b-06d8-4b17-8c46-839bea2ff643",
+    "VertexUUIDField" : "9e4b574f-a115-4b04-bbc8-5580544b2b42",
     "VertexTypeField" : "Instruction",
     "VertexIsRootField" : false,
     "InstructionOrderField" : 1,
@@ -65,53 +154,7 @@
     "id" : "5",
     "_type" : "vertex"
   }, {
-    "MaxNumParameters" : 1,
-    "VertexUUIDField" : "f0b8b59f-aebf-47bd-991d-763d8403453b",
-    "VertexTypeField" : "Instruction",
-    "VertexIsRootField" : false,
-    "InstructionOrderField" : 0,
-    "VertexLabelField" : "CreateVertex",
-    "VertexContentField" : "CreateVertex",
-    "id" : "17",
-    "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "f578ef57-3eef-48bf-abd0-fe2c3388152d",
-    "VertexInstructionParameterNameField" : "nodeName",
-    "VertexTypeField" : "InstructionParameter",
-    "VertexIsRootField" : false,
-    "VertexInstructionParameterValueField" : "is-put-by",
-    "VertexInstructionParameterReturnTypeField" : "string",
-    "InstructionOrderField" : 0,
-    "VertexLabelField" : "InstructionParameter",
-    "VertexContentField" : "InstructionParameter",
-    "id" : "18",
-    "_type" : "vertex"
-  }, {
-    "InternalPipeInstruction" : "SetQueryPipe",
-    "VertexUUIDField" : "86995f28-136d-4785-a5f4-5c15d3b40747",
-    "QueryName" : "StartQueryPipe",
-    "VertexTypeField" : "QueryPivot",
-    "TowardNode" : "RootDomain",
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "EndPipeInstruction" : "GetRootDomain",
-    "StartPipeInstruction" : "StartQueryPipe",
-    "VertexCommandOwnerField" : "AddRootDomain",
-    "FromNode" : "RootDomain",
-    "VertexLabelField" : "QueryPivot",
-    "id" : "24",
-    "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "26856133-386f-4dd5-bc58-952c2b3ad0bf",
-    "VertexTypeField" : "SystemKey",
-    "VertexIsRootField" : false,
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "VertexCommandOwnerField" : "AddRootDomain",
-    "VertexLabelField" : "is-put-by",
-    "VertexContentField" : "is-put-by",
-    "id" : "16",
-    "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "a654494b-a065-45a1-a9f9-3c835adb1bdf",
+    "VertexUUIDField" : "2ccb3bb8-13b3-4861-bb9f-93f2b18e73ef",
     "VertexInstructionParameterNameField" : "queriesNodeUUID",
     "VertexTypeField" : "InstructionParameter",
     "VertexIsRootField" : false,
@@ -122,51 +165,56 @@
     "VertexContentField" : "InstructionParameter",
     "id" : "8",
     "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "461db846-0eff-40b4-9eed-6e1c509fb56f",
-    "VertexInstructionParameterNameField" : "nodeName",
-    "VertexTypeField" : "InstructionParameter",
-    "VertexIsRootField" : false,
-    "VertexInstructionParameterValueField" : "is-system",
-    "VertexInstructionParameterReturnTypeField" : "string",
-    "InstructionOrderField" : 0,
-    "VertexLabelField" : "InstructionParameter",
-    "VertexContentField" : "InstructionParameter",
-    "id" : "13",
-    "_type" : "vertex"
-  }, {
-    "VertexUUIDField" : "5b4bb19d-d55c-4a54-9daa-ec63fa854110",
-    "VertexTypeField" : "SystemKey",
-    "VertexIsRootField" : false,
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "VertexCommandOwnerField" : "AddRootDomain",
-    "VertexLabelField" : "is-system",
-    "VertexContentField" : "is-system",
-    "id" : "11",
-    "_type" : "vertex"
-  }, {
-    "MaxNumParameters" : 1,
-    "VertexUUIDField" : "fac17958-e04a-4c24-9d8e-a64a87ee9b07",
-    "VertexTypeField" : "Instruction",
-    "VertexIsRootField" : false,
-    "InstructionOrderField" : 0,
-    "VertexLabelField" : "CreateVertex",
-    "VertexContentField" : "CreateVertex",
-    "id" : "12",
-    "_type" : "vertex"
   } ],
   "edges" : [ {
     "weight" : 0,
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "EdgeUUIDField" : "787983cb-1cf5-4543-9124-5b21186611a4",
-    "source" : "16",
-    "target" : "0",
+    "source" : "17",
+    "target" : "18",
+    "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "EdgeUUIDField" : "c4e3800b-0308-46d4-ba3d-9058517ec16e",
+    "source" : "11",
+    "target" : "16",
     "caption" : "Command"
+  }, {
+    "weight" : 0,
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "EdgeUUIDField" : "c4e3800b-0308-46d4-ba3d-9058517ec16e",
+    "source" : "0",
+    "target" : "11",
+    "caption" : "Command"
+  }, {
+    "weight" : 0,
+    "source" : "11",
+    "target" : "12",
+    "caption" : "EdgeInstruction"
+  }, {
+    "source" : "24",
+    "target" : "25",
+    "caption" : "QueryPivotEdge"
+  }, {
+    "source" : "11",
+    "target" : "24",
+    "caption" : "QueryPivotEdge"
+  }, {
+    "weight" : 0,
+    "source" : "12",
+    "target" : "13",
+    "caption" : "EdgeInstructionsParameter"
   }, {
     "weight" : 0,
     "source" : "1",
     "target" : "2",
     "caption" : "EdgeInstructionsParameter"
+  }, {
+    "weight" : 0,
+    "CommandGraphUUID" : "16639a6e-4e25-4f1f-95a9-1b23ee9006b1",
+    "EdgeUUIDField" : "c4e3800b-0308-46d4-ba3d-9058517ec16e",
+    "source" : "16",
+    "target" : "0",
+    "caption" : "Command"
   }, {
     "weight" : 0,
     "source" : "16",
@@ -184,46 +232,13 @@
     "caption" : "EdgeInstructionsParameter"
   }, {
     "weight" : 0,
-    "source" : "17",
-    "target" : "18",
-    "caption" : "EdgeInstructionsParameter"
-  }, {
-    "weight" : 0,
     "source" : "0",
     "target" : "1",
-    "caption" : "EdgeInstruction"
-  }, {
-    "weight" : 0,
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "EdgeUUIDField" : "787983cb-1cf5-4543-9124-5b21186611a4",
-    "source" : "11",
-    "target" : "16",
-    "caption" : "Command"
-  }, {
-    "weight" : 0,
-    "CommandGraphUUID" : "5faf489f-f2b5-407d-8679-afb9a3d36f9d",
-    "EdgeUUIDField" : "787983cb-1cf5-4543-9124-5b21186611a4",
-    "source" : "0",
-    "target" : "11",
-    "caption" : "Command"
-  }, {
-    "weight" : 0,
-    "source" : "11",
-    "target" : "12",
     "caption" : "EdgeInstruction"
   }, {
     "weight" : 1,
     "source" : "5",
     "target" : "8",
-    "caption" : "EdgeInstructionsParameter"
-  }, {
-    "source" : "0",
-    "target" : "24",
-    "caption" : "Command"
-  }, {
-    "weight" : 0,
-    "source" : "12",
-    "target" : "13",
     "caption" : "EdgeInstructionsParameter"
   } ]
 }
