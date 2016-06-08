@@ -78,14 +78,14 @@
 	</build>
 
 	<distributionManagement>
-		<repository>
-		<id>releases</id>
-		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/releases</url>
-		</repository>
-
 		<snapshotRepository>
 		<id>snapshots</id>
 		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
+		
+		<repository>
+		<id>releases</id>
+		<url>http://thething.disco.unimib.it:17080/nexus/content/repositories/ratplatform2.0-releases/</url>
+		</repository>
 	</distributionManagement>
 </project>
