@@ -19,6 +19,7 @@ import com.dgr.rat.command.graph.executor.engine.result.instructions.Instruction
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.commons.errors.ErrorType;
 import com.dgr.rat.commons.errors.ResourceException;
+import com.dgr.rat.commons.errors.VertexDoesNotExistsException;
 import com.dgr.rat.json.utils.ReturnType;
 import com.dgr.rat.storage.provider.IStorage;
 import com.dgr.utils.StringUtils;
@@ -213,6 +214,9 @@ public class InstructionInvoker implements IInstructionInvoker{
 			if(instructionResult != null){
 				this.addInstructionResult(invokable.getCallerNode(), instructionResult, _currentInstruction);
 			}
+		}
+		catch (VertexDoesNotExistsException e){
+			// TODO: log
 		}
 		catch(Exception e){
 			throw new Exception(e);

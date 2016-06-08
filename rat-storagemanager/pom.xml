@@ -34,11 +34,14 @@
 	</developers>
 
 	<dependencies>
+	<!--
 		<dependency>
 			<groupId>org.apache.xbean</groupId>
 			<artifactId>xbean-spring</artifactId>
 			<version>3.13</version>
 		</dependency>
+		-->
+		
 		<!--OrientDB-->
 
 		<dependency>
@@ -69,10 +72,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-all</artifactId>
-			<version>5.11.1</version>
-			<scope>compile</scope>
+		<groupId>org.apache.activemq</groupId>
+		<artifactId>activemq-spring</artifactId>
+		<version>5.10.2</version>
+		</dependency>
+		
+		<dependency>
+		<groupId>org.apache.activemq</groupId>
+		<artifactId>activemq-all</artifactId>
+		<version>5.10.2</version>
 		</dependency>
 
 		<!--Lucene-->
@@ -100,6 +108,12 @@
 			<groupId>org.rat.platform</groupId>
 			<artifactId>spring-dependencies</artifactId>
 			<version>1.0.0</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-asm</artifactId>
+            </exclusion>
+        </exclusions>
 			<type>pom</type>
 		</dependency>
 
