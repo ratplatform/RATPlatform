@@ -103,6 +103,7 @@
 		<!--End org.glassfish-->
 
 		<!--Start Shiro-->
+		<!-- 
 		<dependency>
 		<groupId>org.apache.shiro</groupId>
 		<artifactId>shiro-aspectj</artifactId>
@@ -113,7 +114,7 @@
 		<groupId>org.apache.shiro</groupId>
 		<artifactId>shiro-core</artifactId>
 		<version>1.2.4</version>
-		<!--ATTENZIONE: solo se shiro è presente in lib di tomcat-->
+
 		<exclusions>
 		<exclusion>
 		<groupId>org.slf4j</groupId>
@@ -132,7 +133,7 @@
 		<groupId>org.apache.shiro</groupId>
 		<artifactId>shiro-ehcache</artifactId>
 		<version>1.2.4</version>
-		<!--ATTENZIONE: solo se shiro è presente in lib di tomcat-->
+
 		<exclusions>
 		<exclusion>
 		<groupId>org.slf4j</groupId>
@@ -146,6 +147,7 @@
 		<artifactId>shiro-spring</artifactId>
 		<version>1.2.4</version>
 		</dependency>
+		 -->
 		<!--End Shiro-->
 
 		<dependency>

@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContext;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response;
-import org.apache.shiro.subject.Subject;
 import org.apache.xbean.spring.context.FileSystemXmlApplicationContext;
 import com.dgr.rat.commons.constants.MessageType;
 import com.dgr.rat.commons.constants.StatusCode;
@@ -53,8 +52,8 @@ public class RATMessageSender implements IMessageSender{
 				throw new Exception("sessionID does not exist");
 			}
 			
-			Subject requestSubject = new Subject.Builder().sessionId(sessionID).buildSubject();
-			System.out.println("Is Authenticated = " + requestSubject.isAuthenticated());
+//			Subject requestSubject = new Subject.Builder().sessionId(sessionID).buildSubject();
+//			System.out.println("Is Authenticated = " + requestSubject.isAuthenticated());
 			
 			// TODO: attenzione, gestisco la sessione shiro in modo separato e quando la mia
 			// piattaforma cancella la sessione conrrente,, dovrebbe anche eseguire il 
@@ -123,8 +122,8 @@ public class RATMessageSender implements IMessageSender{
 	    				throw new Exception("sessionID does not exist");
 	    			}
 	    			
-	    			Subject requestSubject = new Subject.Builder().sessionId(sessionID).buildSubject();
-	    			System.out.println("Is Authenticated = " + requestSubject.isAuthenticated());
+//	    			Subject requestSubject = new Subject.Builder().sessionId(sessionID).buildSubject();
+//	    			System.out.println("Is Authenticated = " + requestSubject.isAuthenticated());
 	    			
 	    			// TODO: attenzione, gestisco la sessione shiro in modo separato e quando la mia
 	    			// piattaforma cancella la sessione conrrente,, dovrebbe anche eseguire il 

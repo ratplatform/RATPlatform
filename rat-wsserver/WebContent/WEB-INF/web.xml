@@ -16,10 +16,6 @@
     <param-value>${app.base}/conf/spring-producer.xml</param-value>
 </context-param>
 <context-param>
-    <param-name>shiroConfigLocations</param-name>
-    <param-value>/WEB-INF/shiro.ini</param-value>
-</context-param>
-<context-param>
     <param-name>persistence</param-name>
     <param-value>${app.base}/conf/persistence.xml</param-value>
 </context-param>
@@ -31,43 +27,6 @@
     <param-name>plugInContextMenu</param-name>
     <param-value>${app.base}/conf/plugInContextMenu.json</param-value>
 </context-param>
- 
- <!-- 
- <context-param>
-    <param-name>spring-producer</param-name>
-    <param-value>//home/dgr/dev/RATPlatform/rat-wsserver/RATWSServer/conf/spring-producer.xml</param-value>
-</context-param>
-<context-param>
-    <param-name>shiroConfigLocations</param-name>
-    <param-value>/WEB-INF/shiro.ini</param-value>
-</context-param>
-<context-param>
-    <param-name>persistence</param-name>
-    <param-value>//home/dgr/dev/RATPlatform/rat-wsserver/RATWSServer/conf/persistence.xml</param-value>
-</context-param>
-<context-param>
-    <param-name>application.properties</param-name>
-    <param-value>//home/dgr/dev/RATPlatform/rat-wsserver/RATWSServer/conf/application.properties</param-value>
-</context-param>
-  -->
-<!-- Shiro -->
- <listener>
-<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
-</listener>
-<filter>
-<filter-name>ShiroFilter</filter-name>
-<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
-<async-supported>true</async-supported>
-</filter>
-<filter-mapping>
-<filter-name>ShiroFilter</filter-name>
-<url-pattern>/*</url-pattern>
-<dispatcher>REQUEST</dispatcher>
-<dispatcher>FORWARD</dispatcher>
-<dispatcher>INCLUDE</dispatcher>
-<dispatcher>ERROR</dispatcher>
-</filter-mapping>
-<!-- End shiro -->
 
 
   <servlet>

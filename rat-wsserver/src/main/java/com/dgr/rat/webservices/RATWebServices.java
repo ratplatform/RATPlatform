@@ -21,13 +21,9 @@ import javax.ejb.Stateless;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import com.dgr.rat.auth.LoginData;
 import com.dgr.rat.auth.db.IdentityManager;
+import com.dgr.rat.auth.db.IncorrectCredentialsException;
 import com.dgr.rat.commons.constants.RATConstants;
 import com.dgr.rat.messages.IMessageSender;
 import com.dgr.rat.messages.RATMessageSender;
@@ -127,32 +123,31 @@ public class RATWebServices {
     	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     	    authenticationData = mapper.readValue(data, LoginData.class);
     	    
+    	    IdentityManager identityManager = new IdentityManager();
+    	    
     		String login = authenticationData.get_email();
     		String password = authenticationData.getPassword();
-            UsernamePasswordToken token = new UsernamePasswordToken(login, password);
-            Subject currentUser = SecurityUtils.getSubject();
-
-            token.setRememberMe(true);
-            currentUser.login(token); 
-
-            sessionID = currentUser.getSession().getId().toString();
+    		
+    		sessionID = identityManager.userLogin(login, password);
             System.out.println(sessionID);
+            if(sessionID == null){
+            	throw new IncorrectCredentialsException();
+            }
             
             SessionData sessionData = new SessionData(sessionID);
             sessionData.setPassword(password);
             sessionData.setUserName(login);
-			
-			IdentityManager identityManager = new IdentityManager();
+
 			result = identityManager.getUserDomains(sessionID, login);
 			responseStatus = 200;
 			
 			RATSessionManager.getInstance().setSessionData(sessionData);
 		} 
-        catch (UnknownAccountException e) {
-            System.out.println("Incorrect username/password!");
-            responseStatus = 401;
-            result = new HashMap<String, Object>();
-        }
+//        catch (UnknownAccountException e) {
+//            System.out.println("Incorrect username/password!");
+//            responseStatus = 401;
+//            result = new HashMap<String, Object>();
+//        }
         catch (IncorrectCredentialsException ice) {
             System.out.println("Incorrect username/password!");
             responseStatus = 401;
@@ -187,6 +182,84 @@ public class RATWebServices {
         
         return response;
 	}
+//	@POST @Path("/v0.1/login")
+//	@Produces(MediaType.TEXT_PLAIN)
+//	@Consumes (MediaType.TEXT_PLAIN)
+//	public Response login(String data){
+//        System.out.println("login");
+//        System.out.println(data);
+//        
+//        int responseStatus = 200;
+//        Response response = null;
+//        Map<String, Object> result = null;
+//        ObjectMapper mapper = null;
+//        String sessionID = null;
+//        LoginData authenticationData = null;
+//        try {
+//    		mapper = new ObjectMapper();
+//    	    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//    	    authenticationData = mapper.readValue(data, LoginData.class);
+//    	    
+//    		String login = authenticationData.get_email();
+//    		String password = authenticationData.getPassword();
+//            UsernamePasswordToken token = new UsernamePasswordToken(login, password);
+//            Subject currentUser = SecurityUtils.getSubject();
+//
+//            token.setRememberMe(true);
+//            currentUser.login(token); 
+//
+//            sessionID = currentUser.getSession().getId().toString();
+//            System.out.println(sessionID);
+//            
+//            SessionData sessionData = new SessionData(sessionID);
+//            sessionData.setPassword(password);
+//            sessionData.setUserName(login);
+//			
+//			IdentityManager identityManager = new IdentityManager();
+//			result = identityManager.getUserDomains(sessionID, login);
+//			responseStatus = 200;
+//			
+//			RATSessionManager.getInstance().setSessionData(sessionData);
+//		} 
+//        catch (UnknownAccountException e) {
+//            System.out.println("Incorrect username/password!");
+//            responseStatus = 401;
+//            result = new HashMap<String, Object>();
+//        }
+//        catch (IncorrectCredentialsException ice) {
+//            System.out.println("Incorrect username/password!");
+//            responseStatus = 401;
+//            result = new HashMap<String, Object>();
+//        }
+//        catch (Exception e) {
+//			// TODO log
+//			e.printStackTrace();
+//			responseStatus = 500;
+//            result = new HashMap<String, Object>();
+//		}
+//
+//    	String json = null;
+//    	
+//        result.put(RATConstants.StatusCode, responseStatus);
+//        if(mapper == null){
+//        	mapper = new ObjectMapper();
+//        	mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+//        }
+//        
+//		try {
+//			json = mapper.writeValueAsString(result);
+//			System.out.println(json);
+//		} 
+//		catch (Exception e) {
+//			// TODO: gestire l'errore creando un JSON con errore e statuscode 
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//    	response = Response.status(responseStatus).entity(json).build();
+//        
+//        return response;
+//	}
 	
 	@POST @Path("/v0.1/runcommand")
 	@Asynchronous
