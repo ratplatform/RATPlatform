@@ -76,7 +76,7 @@ public class RATStorageManager {
 			
 			// TODO: da togliere nella release
 			if(FileUtils.fileExists("conf" + FileSystems.getDefault().getSeparator() + "users.txt")){
-				String json = FileUtils.fileRead(args[0]);
+				String json = FileUtils.fileRead("conf" + FileSystems.getDefault().getSeparator() + "users.txt");
 				InitDB initDB = new InitDB();
 				initDB.init();
 				initDB.bulkCreation(json);
