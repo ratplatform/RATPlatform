@@ -74,14 +74,22 @@ public class RATStorageManager {
 		try {
 			RATStorageManager main = new RATStorageManager();
 			
-			if(args.length == 1){
-				if(FileUtils.fileExists(args[0])){
-					String json = FileUtils.fileRead(args[0]);
-					InitDB initDB = new InitDB();
-					initDB.init();
-					initDB.bulkCreation(json);
-				}
+			// TODO: da togliere nella release
+			if(FileUtils.fileExists("conf" + FileSystems.getDefault().getSeparator() + "users.txt")){
+				String json = FileUtils.fileRead(args[0]);
+				InitDB initDB = new InitDB();
+				initDB.init();
+				initDB.bulkCreation(json);
 			}
+			
+//			if(args.length == 1){
+//				if(FileUtils.fileExists(args[0])){
+//					String json = FileUtils.fileRead(args[0]);
+//					InitDB initDB = new InitDB();
+//					initDB.init();
+//					initDB.bulkCreation(json);
+//				}
+//			}
 			
 			do {
 				str = br.readLine();

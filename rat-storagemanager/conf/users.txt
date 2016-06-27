@@ -5,7 +5,23 @@
 		"email": "dgr@gmail.com",
 		"domains": [
 			"domain dgr"
-		]
+		],
+		"comments": [{
+			"domain": "domain dgr",
+			"VertexLabelField": "commento 1",
+			"VertexContentField": "questo è il commento 1 fatto da dgr al fatto quotidiano",
+			"url": "http://www.ilfattoquotidiano.it/"
+		}, {
+			"domain": "domain dgr",
+			"VertexLabelField": "commento 2",
+			"VertexContentField": "questo è il commento 2 fatto da dgr al fatto quotidiano",
+			"url": "http://www.ilfattoquotidiano.it/"
+		},{
+			"domain": "domain dgr",
+			"VertexLabelField": "commento 1 a repubblica",
+			"VertexContentField": "questo è il commento 1  fatto da dgr a repubblica",
+			"url": "http://www.repubblica.it.it/"
+		}]
 	},
 	"dgr1": {
 		"name": "dgr1",
@@ -13,6 +29,17 @@
 		"email": "dgr1@gmail.com",
 		"domains": [
 			"domain dgr1"
-		]
+		],
+		"comments": [{
+			"domain": "domain dgr1",
+			"VertexLabelField": "commento 1 da dgr1",
+			"VertexContentField": "commento al ilfattoquotidiano da dgr1 al fatto quotidiano",
+			"url": "http://www.ilfattoquotidiano.it/"
+		},{
+			"domain": "domain dgr1",
+			"VertexLabelField": "commento 1 a repubblica da dgr1",
+			"VertexContentField": "commento 1 fatto da dgr1 a la repubblica",
+			"url": "http://www.repubblica.it.it/"
+		}]
 	}
 }
